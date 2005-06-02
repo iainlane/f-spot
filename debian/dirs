@@ -1,0 +1,4 @@
+usr/bin
+usr/lib/f-spot
+usr/lib/mono/f-spot
+etc/mono/assemblies/Mono.Data.SqliteClient/

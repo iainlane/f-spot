@@ -1,0 +1,87 @@
+f-spot (0.0.13-0ubuntu1) breezy; urgency=low
+
+  * New upstream release
+    + 00_MonoConventions.patch dropped
+    + debian/rules - de-/usr/share/dotnet
+    + Move from dh_netdeps to dh_clideps and s/mono-utils/cli-common in
+    build-dep 
+
+ -- Brandon Hale <brandon@smarterits.com>  Fri, 13 May 2005 21:36:29 -0400
+
+f-spot (0.0.12-0ubuntu1) hoary; urgency=low
+
+  * New upstream release
+
+ -- Brandon Hale <brandon@smarterits.com>  Sat, 19 Mar 2005 22:25:22 -0500
+
+f-spot (0.0.11-1) unstable; urgency=low
+
+  * New upstream release
+  * Update 00_MonoConventions.patch
+
+ -- Brandon Hale <brandon@smarterits.com>  Tue, 15 Mar 2005 09:43:14 -0500
+
+f-spot (0.0.10-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Brandon Hale <brandon@smarterits.com>  Sun,  6 Mar 2005 15:53:29 -0500
+
+f-spot (0.0.9-3) unstable; urgency=low
+
+  * [Brandon] Update 01_fspot-config.patch to also dllmap libexif.so.10
+  * [Ondrej] Bump build dependency on mono-utils to version 1.0
+
+ -- Ondřej Surý <ondrej@sury.org>  Thu, 24 Feb 2005 08:26:05 +0100
+
+f-spot (0.0.9-2) unstable; urgency=low
+
+  * Fix misspeled dependency.
+
+ -- Ondřej Surý <ondrej@sury.org>  Wed, 23 Feb 2005 13:05:18 +0100
+
+f-spot (0.0.9-1) unstable; urgency=low
+
+  * New upstream release.
+  * Fix missing dependencies (Closes: #296372, #296541)
+  * Use Brandon Hale package as base for mine.
+
+ -- Ondřej Surý <ondrej@sury.org>  Wed, 23 Feb 2005 08:50:06 +0100
+
+f-spot (0.0.8-3) unstable; urgency=low
+
+  * Add a libgphoto2-sharp.dll.config to remap libgphoto2.so to libgphoto2.so.2
+
+ -- Brandon Hale <brandon@smarterits.com>  Sun, 20 Feb 2005 15:56:07 -0500
+
+f-spot (0.0.8-2) unstable; urgency=low
+
+  * liblcms1-dev to debian/control.in, not debian/control
+
+ -- Brandon Hale <brandon@smarterits.com>  Sat, 19 Feb 2005 07:39:02 -0500
+
+f-spot (0.0.8-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Brandon Hale <brandon@smarterits.com>  Thu, 17 Feb 2005 18:09:48 -0500
+
+f-spot (0.0.3-2) unstable; urgency=low
+
+  * Update f-spot.exe.config to include mapping for internal libraries
+    (Closes: #283469)
+
+ -- Ondřej Surý <ondrej@sury.org>  Wed, 15 Dec 2004 11:45:53 +0100
+
+f-spot (0.0.3-1) unstable; urgency=low
+
+  * New upstream release. (Closes: #283183)
+
+ -- Ondřej Surý <ondrej@sury.org>  Sun, 28 Nov 2004 18:41:11 +0100
+
+f-spot (0.0.2-1) unstable; urgency=low
+
+  * Initial Release. (Closes: #239558)
+
+ -- Ondřej Surý <ondrej@debian.org>  Sat,  4 Sep 2004 21:32:52 +0200
+

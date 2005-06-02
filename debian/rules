@@ -1,0 +1,24 @@
+#! /usr/bin/make -f
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/gnome.mk
+include /usr/share/gnome-pkg-tools/1/rules/uploaders.mk
+include /usr/share/cdbs/1/rules/simple-patchsys.mk
+
+CFLAGS := -Wall -g
+
+# Ensure at build time that the library has no dependencies on undefined
+# symbols.
+LDFLAGS += -Wl,-z,defs
+
+# Speed up loading.
+LDFLAGS += -Wl,-O1
+
+binary-predeb/f-spot::
+	dh_clideps -d -p$(cdbs_curpkg) $(DEB_DH_NETDEPS_ARGS)
+
+binary-install/f-spot::
+	# We still need these for debian/sid
+	#/bin/mv $(CURDIR)/debian/f-spot/usr/lib/f-spot/f-spot.exe* $(CURDIR)/debian/f-spot/usr/share/dotnet/f-spot/
+	#/bin/mv $(CURDIR)/debian/f-spot/usr/lib/f-spot/libgphoto2-sharp.dll* $(CURDIR)/debian/f-spot/usr/share/dotnet/f-spot/
+	rm $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.a $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.la $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.so

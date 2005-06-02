@@ -1,0 +1,18 @@
+Source: f-spot
+Section: gnome
+Priority: optional
+Maintainer: Ondřej Surý <ondrej@debian.org>
+Build-Depends: debhelper (>= 4.0.0), cdbs, gnome-pkg-tools, mono-mcs | c-sharp-compiler, cli-common (>= 0.1.1), libgnome-cil, libxml-parser-perl, libmono-dev, libgnomeui-dev, libexif-dev, libsqlite0-dev, libgphoto2-2-dev (>= 2.1.4), liblcms1-dev
+Uploaders: @GNOME_TEAM@
+Standards-Version: 3.6.1
+
+Package: f-spot
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${net:Depends}, libgphoto2-2 (>= 2.1.4), libexif10 (>= 0.5.1)
+Description: personal photo management application
+ F-Spot is meant to be an easy-to-use photo management
+ application.  It allows for importing of your existing
+ photo collections, tagging photos with identifiers,
+ as well as doing simple edits of photos (e.g. rotating).
+ .
+ This application is still in its early stage of development.
