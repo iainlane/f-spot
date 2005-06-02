@@ -1,2 +1,0 @@
-?package(f-spot):needs=X11 section=Apps/Viewers \
-  title="F-Spot" command="/usr/bin/f-spot"
