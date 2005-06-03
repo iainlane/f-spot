@@ -1,5 +1,7 @@
 #! /usr/bin/make -f
 
+export MONO_SHARED_DIR=$(CURDIR)
+
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/gnome.mk
 include /usr/share/gnome-pkg-tools/1/rules/uploaders.mk
@@ -14,8 +16,14 @@ LDFLAGS += -Wl,-z,defs
 # Speed up loading.
 LDFLAGS += -Wl,-O1
 
+common-configure-indep::
+	mkdir -p $(MONO_SHARED_DIR)/.wapi
+
 binary-predeb/f-spot::
 	dh_clideps -d -p$(cdbs_curpkg) $(DEB_DH_NETDEPS_ARGS)
 
 binary-install/f-spot::
 	rm $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.a $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.la $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.so
+
+clean::
+	rm -rf $(MONO_SHARED_DIR)/.wapi

@@ -8,7 +8,7 @@ Standards-Version: 3.6.1
 
 Package: f-spot
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${net:Depends}, libgphoto2-2 (>= 2.1.4), libexif10 (>= 0.5.1)
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${cli:Depends}, libgphoto2-2 (>= 2.1.4), libexif10 (>= 0.5.1)
 Description: personal photo management application
  F-Spot is meant to be an easy-to-use photo management
  application.  It allows for importing of your existing
