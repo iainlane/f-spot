@@ -18,7 +18,4 @@ binary-predeb/f-spot::
 	dh_clideps -d -p$(cdbs_curpkg) $(DEB_DH_NETDEPS_ARGS)
 
 binary-install/f-spot::
-	# We still need these for debian/sid
-	#/bin/mv $(CURDIR)/debian/f-spot/usr/lib/f-spot/f-spot.exe* $(CURDIR)/debian/f-spot/usr/share/dotnet/f-spot/
-	#/bin/mv $(CURDIR)/debian/f-spot/usr/lib/f-spot/libgphoto2-sharp.dll* $(CURDIR)/debian/f-spot/usr/share/dotnet/f-spot/
 	rm $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.a $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.la $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.so

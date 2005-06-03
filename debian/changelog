@@ -1,3 +1,17 @@
+f-spot (0.0.13-1ubuntu1) unstable; urgency=low
+
+  * Synchronize with Debian.
+    * We are now hosted on pkg-mono/non-group/f-spot on svn.debian.org
+
+ -- Brandon Hale <brandon@smarterits.com>  Fri,  3 Jun 2005 06:22:37 -0400
+
+f-spot (0.0.13-1) unstable; urgency=low
+
+  * New upstream relase
+  * Updated for mono 1.1 (Closes: #311473)
+
+ -- OndÅ™ej SurÃ½ <ondrej@sury.org>  Thu,  2 Jun 2005 08:42:59 +0200
+
 f-spot (0.0.13-0ubuntu1) breezy; urgency=low
 
   * New upstream release
@@ -7,6 +21,12 @@ f-spot (0.0.13-0ubuntu1) breezy; urgency=low
     build-dep 
 
  -- Brandon Hale <brandon@smarterits.com>  Fri, 13 May 2005 21:36:29 -0400
+
+f-spot (0.0.12-1) unstable; urgency=low
+
+  * New upstream release (Closes: #305016)
+
+ -- OndÅ™ej SurÃ½ <ondrej@sury.org>  Mon, 18 Apr 2005 09:02:33 +0200
 
 f-spot (0.0.12-0ubuntu1) hoary; urgency=low
 
