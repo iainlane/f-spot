@@ -1,3 +1,16 @@
+f-spot (0.0.13-3) unstable; urgency=low
+
+  * Fix FTBFS on amd64 (add MONO_SHARED_DIR to debian/rules (Closes: #314515)
+    Thanks to Brandon Hale.
+
+ -- Ondřej Surý <ondrej@sury.org>  Mon, 20 Jun 2005 21:48:14 +0200
+
+f-spot (0.0.13-2) unstable; urgency=low
+
+  * Change ${net:Depends} to ${cli:Depends} to get dependencies right (Closes: #311721)
+
+ -- Ondřej Surý <ondrej@sury.org>  Fri,  3 Jun 2005 08:34:57 +0200
+
 f-spot (0.0.13-1ubuntu1) unstable; urgency=low
 
   * Synchronize with Debian.
