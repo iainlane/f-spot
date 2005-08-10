@@ -1,3 +1,13 @@
+f-spot (0.0.13-4) unstable; urgency=low
+
+  * Rebuild with newer libexif-dev & change Depends to libexif12 (Closes: #321310)
+  * Added watch file.
+  * Removed unneeded control.in & uploaders
+  * Removed extra dh_clideps arguments
+  * New Maintainer (Debian Mono Group)
+
+ -- Debian Mono Group <pkg-mono-group@lists.alioth.debian.org>  Wed, 10 Aug 2005 19:44:27 +1200
+
 f-spot (0.0.13-3) unstable; urgency=low
 
   * Fix FTBFS on amd64 (add MONO_SHARED_DIR to debian/rules (Closes: #314515)
