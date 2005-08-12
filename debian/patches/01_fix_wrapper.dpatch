@@ -1,0 +1,27 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 01_fix_wrapper.dpatch by  <ajmitch@gnu.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad --exclude=CVS --exclude=.svn ./src/f-spot.in /tmp/dpep-work.Hz6jsO/trunk/src/f-spot.in
+--- ./src/f-spot.in	2005-03-07 10:30:33.000000000 +0000
++++ /tmp/dpep-work.Hz6jsO/trunk/src/f-spot.in	2005-08-12 13:41:23.000000000 +0000
+@@ -1,15 +1,3 @@
+ #!/bin/sh
+ 
+-prefix=@prefix@
+-exec_prefix=@exec_prefix@
+-libdir=@libdir@
+-
+-if [ -e ./f-spot.exe ] && [ -e ./Makefile ] && [ -e ./Defines.cs ]; then
+-    echo "*** Running uninstalled f-spot ***"
+-    EXE_TO_RUN="./f-spot.exe"
+-    export MONO_PATH=../libgphoto2-sharp:$MONO_PATH
+-else
+-    EXE_TO_RUN="$libdir/f-spot/f-spot.exe"
+-fi
+-
+-mono --debug $EXE_TO_RUN "$@"
++mono /usr/lib/f-spot/f-spot.exe "$@"

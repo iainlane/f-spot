@@ -4,7 +4,7 @@ export MONO_SHARED_DIR=$(CURDIR)
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/gnome.mk
-include /usr/share/cdbs/1/rules/simple-patchsys.mk
+include /usr/share/cdbs/1/rules/dpatch.mk
 
 CFLAGS := -Wall -g
 
@@ -26,3 +26,5 @@ binary-install/f-spot::
 
 clean::
 	rm -rf $(MONO_SHARED_DIR)/.wapi
+
+unpatch: deapply-dpatches

@@ -1,11 +1,20 @@
 f-spot (0.0.13-4) unstable; urgency=low
 
-  * Rebuild with newer libexif-dev & removed explicit Depends on libexif10, libgphoto2-2 (Closes: #321310)
-  * Added watch file.
-  * Removed unneeded control.in & uploaders
-  * Removed extra dh_clideps arguments
-  * Updated to Standards Version 3.6.2
-  * New Maintainer (Debian Mono Group)
+  * Andrew Mitchell
+    + debian/control:
+      - New Maintainer (Debian Mono Group)
+      - Rebuild with newer libexif-dev & removed explicit Depends on libexif10, libgphoto2-2 (Closes: #321310)
+      - Removed unneeded control.in & uploaders
+      - Removed extra dh_clideps arguments
+      - Added dpatch build dependency
+      - Updated to Standards Version 3.6.2 (no changes needed)
+    + debian/rules:
+      - Changed simple-patchsys.mk to dpatch.mk
+      - Added unpatch target for dpatch
+    + debian/dirs:
+      - Remove unneeded directories from debian/dirs
+    + debian/watch:
+      - Added
 
  -- Debian Mono Group <pkg-mono-group@lists.alioth.debian.org>  Wed, 10 Aug 2005 19:44:27 +1200
 
