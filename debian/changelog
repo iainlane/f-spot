@@ -2,7 +2,7 @@ f-spot (0.1.1-1) unstable; urgency=low
 
   * Andrew Mitchell
     - New upstream version
-    - F-Spot now uses GTK# 2.0, updated Build-Depends to libgnome2.0-cil
+    - F-Spot now uses GTK# 2.0, updated Build-Depends to libgnome2.0-cil (Closes: #316776)
     - Removed gnome-pkg-tools from Build-Depends
 
  -- Debian Mono Group <pkg-mono-group@lists.alioth.debian.org>  Mon, 22 Aug 2005 22:04:52 +0000
