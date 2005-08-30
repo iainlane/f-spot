@@ -1,3 +1,10 @@
+f-spot (0.1.1-2) unstable; urgency=low
+
+  * Andrew Mitchell
+    - Add libsqlite0 to Depends (Closes: #325375, #325762)
+
+ -- Debian Mono Group <pkg-mono-group@lists.alioth.debian.org>  Tue, 30 Aug 2005 22:27:05 +0000
+
 f-spot (0.1.1-1) unstable; urgency=low
 
   * Andrew Mitchell

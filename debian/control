@@ -8,7 +8,7 @@ Standards-Version: 3.6.2
 
 Package: f-spot
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${cli:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${cli:Depends}, libsqlite0
 Description: personal photo management application
  F-Spot is meant to be an easy-to-use photo management
  application.  It allows for importing of your existing
