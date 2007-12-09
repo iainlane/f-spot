@@ -1,8 +1,12 @@
-f-spot (0.3.5-1.3) unstable; urgency=low
+f-spot (0.4.1-1) unstable; urgency=low
 
-  * Convert 0.3.5-1.2 to use dpatch for its changes.
+  * New maintainer. (Closes: #453474)
+  * New upstream version. (Closes: #436298, #446409)
+  * Acknowledge NMUs by Margarita Manterola.
+    (Closes: #435697, #427287, #401647) 
+  * Use dpatch to manage patches.
 
- -- Tim Retout <tim@retout.co.uk>  Sun, 09 Dec 2007 17:37:09 +0000
+ -- Tim Retout <tim@retout.co.uk>  Sun, 09 Dec 2007 18:27:10 +0000
 
 f-spot (0.3.5-1.2) unstable; urgency=low
 
