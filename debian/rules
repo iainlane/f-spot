@@ -1,7 +1,7 @@
 #! /usr/bin/make -f
 
+#export DH_VERBOSE=1
 export MONO_SHARED_DIR=$(CURDIR)
-export DH_VERBOSE=1
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/gnome.mk
@@ -11,16 +11,10 @@ include /usr/share/dpatch/dpatch.make
 
 export DEB_DH_MAKESHLIBS_ARGS="-n"
 
-DEB_CONFIGURE_EXTRA_FLAGS := --disable-scrollkeeper
-
 CFLAGS := -Wall -g
 
-# Ensure at build time that the library has no dependencies on undefined
-# symbols.
-LDFLAGS += -Wl,-z,defs
-
-# Speed up loading.
-LDFLAGS += -Wl,-O1
+DEB_CONFIGURE_SCRIPT_ENV := LDFLAGS="-Wl,-O1 -Wl,--as-needed"
+DEB_CONFIGURE_EXTRA_FLAGS := --disable-scrollkeeper
 
 common-configure-indep::
 	mkdir -p $(MONO_SHARED_DIR)/.wapi

@@ -1,0 +1,30 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## fix_libfspoteog_linkage.dpatch by Mirco Bauer <meebey@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad f-spot-0.4.1~/libeog/Makefile.am f-spot-0.4.1/libeog/Makefile.am
+--- f-spot-0.4.1~/libeog/Makefile.am	2007-12-10 00:06:42.000000000 +0100
++++ f-spot-0.4.1/libeog/Makefile.am	2007-12-10 00:07:08.000000000 +0100
+@@ -44,6 +44,7 @@
+ 
+ libfspoteog_la_SOURCES = $(libfspoteog_files)
+ 
++libfspoteog_la_LIBADD = $(F_LIBS) $(LCMS_LIBS)
+ 
+ # GLib marshalling cruft
+ 
+diff -urNad f-spot-0.4.1~/libeog/Makefile.in f-spot-0.4.1/libeog/Makefile.in
+--- f-spot-0.4.1~/libeog/Makefile.in	2007-12-10 00:06:42.000000000 +0100
++++ f-spot-0.4.1/libeog/Makefile.in	2007-12-10 00:07:15.000000000 +0100
+@@ -51,7 +51,7 @@
+ am__installdirs = "$(DESTDIR)$(fspotlibdir)"
+ fspotlibLTLIBRARIES_INSTALL = $(INSTALL)
+ LTLIBRARIES = $(fspotlib_LTLIBRARIES)
+-libfspoteog_la_LIBADD =
++libfspoteog_la_LIBADD = $(F_LIBS) $(LCMS_LIBS)
+ am__objects_1 = access.lo accessible-image-view-factory.lo \
+ 	accessible-image-view.lo eog-file-selection.lo eog-image.lo \
+ 	eog-pixbuf-util.lo eog-scroll-view.lo image-view.lo \
