@@ -1,1 +1,4 @@
-01_fix_wrapper.dpatch
+01_build-system.patch
+02_autoreconf.patch
+10_cs-changes.patch
+11_screensaver-path.patch

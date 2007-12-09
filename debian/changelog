@@ -1,3 +1,386 @@
+f-spot (0.3.5-1.3) unstable; urgency=low
+
+  * Convert 0.3.5-1.2 to use dpatch for its changes.
+
+ -- Tim Retout <tim@retout.co.uk>  Sun, 09 Dec 2007 17:37:09 +0000
+
+f-spot (0.3.5-1.2) unstable; urgency=low
+
+  * Non-maintainer upload, to fix spurious Failures to Build From Source.
+  * Added docbook-xml as a dependency.
+  * Changed all xsltproc calls to xsltproc --nonet, so that no network is
+    used while generating the documentation. (Closes: #435697).
+
+ -- Margarita Manterola <marga@debian.org>  Thu, 02 Aug 2007 19:13:54 -0300
+
+f-spot (0.3.5-1.1) unstable; urgency=low
+
+  * Non-maintainer upload to fix Failure to Build From Source.
+  * Added libgconf2.0-cil and libglade2.0-cil as Build-Dependencies,
+    as suggested by Cyril Brulebois. (Closes: #427287).
+  * Added dbus as a dependency, since F-Spot does not work when dbus is
+    not present.  (Closes: #401647)
+
+ -- Margarita Manterola <marga@debian.org>  Wed, 01 Aug 2007 23:18:53 -0300
+
+f-spot (0.3.5-1) unstable; urgency=low
+
+  * Upload current Ubuntu package to Debian as a new upstream release
+
+ -- Andrew Mitchell <ajmitch@debian.org>  Mon,  7 May 2007 21:49:44 +1200
+
+f-spot (0.3.5-0ubuntu2) feisty; urgency=low
+
+  * Support .KDC files as a RAW image type (LP: 91488)
+
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Wed, 21 Mar 2007 23:26:56 +1200
+
+f-spot (0.3.5-0ubuntu1) feisty; urgency=low
+
+  * New upstream release
+    - Fix slideshow with missing images
+    - More descriptive error when dbus session bus is missing
+    - Don't show Hidden photos unless asked
+  * Add fix to google-sharp/PicasaWeb.cs from r3011 to fix PicasaWeb export
+	
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Wed, 14 Mar 2007 10:29:37 +1300
+
+f-spot (0.3.4-0ubuntu1) feisty; urgency=low
+
+  * New upstream release
+  * Use system copies of NDesk.DBus instead of using the bundled source
+  * Add patch from SVN r2790 for LP: #59723
+
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Mon, 26 Feb 2007 23:07:50 +1300
+
+f-spot (0.3.3-0ubuntu1) feisty; urgency=low
+
+  * New upstream release
+    - Fix the insensitive editors problem.
+  * Add libgl1-mesa-dev | libgl-dev to Build-Depends to be able to load 
+    libGL.so.1 at run time (LP: #81578)
+  * Disable scrollkeeper usage in debian/ules
+	
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Tue,  6 Feb 2007 11:53:45 +1300
+
+f-spot (0.3.2-0ubuntu1) feisty; urgency=low
+
+  * New upstream release
+    - New editing effects: Soft Focus and Straighten.
+    - Lots of fixes to the OpenGL slideshow introduced in 0.3.1
+    - Export to 23hq.com and SmugMug (Thomas Van Machelen)
+    - Background color for transparent regions of images can be chosen 
+      in --view mode (Stephane Delcroix)
+    - New red-eye removal algorithm. Threshold value for redeye removal is 
+      read from gconf. Default is set to -15 (Stephane Delcroix)
+    - Zero-pad month and days while creating files and directories 
+      (Stephane Delcroix)
+    - In browse mode hjkl now behave just like left, down, up, right arrow
+      keys do (Gabriel Burt)
+    - Accepts dropped URIs from Firefox. Drag an image from Firefox and 
+      drop it in f-spot --view (Stephane Delcroix)
+    - Fullscreen mode uses overlayed controls, powered by compiz (Larry Ewing)
+    - Fixes to histogram (Larry Ewing)
+    - Initial work on color management (Larry Ewing)
+    - Refactored multi service support (Larry Ewing)
+    - More work on unit tests (Larry Ewing)
+    - Other fixes and improvements
+
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Wed, 24 Jan 2007 22:03:15 +1300
+
+f-spot (0.3.0-1) unstable; urgency=low
+
+  * New upstream release
+    - Massive view  mode improvements (Stephane Delcroix, Thomas Van Machelen).
+    - Fix for new Picasa web interface (Stephane Delcroix).
+    - Integrated unit tests using nunit.
+    - New multiresolution icons.
+    - New User Guide (Bengt Thuree, Alexandre Prokoudine and others).
+    - Query improvements (Gabriel Burt).
+
+ -- Andrew Mitchell <ajmitch@debian.org>  Sun, 10 Dec 2006 20:28:28 +1300
+
+f-spot (0.3.0-0ubuntu1) feisty; urgency=low
+
+  * New upstream release
+    - Massive view  mode improvements (Stephane Delcroix, Thomas Van Machelen).
+    - Fix for new Picasa web interface (Stephane Delcroix).
+    - Integrated unit tests using nunit.
+    - New multiresolution icons.
+    - New User Guide (Bengt Thuree, Alexandre Prokoudine and others).
+    - Query improvements (Gabriel Burt).
+
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Fri,  1 Dec 2006 00:24:28 +1300
+
+f-spot (0.2.2-0ubuntu1) feisty; urgency=low
+
+  * Update to 0.2.2 upstream
+
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Tue,  7 Nov 2006 11:27:24 +1300
+
+f-spot  (0.2.1-1.1) unstable; urgency=medium
+
+   * Non-maintainer upload.
+   * Fix FTBFS, Kudos to Roland Mas and Mirco Bauer for looking
+     into this and preparing a Patch (Closes: #394142)
+
+ -- Michael Ablassmeier <abi@debian.org>  Fri, 27 Oct 2006 12:59:23 +0200 
+	
+f-spot (0.2.1-1ubuntu1) edgy; urgency=low
+
+  * Apply bug fixes from upstream CVS:
+    - #340901: Close colour dialog on switching to browse mode
+    - #353801: Tag drag & drop crashing
+    - #355653: Picasa export UI fix
+    - #356543: Picasa progressbar UI fix
+    - #329299: Landscape/portrait constraints while cropping
+    - #357286: Crash in commandline parsing
+    - #354621: Update google-sharp for authenticated connections
+  * Fix screensaver exec line in tools/f-spot-screensaver
+	
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Thu, 12 Oct 2006 17:17:16 +1300
+
+f-spot (0.2.1-1) unstable; urgency=low
+
+  * New upstream release, incorporating Ubuntu changes
+
+ -- Andrew Mitchell <ajmitch@debian.org>  Tue,  3 Oct 2006 11:05:04 +1300
+
+f-spot (0.2.1-0ubuntu1) edgy; urgency=low
+
+  * New upstream release (UVF Exception granted as malone #61550)
+    - Picasa Web album export.
+    - Fixes for recent mono versions.
+    - Support for scaling when sending mail.
+    - Support for exporting the images in correct orientation.
+    - Improved generation.
+    - Many more bug fixes.
+  * Fixes for bashisms merged upstream (Closes: #367459)
+  * Fix libgphoto-sharp dllmap (Closes: #385979, #389513)
+  
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Thu, 21 Sep 2006 13:54:31 +1200
+
+f-spot (0.2.0-1ubuntu1) edgy; urgency=low
+
+  * Add libgphoto2_port.so to libgphoto2-sharp.dll.config dllmap
+
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Wed,  6 Sep 2006 19:29:05 +1200
+
+f-spot (0.2.0-1) unstable; urgency=low
+
+  * New upstream release
+    - Initial gnome-vfs --view support. 
+    - Impoved static html and folder export logic.
+    - Improved loupe.
+    - Fixes for mono head.
+    - Many many more fixes see ChangeLog.
+  * Most patch branches incorporated upstream, remaining are
+    - ubuntu.01-fix-wrapper: Fix for bashisms
+    - ubuntu.03-sqlite3-when-new: Create sqlite 3 database by default
+    - ubuntu.04-screensaver: Set correct screensaver path
+  * Add f-spot(1) manpage, thanks to Andrew Burton (Closes: #312566)
+  	
+ -- Andrew Mitchell <ajmitch@debian.org>  Fri,  1 Sep 2006 09:16:30 +1200
+
+f-spot (0.1.11-3ubuntu5) edgy; urgency=low
+
+  * Update removable metadata patch from upstream (Malone: #42736)
+  * Update location of screensaver
+
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Sat, 12 Aug 2006 13:52:02 +1200
+
+f-spot (0.1.11-3ubuntu4) edgy; urgency=low
+
+  * Apply patch from f-spot-0.1 branch to import rotated images 
+    correctly (Malone: #37972)
+
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Wed,  9 Aug 2006 23:45:48 +1200
+
+f-spot (0.1.11-3ubuntu3) edgy; urgency=low
+
+  * Remove dpatch from Build-Depends, rm debian/patched (Malone: #54760)
+
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Tue,  1 Aug 2006 22:02:27 +1200
+
+f-spot (0.1.11-3ubuntu2) edgy; urgency=low
+
+  * debian/control:
+    + Build-Depend on cli-common-dev instead of cli-common to fix FTBFS
+
+ -- Sebastian Dröge <slomo@ubuntu.com>  Sun, 30 Jul 2006 17:45:19 +0200 
+
+f-spot (0.1.11-3ubuntu1) edgy; urgency=low
+
+  * Remove unneeded libmono0 & libsqlite* dependencies
+
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Sun, 30 Jul 2006 21:09:40 +1200
+
+f-spot (0.1.11-3) unstable; urgency=high
+
+  * Drop use of dpatch, using bzr for patch management now
+  * Automake fixes for missing .la files (Closes: #377158)
+
+ -- Andrew Mitchell <ajmitch@debian.org>  Fri, 21 Jul 2006 14:18:10 +1200
+
+f-spot (0.1.11-2) unstable; urgency=low
+
+  * Add libmono-sqlite1.0-cil to Build-Depends (Closes: #364440)
+  * Fix screensaver script path
+  * Update to Standards-Version 3.7.2
+
+ -- Andrew Mitchell <ajmitch@debian.org>  Sat,  3 Jun 2006 17:15:39 +1200
+
+f-spot (0.1.11-1ubuntu1) dapper; urgency=low
+
+  * Add patch to ignore failure in writing metadata to images 
+    imported from a removable device. Thanks to Chris Wilson for this
+    - Malone #42736  
+  * Update 02_f-spot-copy.dpatch from GNOME #326860
+    - Malone #38010  
+	
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Tue, 16 May 2006 18:17:23 +1200
+
+f-spot (0.1.11-1) unstable; urgency=low
+
+  * New upstream release
+    - Much improved contrast function.
+    - Database opens existing databases regardless of the sqlite
+      version.
+    - Database tries to force the correct encoding on v2 databases.
+    - Import dialog is better about cleaning up after itself.
+    - Valid cameras are no longer discarded from the camera list.
+    - Group selector handles empty groups.
+    - Many slideshow improvements.
+    - Fix the erratic open with menu behavior. 
+    - Improve the tag menu behavior when adding tags.
+    - Add --debug and --uninstalled command line options.
+    - Fixed JPEG orientation when saving new versions.
+    - Added a general exception dialog.
+    - Many many more bugfixes.
+    Closes: #337240, #338536, #354135, #358954, #358551, #349501
+  * Add dcraw to Recommends for RAW image support
+  * Add patch to fix copying on import
+  * Use SQLite 3 database format by default
+  * Thanks to Roland Mas for NMU (Closes: #349501, #354849)
+  
+ -- Andrew Mitchell <ajmitch@debian.org>  Tue,  4 Apr 2006 22:35:32 +1200
+
+f-spot (0.1.10-0ubuntu1) dapper; urgency=low
+
+  * New upstream release
+    - Script to launch f-spot import based on hal id
+    - Screensaver wrappers for gnomescreensaver.- New gnome-screensaver mode.
+    - Timezone utc clean-ups.
+    - Fixed time dialog set the date properly.
+    - Expose the sort order to the ui.
+    - Added cancel button to color dialog
+    - Fixed memory leak in async loader.
+    - Many more bugfixes.
+
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Sat, 25 Feb 2006 06:32:13 +1000
+
+f-spot (0.1.9-0ubuntu1) dapper; urgency=low
+
+  * New upstream release
+    - Small import dialog improvements.
+    - Support for new Flickr API.
+    - Open With menu.
+    - Database upgrade path.
+    - Translated default tag names.
+	
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Tue, 14 Feb 2006 11:50:37 +1300
+
+f-spot (0.1.8-1) unstable; urgency=low
+
+  * New upstream release
+    - New icons
+    - Fixed typos.
+    - Png metadata support.
+    - Support for dates before the unix Epoch.
+    - Improved XMP handing.
+    - Enhanced time dialog.
+  * Remove outdated README from debian/docs
+
+ -- Andrew Mitchell <ajmitch@debian.org>  Tue, 31 Jan 2006 09:14:12 +1300
+
+f-spot (0.1.7-0ubuntu1) dapper; urgency=low
+
+  * New upstream release
+    - Uses async I/O when loading pictures (Closes: #341790)
+  * DBUS 0.60 transition (Closes: #348177)
+    - Drop libdbus-cil from Build-Depends
+  
+ -- Andrew Mitchell <ajmitch@debian.org>  Thu, 19 Jan 2006 03:40:19 +1300
+
+f-spot (0.1.5-1) unstable; urgency=low
+
+  * New upstream release (Closes: #343046)
+    - Fix comments in Original export.
+    - Improve Zooming logic, remove the old View->Size menu.
+    - Keep in the timeline place when removing photos.
+    - Allow changes to case in tag names.
+    - Support adding albums to existing galleries.
+    - Support Gallery 2 in gallery export.
+    - Added russian translation from Alexsandre Prokoudine.
+  * Sticking with sqlite2 for now, until a clean upgrade path is found
+
+ -- Andrew Mitchell <ajmitch@debian.org>  Thu, 15 Dec 2005 20:58:55 +0000
+
+f-spot (0.1.4-1) unstable; urgency=low
+
+  * New upstream release 
+    - Menu rotation is 270 degrees, not 90. Closes (#341791) 
+  * Patches 02_endianness_fix.dpatch & 03_ciff.cs.dpatch dropped, included in upstream release
+  * Added patch to use sqlite 3
+
+ -- Andrew Mitchell <ajmitch@debian.org>  Fri,  9 Dec 2005 08:48:57 +1300
+
+f-spot (0.1.3-3) unstable; urgency=low
+
+  * Update for new maintainer address
+  * Set watch file to look for 0.1.x versions
+
+ -- Andrew Mitchell <ajmitch@debian.org>  Wed,  7 Dec 2005 23:58:52 +1300
+
+f-spot (0.1.3-2) experimental; urgency=low
+
+  * Add patch to src/Ciff.cs from CVS (Ciff.cs rev 1.9)
+  * Merge in Ubuntu changes, use dbus 0.50
+
+ -- Andrew Mitchell <ajmitch@debian.org>  Sat, 26 Nov 2005 00:05:32 +1300
+
+f-spot (0.1.3-1ubuntu1.1) breezy-updates; urgency=low
+
+  * Fix big-endian data-loss bug
+  * Patch from GNOME #319190 (Malone #3338)
+
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Thu, 20 Oct 2005 09:31:10 +1300
+
+f-spot (0.1.3-1ubuntu1) breezy; urgency=low
+
+  * Change {Build-,}Depends back to libdbus-1-cil for breezy
+
+ -- Andrew Mitchell <ajmitch@ubuntu.com>  Fri, 30 Sep 2005 01:09:20 +1200
+
+f-spot (0.1.3-1) unstable; urgency=low
+
+  * New upstream release (Closes: #301152, #311871, #330461)
+  * Rebuild for gtk# 2.3.91 
+  * Andrew Mitchell
+    - Add Depends on libdbus-cil
+    - Updated debian/patches/01_fix_wrapper.dpatch to match upstream changes
+
+ -- Debian Mono Group <pkg-mono-group@lists.alioth.debian.org>  Thu, 29 Sep 2005 23:33:44 +0000
+
+f-spot (0.1.2-0ubuntu1) breezy; urgency=low
+
+  * New upstream release
+  * Andrew Mitchell
+    - Add Depends on libdbus-1-cil
+    - Update for cli-common 0.2.0
+  
+ -- Debian Mono Group <pkg-mono-group@lists.alioth.debian.org>  Thu,  8 Sep 2005 21:55:04 +0000
+
 f-spot (0.1.1-2) unstable; urgency=low
 
   * Andrew Mitchell

@@ -1,0 +1,24 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## build-system.dpatch by  <tim@retout.co.uk>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Change to f-spot path in f-spot-screensaver from Debian package version 
+## DP: 0.3.5-1.2
+
+@DPATCH@
+
+commit 262c969b3e1fa0f4085c9e447752dfa10180bfb8
+Author: Tim Retout <tim@retout.co.uk>
+Date:   Sat Dec 8 20:40:37 2007 +0000
+
+    Imported Debian patch 0.3.5-1.2
+
+diff --git a/tools/f-spot-screensaver b/tools/f-spot-screensaver
+index c731887..f0a5a3c 100755
+--- a/tools/f-spot-screensaver
++++ b/tools/f-spot-screensaver
+@@ -1,2 +1,2 @@
+-#!/bin/sh
+-exec f-spot --slideshow
++#!/bin/bash
++exec -a f-spot /usr/bin/f-spot --slideshow

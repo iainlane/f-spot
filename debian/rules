@@ -1,10 +1,17 @@
 #! /usr/bin/make -f
 
 export MONO_SHARED_DIR=$(CURDIR)
+export DH_VERBOSE=1
 
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/gnome.mk
 include /usr/share/cdbs/1/rules/dpatch.mk
+# needed to use the dpatch tools (like dpatch-edit-patch)
+include /usr/share/dpatch/dpatch.make
+
+export DEB_DH_MAKESHLIBS_ARGS="-n"
+
+DEB_CONFIGURE_EXTRA_FLAGS := --disable-scrollkeeper
 
 CFLAGS := -Wall -g
 
@@ -26,5 +33,3 @@ binary-install/f-spot::
 
 clean::
 	rm -rf $(MONO_SHARED_DIR)/.wapi
-
-unpatch: deapply-dpatches

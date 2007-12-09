@@ -1,18 +1,16 @@
 Source: f-spot
 Section: gnome
 Priority: optional
-Maintainer: Debian Mono Group <pkg-mono-group@lists.alioth.debian.org>
-Build-Depends: debhelper (>= 4.2.21), cdbs, mono-mcs (>= 1.1.2) | c-sharp-compiler, cli-common (>= 0.1.3), libgnome2.0-cil, libxml-parser-perl, libmono-dev (>= 1.1.2), libgnomeui-dev, libexif-dev (>= 0.6.12), libsqlite0-dev, libgphoto2-2-dev (>= 2.1.4), liblcms1-dev, dpatch
-Uploaders: Andrew Mitchell <ajmitch@gnu.org>, Dave Beckett <dajobe@debian.org>, Mirco Bauer <meebey@meebey.net>
-Standards-Version: 3.6.2
+Maintainer: Andrew Mitchell <ajmitch@debian.org>
+Build-Depends: debhelper (>= 5.0.0), cdbs, mono-gmcs (>= 1.1.17) | c-sharp-2.0-compiler, cli-common-dev (>= 0.4.3), libgnome2.0-cil (>= 2.7.90), libxml-parser-perl, libmono-dev (>= 1.1.2), libgnomeui-dev, libexif-dev (>= 0.6.12), libsqlite3-dev, libgphoto2-2-dev (>= 2.1.4), liblcms1-dev, libmono-sqlite2.0-cil, libmono-system-runtime2.0-cil, libmono-cairo2.0-cil, libusb-dev, gnome-doc-utils (>= 0.3.2), libgl1-mesa-dev | libgl-dev, libndesk-dbus1.0-cil, libndesk-dbus-glib1.0-cil, gnome-screensaver, libgconf2.0-cil, libglade2.0-cil, docbook-xml
+Standards-Version: 3.7.2
 
 Package: f-spot
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${cli:Depends}, libsqlite0
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${cli:Depends}, dbus
+Recommends: dcraw
 Description: personal photo management application
  F-Spot is meant to be an easy-to-use photo management
  application.  It allows for importing of your existing
  photo collections, tagging photos with identifiers,
  as well as doing simple edits of photos (e.g. rotating).
- .
- This application is still in its early stage of development.

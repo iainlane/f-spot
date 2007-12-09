@@ -1,0 +1,55 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## cs-changes.dpatch by  <tim@retout.co.uk>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Miscellaneous f-spot changes from Debian package version 0.3.5-1.2
+
+@DPATCH@
+
+commit 262c969b3e1fa0f4085c9e447752dfa10180bfb8
+Author: Tim Retout <tim@retout.co.uk>
+Date:   Sat Dec 8 20:40:37 2007 +0000
+
+    Imported Debian patch 0.3.5-1.2
+
+diff --git a/google-sharp/PicasaWeb.cs b/google-sharp/PicasaWeb.cs
+index aac6fc8..d808d9d 100644
+--- a/google-sharp/PicasaWeb.cs
++++ b/google-sharp/PicasaWeb.cs
+@@ -260,7 +260,8 @@ namespace Mono.Google.Picasa {
+ 			XmlNamespaceManager nsmgr = new XmlNamespaceManager (doc.NameTable);
+ 			nsmgr.AddNamespace ("photo", "http://www.pheed.com/pheed/");
+ 			nsmgr.AddNamespace ("media", "http://search.yahoo.com/mrss/");
+-			nsmgr.AddNamespace ("gphoto", "http://picasaweb.google.com/lh/picasaweb");
++			nsmgr.AddNamespace ("gphoto", "http://schemas.google.com/photos/2007");
++			nsmgr.AddNamespace ("batch", "http://schemas.google.com/gdata/batch");
+ 			node = channel.SelectSingleNode ("gphoto:user", nsmgr);
+ 			user = node.InnerText;
+ 			node = channel.SelectSingleNode ("gphoto:nickname", nsmgr);
+diff --git a/src/Db.cs b/src/Db.cs
+index 5f6ed8c..dd8c52f 100644
+--- a/src/Db.cs
++++ b/src/Db.cs
+@@ -363,7 +363,9 @@ public class Db : IDisposable {
+ 
+ 			if (version == 2)
+ 				version_string += ",encoding=UTF-8";
+-		}
++		} else {
++		  version_string = ",version=3";
++    }
+ 		
+ 		sqlite_connection = new SqliteConnection ();
+ 		sqlite_connection.ConnectionString = "URI=file:" + path + version_string;
+diff --git a/src/Imaging/ImageFile.cs b/src/Imaging/ImageFile.cs
+index 74cf22c..918891f 100644
+--- a/src/Imaging/ImageFile.cs
++++ b/src/Imaging/ImageFile.cs
+@@ -53,6 +53,7 @@ namespace FSpot {
+ 			name_table [".nef"] = typeof (FSpot.Tiff.NefFile);
+ 			name_table [".pef"] = typeof (FSpot.Tiff.NefFile);
+ 			name_table [".raw"] = typeof (FSpot.Tiff.NefFile);
++			name_table [".kdc"] = typeof (FSpot.Tiff.NefFile);
+ 			name_table [".tiff"] = typeof (FSpot.Tiff.TiffFile);
+ 			name_table [".tif"] = typeof (FSpot.Tiff.TiffFile);
+ 			name_table [".orf"] =  typeof (FSpot.Tiff.NefFile);
