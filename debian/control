@@ -1,7 +1,8 @@
 Source: f-spot
 Section: gnome
 Priority: optional
-Maintainer: Andrew Mitchell <ajmitch@debian.org>
+Maintainer: Debian CLI Applications Team <pkg-cli-apps-team@lists.alioth.debian.org>
+Uploaders: Tim Retout <tim@retout.co.uk>
 Build-Depends: debhelper (>= 5.0.0), cdbs, mono-gmcs (>= 1.1.17) | c-sharp-2.0-compiler, cli-common-dev (>= 0.4.3), libgnome2.0-cil (>= 2.7.90), libxml-parser-perl, libmono-dev (>= 1.1.2), libgnomeui-dev, libexif-dev (>= 0.6.12), libsqlite3-dev, libgphoto2-2-dev (>= 2.1.4), liblcms1-dev, libmono-sqlite2.0-cil, libmono-system-runtime2.0-cil, libmono-cairo2.0-cil, libusb-dev, gnome-doc-utils (>= 0.3.2), libgl1-mesa-dev | libgl-dev, libndesk-dbus1.0-cil, libndesk-dbus-glib1.0-cil, gnome-screensaver, libgconf2.0-cil, libglade2.0-cil, docbook-xml
 Standards-Version: 3.7.2
 
