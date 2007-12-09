@@ -1,5 +1,10 @@
-f-spot (0.4.1-1) unstable; urgency=low
+f-spot (0.4.1-1~pre1) UNRELEASED; urgency=low
 
+  [ Mirco Bauer ]
+  * Added myself to Uploaders.
+  * Updated cli-common-dev build-dependency to >= 0.4.4.
+
+  [ Tim Retout ]
   * New upstream version. (Closes: #436298, #446409)
   * New maintainer. (Closes: #453474)
   * Acknowledge NMUs by Margarita Manterola.
@@ -10,7 +15,7 @@ f-spot (0.4.1-1) unstable; urgency=low
     - Add new Homepage field.
     - Add new Vcs-* fields.
 
- -- Tim Retout <tim@retout.co.uk>  Sun, 09 Dec 2007 19:05:34 +0000
+ -- Mirco Bauer <meebey@debian.org>  Sun, 09 Dec 2007 19:54:39 +0100
 
 f-spot (0.3.5-1.2) unstable; urgency=low
 
