@@ -13,6 +13,7 @@ Package: f-spot
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${cli:Depends}, dbus
 Recommends: dcraw
+Suggests: sqlite, sqlite3
 Description: personal photo management application
  F-Spot is meant to be an easy-to-use photo management
  application.  It allows for importing of your existing
