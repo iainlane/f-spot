@@ -1,22 +1,26 @@
-f-spot (0.4.1-1~pre1) UNRELEASED; urgency=low
+f-spot (0.4.1-1~pre2) UNRELEASED; urgency=low
 
   [ Mirco Bauer ]
   * debian/control:
     + Added myself to Uploaders.
     + Updated cli-common-dev build-dependency to >= 0.4.4.
-    + Updated Standards-Version to 3.7.3, no changed needed.
+    + Updated Standards-Version to 3.7.3, no changes needed.
     + Added sqlite and sqlite3 to Suggests, needed for the
       f-spot-sqlite-upgrade script.
   * debian/patches/01_build-system.dpatch:
     + Disabled as upstream allows to link against system ndesk-dbus now.
   * debian/patches/10_cs-changes.dpatch:
-    + Disabled as PicasaWeb export, .kdc file support and sqlite3 handling are
+    + Disabled as PicasaWeb export, .kdc file support and sqlite3 support are
       already fixed upstream.
   * Added beagle-dev to build-dependencies for beagle support.
   * debian/patches/fix_libfspot_linkage.dpatch
     debian/patches/fix_libfspoteog_linkage.dpatch
     debian/patches/fix_libfspotjpegtran_linkage.dpatch:
     + Created patch to link correctly against used libraries.
+  * debian/patches/20_refresh-menus-on-extensions.dpatch:
+    + Refresh the Export and Tools menus on new or removed extensions.
+      (upstream SVN revision: 3478)
+      (thanks to Matvey Kozhev <sikon@lucidfox.org> for the dpatch and investigation)
   * debian/rules:
     + Pass --as-needed to linker for lesser dependencies.
 
@@ -33,7 +37,7 @@ f-spot (0.4.1-1~pre1) UNRELEASED; urgency=low
     + Add new Homepage field.
     + Add new Vcs-* fields.
 
- -- Tim Retout <tim@retout.co.uk>  Tue, 11 Dec 2007 19:18:27 +0000
+ -- Mirco Bauer <meebey@debian.org>  Tue, 11 Dec 2007 20:32:53 +0100
 
 f-spot (0.3.5-1.2) unstable; urgency=low
 
