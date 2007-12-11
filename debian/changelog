@@ -7,6 +7,8 @@ f-spot (0.4.1-1~pre2) UNRELEASED; urgency=low
     + Updated Standards-Version to 3.7.3, no changes needed.
     + Added sqlite and sqlite3 to Suggests, needed for the
       f-spot-sqlite-upgrade script.
+  * debian/copyright:
+    + Rewritten, checked copyright and licenses of all source files.
   * debian/patches/01_build-system.dpatch:
     + Disabled as upstream allows to link against system ndesk-dbus now.
   * debian/patches/10_cs-changes.dpatch:
