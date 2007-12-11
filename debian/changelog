@@ -21,6 +21,11 @@ f-spot (0.4.1-1~pre2) UNRELEASED; urgency=low
     + Refresh the Export and Tools menus on new or removed extensions.
       (upstream SVN revision: 3478)
       (thanks to Matvey Kozhev <sikon@lucidfox.org> for the dpatch and investigation)
+  * debian/patches/link_system_libs.dpatch:
+    + Link against the Mono.Addins and FlickrNet debian packages instead of the
+      bundled versions.
+  * debian/patches/forward_port_to_flickrnet_2.1.5.dpatch:
+    + API forward port for FlickrNet 2.1.5.
   * debian/rules:
     + Pass --as-needed to linker for lesser dependencies.
 
@@ -153,7 +158,7 @@ f-spot (0.2.2-0ubuntu1) feisty; urgency=low
 
  -- Andrew Mitchell <ajmitch@ubuntu.com>  Tue,  7 Nov 2006 11:27:24 +1300
 
-f-spot  (0.2.1-1.1) unstable; urgency=medium
+f-spot (0.2.1-1.1) unstable; urgency=medium
 
    * Non-maintainer upload.
    * Fix FTBFS, Kudos to Roland Mas and Mirco Bauer for looking
