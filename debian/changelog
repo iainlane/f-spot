@@ -19,7 +19,7 @@ f-spot (0.4.1-1~pre1) UNRELEASED; urgency=low
     + Created patch to link correctly against used libraries.
   * debian/rules:
     + Pass --as-needed to linker for lesser dependencies.
-  
+
   [ Tim Retout ]
   * New upstream version. (Closes: #436298, #446409)
   * New maintainer. (Closes: #453474)
@@ -28,10 +28,12 @@ f-spot (0.4.1-1~pre1) UNRELEASED; urgency=low
   * Use dpatch to manage patches.
   * debian/watch: Update to look for 0.4.x versions, not 0.1.x.
   * debian/control:
-    - Add new Homepage field.
-    - Add new Vcs-* fields.
+    + Added myself to Uploaders.
+    + Add build dependency on dpatch.
+    + Add new Homepage field.
+    + Add new Vcs-* fields.
 
- -- Mirco Bauer <meebey@debian.org>  Sun, 09 Dec 2007 19:54:39 +0100
+ -- Tim Retout <tim@retout.co.uk>  Tue, 11 Dec 2007 19:18:27 +0000
 
 f-spot (0.3.5-1.2) unstable; urgency=low
 
