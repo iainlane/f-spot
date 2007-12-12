@@ -1,12 +1,16 @@
-f-spot (0.4.1-1~pre2) UNRELEASED; urgency=low
+f-spot (0.4.1-1~pre3) UNRELEASED; urgency=low
 
   [ Mirco Bauer ]
+  * New upstream version.
+    + Fixes NDesk.Glitz FTBFS. (Closes: #441686)
   * debian/control:
     + Added myself to Uploaders.
     + Updated cli-common-dev build-dependency to >= 0.4.4.
     + Updated Standards-Version to 3.7.3, no changes needed.
     + Added sqlite and sqlite3 to Suggests, needed for the
       f-spot-sqlite-upgrade script.
+    + Added libflickrnet2.1.5-cil, libmono-addins0.2-cil and
+      libmono-addins-gui0.2-cil to build-dependencies.
   * debian/copyright:
     + Rewritten, checked copyright and licenses of all source files.
   * debian/patches/01_build-system.dpatch:
