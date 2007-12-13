@@ -1,8 +1,10 @@
-f-spot (0.4.1-1~pre3) UNRELEASED; urgency=low
+f-spot (0.4.1-1~pre4) UNRELEASED; urgency=low
 
   [ Mirco Bauer ]
   * New upstream version.
     + Fixes NDesk.Glitz FTBFS. (Closes: #441686)
+    + Fixes crash when double clicking an image or attaching a tag while the
+      image is open. (Closes: #447986)
   * debian/control:
     + Added myself to Uploaders.
     + Updated cli-common-dev build-dependency to >= 0.4.4.
@@ -48,7 +50,7 @@ f-spot (0.4.1-1~pre3) UNRELEASED; urgency=low
     + Add new Homepage field.
     + Add new Vcs-* fields.
 
- -- Mirco Bauer <meebey@debian.org>  Tue, 11 Dec 2007 20:32:53 +0100
+ -- Mirco Bauer <meebey@debian.org>  Thu, 13 Dec 2007 20:57:10 +0100
 
 f-spot (0.3.5-1.2) unstable; urgency=low
 
