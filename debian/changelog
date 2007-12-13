@@ -34,7 +34,8 @@ f-spot (0.4.1-1~pre4) UNRELEASED; urgency=low
       bundled versions.
   * debian/patches/forward_port_to_flickrnet_2.1.5.dpatch:
     + API forward port for FlickrNet 2.1.5.
-  * debian/rules:
+  * debian/rules
+    debian/patches/99_ltmain_as-needed.dpatch:
     + Pass --as-needed to linker for lesser dependencies.
 
   [ Tim Retout ]
