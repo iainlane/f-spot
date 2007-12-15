@@ -1,3 +1,10 @@
+f-spot (0.4.1-2~pre1) UNRELEASED; urgency=low
+
+  * debian/patched/02_autoreconf.dpatch:
+    + Dropped
+
+ -- Mirco Bauer <meebey@debian.org>  Thu, 13 Dec 2007 22:24:23 +0100
+
 f-spot (0.4.1-1) unstable; urgency=low
 
   [ Mirco Bauer ]
