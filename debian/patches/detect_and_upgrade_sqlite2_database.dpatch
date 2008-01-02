@@ -1,0 +1,151 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## detect_sqlite2_databases.dpatch by Mirco Bauer <meebey@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad f-spot-0.4.1~/src/Db.cs f-spot-0.4.1/src/Db.cs
+--- f-spot-0.4.1~/src/Db.cs	2008-01-02 19:47:36.000000000 +0100
++++ f-spot-0.4.1/src/Db.cs	2008-01-02 19:49:36.000000000 +0100
+@@ -1,10 +1,10 @@
+ using System.Threading;
+ using System.Collections;
++using System.Diagnostics;
+ using System.IO;
+ using System;
+ using Banshee.Database;
+ 
+-
+ // All kinds of database items subclass from this.
+ public class DbItem {
+ 	uint id;
+@@ -43,6 +43,12 @@
+ public delegate void ItemsRemovedHandler (object sender, DbItemEventArgs args);
+ public delegate void ItemsChangedHandler (object sender, DbItemEventArgs args);
+ 
++public class DbException : ApplicationException {
++	public DbException(string msg) : base(msg)
++	{
++	}
++}
++
+ public abstract class DbStore {
+ 	// DbItem cache.
+ 
+@@ -235,7 +241,40 @@
+ 		if (new_db && ! create_if_missing)
+ 			throw new Exception (path + ": File not found");
+ 
+-		database = new QueuedSqliteDatabase(path);	
++		database = new QueuedSqliteDatabase(path);
++		if (database.GetFileVersion(path) == 2) {
++			// close the old database first
++			database.Dispose();
++
++			string error = null;
++			if (!File.Exists("/usr/bin/sqlite")) {
++				error = "The required program /usr/bin/sqlite is missing on this system, please install sqlite.";
++			}
++			if (!File.Exists("/usr/bin/sqlite3")) {
++				error = "The required program /usr/bin/sqlite3 is missing on this system, please install sqlite3.";
++			}
++
++			if (error == null) {
++				Console.WriteLine("Running f-spot-sqlite-upgrade script...");
++				ProcessStartInfo updaterInfo = new ProcessStartInfo("/usr/bin/f-spot-sqlite-upgrade");
++				updaterInfo.UseShellExecute = false;
++				updaterInfo.RedirectStandardError = true;
++				Process updater = Process.Start(updaterInfo);
++				string stdError = updater.StandardError.ReadToEnd();
++				updater.WaitForExit();
++				if (updater.ExitCode != 0) {
++					error = "/usr/bin/f-spot-sqlite-upgrade returned:\n" + stdError;
++				}
++			}
++			
++			if (error != null) {
++				string msg = "Failed to upgrade the f-spot sqlite2 database to sqlite3!\n" + error;
++				throw new DbException(msg);
++ 			}
++
++			// reopen the new converted database
++			database = new QueuedSqliteDatabase(path);
++		}
+ 
+ 		// Load or create the meta table
+  		meta_store = new MetaStore (Database, new_db);
+diff -urNad f-spot-0.4.1~/src/QueuedSqliteDatabase.cs f-spot-0.4.1/src/QueuedSqliteDatabase.cs
+--- f-spot-0.4.1~/src/QueuedSqliteDatabase.cs	2008-01-02 19:47:36.000000000 +0100
++++ f-spot-0.4.1/src/QueuedSqliteDatabase.cs	2008-01-02 19:48:58.000000000 +0100
+@@ -266,7 +266,7 @@
+             connection.Close();
+         }
+ 
+-        private int GetFileVersion(string path) 
++        public int GetFileVersion(string path) 
+         {
+             if (!File.Exists(path)) {
+                 return 3;
+diff -urNad f-spot-0.4.1~/src/main.cs f-spot-0.4.1/src/main.cs
+--- f-spot-0.4.1~/src/main.cs	2008-01-02 19:47:36.000000000 +0100
++++ f-spot-0.4.1/src/main.cs	2008-01-02 19:48:58.000000000 +0100
+@@ -176,6 +176,11 @@
+ 
+ 					if (core != null)
+ 						core.UnregisterServer ();
++
++					// if there is a problem with the DB, so is no way we can survive
++					if (e is DbException) {
++						throw;
++					}
+ 				}
+ 				if (control == null)
+ 					System.Console.WriteLine ("Can't get a connection to the dbus. Trying again...");
+diff -urNad f-spot-0.4.1~/tools/f-spot-sqlite-upgrade f-spot-0.4.1/tools/f-spot-sqlite-upgrade
+--- f-spot-0.4.1~/tools/f-spot-sqlite-upgrade	2008-01-02 19:47:36.000000000 +0100
++++ f-spot-0.4.1/tools/f-spot-sqlite-upgrade	2008-01-02 19:48:58.000000000 +0100
+@@ -1,8 +1,12 @@
+ #!/bin/sh
++set -e
++
+ # This only upgrades the default database location
+ # if you have specified a different location 
+ DB_LOCATION=~/.gnome2/f-spot/photos.db
+ BACKUP_LOCATION=$DB_LOCATION.backup
++DUMP_LOCATION=$DB_LOCATION.dump
++NEW_DB_LOCATION=$DB_LOCATION.new
+ 
+ if ! which sqlite >& /dev/null ; then
+ 	echo "Could not find sqlite binary. Update aborted."
+@@ -12,10 +16,28 @@
+ 	exit 1
+ fi
+ 
++if [ ! -f $DB_LOCATION ]; then
++	echo "Could not find $DB_LOCATION, nothing to update. Update aborted."
++	exit 1
++fi
++
++# make sure nothing gets in the way
++rm -f $BACKUP_LOCATION
++rm -f $DUMP_LOCATION
++rm -f $NEW_DB_LOCATION
++
+ if grep "^...This file contains an SQLite 2.1 database" $DB_LOCATION &> /dev/null; then
+ 	echo "Upgrading from SQLite 2.1 to SQLite3"
+-	mv $DB_LOCATION $BACKUP_LOCATION
+-	sqlite $BACKUP_LOCATION .dump | sqlite3 $DB_LOCATION
++	cp $DB_LOCATION $BACKUP_LOCATION
++	if sqlite $DB_LOCATION .dump > $DUMP_LOCATION &&
++	   sqlite3 $NEW_DB_LOCATION < $DUMP_LOCATION; then
++		cp $NEW_DB_LOCATION $DB_LOCATION
++		echo "Upgrade was successful."
++	else
++		echo "Upgrade failed, putting old database back."
++		cp $BACKUP_LOCATION $DB_LOCATION
++		exit 1
++	fi
+ else
+ 	echo "Database is already upgraded"
+ fi

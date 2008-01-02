@@ -5,6 +5,7 @@ fix_libfspoteog_linkage
 fix_libfspotjpegtran_linkage
 link_system_libs
 forward_port_to_flickrnet_2.1.5
-detect_sqlite2_databases
+detect_and_upgrade_sqlite2_database
 no_dup_apps_icons
+unlink_nunit
 99_ltmain_as-needed

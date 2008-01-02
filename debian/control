@@ -3,7 +3,7 @@ Section: gnome
 Priority: optional
 Maintainer: Debian CLI Applications Team <pkg-cli-apps-team@lists.alioth.debian.org>
 Uploaders: Tim Retout <tim@retout.co.uk>, Mirco Bauer <meebey@debian.org>
-Build-Depends: debhelper (>= 5.0.0), cdbs, dpatch, mono-gmcs (>= 1.1.17) | c-sharp-2.0-compiler, cli-common-dev (>= 0.4.4), libgnome2.0-cil (>= 2.7.90), libxml-parser-perl, libmono-dev (>= 1.1.2), libgnomeui-dev, libexif-dev (>= 0.6.12), libsqlite3-dev, libgphoto2-2-dev (>= 2.1.4), liblcms1-dev, libmono-sqlite2.0-cil, libmono-system-runtime2.0-cil, libmono-cairo2.0-cil, libusb-dev, gnome-doc-utils (>= 0.3.2), libgl1-mesa-dev | libgl-dev, libndesk-dbus1.0-cil, libndesk-dbus-glib1.0-cil, libgconf2.0-cil, libglade2.0-cil, libflickrnet2.1.5-cil, libmono-addins0.2-cil, libmono-addins-gui0.2-cil, beagle-dev, gnome-screensaver, docbook-xml
+Build-Depends: debhelper (>= 5.0.0), cli-common-dev (>= 0.4.4), cdbs, dpatch, mono-gmcs (>= 1.1.17) | c-sharp-2.0-compiler, libgtk2.0-cil (>= 2.8), libgtkhtml2.0-cil (>= 2.8), libgtk2.0-dev (>= 2.6), libgnome2.0-cil (>= 2.8), libgnome2-dev (>= 2.2), libxml-parser-perl, libmono-dev (>= 1.1.7), libgnomeui-dev (>= 2.2), libexif-dev (>= 0.5.7), libsqlite3-dev, libgphoto2-2-dev (>= 2.1.4), liblcms1-dev, libmono-sqlite2.0-cil, libmono-system-runtime2.0-cil, libmono-cairo2.0-cil, libusb-dev, gnome-doc-utils (>= 0.3.2), libgl1-mesa-dev | libgl-dev, libndesk-dbus1.0-cil (>= 0.4.2), libndesk-dbus-glib1.0-cil (>= 0.3.0), libgconf2.0-cil, libglade2.0-cil, libgnome-vfs2.0-cil, libflickrnet2.1.5-cil, libmono-addins0.2-cil, libmono-addins-gui0.2-cil, beagle-dev, gnome-screensaver, docbook-xml
 Standards-Version: 3.7.3
 Homepage: http://www.f-spot.org/
 Vcs-Svn: svn://svn.debian.org/svn/pkg-cli-apps/packages/f-spot/trunk/
@@ -12,8 +12,7 @@ Vcs-Browser: http://svn.debian.org/wsvn/pkg-cli-apps/packages/f-spot/trunk/
 Package: f-spot
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${cli:Depends}, dbus
-Recommends: dcraw
-Suggests: sqlite, sqlite3
+Recommends: dcraw, sqlite, sqlite3
 Description: personal photo management application
  F-Spot is meant to be an easy-to-use photo management
  application.  It allows for importing of your existing
