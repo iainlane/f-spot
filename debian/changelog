@@ -23,6 +23,8 @@ f-spot (0.4.1-2) unstable; urgency=low
       users are migrated to sqlite3.
     + Added build dependencies on all libraries the configure script explicitly
       checks for, fixes FTBFS. (Closes: #458672)
+  * debian/menu:
+    + Changed Apps -> Applications.
 
   [ Tim Retout ]
   * debian/patches/no_dup_apps_icons.dpatch: Adjust Makefiles so as not to
