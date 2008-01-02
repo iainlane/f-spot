@@ -9,7 +9,8 @@ f-spot (0.4.1-2) unstable; urgency=low
       but causes unnecesary dependency and produces different build results
       depending if nunit was installed or not.
   * debian/patches/detect_sqlite2_databases.dpatch
-    debian/patches/detect_and_upgrade_sqlite2_database.dpatch: (Closes: #456308)
+    debian/patches/detect_and_upgrade_sqlite2_database.dpatch:
+    (Closes: #456308)
     + Renamed detect_sqlite2_databases.dpatch to
       detect_and_upgrade_sqlite2_database.dpatch.
     + Made error message less developerish.
