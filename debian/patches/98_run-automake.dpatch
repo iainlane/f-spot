@@ -1,0 +1,594 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 98_run-automake.dpatch by  <tim@retout.co.uk>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad trunk~/FlickrNet/Makefile.in trunk/FlickrNet/Makefile.in
+--- trunk~/FlickrNet/Makefile.in	2007-12-04 12:20:31.000000000 +0000
++++ trunk/FlickrNet/Makefile.in	2008-01-13 17:09:51.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/Makefile.in trunk/Makefile.in
+--- trunk~/Makefile.in	2007-12-04 12:20:34.000000000 +0000
++++ trunk/Makefile.in	2008-01-13 17:09:56.000000000 +0000
+@@ -294,7 +294,6 @@
+ 	$(DIR_DBUS)	\
+ 	$(DIR_DBUS_GLIB)\
+ 	docs		\
+-	FlickrNet	\
+ 	SmugMugNet	\
+ 	glitz-sharp	\
+ 	google-sharp	\
+@@ -306,7 +305,6 @@
+ 	libgphoto2-sharp \
+ 	semweb		\
+ 	Tao		\
+-	mono-addins	\
+ 	tools		\
+ 	po		\
+ 	src		\
+@@ -316,7 +314,6 @@
+ 	dbus-sharp	\
+ 	dbus-sharp-glib	\
+ 	docs		\
+-	FlickrNet	\
+ 	SmugMugNet	\
+ 	glitz-sharp	\
+ 	google-sharp	\
+@@ -328,7 +325,6 @@
+ 	libgphoto2-sharp \
+ 	semweb		\
+ 	Tao		\
+-	mono-addins	\
+ 	tools		\
+ 	po		\
+ 	src		\
+diff -urNad trunk~/SmugMugNet/Makefile.in trunk/SmugMugNet/Makefile.in
+--- trunk~/SmugMugNet/Makefile.in	2007-12-04 12:20:31.000000000 +0000
++++ trunk/SmugMugNet/Makefile.in	2008-01-13 17:09:51.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/Tao/Tao.GlPostProcess/Makefile.in trunk/Tao/Tao.GlPostProcess/Makefile.in
+--- trunk~/Tao/Tao.GlPostProcess/Makefile.in	2007-12-04 12:20:31.000000000 +0000
++++ trunk/Tao/Tao.GlPostProcess/Makefile.in	2008-01-13 17:09:51.000000000 +0000
+@@ -270,15 +270,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/Tao/Tao.OpenGl/Makefile.in trunk/Tao/Tao.OpenGl/Makefile.in
+--- trunk~/Tao/Tao.OpenGl/Makefile.in	2007-12-04 12:20:31.000000000 +0000
++++ trunk/Tao/Tao.OpenGl/Makefile.in	2008-01-13 17:09:52.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/Tao/Tao.OpenGl.ExtensionLoader/Makefile.in trunk/Tao/Tao.OpenGl.ExtensionLoader/Makefile.in
+--- trunk~/Tao/Tao.OpenGl.ExtensionLoader/Makefile.in	2007-12-04 12:20:31.000000000 +0000
++++ trunk/Tao/Tao.OpenGl.ExtensionLoader/Makefile.in	2008-01-13 17:09:52.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/Tao/Tao.OpenGl.Glu/Makefile.in trunk/Tao/Tao.OpenGl.Glu/Makefile.in
+--- trunk~/Tao/Tao.OpenGl.Glu/Makefile.in	2007-12-04 12:20:31.000000000 +0000
++++ trunk/Tao/Tao.OpenGl.Glu/Makefile.in	2008-01-13 17:09:52.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/dbus-sharp/Makefile.in trunk/dbus-sharp/Makefile.in
+--- trunk~/dbus-sharp/Makefile.in	2007-12-04 12:20:31.000000000 +0000
++++ trunk/dbus-sharp/Makefile.in	2008-01-13 17:09:53.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/dbus-sharp-glib/Makefile.in trunk/dbus-sharp-glib/Makefile.in
+--- trunk~/dbus-sharp-glib/Makefile.in	2007-12-04 12:20:31.000000000 +0000
++++ trunk/dbus-sharp-glib/Makefile.in	2008-01-13 17:09:52.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/extensions/DefaultExporters/Makefile.in trunk/extensions/DefaultExporters/Makefile.in
+--- trunk~/extensions/DefaultExporters/Makefile.in	2007-12-04 12:20:32.000000000 +0000
++++ trunk/extensions/DefaultExporters/Makefile.in	2008-01-13 17:09:53.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/extensions/GalleryExport/Makefile.in trunk/extensions/GalleryExport/Makefile.in
+--- trunk~/extensions/GalleryExport/Makefile.in	2007-12-04 12:20:32.000000000 +0000
++++ trunk/extensions/GalleryExport/Makefile.in	2008-01-13 17:09:53.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/glitz-sharp/src/Makefile.in trunk/glitz-sharp/src/Makefile.in
+--- trunk~/glitz-sharp/src/Makefile.in	2007-12-04 12:20:32.000000000 +0000
++++ trunk/glitz-sharp/src/Makefile.in	2008-01-13 17:09:53.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/gnome-keyring-sharp/Makefile.in trunk/gnome-keyring-sharp/Makefile.in
+--- trunk~/gnome-keyring-sharp/Makefile.in	2007-12-04 12:20:32.000000000 +0000
++++ trunk/gnome-keyring-sharp/Makefile.in	2008-01-13 17:09:54.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/google-sharp/Makefile.in trunk/google-sharp/Makefile.in
+--- trunk~/google-sharp/Makefile.in	2007-12-04 12:20:32.000000000 +0000
++++ trunk/google-sharp/Makefile.in	2008-01-13 17:09:54.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/icons/Makefile.in trunk/icons/Makefile.in
+--- trunk~/icons/Makefile.in	2007-12-04 12:20:32.000000000 +0000
++++ trunk/icons/Makefile.in	2008-01-13 17:09:54.000000000 +0000
+@@ -303,11 +303,6 @@
+ 	actions,view-restore-22.png		\
+ 	actions,view-restore-24.png		\
+ 	actions,view-restore-32.png		\
+-	apps,f-spot.svg				\
+-	apps,f-spot-16.png			\
+-	apps,f-spot-22.png			\
+-	apps,f-spot-24.png			\
+-	apps,f-spot-32.png			\
+ 	devices,camera-photo-16.png		\
+ 	devices,camera-photo-22.png		\
+ 	devices,camera-photo-24.png		\
+diff -urNad trunk~/libeog/Makefile.in trunk/libeog/Makefile.in
+--- trunk~/libeog/Makefile.in	2007-12-04 12:20:32.000000000 +0000
++++ trunk/libeog/Makefile.in	2008-01-13 17:09:54.000000000 +0000
+@@ -51,7 +51,9 @@
+ am__installdirs = "$(DESTDIR)$(fspotlibdir)"
+ fspotlibLTLIBRARIES_INSTALL = $(INSTALL)
+ LTLIBRARIES = $(fspotlib_LTLIBRARIES)
+-libfspoteog_la_LIBADD =
++am__DEPENDENCIES_1 =
++libfspoteog_la_DEPENDENCIES = $(am__DEPENDENCIES_1) \
++	$(am__DEPENDENCIES_1)
+ am__objects_1 = access.lo accessible-image-view-factory.lo \
+ 	accessible-image-view.lo eog-file-selection.lo eog-image.lo \
+ 	eog-pixbuf-util.lo eog-scroll-view.lo image-view.lo \
+@@ -331,6 +333,7 @@
+ 	zoom.h
+ 
+ libfspoteog_la_SOURCES = $(libfspoteog_files)
++libfspoteog_la_LIBADD = $(F_LIBS) $(LCMS_LIBS)
+ MARSHAL_GENERATED = libeog-marshal.c libeog-marshal.h
+ BUILT_SOURCES = $(MARSHAL_GENERATED)
+ EXTRA_DIST = libeog-marshal.list
+diff -urNad trunk~/libfspot/Makefile.in trunk/libfspot/Makefile.in
+--- trunk~/libfspot/Makefile.in	2007-12-04 12:20:32.000000000 +0000
++++ trunk/libfspot/Makefile.in	2008-01-13 17:09:54.000000000 +0000
+@@ -53,6 +53,7 @@
+ LTLIBRARIES = $(fspotlib_LTLIBRARIES)
+ am__DEPENDENCIES_1 =
+ libfspot_la_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
++	$(am__DEPENDENCIES_1) \
+ 	$(top_builddir)/libjpegtran/libfspotjpegtran.la \
+ 	$(top_builddir)/libeog/libfspoteog.la
+ am_libfspot_la_OBJECTS = f-image-surface.lo f-image-view.lo \
+@@ -311,6 +312,8 @@
+ 	f-utils.h
+ 
+ libfspot_la_LIBADD = \
++	-lX11						\
++	$(F_LIBS)					\
+ 	$(LCMS_LIBS)					\
+ 	$(EXIF_LIBS)					\
+ 	$(top_builddir)/libjpegtran/libfspotjpegtran.la	\
+diff -urNad trunk~/libgphoto2-sharp/Makefile.in trunk/libgphoto2-sharp/Makefile.in
+--- trunk~/libgphoto2-sharp/Makefile.in	2007-12-04 12:20:33.000000000 +0000
++++ trunk/libgphoto2-sharp/Makefile.in	2008-01-13 17:09:55.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/libjpegtran/Makefile.in trunk/libjpegtran/Makefile.in
+--- trunk~/libjpegtran/Makefile.in	2007-12-04 12:20:33.000000000 +0000
++++ trunk/libjpegtran/Makefile.in	2008-01-13 17:09:55.000000000 +0000
+@@ -51,7 +51,8 @@
+ am__installdirs = "$(DESTDIR)$(fspotlibdir)"
+ fspotlibLTLIBRARIES_INSTALL = $(INSTALL)
+ LTLIBRARIES = $(fspotlib_LTLIBRARIES)
+-libfspotjpegtran_la_LIBADD =
++am__DEPENDENCIES_1 =
++libfspotjpegtran_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
+ am__objects_1 = jpeg-data.lo jpeg-marker.lo jpegtran.lo transupp.lo
+ am_libfspotjpegtran_la_OBJECTS = $(am__objects_1)
+ libfspotjpegtran_la_OBJECTS = $(am_libfspotjpegtran_la_OBJECTS)
+@@ -295,6 +296,7 @@
+ libfspotjpegtran_la_SOURCES = \
+ 	$(libfspotjpegtran_files)
+ 
++libfspotjpegtran_la_LIBADD = $(F_LIBS)
+ EXTRA_DIST = README
+ all: all-am
+ 
+diff -urNad trunk~/mono-addins/Mono.Addins/Makefile.in trunk/mono-addins/Mono.Addins/Makefile.in
+--- trunk~/mono-addins/Mono.Addins/Makefile.in	2007-12-04 12:20:33.000000000 +0000
++++ trunk/mono-addins/Mono.Addins/Makefile.in	2008-01-13 17:09:56.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/mono-addins/Mono.Addins.Gui/Makefile.in trunk/mono-addins/Mono.Addins.Gui/Makefile.in
+--- trunk~/mono-addins/Mono.Addins.Gui/Makefile.in	2007-12-04 12:20:33.000000000 +0000
++++ trunk/mono-addins/Mono.Addins.Gui/Makefile.in	2008-01-13 17:09:55.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+@@ -327,8 +327,8 @@
+ REFS = \
+ 	-r:Mono.Posix					\
+ 	-r:System					\
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)
+ 
+ PKGS = \
+ 	-pkg:gnome-sharp-2.0 	\
+diff -urNad trunk~/mono-addins/Mono.Addins.Setup/Makefile.in trunk/mono-addins/Mono.Addins.Setup/Makefile.in
+--- trunk~/mono-addins/Mono.Addins.Setup/Makefile.in	2007-12-04 12:20:33.000000000 +0000
++++ trunk/mono-addins/Mono.Addins.Setup/Makefile.in	2008-01-13 17:09:55.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+@@ -338,7 +338,7 @@
+ 	-r:Mono.Posix 				\
+ 	-r:System 				\
+ 	-r:System.Xml				\
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll
++	$(shell pkg-config --libs mono-addins)
+ 
+ PKGS = 
+ CSC_EXTRA_FLAGS = -langversion:ISO-1 -noconfig -codepage:utf8 -warn:4 -debug -d:DEBUG
+diff -urNad trunk~/semweb/Makefile.in trunk/semweb/Makefile.in
+--- trunk~/semweb/Makefile.in	2007-12-04 12:20:33.000000000 +0000
++++ trunk/semweb/Makefile.in	2008-01-13 17:09:56.000000000 +0000
+@@ -280,15 +280,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+diff -urNad trunk~/src/Makefile.in trunk/src/Makefile.in
+--- trunk~/src/Makefile.in	2007-12-04 12:20:33.000000000 +0000
++++ trunk/src/Makefile.in	2008-01-13 17:09:56.000000000 +0000
+@@ -286,15 +286,15 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_FLICKR = -r:$(DIR_FLICKR)/FlickrNet.dll
++LINK_FLICKR = -r:/usr/lib/cli/flickrnet-2.1.5/FlickrNet.dll
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GOOGLE = -r:$(DIR_GOOGLE)/Mono.Google.dll
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++	$(shell pkg-config --libs mono-addins)		\
++	$(shell pkg-config --libs mono-addins-setup)	\
++	$(shell pkg-config --libs mono-addins-gui)
+ 
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_SMUGMUG = -r:$(DIR_SMUGMUG)/SmugMugNet.dll
+@@ -307,7 +307,7 @@
+ CSC_LIB = $(CSC) -target:library
+ MONO_DEBUGFLAGS = --debug
+ RUNTIME = mono $(MONO_DEBUGFLAGS)
+-EXTRAFLAGS = -unsafe -nowarn:0169 -nowarn:0612 -nowarn:0414 -d:TEST_METADATA -d:BROKEN_RSVG $(NUNIT_DEFINES) $(BEAGLE_DEFINES) $(CSC_DEFINES)
++EXTRAFLAGS = -unsafe -nowarn:0169 -nowarn:0612 -nowarn:0414 -d:TEST_METADATA -d:BROKEN_RSVG $(BEAGLE_DEFINES) $(CSC_DEFINES)
+ F_SPOT_CSDISTFILES = \
+ 	$(srcdir)/Cairo/Antialias.cs		\
+ 	$(srcdir)/Cairo/Cairo.cs		\
+@@ -561,7 +561,6 @@
+ 	-r:Mono.Posix				\
+ 	-r:Mono.Security			\
+ 	-r:ICSharpCode.SharpZipLib		\
+-	$(NUNIT_PKG)				\
+ 	-pkg:gtkhtml-sharp-2.0			\
+ 	-pkg:glade-sharp-2.0			\
+ 	-pkg:gnome-vfs-sharp-2.0		\

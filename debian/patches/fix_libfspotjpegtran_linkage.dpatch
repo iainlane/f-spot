@@ -15,15 +15,3 @@ diff -urNad f-spot-0.4.1~/libjpegtran/Makefile.am f-spot-0.4.1/libjpegtran/Makef
 +libfspotjpegtran_la_LIBADD = $(F_LIBS)
  
  EXTRA_DIST = README
-diff -urNad f-spot-0.4.1~/libjpegtran/Makefile.in f-spot-0.4.1/libjpegtran/Makefile.in
---- f-spot-0.4.1~/libjpegtran/Makefile.in	2007-12-04 13:20:33.000000000 +0100
-+++ f-spot-0.4.1/libjpegtran/Makefile.in	2007-12-09 23:52:08.000000000 +0100
-@@ -51,7 +51,7 @@
- am__installdirs = "$(DESTDIR)$(fspotlibdir)"
- fspotlibLTLIBRARIES_INSTALL = $(INSTALL)
- LTLIBRARIES = $(fspotlib_LTLIBRARIES)
--libfspotjpegtran_la_LIBADD =
-+libfspotjpegtran_la_LIBADD = $(F_LIBS)
- am__objects_1 = jpeg-data.lo jpeg-marker.lo jpegtran.lo transupp.lo
- am_libfspotjpegtran_la_OBJECTS = $(am__objects_1)
- libfspotjpegtran_la_OBJECTS = $(am_libfspotjpegtran_la_OBJECTS)

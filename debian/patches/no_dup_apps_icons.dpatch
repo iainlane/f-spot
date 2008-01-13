@@ -20,18 +20,3 @@ diff -urNad trunk~/icons/Makefile.am trunk/icons/Makefile.am
  	devices,camera-photo-16.png		\
  	devices,camera-photo-22.png		\
  	devices,camera-photo-24.png		\
-diff -urNad trunk~/icons/Makefile.in trunk/icons/Makefile.in
---- trunk~/icons/Makefile.in	2007-12-04 12:20:32.000000000 +0000
-+++ trunk/icons/Makefile.in	2007-12-25 14:46:19.000000000 +0000
-@@ -303,11 +303,6 @@
- 	actions,view-restore-22.png		\
- 	actions,view-restore-24.png		\
- 	actions,view-restore-32.png		\
--	apps,f-spot.svg				\
--	apps,f-spot-16.png			\
--	apps,f-spot-22.png			\
--	apps,f-spot-24.png			\
--	apps,f-spot-32.png			\
- 	devices,camera-photo-16.png		\
- 	devices,camera-photo-22.png		\
- 	devices,camera-photo-24.png		\

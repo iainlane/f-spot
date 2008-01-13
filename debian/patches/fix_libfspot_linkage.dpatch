@@ -17,15 +17,3 @@ diff -urNad f-spot-0.4.1~/libfspot/Makefile.am f-spot-0.4.1/libfspot/Makefile.am
  	$(LCMS_LIBS)					\
  	$(EXIF_LIBS)					\
  	$(top_builddir)/libjpegtran/libfspotjpegtran.la	\
-diff -urNad f-spot-0.4.1~/libfspot/Makefile.in f-spot-0.4.1/libfspot/Makefile.in
---- f-spot-0.4.1~/libfspot/Makefile.in	2007-12-10 00:15:27.000000000 +0100
-+++ f-spot-0.4.1/libfspot/Makefile.in	2007-12-10 00:18:11.000000000 +0100
-@@ -311,6 +311,8 @@
- 	f-utils.h
- 
- libfspot_la_LIBADD = \
-+	-lX11						\
-+	$(F_LIBS)					\
- 	$(LCMS_LIBS)					\
- 	$(EXIF_LIBS)					\
- 	$(top_builddir)/libjpegtran/libfspotjpegtran.la	\

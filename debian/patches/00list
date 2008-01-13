@@ -8,4 +8,5 @@ forward_port_to_flickrnet_2.1.5
 detect_and_upgrade_sqlite2_database
 no_dup_apps_icons
 unlink_nunit
+98_run-automake
 99_ltmain_as-needed
