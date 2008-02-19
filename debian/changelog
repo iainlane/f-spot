@@ -8,10 +8,10 @@ f-spot (0.4.2-1) unstable; urgency=low
       - remove libflickrnet2.1.5-cil build dependency.
   * debian/patches/01_build-system.dpatch,
     debian/patches/10_cs-changes.dpatch: Delete unused patches.
-  * debian/patches/98_run-automake.dpatch: Move all automake changes from
+  * debian/patches/98_autoreconf.dpatch: Move all automake changes from
     other patches into single patch, for easier maintenance.
 
- -- Tim Retout <tim@retout.co.uk>  Tue, 19 Feb 2008 00:55:01 +0000
+ -- Tim Retout <tim@retout.co.uk>  Tue, 19 Feb 2008 00:58:21 +0000
 
 f-spot (0.4.1-4) unstable; urgency=low
 
