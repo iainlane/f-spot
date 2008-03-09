@@ -2,6 +2,7 @@
 fix_libfspot_linkage
 fix_libfspoteog_linkage
 fix_libfspotjpegtran_linkage
+fix_cms_linkage
 link_system_libs
 
 # Bugfix for bashisms (#464652)
