@@ -12,7 +12,7 @@ Vcs-Browser: http://svn.debian.org/wsvn/pkg-cli-apps/packages/f-spot/trunk/
 Package: f-spot
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${cli:Depends}, dbus, beagle (>= 0.3)
-Recommends: dcraw, sqlite, sqlite3
+Recommends: dcraw, sqlite, sqlite3, dbus-x11
 Description: personal photo management application
  F-Spot is meant to be an easy-to-use photo management
  application.  It allows for importing of your existing
