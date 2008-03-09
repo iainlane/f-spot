@@ -1,8 +1,9 @@
 f-spot (0.4.2-1) UNRELEASED; urgency=low
 
   * New upstream version. (Closes: #457030, #459273)
-    + debian/patches/20_refresh-menus-on-extensions.dpatch: Drop, because it
-      is now included upstream.
+    + Drop patches now included upstream:
+      - debian/patches/20_refresh-menus-on-extensions.dpatch
+      - debian/patches/detect_and_upgrade_sqlite2_database.dpatch
     + Upstream moved Flickr export to an extension, so:
       - Update debian/patches/forward_port_to_flickrnet_2.1.5.dpatch
       - New patch debian/patches/link_system_flickrnet.dpatch for changes
@@ -12,7 +13,7 @@ f-spot (0.4.2-1) UNRELEASED; urgency=low
   * debian/patches/98_autoreconf.dpatch: Move all automake changes from
     other patches into single patch, for easier maintenance.
 
- -- Tim Retout <tim@retout.co.uk>  Sun, 09 Mar 2008 01:29:41 +0000
+ -- Tim Retout <tim@retout.co.uk>  Sun, 09 Mar 2008 01:48:15 +0000
 
 f-spot (0.4.1-4) unstable; urgency=low
 
