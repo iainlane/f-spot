@@ -1,0 +1,28 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## link_system_flickrnet.dpatch by Tim Retout <tim@retout.co.uk>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Link against system flickrnet-2.1.5 rather than bundled f-spot version.
+
+@DPATCH@
+diff -urNad f-spot~/extensions/FlickrExport/Makefile.am f-spot/extensions/FlickrExport/Makefile.am
+--- f-spot~/extensions/FlickrExport/Makefile.am	2008-03-09 01:13:46.000000000 +0000
++++ f-spot/extensions/FlickrExport/Makefile.am	2008-03-09 01:25:30.000000000 +0000
+@@ -15,16 +15,13 @@
+ 	-r:../../src/FSpot.Core.dll	\
+ 	-r:../../src/FSpot.Utils.dll	\
+ 	-r:../../semweb/SemWeb.dll	\
+-	-r:FlickrNet/FlickrNet.dll	\
+ 	-r:Mono.Posix
+ 
+ PKGS =					\
++	-pkg:flickrnet-2.1.5		\
+ 	-pkg:gtk-sharp-2.0		\
+ 	-pkg:glade-sharp-2.0
+ 
+-SUBDIRS = 			\
+-	FlickrNet
+-
+ RESOURCES =				\
+ 	-resource:$(srcdir)/$(PLUGIN_MANIFEST)	\
+ 	-resource:$(srcdir)/$(PLUGIN_NAME).glade

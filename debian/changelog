@@ -4,14 +4,15 @@ f-spot (0.4.2-1) UNRELEASED; urgency=low
     + debian/patches/20_refresh-menus-on-extensions.dpatch: Drop, because it
       is now included upstream.
     + Upstream moved Flickr export to an extension, so:
-      - drop debian/patches/forward_port_to_flickrnet_2.1.5.dpatch
-      - remove libflickrnet2.1.5-cil build dependency.
+      - Update debian/patches/forward_port_to_flickrnet_2.1.5.dpatch
+      - New patch debian/patches/link_system_flickrnet.dpatch for changes
+        to FlickrExport makefiles.
   * debian/patches/01_build-system.dpatch,
     debian/patches/10_cs-changes.dpatch: Delete unused patches.
   * debian/patches/98_autoreconf.dpatch: Move all automake changes from
     other patches into single patch, for easier maintenance.
 
- -- Tim Retout <tim@retout.co.uk>  Tue, 19 Feb 2008 00:58:21 +0000
+ -- Tim Retout <tim@retout.co.uk>  Sun, 09 Mar 2008 01:29:41 +0000
 
 f-spot (0.4.1-4) unstable; urgency=low
 

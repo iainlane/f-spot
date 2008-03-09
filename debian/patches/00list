@@ -3,6 +3,11 @@ fix_libfspot_linkage
 fix_libfspoteog_linkage
 fix_libfspotjpegtran_linkage
 link_system_libs
+
+# Update FlickrNet to 2.1.5
+link_system_flickrnet
+forward_port_to_flickrnet_2.1.5
+
 detect_and_upgrade_sqlite2_database
 no_dup_apps_icons
 unlink_nunit
