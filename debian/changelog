@@ -1,4 +1,4 @@
-f-spot (0.4.2-1) UNRELEASED; urgency=low
+f-spot (0.4.2-1) unstable; urgency=low
 
   * New upstream version. (Closes: #457030, #459273)
     + Drop patches now included upstream:
