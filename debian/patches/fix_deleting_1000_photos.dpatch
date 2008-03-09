@@ -1,0 +1,40 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## fix_deleting_1000_photos.dpatch by Tim Retout <tim@retout.co.uk>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Patch from b.g.o. by Lorenzo Milesi <lorenzo.milesi@yetopen.it>
+## DP: Fixes Debian bug #462798.
+
+@DPATCH@
+diff -urNad f-spot~/src/PhotoStore.cs f-spot/src/PhotoStore.cs
+--- f-spot~/src/PhotoStore.cs	2008-03-09 02:43:50.000000000 +0000
++++ f-spot/src/PhotoStore.cs	2008-03-09 03:06:16.000000000 +0000
+@@ -389,22 +389,16 @@
+ 	{
+ 		EmitRemoved (items);
+ 
+-		StringBuilder query_builder = new StringBuilder ();
+-		StringBuilder tv_query_builder = new StringBuilder ();
++		ArrayList query_builder = new ArrayList ();
+ 		for (int i = 0; i < items.Length; i++) {
+-			if (i > 0) {
+-				query_builder.Append (" OR ");
+-				tv_query_builder.Append (" OR ");
+-			}
+-
+-			query_builder.Append (String.Format ("id = {0}", items[i].Id));
+-			tv_query_builder.Append (String.Format ("photo_id = {0}", items[i].Id));
++			query_builder.Add (String.Format ("{0}", items[i].Id));
+ 			RemoveFromCache (items[i]);
+ 		}
+ 
+-		Database.ExecuteNonQuery (String.Format ("DELETE FROM photos WHERE {0}", query_builder.ToString ()));
+-		Database.ExecuteNonQuery (String.Format ("DELETE FROM photo_tags WHERE {0}", tv_query_builder.ToString ()));
+-		Database.ExecuteNonQuery (String.Format ("DELETE FROM photo_versions WHERE {0}", tv_query_builder.ToString ()));
++		String id_list = String.Join ("','", ((String []) query_builder.ToArray (typeof(String))));
++		Database.ExecuteNonQuery (String.Format ("DELETE FROM photos WHERE id IN ('{0}')", id_list));
++		Database.ExecuteNonQuery (String.Format ("DELETE FROM photo_tags WHERE photo_id IN ('{0}')", id_list));
++		Database.ExecuteNonQuery (String.Format ("DELETE FROM photo_versions WHERE photo_id IN ('{0}')", id_list));
+ 
+ 	}
+ 

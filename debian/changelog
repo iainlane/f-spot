@@ -11,14 +11,21 @@ f-spot (0.4.2-1) unstable; urgency=low
     + Update patches for bitrot:
       - debian/patches/unlink_nunit.dpatch
       - debian/patches/link_system_libs.dpatch
-  * debian/patches/01_build-system.dpatch,
-    debian/patches/10_cs-changes.dpatch: Delete unused patches.
-  * debian/patches/fix_bashisms.dpatch: Ensure f-spot-sqlite-upgrade will
-    run correctly under shells other than bash. (Closes: #464652)
-  * debian/patches/98_autoreconf.dpatch: Move all automake changes from
-    other patches into single patch, for easier maintenance.
+  * Delete unused patches:
+    + debian/patches/01_build-system.dpatch
+    + debian/patches/10_cs-changes.dpatch
+  * New patches:
+    + debian/patches/fix_bashisms.dpatch:
+      - Ensure f-spot-sqlite-upgrade will run correctly under shells other
+        than bash. (Closes: #464652)
+    + debian/patches/fix_deleting_1000_photos.dpatch:
+      - Fix from upstream bug tracker for deleting >1000 photos.
+        (Closes: #462798)
+    + debian/patches/98_autoreconf.dpatch:
+      - Move all generated changes from other patches into single patch,
+        for easier maintenance.
 
- -- Tim Retout <tim@retout.co.uk>  Sun, 09 Mar 2008 02:59:58 +0000
+ -- Tim Retout <tim@retout.co.uk>  Sun, 09 Mar 2008 03:12:25 +0000
 
 f-spot (0.4.1-4) unstable; urgency=low
 

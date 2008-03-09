@@ -7,6 +7,9 @@ link_system_libs
 # Bugfix for bashisms (#464652)
 fix_bashisms
 
+# Bugfix for deleting >1000 photos (#462798)
+fix_deleting_1000_photos
+
 # Bugfix for build breakage.
 fix_gallery_extension_install_hook
 
