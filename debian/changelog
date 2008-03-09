@@ -28,8 +28,9 @@ f-spot (0.4.2-1) unstable; urgency=low
       - Move all generated changes from other patches into single patch,
         for easier maintenance. 
   * debian/control: Recommend dbus-x11. (Closes: #459272)
+  * Bump debhelper compatibility level to 6.
 
- -- Tim Retout <tim@retout.co.uk>  Sun, 09 Mar 2008 14:42:47 +0000
+ -- Tim Retout <tim@retout.co.uk>  Sun, 09 Mar 2008 16:53:22 +0000
 
 f-spot (0.4.1-4) unstable; urgency=low
 
