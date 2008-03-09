@@ -5,21 +5,29 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad f-spot-0.4.1~/src/Makefile.am f-spot-0.4.1/src/Makefile.am
---- f-spot-0.4.1~/src/Makefile.am	2007-12-04 13:19:18.000000000 +0100
-+++ f-spot-0.4.1/src/Makefile.am	2008-01-01 17:38:29.000000000 +0100
+diff -urNad f-spot~/src/Makefile.am f-spot/src/Makefile.am
+--- f-spot~/src/Makefile.am	2008-03-08 17:24:56.000000000 +0000
++++ f-spot/src/Makefile.am	2008-03-08 22:24:44.000000000 +0000
 @@ -1,5 +1,5 @@
  include $(top_srcdir)/Makefile.include
 -EXTRAFLAGS = -unsafe -nowarn:0169 -nowarn:0612 -nowarn:0414 -d:TEST_METADATA -d:BROKEN_RSVG $(NUNIT_DEFINES) $(BEAGLE_DEFINES) $(CSC_DEFINES)
 +EXTRAFLAGS = -unsafe -nowarn:0169 -nowarn:0612 -nowarn:0414 -d:TEST_METADATA -d:BROKEN_RSVG $(BEAGLE_DEFINES) $(CSC_DEFINES)
  
- F_SPOT_CSDISTFILES =				\
- 	$(srcdir)/Cairo/Antialias.cs		\
-@@ -254,7 +254,6 @@
- 	-r:Mono.Posix				\
- 	-r:Mono.Security			\
- 	-r:ICSharpCode.SharpZipLib		\
+ CMS_CSDISTFILES =				\
+ 	$(srcdir)/Cms/Cms.cs			\
+@@ -270,7 +270,6 @@
+ endif
+ 
+ CMS_ASSEMBLIES = 				\
 -	$(NUNIT_PKG)				\
- 	-pkg:gtkhtml-sharp-2.0			\
+ 	-pkg:gtk-sharp-2.0
+ 
+ CORE_ASSEMBLIES =				\
+@@ -312,7 +311,6 @@
+ 	-r:FSpot.Query.dll			\
+ 	-r:FSpot.Utils.dll			\
+ 	-r:Cms.dll				\
+-	$(NUNIT_PKG)				\
+ 	$(GCONF_PKG)				\
+ 	$(GTKHTML_SHARP_PKG)			\
  	-pkg:glade-sharp-2.0			\
- 	-pkg:gnome-vfs-sharp-2.0		\
