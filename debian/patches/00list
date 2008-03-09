@@ -6,5 +6,5 @@ link_system_libs
 detect_and_upgrade_sqlite2_database
 no_dup_apps_icons
 unlink_nunit
-98_run-automake
+98_autoreconf
 99_ltmain_as-needed
