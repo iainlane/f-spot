@@ -13,10 +13,12 @@ f-spot (0.4.2-1) unstable; urgency=low
       - debian/patches/link_system_libs.dpatch
   * debian/patches/01_build-system.dpatch,
     debian/patches/10_cs-changes.dpatch: Delete unused patches.
+  * debian/patches/fix_bashisms.dpatch: Ensure f-spot-sqlite-upgrade will
+    run correctly under shells other than bash. (Closes: #464652)
   * debian/patches/98_autoreconf.dpatch: Move all automake changes from
     other patches into single patch, for easier maintenance.
 
- -- Tim Retout <tim@retout.co.uk>  Sun, 09 Mar 2008 01:56:33 +0000
+ -- Tim Retout <tim@retout.co.uk>  Sun, 09 Mar 2008 02:59:58 +0000
 
 f-spot (0.4.1-4) unstable; urgency=low
 

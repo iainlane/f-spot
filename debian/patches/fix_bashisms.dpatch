@@ -1,0 +1,33 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## fix_bashisms.dpatch by Tim Retout <tim@retout.co.uk>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fix bashisms in f-spot-sqlite-upgrade (Debian bug #464652).
+## DP: This was applied upstream as SVN revision 3700.
+
+@DPATCH@
+diff -urNad f-spot~/tools/f-spot-sqlite-upgrade f-spot/tools/f-spot-sqlite-upgrade
+--- f-spot~/tools/f-spot-sqlite-upgrade	2008-03-09 02:43:50.000000000 +0000
++++ f-spot/tools/f-spot-sqlite-upgrade	2008-03-09 02:55:56.000000000 +0000
+@@ -8,10 +8,10 @@
+ DUMP_LOCATION=$DB_LOCATION.dump
+ NEW_DB_LOCATION=$DB_LOCATION.new
+ 
+-if ! which sqlite >& /dev/null ; then
++if ! which sqlite >/dev/null 2>&1 ; then
+ 	echo "Could not find sqlite binary. Update aborted." >&2
+ 	exit 1
+-elif ! which sqlite3 >& /dev/null ; then
++elif ! which sqlite3 >/dev/null 2>&1 ; then
+ 	echo "Could not find sqlite3 binary. Update aborted." >&2
+ 	exit 1
+ fi
+@@ -26,7 +26,7 @@
+ rm -f $DUMP_LOCATION
+ rm -f $NEW_DB_LOCATION
+ 
+-if grep "^...This file contains an SQLite 2.1 database" $DB_LOCATION &> /dev/null; then
++if grep "^...This file contains an SQLite 2.1 database" $DB_LOCATION >/dev/null 2>&1; then
+ 	echo "Upgrading from SQLite 2.1 to SQLite3"
+ 	cp $DB_LOCATION $BACKUP_LOCATION
+ 	if sqlite $DB_LOCATION .dump > $DUMP_LOCATION &&

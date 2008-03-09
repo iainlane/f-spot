@@ -4,6 +4,9 @@ fix_libfspoteog_linkage
 fix_libfspotjpegtran_linkage
 link_system_libs
 
+# Bugfix for bashisms (#464652)
+fix_bashisms
+
 # Bugfix for build breakage.
 fix_gallery_extension_install_hook
 
