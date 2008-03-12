@@ -5,6 +5,9 @@ fix_libfspotjpegtran_linkage
 fix_cms_linkage
 link_system_libs
 
+# Bugfix for database updater
+fix_v8_db_update
+
 # Bugfix for bashisms (#464652)
 fix_bashisms
 
