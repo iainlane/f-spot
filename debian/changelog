@@ -1,3 +1,12 @@
+f-spot (0.4.2-2) unstable; urgency=low
+
+  * debian/patches/55-add-mimetype.dpatch:
+    + Patch from Ubuntu for x-control/* mimetypes in .desktop file.
+  * debian/control:
+    + Add line breaks to Build-Depends.
+
+ -- Tim Retout <tim@retout.co.uk>  Thu, 20 Mar 2008 21:01:33 +0000
+
 f-spot (0.4.2-1) unstable; urgency=low
 
   * New upstream version. (Closes: #470788, #470814, #457030, #459273)
@@ -30,8 +39,6 @@ f-spot (0.4.2-1) unstable; urgency=low
       - Fix from upstream SVN for typo in configure.in.
     + debian/patches/gtkhtml-sharp-3.14_port.dpatch:
       - Forward port to gtkhtml-sharp-3.14.
-    + debian/patches/55-add-mimetype.dpatch:
-      - Patch from Ubuntu for adding x-content/* mimetypes to .desktop file.
     + debian/patches/98_autoreconf.dpatch:
       - Move all generated changes from other patches into single patch,
         for easier maintenance. 
@@ -40,9 +47,8 @@ f-spot (0.4.2-1) unstable; urgency=low
     + Require a version of libgnome2.0-cil >= 2.20.
     + Build against libgtkhtml3.16-cil rather than libgtkhtml2.0-cil.
       (Closes: #470822)
-    + Add line breaks to Build-Depends.
 
- -- Tim Retout <tim@retout.co.uk>  Thu, 20 Mar 2008 20:51:18 +0000
+ -- Tim Retout <tim@retout.co.uk>  Thu, 20 Mar 2008 19:45:46 +0000
 
 f-spot (0.4.1-4) unstable; urgency=low
 
