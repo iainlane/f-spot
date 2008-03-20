@@ -3,7 +3,18 @@ Section: gnome
 Priority: optional
 Maintainer: Debian CLI Applications Team <pkg-cli-apps-team@lists.alioth.debian.org>
 Uploaders: Tim Retout <tim@retout.co.uk>, Mirco Bauer <meebey@debian.org>
-Build-Depends: debhelper (>= 5.0.0), cli-common-dev (>= 0.4.4), cdbs, dpatch, mono-gmcs (>= 1.1.17) | c-sharp-2.0-compiler, libgtk2.0-cil (>= 2.8), libgtkhtml3.16-cil (>= 2.20), libgtk2.0-dev (>= 2.6), libgnome2.0-cil (>= 2.20), libgnome2-dev (>= 2.2), libxml-parser-perl, libmono-dev (>= 1.1.7), libgnomeui-dev (>= 2.2), libexif-dev (>= 0.5.7), libsqlite3-dev, libgphoto2-2-dev (>= 2.1.4), liblcms1-dev, libmono-sqlite2.0-cil, libmono-system-runtime2.0-cil, libmono-cairo2.0-cil, libusb-dev, gnome-doc-utils (>= 0.3.2), libgl1-mesa-dev | libgl-dev, libndesk-dbus1.0-cil (>= 0.4.2), libndesk-dbus-glib1.0-cil (>= 0.3.0), libgconf2.0-cil, libglade2.0-cil, libgnome-vfs2.0-cil, libflickrnet2.1.5-cil (>= 25277-5), libmono-addins0.2-cil, libmono-addins-gui0.2-cil, beagle-dev (>= 0.3), gnome-screensaver, docbook-xml
+Build-Depends: debhelper (>= 5.0.0), cli-common-dev (>= 0.4.4), cdbs, dpatch,
+ mono-gmcs (>= 1.1.17) | c-sharp-2.0-compiler, libgtk2.0-cil (>= 2.8),
+ libgtkhtml3.16-cil (>= 2.20), libgtk2.0-dev (>= 2.6),
+ libgnome2.0-cil (>= 2.20), libgnome2-dev (>= 2.2), libxml-parser-perl,
+ libmono-dev (>= 1.1.7), libgnomeui-dev (>= 2.2), libexif-dev (>= 0.5.7),
+ libsqlite3-dev, libgphoto2-2-dev (>= 2.1.4), liblcms1-dev,
+ libmono-sqlite2.0-cil, libmono-system-runtime2.0-cil, libmono-cairo2.0-cil,
+ libusb-dev, gnome-doc-utils (>= 0.3.2), libgl1-mesa-dev | libgl-dev,
+ libndesk-dbus1.0-cil (>= 0.4.2), libndesk-dbus-glib1.0-cil (>= 0.3.0),
+ libgconf2.0-cil, libglade2.0-cil, libgnome-vfs2.0-cil,
+ libflickrnet2.1.5-cil (>= 25277-5), libmono-addins0.2-cil,
+ libmono-addins-gui0.2-cil, beagle-dev (>= 0.3), gnome-screensaver, docbook-xml
 Standards-Version: 3.7.3
 Homepage: http://www.f-spot.org/
 Vcs-Svn: svn://svn.debian.org/svn/pkg-cli-apps/packages/f-spot/trunk/

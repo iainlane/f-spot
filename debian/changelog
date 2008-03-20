@@ -40,8 +40,9 @@ f-spot (0.4.2-1) unstable; urgency=low
     + Require a version of libgnome2.0-cil >= 2.20.
     + Build against libgtkhtml3.16-cil rather than libgtkhtml2.0-cil.
       (Closes: #470822)
+    + Add line breaks to Build-Depends.
 
- -- Tim Retout <tim@retout.co.uk>  Thu, 20 Mar 2008 20:38:36 +0000
+ -- Tim Retout <tim@retout.co.uk>  Thu, 20 Mar 2008 20:51:18 +0000
 
 f-spot (0.4.1-4) unstable; urgency=low
 
