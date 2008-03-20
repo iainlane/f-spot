@@ -32,9 +32,12 @@ f-spot (0.4.2-1) unstable; urgency=low
     + debian/patches/98_autoreconf.dpatch:
       - Move all generated changes from other patches into single patch,
         for easier maintenance. 
-  * debian/control: Recommend dbus-x11. (Closes: #459272)
+  * debian/control:
+    + Recommend dbus-x11. (Closes: #459272)
+    + Build against libgtkhtml3.16-cil rather than libgtkhtml2.0-cil.
+      (Closes: #470822)
 
- -- Tim Retout <tim@retout.co.uk>  Thu, 20 Mar 2008 18:00:49 +0000
+ -- Tim Retout <tim@retout.co.uk>  Thu, 20 Mar 2008 18:04:03 +0000
 
 f-spot (0.4.1-4) unstable; urgency=low
 
