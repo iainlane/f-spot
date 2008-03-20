@@ -19,8 +19,7 @@ f-spot (0.4.2-1) unstable; urgency=low
       - Ensure f-spot-sqlite-upgrade will run correctly under shells other
         than bash. (Closes: #464652)
     + debian/patches/fix_deleting_1000_photos.dpatch:
-      - Fix from upstream bug tracker for deleting >1000 photos.
-        (Closes: #462798)
+      - Fix from upstream SVN for deleting >1000 photos. (Closes: #462798)
     + debian/patches/fix_cms_linkage.dpatch:
       - Fix from upstream stable SVN branch for linking Cms.dll against
         libfspot.
@@ -37,7 +36,7 @@ f-spot (0.4.2-1) unstable; urgency=low
     + Build against libgtkhtml3.16-cil rather than libgtkhtml2.0-cil.
       (Closes: #470822)
 
- -- Tim Retout <tim@retout.co.uk>  Thu, 20 Mar 2008 18:04:03 +0000
+ -- Tim Retout <tim@retout.co.uk>  Thu, 20 Mar 2008 18:12:55 +0000
 
 f-spot (0.4.1-4) unstable; urgency=low
 
