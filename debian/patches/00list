@@ -5,6 +5,7 @@ fix_libfspoteog_linkage
 fix_libfspotjpegtran_linkage
 fix_cms_linkage
 link_system_libs
+importdialog_missing_icon
 
 # Bugfix for database updater
 fix_v8_db_update

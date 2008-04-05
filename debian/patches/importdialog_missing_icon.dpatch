@@ -1,0 +1,22 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## importdialog_missing_icon.dpatch by Tim Retout <tim@retout.co.uk>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Use the GtkUtil.TryLoadIcon method to stop a crash when the f-spot icon 
+## DP: is missing. Closes: #459261.
+
+@DPATCH@
+
+diff --git a/src/ImportCommand.cs b/src/ImportCommand.cs
+index d22d143..9001dff 100644
+--- a/src/ImportCommand.cs
++++ b/src/ImportCommand.cs
+@@ -624,7 +624,7 @@ public class ImportCommand : FSpot.GladeDialog
+ 		GtkUtil.ModifyColors (photo_scrolled);
+ 		GtkUtil.ModifyColors (photo_view);
+ 
+-		photo_view.Pixbuf = FSpot.Global.IconTheme.LoadIcon ("f-spot", 48, (Gtk.IconLookupFlags)0);
++		photo_view.Pixbuf = GtkUtil.TryLoadIcon (FSpot.Global.IconTheme, "f-spot", 48, (Gtk.IconLookupFlags)0);
+ 		photo_view.Fit = true;
+ 			
+ 		tag_entry = new FSpot.Widgets.TagEntry (MainWindow.Toplevel.Database.Tags, false);
