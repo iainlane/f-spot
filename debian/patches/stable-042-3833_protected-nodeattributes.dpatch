@@ -1,0 +1,107 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## protected-nodeattributes.dpatch by Tim Retout <tim@retout.co.uk>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Patch from upstream stable branch r3833 for protected node attributes.
+
+@DPATCH@
+commit 10ea01bfe529b8adb8d1e978511499a203a413dc
+Author: sdelcroix <sdelcroix@772769d8-d925-0410-89eb-a6ffa0d40526>
+Date:   Tue Apr 15 11:00:16 2008 +0000
+
+    2008-04-15  Stephane Delcroix  <sdelcroix@novell.com>
+    
+    	backporting r3832 to the 042_STABLE branch
+    
+    
+    git-svn-id: http://svn.gnome.org/svn/f-spot/branches/FSPOT_0_4_2_STABLE@3833 772769d8-d925-0410-89eb-a6ffa0d40526
+
+diff --git a/ChangeLog b/ChangeLog
+index 5ece9ed..393b6d1 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,7 @@
++2008-04-15  Stephane Delcroix  <sdelcroix@novell.com>
++
++	backporting r3832 to the 042_STABLE branch
++
+ 2008-03-25  Stephane Delcroix  <sdelcroix@novell.com>
+ 
+ 	* configure.in:
+diff --git a/src/Extensions/CommandMenuItemNode.cs b/src/Extensions/CommandMenuItemNode.cs
+index 04e117e..fa01ddd 100644
+--- a/src/Extensions/CommandMenuItemNode.cs
++++ b/src/Extensions/CommandMenuItemNode.cs
+@@ -18,7 +18,7 @@ namespace FSpot.Extensions
+ 	{
+ 
+ 		[NodeAttribute ("command_type", true)]
+-		string command_type;
++		protected string command_type;
+ 
+ 		protected override void OnActivated (object o, EventArgs e)
+ 		{
+diff --git a/src/Extensions/ComplexMenuItemNode.cs b/src/Extensions/ComplexMenuItemNode.cs
+index 3204d67..0e72029 100644
+--- a/src/Extensions/ComplexMenuItemNode.cs
++++ b/src/Extensions/ComplexMenuItemNode.cs
+@@ -18,10 +18,10 @@ namespace FSpot.Extensions
+ 	public class ComplexMenuItemNode : MenuNode
+ 	{
+ 		[NodeAttribute]
+-		string widget_type;
++		protected string widget_type;
+ 
+ 		[NodeAttribute]
+-		string command_type;
++		protected string command_type;
+ 
+ 		public event EventHandler Changed;
+ 
+diff --git a/src/Extensions/ExportMenuItemNode.cs b/src/Extensions/ExportMenuItemNode.cs
+index f30d323..af33b56 100644
+--- a/src/Extensions/ExportMenuItemNode.cs
++++ b/src/Extensions/ExportMenuItemNode.cs
+@@ -20,7 +20,7 @@ namespace FSpot.Extensions
+ 	{
+ 
+ 		[NodeAttribute ("class", true)]
+-		string class_name;
++		protected string class_name;
+ 
+ 		public static SelectedImages SelectedImages;
+ 
+diff --git a/src/Extensions/MenuNode.cs b/src/Extensions/MenuNode.cs
+index 63ff39f..2a66cec 100644
+--- a/src/Extensions/MenuNode.cs
++++ b/src/Extensions/MenuNode.cs
+@@ -52,7 +52,7 @@ namespace FSpot.Extensions
+ 	public class MenuGeneratorNode : MenuNode
+ 	{
+ 		[NodeAttribute ("generator_type", true)]
+-		string command_type;
++		protected string command_type;
+ 
+ 		private IMenuGenerator menu_generator;
+ 
+@@ -78,7 +78,6 @@ namespace FSpot.Extensions
+ 
+ 		protected virtual void OnActivated (object o, EventArgs e)
+ 		{
+-			Console.WriteLine ("Item {0} activated", Id);
+ 		}
+ 	}
+ 
+@@ -94,10 +93,10 @@ namespace FSpot.Extensions
+ 	public abstract class MenuNode : ExtensionNode
+ 	{
+ 		[NodeAttribute]
+-		string _label;
++		protected string _label;
+ 
+ 		[NodeAttribute]
+-		string icon;
++		protected string icon;
+ 
+ 		public virtual Gtk.MenuItem GetMenuItem ()
+ 		{

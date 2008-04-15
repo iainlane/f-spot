@@ -2,6 +2,7 @@
 stable-042-3692_cms-linkage
 stable-042-3748_v8-db-updater
 stable-042-3782_gtkhtml-sharp-3.14
+stable-042-3833_protected-nodeattributes
 stable-042-3835_gnome-sharp-typo
 
 # Patches from upstream SVN trunk.
