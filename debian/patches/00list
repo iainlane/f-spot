@@ -5,7 +5,6 @@ fix_libfspoteog_linkage
 fix_libfspotjpegtran_linkage
 fix_cms_linkage
 link_system_libs
-importdialog_missing_icon
 
 # Bugfix for database updater
 fix_v8_db_update
@@ -31,5 +30,10 @@ forward_port_to_flickrnet_2.1.5
 
 no_dup_apps_icons
 unlink_nunit
+
+# Patches from upstream SVN trunk.
+svn-042-3817_importdialog-missing-icon
+
+# Patches to be applied last.
 98_autoreconf
 99_ltmain_as-needed

@@ -2,7 +2,7 @@ f-spot (0.4.2-2) unstable; urgency=low
 
   * debian/patches/55-add-mimetype.dpatch:
     + Patch from Ubuntu for x-control/* mimetypes in .desktop file.
-  * debian/patches/importdialog_missing_icon.dpatch:
+  * debian/patches/svn-042-3817_importdialog-missing-icon.dpatch:
     + Show a 'missing icon' image in the import dialog rather than
       throwing an exception when f-spot icon is not found. (Closes: #459261)
   * debian/control:

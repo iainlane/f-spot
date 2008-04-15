@@ -1,9 +1,10 @@
 #! /bin/sh /usr/share/dpatch/dpatch-run
-## importdialog_missing_icon.dpatch by Tim Retout <tim@retout.co.uk>
+## importdialog-missing-icon.dpatch by Tim Retout <tim@retout.co.uk>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
 ## DP: Use the GtkUtil.TryLoadIcon method to stop a crash when the f-spot icon 
-## DP: is missing. Closes: #459261.
+## DP: is missing. Closes: #459261
+## DP: Applied upstream as SVN r3817.
 
 @DPATCH@
 
