@@ -10,6 +10,9 @@ f-spot (0.4.2-2) unstable; urgency=low
       debian/patches/gtkhtml-sharp-3.14_port.dpatch.
   * debian/patches/stable-042-3833_protected-nodeattributes.dpatch:
     + Patch from upstream stable SVN branch for protected node attributes.
+  * debian/patches/stable-042-3834_gphoto2-cameralist.dpatch:
+    + Patch from upstream stable SVN branch for bug in gphoto2 bindings.
+      (Closes: #475662)
   * debian/patches/11_screensaver_path.dpatch:
     + Remove - there is no point hardcoding a full path.
   * debian/control:
@@ -19,7 +22,7 @@ f-spot (0.4.2-2) unstable; urgency=low
     status; svn-042-* are on upstream SVN trunk, stable-042-* are from the
     upstream stable SVN branch, and debian_* patches are not upstream.
 
- -- Tim Retout <tim@retout.co.uk>  Tue, 15 Apr 2008 23:34:18 +0100
+ -- Tim Retout <tim@retout.co.uk>  Tue, 15 Apr 2008 23:46:17 +0100
 
 f-spot (0.4.2-1) unstable; urgency=low
 

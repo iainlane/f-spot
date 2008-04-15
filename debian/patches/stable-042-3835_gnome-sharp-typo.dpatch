@@ -6,8 +6,8 @@
 
 @DPATCH@
 diff -urNad f-spot~/ChangeLog f-spot/ChangeLog
---- f-spot~/ChangeLog	2008-04-15 23:32:08.000000000 +0100
-+++ f-spot/ChangeLog	2008-04-15 23:32:54.000000000 +0100
+--- f-spot~/ChangeLog	2008-04-15 23:43:25.000000000 +0100
++++ f-spot/ChangeLog	2008-04-15 23:43:54.000000000 +0100
 @@ -1,5 +1,9 @@
  2008-04-15  Stephane Delcroix  <sdelcroix@novell.com>
  
@@ -15,12 +15,12 @@ diff -urNad f-spot~/ChangeLog f-spot/ChangeLog
 +
 +2008-04-15  Stephane Delcroix  <sdelcroix@novell.com>
 +
- 	backporting r3832 to the 042_STABLE branch
+ 	backporting r3831 to the 042_STABLE branch
  
- 2008-03-25  Stephane Delcroix  <sdelcroix@novell.com>
+ 2008-04-15  Stephane Delcroix  <sdelcroix@novell.com>
 diff -urNad f-spot~/configure.in f-spot/configure.in
---- f-spot~/configure.in	2008-04-15 23:32:08.000000000 +0100
-+++ f-spot/configure.in	2008-04-15 23:32:08.000000000 +0100
+--- f-spot~/configure.in	2008-04-15 23:43:25.000000000 +0100
++++ f-spot/configure.in	2008-04-15 23:43:25.000000000 +0100
 @@ -75,7 +75,7 @@
  
  CSC_DEFINES=""
