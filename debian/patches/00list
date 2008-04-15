@@ -1,9 +1,6 @@
 # Bugfix for gnome-sharp typo in configure.in
 fix_gnome-sharp_typo
 
-# Bugfix for build breakage.
-fix_gallery_extension_install_hook
-
 # Update gtkhtml-sharp to 3.14
 gtkhtml-sharp-3.14_port
 
@@ -13,6 +10,7 @@ stable-042-3748_v8-db-updater
 
 # Patches from upstream SVN trunk.
 svn-042-3700_bashisms
+svn-042-3743_gallery-extension-install-hook
 svn-042-3754_deleting-1000-photos
 svn-042-3817_importdialog-missing-icon
 
