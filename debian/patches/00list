@@ -1,6 +1,3 @@
-# Bugfix for database updater
-fix_v8_db_update
-
 # Bugfix for gnome-sharp typo in configure.in
 fix_gnome-sharp_typo
 
@@ -12,6 +9,7 @@ gtkhtml-sharp-3.14_port
 
 # Patches from upstream stable SVN branch.
 stable-042-3692_cms-linkage
+stable-042-3748_v8-db-updater
 
 # Patches from upstream SVN trunk.
 svn-042-3700_bashisms
