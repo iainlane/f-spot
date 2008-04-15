@@ -23,7 +23,6 @@ gtkhtml-sharp-3.14_port
 link_system_flickrnet
 forward_port_to_flickrnet_2.1.5
 
-no_dup_apps_icons
 unlink_nunit
 
 # Patches from upstream SVN trunk.
@@ -31,6 +30,7 @@ svn-042-3754_deleting-1000-photos
 svn-042-3817_importdialog-missing-icon
 
 # Patches that haven't been applied upstream yet.
+debian_no-dup-app-icons
 debian_x-content-mimetype
 
 # Patches to be applied last.
