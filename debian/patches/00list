@@ -16,10 +16,6 @@ fix_gallery_extension_install_hook
 # Update gtkhtml-sharp to 3.14
 gtkhtml-sharp-3.14_port
 
-# Update FlickrNet to 2.1.5
-link_system_flickrnet
-forward_port_to_flickrnet_2.1.5
-
 # Patches from upstream SVN trunk.
 svn-042-3700_bashisms
 svn-042-3754_deleting-1000-photos
@@ -29,6 +25,8 @@ svn-042-3817_importdialog-missing-icon
 debian_unlink-nunit
 debian_no-dup-app-icons
 debian_x-content-mimetype
+debian_link-system-flickrnet
+debian_flickrnet-2.1.5-port
 
 # Patches to be applied last.
 98_autoreconf
