@@ -1,6 +1,3 @@
-fix_libfspot_linkage
-fix_libfspoteog_linkage
-fix_libfspotjpegtran_linkage
 fix_cms_linkage
 link_system_libs
 
@@ -22,6 +19,9 @@ svn-042-3754_deleting-1000-photos
 svn-042-3817_importdialog-missing-icon
 
 # Patches that haven't been applied upstream yet.
+debian_libfspot-linkage
+debian_libfspoteog-linkage
+debian_libfspotjpegtran-linkage
 debian_unlink-nunit
 debian_no-dup-app-icons
 debian_x-content-mimetype
