@@ -1,5 +1,3 @@
-fix_cms_linkage
-
 # Bugfix for database updater
 fix_v8_db_update
 
@@ -11,6 +9,9 @@ fix_gallery_extension_install_hook
 
 # Update gtkhtml-sharp to 3.14
 gtkhtml-sharp-3.14_port
+
+# Patches from upstream stable SVN branch.
+stable-042-3692_cms-linkage
 
 # Patches from upstream SVN trunk.
 svn-042-3700_bashisms
