@@ -10,9 +10,6 @@ fix_v8_db_update
 # Bugfix for bashisms (#464652)
 fix_bashisms
 
-# Bugfix for deleting >1000 photos (#462798)
-fix_deleting_1000_photos
-
 # Bugfix for gnome-sharp typo in configure.in
 fix_gnome-sharp_typo
 
@@ -30,6 +27,7 @@ no_dup_apps_icons
 unlink_nunit
 
 # Patches from upstream SVN trunk.
+svn-042-3754_deleting-1000-photos
 svn-042-3817_importdialog-missing-icon
 
 # Patches that haven't been applied upstream yet.
