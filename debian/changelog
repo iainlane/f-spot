@@ -10,8 +10,11 @@ f-spot (0.4.2-2) unstable; urgency=low
   * debian/control:
     + Add line breaks to Build-Depends.
   * debian/update_src_to_use_system_libs.sh: Remove unused script.
+  * Rename patches to have different prefixes depending on their upstream
+    status; svn-042-* are on upstream SVN trunk, stable-042-* are from the
+    upstream stable SVN branch, and debian_* patches are not upstream.
 
- -- Tim Retout <tim@retout.co.uk>  Tue, 15 Apr 2008 21:28:52 +0100
+ -- Tim Retout <tim@retout.co.uk>  Tue, 15 Apr 2008 22:57:05 +0100
 
 f-spot (0.4.2-1) unstable; urgency=low
 
