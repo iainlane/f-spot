@@ -1,5 +1,4 @@
 11_screensaver-path
-55-add-mimetype
 fix_libfspot_linkage
 fix_libfspoteog_linkage
 fix_libfspotjpegtran_linkage
@@ -33,6 +32,9 @@ unlink_nunit
 
 # Patches from upstream SVN trunk.
 svn-042-3817_importdialog-missing-icon
+
+# Patches that haven't been applied upstream yet.
+debian_x-content-mimetype
 
 # Patches to be applied last.
 98_autoreconf

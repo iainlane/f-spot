@@ -1,7 +1,7 @@
 f-spot (0.4.2-2) unstable; urgency=low
 
-  * debian/patches/55-add-mimetype.dpatch:
-    + Patch from Ubuntu for x-control/* mimetypes in .desktop file.
+  * debian/patches/debian_x-content-mimetype.dpatch:
+    + Patch from upstream bugzilla for x-content mimetype .desktop file.
   * debian/patches/svn-042-3817_importdialog-missing-icon.dpatch:
     + Show a 'missing icon' image in the import dialog rather than
       throwing an exception when f-spot icon is not found. (Closes: #459261)
@@ -9,7 +9,7 @@ f-spot (0.4.2-2) unstable; urgency=low
     + Add line breaks to Build-Depends.
   * debian/update_src_to_use_system_libs.sh: Remove unused script.
 
- -- Tim Retout <tim@retout.co.uk>  Sat, 05 Apr 2008 16:04:32 +0100
+ -- Tim Retout <tim@retout.co.uk>  Tue, 15 Apr 2008 20:58:22 +0100
 
 f-spot (0.4.2-1) unstable; urgency=low
 
