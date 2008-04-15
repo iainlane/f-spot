@@ -1,5 +1,4 @@
 fix_cms_linkage
-link_system_libs
 
 # Bugfix for database updater
 fix_v8_db_update
@@ -25,6 +24,7 @@ debian_libfspotjpegtran-linkage
 debian_unlink-nunit
 debian_no-dup-app-icons
 debian_x-content-mimetype
+debian_link-system-mono-addins
 debian_link-system-flickrnet
 debian_flickrnet-2.1.5-port
 
