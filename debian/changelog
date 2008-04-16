@@ -1,7 +1,12 @@
 f-spot (0.4.2-2) unstable; urgency=low
 
+  * Rename patches to have different prefixes depending on their upstream
+    status; svn-042-* are on upstream SVN trunk, stable-042-* are from the
+    upstream stable SVN branch, and debian_* patches are not upstream.
   * debian/patches/debian_x-content-mimetype.dpatch:
     + Patch from upstream bugzilla for x-content mimetype .desktop file.
+  * debian/patches/debian_link-system-mono-addins.dpatch:
+    + Remove configure.in entries so that Makefiles aren't generated.
   * debian/patches/svn-042-3817_importdialog-missing-icon.dpatch:
     + Show a 'missing icon' image in the import dialog rather than
       throwing an exception when f-spot icon is not found. (Closes: #459261)
@@ -21,11 +26,8 @@ f-spot (0.4.2-2) unstable; urgency=low
   * debian/control:
     + Add line breaks to Build-Depends.
   * debian/update_src_to_use_system_libs.sh: Remove unused script.
-  * Rename patches to have different prefixes depending on their upstream
-    status; svn-042-* are on upstream SVN trunk, stable-042-* are from the
-    upstream stable SVN branch, and debian_* patches are not upstream.
 
- -- Tim Retout <tim@retout.co.uk>  Wed, 16 Apr 2008 00:57:58 +0100
+ -- Tim Retout <tim@retout.co.uk>  Wed, 16 Apr 2008 22:11:46 +0100
 
 f-spot (0.4.2-1) unstable; urgency=low
 
