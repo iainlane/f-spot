@@ -11,6 +11,7 @@ svn-042-3700_bashisms
 svn-042-3743_gallery-extension-install-hook
 svn-042-3754_deleting-1000-photos
 svn-042-3817_importdialog-missing-icon
+svn-042-3821_tag-icon-from-external-file
 
 # Patches that haven't been applied upstream yet.
 debian_libfspot-linkage

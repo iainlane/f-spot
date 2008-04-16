@@ -5,6 +5,9 @@ f-spot (0.4.2-2) unstable; urgency=low
   * debian/patches/svn-042-3817_importdialog-missing-icon.dpatch:
     + Show a 'missing icon' image in the import dialog rather than
       throwing an exception when f-spot icon is not found. (Closes: #459261)
+  * debian/patches/svn-042-3821_tag-icon-from-external-file.dpatch:
+    + Fix from upstream SVN for crash in tag icon file chooser.
+      (Closes: #470787)
   * debian/patches/stable-042-3782_gtkhtml-sharp-3.14.dpatch:
     + Use upstream's version of the gtkhtml-sharp-3.14 port, and remove
       debian/patches/gtkhtml-sharp-3.14_port.dpatch.
@@ -22,7 +25,7 @@ f-spot (0.4.2-2) unstable; urgency=low
     status; svn-042-* are on upstream SVN trunk, stable-042-* are from the
     upstream stable SVN branch, and debian_* patches are not upstream.
 
- -- Tim Retout <tim@retout.co.uk>  Tue, 15 Apr 2008 23:46:17 +0100
+ -- Tim Retout <tim@retout.co.uk>  Wed, 16 Apr 2008 00:57:58 +0100
 
 f-spot (0.4.2-1) unstable; urgency=low
 

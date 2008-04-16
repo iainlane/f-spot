@@ -1,0 +1,47 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## tag-icon-from-external-file.dpatch by Tim Retout <tim@retout.co.uk>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Fix from upstream SVN r3821 for crash when browsing for an external
+## DP: file in the tag icon dialog. (Closes: #470787)
+
+@DPATCH@
+diff -urNad f-spot~/src/TagCommands.cs f-spot/src/TagCommands.cs
+--- f-spot~/src/TagCommands.cs	2008-04-15 23:50:45.000000000 +0100
++++ f-spot/src/TagCommands.cs	2008-04-16 00:56:26.000000000 +0100
+@@ -17,6 +17,7 @@
+ using Mono.Unix;
+ using FSpot;
+ using FSpot.Utils;
++using FSpot.UI.Dialog;
+ 
+ public class TagCommands {
+ 
+@@ -377,10 +378,24 @@
+ 
+ 		private void CreateTagIconFromExternalPhoto ()
+ 		{
+-			using (FSpot.ImageFile img = FSpot.ImageFile.Create(new Uri(external_photo_chooser.Uri))) {
+-				using (Gdk.Pixbuf external_image = img.Load ()) {
+-					PreviewPixbuf = PixbufUtils.TagIconFromPixbuf (external_image);
++			try {
++				using (FSpot.ImageFile img = FSpot.ImageFile.Create(new Uri(external_photo_chooser.Uri))) {
++					using (Gdk.Pixbuf external_image = img.Load ()) {
++						PreviewPixbuf = PixbufUtils.TagIconFromPixbuf (external_image);
++					}
+ 				}
++			} catch (Exception e) {
++				string caption = Catalog.GetString ("Unable to load image");
++				string message = String.Format (Catalog.GetString ("Unable to load \"{0}\" as icon for the tag"), 
++									external_photo_chooser.Uri.ToString ());
++				HigMessageDialog md = new HigMessageDialog (this.Dialog, 
++									    DialogFlags.DestroyWithParent,
++									    MessageType.Error,
++									    ButtonsType.Close,
++									    caption, 
++									    message);
++				md.Run();
++				md.Destroy();
+ 			}
+ 		}
+ 
