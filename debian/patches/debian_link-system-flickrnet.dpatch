@@ -5,9 +5,20 @@
 ## DP: Link against system flickrnet-2.1.5 rather than bundled f-spot version.
 
 @DPATCH@
+diff -urNad f-spot~/configure.in f-spot/configure.in
+--- f-spot~/configure.in	2008-04-16 22:16:06.000000000 +0100
++++ f-spot/configure.in	2008-04-16 22:16:55.000000000 +0100
+@@ -302,7 +302,6 @@
+ extensions/CDExport/Makefile
+ extensions/DefaultExporters/Makefile
+ extensions/FlickrExport/Makefile
+-extensions/FlickrExport/FlickrNet/Makefile
+ extensions/GalleryExport/Makefile
+ extensions/FolderExport/Makefile
+ extensions/SmugMugExport/SmugMugNet/Makefile
 diff -urNad f-spot~/extensions/FlickrExport/Makefile.am f-spot/extensions/FlickrExport/Makefile.am
---- f-spot~/extensions/FlickrExport/Makefile.am	2008-03-09 01:13:46.000000000 +0000
-+++ f-spot/extensions/FlickrExport/Makefile.am	2008-03-09 01:25:30.000000000 +0000
+--- f-spot~/extensions/FlickrExport/Makefile.am	2008-04-16 22:07:51.000000000 +0100
++++ f-spot/extensions/FlickrExport/Makefile.am	2008-04-16 22:16:07.000000000 +0100
 @@ -15,16 +15,13 @@
  	-r:../../src/FSpot.Core.dll	\
  	-r:../../src/FSpot.Utils.dll	\

@@ -5,7 +5,8 @@ f-spot (0.4.2-2) unstable; urgency=low
     upstream stable SVN branch, and debian_* patches are not upstream.
   * debian/patches/debian_x-content-mimetype.dpatch:
     + Patch from upstream bugzilla for x-content mimetype .desktop file.
-  * debian/patches/debian_link-system-mono-addins.dpatch:
+  * debian/patches/debian_link-system-mono-addins.dpatch,
+    debian/patches/debian_link-system-flickrnet.dpatch:
     + Remove configure.in entries so that Makefiles aren't generated.
   * debian/patches/svn-042-3817_importdialog-missing-icon.dpatch:
     + Show a 'missing icon' image in the import dialog rather than
@@ -27,7 +28,7 @@ f-spot (0.4.2-2) unstable; urgency=low
     + Add line breaks to Build-Depends.
   * debian/update_src_to_use_system_libs.sh: Remove unused script.
 
- -- Tim Retout <tim@retout.co.uk>  Wed, 16 Apr 2008 22:11:46 +0100
+ -- Tim Retout <tim@retout.co.uk>  Wed, 16 Apr 2008 22:18:36 +0100
 
 f-spot (0.4.2-1) unstable; urgency=low
 
