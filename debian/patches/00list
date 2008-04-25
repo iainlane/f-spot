@@ -12,6 +12,7 @@ svn-042-3743_gallery-extension-install-hook
 svn-042-3754_deleting-1000-photos
 svn-042-3817_importdialog-missing-icon
 svn-042-3821_tag-icon-from-external-file
+svn-042-3842_x-content-mimetype
 
 # Patches that haven't been applied upstream yet.
 debian_libfspot-linkage
@@ -19,7 +20,6 @@ debian_libfspoteog-linkage
 debian_libfspotjpegtran-linkage
 debian_unlink-nunit
 debian_no-dup-app-icons
-debian_x-content-mimetype
 debian_link-system-mono-addins
 debian_link-system-flickrnet
 debian_flickrnet-2.1.5-port

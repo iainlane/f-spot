@@ -1,5 +1,5 @@
 #! /bin/sh /usr/share/dpatch/dpatch-run
-## debian_x-content-mimetype.dpatch by Tim Retout <tim@retout.co.uk>
+## svn-042-3842_x-content-mimetype.dpatch by Tim Retout <tim@retout.co.uk>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
 ## DP: Patch from b.g.o. 510325 by Stephane Delcroix adding an f-spot-import
