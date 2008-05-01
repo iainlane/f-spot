@@ -6,9 +6,9 @@
 
 @DPATCH@
 diff -urNad f-spot~/configure.in f-spot/configure.in
---- f-spot~/configure.in	2008-04-16 22:16:06.000000000 +0100
-+++ f-spot/configure.in	2008-04-16 22:16:55.000000000 +0100
-@@ -302,7 +302,6 @@
+--- f-spot~/configure.in	2008-05-01 02:14:09.000000000 +0100
++++ f-spot/configure.in	2008-05-01 02:14:10.000000000 +0100
+@@ -309,7 +309,6 @@
  extensions/CDExport/Makefile
  extensions/DefaultExporters/Makefile
  extensions/FlickrExport/Makefile
@@ -17,8 +17,8 @@ diff -urNad f-spot~/configure.in f-spot/configure.in
  extensions/FolderExport/Makefile
  extensions/SmugMugExport/SmugMugNet/Makefile
 diff -urNad f-spot~/extensions/FlickrExport/Makefile.am f-spot/extensions/FlickrExport/Makefile.am
---- f-spot~/extensions/FlickrExport/Makefile.am	2008-04-16 22:07:51.000000000 +0100
-+++ f-spot/extensions/FlickrExport/Makefile.am	2008-04-16 22:16:07.000000000 +0100
+--- f-spot~/extensions/FlickrExport/Makefile.am	2008-05-01 02:13:04.000000000 +0100
++++ f-spot/extensions/FlickrExport/Makefile.am	2008-05-01 02:14:23.000000000 +0100
 @@ -15,16 +15,13 @@
  	-r:../../src/FSpot.Core.dll	\
  	-r:../../src/FSpot.Utils.dll	\
@@ -37,3 +37,11 @@ diff -urNad f-spot~/extensions/FlickrExport/Makefile.am f-spot/extensions/Flickr
  RESOURCES =				\
  	-resource:$(srcdir)/$(PLUGIN_MANIFEST)	\
  	-resource:$(srcdir)/$(PLUGIN_NAME).glade
+@@ -35,7 +32,6 @@
+ 	mautil p $(PLUGIN_ASSEMBLY)
+ 
+ $(PLUGIN_ASSEMBLY): $(PLUGIN_SOURCES) $(PLUGIN_MANIFEST)
+-	$(MAKE) -C $(SUBDIRS)
+ 	$(CSC_LIB) -out:$@ $(PLUGIN_SOURCES) $(REFS) $(PKGS) $(ASSEMBLIES) $(RESOURCES)
+ 
+ plugindir = $(pkglibdir)/extensions
