@@ -1,5 +1,6 @@
 f-spot (0.4.3.1-1) unstable; urgency=low
 
+  [ Tim Retout ]
   * New upstream version.
     + Shows a 'missing icon' image in the import dialog rather than
       throwing an exception when f-spot icon is not found. (Closes: #459261)
@@ -21,7 +22,17 @@ f-spot (0.4.3.1-1) unstable; urgency=low
     + Add line breaks to Build-Depends.
   * debian/update_src_to_use_system_libs.sh: Remove unused script.
 
- -- Tim Retout <tim@retout.co.uk>  Thu, 01 May 2008 02:08:17 +0100
+  [ Mirco Bauer ]
+  * debian/control:
+    + Added libgnome-keyring1.0-cil to build-dependencies.
+  * debian/patches/debian_link-system-gnome-keyring.dpatch:
+    + Link with the libgnome-keyring1.0-cil package.
+  * debian/patches/debian_fix-distclean.dpatch:
+    + "make distclean" should not remove gnome-doc-utils.make
+  * debian/patches/98_autoreconf.dpatch:
+    + Updated
+
+ -- Mirco Bauer <meebey@debian.org>  Fri, 02 May 2008 16:10:21 +0200
 
 f-spot (0.4.2-1) unstable; urgency=low
 

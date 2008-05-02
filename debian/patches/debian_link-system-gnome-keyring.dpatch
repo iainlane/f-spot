@@ -1,0 +1,38 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## debian_link-system-gnome-keyring.dpatch by Mirco Bauer <meebey@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad f-spot-0.4.3.1~/Makefile.am f-spot-0.4.3.1/Makefile.am
+--- f-spot-0.4.3.1~/Makefile.am	2008-05-02 17:05:24.000000000 +0200
++++ f-spot-0.4.3.1/Makefile.am	2008-05-02 17:09:34.000000000 +0200
+@@ -3,7 +3,6 @@
+ 	$(DIR_DBUS_GLIB)\
+ 	docs		\
+ 	glitz-sharp	\
+-	gnome-keyring-sharp \
+ 	icons		\
+ 	libeog		\
+ 	libjpegtran	\
+@@ -21,7 +20,6 @@
+ 	dbus-sharp-glib	\
+ 	docs		\
+ 	glitz-sharp	\
+-	gnome-keyring-sharp \
+ 	icons		\
+ 	libeog		\
+ 	libjpegtran	\
+diff -urNad f-spot-0.4.3.1~/Makefile.include f-spot-0.4.3.1/Makefile.include
+--- f-spot-0.4.3.1~/Makefile.include	2008-05-02 17:05:24.000000000 +0200
++++ f-spot-0.4.3.1/Makefile.include	2008-05-02 17:09:09.000000000 +0200
+@@ -24,7 +24,7 @@
+ 
+ ## Links
+ 
+-LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
++LINK_KEYRING = -pkg:gnome-keyring-sharp
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS =			\

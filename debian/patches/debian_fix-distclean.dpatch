@@ -1,0 +1,18 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## fix_distclean.dpatch by Mirco Bauer <meebey@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad f-spot-0.4.3.1~/Makefile.am f-spot-0.4.3.1/Makefile.am
+--- f-spot-0.4.3.1~/Makefile.am	2008-05-02 17:15:38.000000000 +0200
++++ f-spot-0.4.3.1/Makefile.am	2008-05-02 17:20:17.000000000 +0200
+@@ -72,7 +72,6 @@
+         intltool-extract        \
+         intltool-merge          \
+         intltool-update         \
+-	gnome-doc-utils.make	\
+         $(desktop_files)
+ 
+ DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper

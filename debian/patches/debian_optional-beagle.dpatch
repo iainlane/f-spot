@@ -1,0 +1,44 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## optional_beagle.dpatch by Mirco Bauer <meebey@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad f-spot-0.4.3.1~/src/BeagleNotifier.cs f-spot-0.4.3.1/src/BeagleNotifier.cs
+--- f-spot-0.4.3.1~/src/BeagleNotifier.cs	2008-05-02 16:50:23.000000000 +0200
++++ f-spot-0.4.3.1/src/BeagleNotifier.cs	2008-05-02 16:57:12.000000000 +0200
+@@ -3,8 +3,33 @@
+ 
+ namespace FSpot {
+ 	public static class BeagleNotifier {
++		static bool BeagleSupport;
++
++		static BeagleNotifier () {
++			try {
++				if (System.Reflection.Assembly.Load ("Beagle") != null) {
++					BeagleSupport = true;
++					return;
++				}
++			} catch (System.Exception) {
++			}
++
++			BeagleSupport = false;
++			System.Console.WriteLine ("Beagle.dll not found, disabled beagle support.");
++		}
++
+ 		public static void SendUpdate (IBrowsableItem item)
+ 		{
++			if (!BeagleSupport) {
++				return;
++			}
++
++			SendBeagleUpdate (item);
++		}
++
++		static void SendBeagleUpdate (IBrowsableItem item)
++		{
++
+ 			Indexable indexable = new Indexable (item.DefaultVersionUri);
+ 			indexable.Type = IndexableType.PropertyChange;
+ 			Beagle.Property prop;
