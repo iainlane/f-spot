@@ -1,3 +1,13 @@
+f-spot (0.4.3.1-2~pre1) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+  * debian/control:
+    + Added libsemweb1.0-cil build-dependencies.
+  * debian/patches/debian_link-system-semweb.dpatch:
+    + Link with the libsemweb1.0-cil package.
+
+ -- Mirco Bauer <meebey@debian.org>  Fri, 02 May 2008 17:42:07 +0200
+
 f-spot (0.4.3.1-1) unstable; urgency=low
 
   [ Tim Retout ]

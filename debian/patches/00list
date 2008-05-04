@@ -8,6 +8,7 @@ debian_no-dup-app-icons
 debian_link-system-mono-addins
 debian_link-system-flickrnet
 debian_link-system-gnome-keyring
+debian_link-system-semweb
 debian_flickrnet-2.1.5-port
 
 # Patches to be applied last.
