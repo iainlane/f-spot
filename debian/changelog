@@ -2,6 +2,7 @@ f-spot (0.4.4-1) UNRELEASED; urgency=low
 
   * New upstream version. (Closes: #487229)
     + Includes relicenced semweb library. (Closes: #479349)
+    + No longer crashes if gconfd-2 is not running. (Closes: #474264)
     + Add gio-sharp/* to debian/copyright. 
     + Update patches for new version:
       - debian_unlink-nunit
@@ -11,7 +12,7 @@ f-spot (0.4.4-1) UNRELEASED; urgency=low
       missing DESTDIR variables.
   * Redo 98_autoreconf patch for Makefile.am changes.
 
- -- Tim Retout <tim@retout.co.uk>  Sun, 22 Jun 2008 21:42:20 +0100
+ -- Tim Retout <tim@retout.co.uk>  Sun, 22 Jun 2008 22:08:15 +0100
 
 f-spot (0.4.3.1-1) unstable; urgency=low
 
