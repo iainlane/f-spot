@@ -37,7 +37,8 @@ Build-Depends: debhelper (>= 5.0.0),
  beagle-dev (>= 0.3),
  gnome-screensaver,
  gnome-doc-utils (>= 0.3.2),
- docbook-xml
+ docbook-xml,
+ intltool
 Standards-Version: 3.7.3
 Homepage: http://www.f-spot.org/
 Vcs-Svn: svn://svn.debian.org/svn/pkg-cli-apps/packages/f-spot/trunk/

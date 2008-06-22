@@ -11,8 +11,9 @@ f-spot (0.4.4-1) UNRELEASED; urgency=low
     + svn-044-4010_gio-sharp-destdir: Patch from upstream (via Ubuntu) to fix
       missing DESTDIR variables.
   * Redo 98_autoreconf patch for Makefile.am changes.
+    + Add build dependency on intltool, required by recent intltool versions.
 
- -- Tim Retout <tim@retout.co.uk>  Sun, 22 Jun 2008 22:08:15 +0100
+ -- Tim Retout <tim@retout.co.uk>  Sun, 22 Jun 2008 22:42:33 +0100
 
 f-spot (0.4.3.1-1) unstable; urgency=low
 
