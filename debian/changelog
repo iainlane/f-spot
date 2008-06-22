@@ -3,6 +3,7 @@ f-spot (0.4.4-1) UNRELEASED; urgency=low
   * New upstream version. (Closes: #487229)
     + Includes relicenced semweb library. (Closes: #479349)
     + No longer crashes if gconfd-2 is not running. (Closes: #474264)
+    + Fixes some Spanish translation issues. (Closes: #481709, #481710)
     + Add gio-sharp/* to debian/copyright. 
     + Update patches for new version:
       - debian_unlink-nunit
@@ -11,9 +12,9 @@ f-spot (0.4.4-1) UNRELEASED; urgency=low
     + svn-044-4010_gio-sharp-destdir: Patch from upstream (via Ubuntu) to fix
       missing DESTDIR variables.
   * Redo 98_autoreconf patch for Makefile.am changes.
-    + Add build dependency on intltool, required by recent intltool versions.
+    + Add build dependency on intltool, required by recent intltool versions. 
 
- -- Tim Retout <tim@retout.co.uk>  Sun, 22 Jun 2008 22:42:33 +0100
+ -- Tim Retout <tim@retout.co.uk>  Sun, 22 Jun 2008 23:04:01 +0100
 
 f-spot (0.4.3.1-1) unstable; urgency=low
 
