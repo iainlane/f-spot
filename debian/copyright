@@ -64,6 +64,12 @@ dbus-sharp/*:
 dbus-sharp-glib/*:
 Copyright 2006-2007 Alp Toker <alp@atoker.com>
 
+gio-sharp/* except gio-sharp/gio/FileFactory.cs:
+Copyright (C) 2008 Novell, Inc.
+
+gio-sharp/gio/FileFactory.cs:
+Copyright (C) 2008 Stephane Delcroix
+
 glitz-sharp/*:
 Copyright 2006 Alp Toker <alp@atoker.com>
 
@@ -230,6 +236,7 @@ On Debian systems, the complete text of the GPL can be found in
 
 -------------------------------------------------------------------------------
 
+gio-sharp/*
 libjpegtran/*
 libgphoto2-sharp/*
 

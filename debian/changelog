@@ -2,8 +2,9 @@ f-spot (0.4.4-1) UNRELEASED; urgency=low
 
   * New upstream version. (Closes: #487229)
     + Includes relicenced semweb library. (Closes: #479349)
+    + Add gio-sharp/* to debian/copyright. 
 
- -- Tim Retout <tim@retout.co.uk>  Sun, 22 Jun 2008 21:21:33 +0100
+ -- Tim Retout <tim@retout.co.uk>  Sun, 22 Jun 2008 21:33:03 +0100
 
 f-spot (0.4.3.1-1) unstable; urgency=low
 
