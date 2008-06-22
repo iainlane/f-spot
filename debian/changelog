@@ -3,8 +3,15 @@ f-spot (0.4.4-1) UNRELEASED; urgency=low
   * New upstream version. (Closes: #487229)
     + Includes relicenced semweb library. (Closes: #479349)
     + Add gio-sharp/* to debian/copyright. 
+    + Update patches for new version:
+      - debian_unlink-nunit
+      - debian_link-system-flickrnet
+  * New patches:
+    + svn-044-4010_gio-sharp-destdir: Patch from upstream (via Ubuntu) to fix
+      missing DESTDIR variables.
+  * Redo 98_autoreconf patch for Makefile.am changes.
 
- -- Tim Retout <tim@retout.co.uk>  Sun, 22 Jun 2008 21:33:03 +0100
+ -- Tim Retout <tim@retout.co.uk>  Sun, 22 Jun 2008 21:42:20 +0100
 
 f-spot (0.4.3.1-1) unstable; urgency=low
 

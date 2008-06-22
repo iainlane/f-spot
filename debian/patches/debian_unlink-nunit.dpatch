@@ -6,16 +6,18 @@
 
 @DPATCH@
 diff -urNad f-spot~/src/Makefile.am f-spot/src/Makefile.am
---- f-spot~/src/Makefile.am	2008-03-08 17:24:56.000000000 +0000
-+++ f-spot/src/Makefile.am	2008-03-08 22:24:44.000000000 +0000
-@@ -1,5 +1,5 @@
+--- f-spot~/src/Makefile.am	2008-06-22 19:06:29.000000000 +0100
++++ f-spot/src/Makefile.am	2008-06-22 19:08:38.000000000 +0100
+@@ -1,7 +1,7 @@
  include $(top_srcdir)/Makefile.include
--EXTRAFLAGS = -unsafe -nowarn:0169 -nowarn:0612 -nowarn:0414 -d:TEST_METADATA -d:BROKEN_RSVG $(NUNIT_DEFINES) $(BEAGLE_DEFINES) $(CSC_DEFINES)
-+EXTRAFLAGS = -unsafe -nowarn:0169 -nowarn:0612 -nowarn:0414 -d:TEST_METADATA -d:BROKEN_RSVG $(BEAGLE_DEFINES) $(CSC_DEFINES)
+ UNSAFE = -unsafe
+ NOWARN = -nowarn:0169 -nowarn:0612 -nowarn:0414  
+-EXTRAFLAGS = -d:TEST_METADATA -d:BROKEN_RSVG $(NUNIT_DEFINES) $(BEAGLE_DEFINES) $(CSC_DEFINES)
++EXTRAFLAGS = -d:TEST_METADATA -d:BROKEN_RSVG $(BEAGLE_DEFINES) $(CSC_DEFINES)
  
  CMS_CSDISTFILES =				\
- 	$(srcdir)/Cms/Cms.cs			\
-@@ -270,7 +270,6 @@
+ 	$(srcdir)/Cms/CctTable.cs		\
+@@ -253,7 +253,6 @@
  endif
  
  CMS_ASSEMBLIES = 				\
@@ -23,9 +25,9 @@ diff -urNad f-spot~/src/Makefile.am f-spot/src/Makefile.am
  	-pkg:gtk-sharp-2.0
  
  CORE_ASSEMBLIES =				\
-@@ -312,7 +311,6 @@
- 	-r:FSpot.Query.dll			\
- 	-r:FSpot.Utils.dll			\
+@@ -309,7 +308,6 @@
+ 	-r:FSpot.JobScheduler.dll		\
+ 	-r:FSpot.Widgets.dll			\
  	-r:Cms.dll				\
 -	$(NUNIT_PKG)				\
  	$(GCONF_PKG)				\
