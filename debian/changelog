@@ -1,3 +1,9 @@
+f-spot (0.4.4-1) UNRELEASED; urgency=low
+
+  * New upstream version. (Closes: #487229)
+
+ -- Tim Retout <tim@retout.co.uk>  Sun, 22 Jun 2008 18:53:33 +0100
+
 f-spot (0.4.3.1-1) unstable; urgency=low
 
   [ Tim Retout ]
