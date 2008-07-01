@@ -1,8 +1,9 @@
-f-spot (0.4.4-1) unstable; urgency=low
+f-spot (0.4.4-1) unstable; urgency=medium
 
   [ Tim Retout ]
   * New upstream version. (Closes: #487229)
     + Includes relicenced semweb library. (Closes: #479349)
+      (fixes RC bug, thus urgency set to medium)
     + No longer crashes if gconfd-2 is not running. (Closes: #474264)
     + Fixes some Spanish translation issues. (Closes: #481709, #481710)
     + Add gio-sharp/* to debian/copyright. 
@@ -20,9 +21,9 @@ f-spot (0.4.4-1) unstable; urgency=low
     + Removed beagle from build and binary dependencies, as beagle doesn't add
       any significant features but might cause a new set of issues.
       (Closes: #458897)
-    + Added libcairo2-dev, libglitz1-dev and libglitz-glx1-dev to
-      build-dependencies, needed for resolving the binary dependencies, using
-      dh_clideps.
+    + Added libcairo2-dev, libglu1-mesa-dev, libglitz1-dev and
+      libglitz-glx1-dev to build-dependencies, needed for resolving the binary
+      dependencies, using dh_clideps.
     + Bumped Standards-Version to 3.8.0 (no changes needed).
   * debian/rules
     debian/NDesk.Glitz.dll.config
