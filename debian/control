@@ -34,19 +34,18 @@ Build-Depends: debhelper (>= 5.0.0),
  libgphoto2-2-dev (>= 2.1.4),
  libgl1-mesa-dev | libgl-dev,
  libxml-parser-perl,
- beagle-dev (>= 0.3),
  gnome-screensaver,
  gnome-doc-utils (>= 0.3.2),
  docbook-xml,
  intltool
-Standards-Version: 3.7.3
+Standards-Version: 3.8.0
 Homepage: http://www.f-spot.org/
 Vcs-Svn: svn://svn.debian.org/svn/pkg-cli-apps/packages/f-spot/trunk/
 Vcs-Browser: http://svn.debian.org/wsvn/pkg-cli-apps/packages/f-spot/trunk/
 
 Package: f-spot
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${cli:Depends}, dbus, beagle (>= 0.3)
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${cli:Depends}, dbus
 Recommends: dcraw, sqlite, sqlite3, dbus-x11
 Description: personal photo management application
  F-Spot is meant to be an easy-to-use photo management
