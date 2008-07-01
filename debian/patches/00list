@@ -12,6 +12,7 @@ debian_link-system-mono-addins
 debian_link-system-flickrnet
 debian_link-system-gnome-keyring
 debian_flickrnet-2.1.5-port
+debian_fix_f-spot.exe.config
 
 # Patches to be applied last.
 98_autoreconf

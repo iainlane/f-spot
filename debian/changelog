@@ -20,7 +20,14 @@ f-spot (0.4.4-1) unstable; urgency=low
     + Removed beagle from build and binary dependencies, as beagle doesn't add
       any significant features but might cause a new set of issues.
       (Closes: #458897)
+    + Added libcairo2-dev, libglitz1-dev and libglitz-glx1-dev to
+      build-dependencies, needed for resolving the binary dependencies, using
+      dh_clideps.
     + Bumped Standards-Version to 3.8.0 (no changes needed).
+  * debian/rules
+    debian/NDesk.Glitz.dll.config
+    debian/patches/debian_fix_f-spot.exe.config.dpatch:
+    + Added missing DLL maps.
 
  -- Tim Retout <tim@retout.co.uk>  Tue, 01 Jul 2008 23:35:19 +0200
 

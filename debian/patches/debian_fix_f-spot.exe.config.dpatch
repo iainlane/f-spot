@@ -1,0 +1,16 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## debian_fix_f-spot.exe.config.dpatch by Mirco Bauer <meebey@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad f-spot-0.4.4~/src/f-spot.exe.config.in f-spot-0.4.4/src/f-spot.exe.config.in
+--- f-spot-0.4.4~/src/f-spot.exe.config.in	2008-05-07 14:35:26.000000000 +0200
++++ f-spot-0.4.4/src/f-spot.exe.config.in	2008-07-02 01:11:48.000000000 +0200
+@@ -14,4 +14,5 @@
+   <dllmap dll="libXcomposite.dll" target="libXcomposite.so.1"/>
+   <dllmap dll="liblcms-1.0.0.dll" target="liblcms.so.1"/>
+   <dllmap dll="libexif.dll" target="libexif.so.@EXIF_SOVERSION@"/>
++  <dllmap dll="cairo" target="libcairo.so.2"/>
+ </configuration>
