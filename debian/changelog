@@ -3,8 +3,9 @@ f-spot (0.4.4-2) UNRELEASED; urgency=low
   * debian/patches/:
     + svn_folder-export.dpatch added, thanks to Arnaud Cornet.
       (Closes: #491126)
+  * debian/watch fixed to correctly search for new releases.
 
- -- David Paleino <d.paleino@gmail.com>  Sun, 21 Sep 2008 12:16:43 +0200
+ -- David Paleino <d.paleino@gmail.com>  Sun, 21 Sep 2008 12:18:57 +0200
 
 f-spot (0.4.4-1) unstable; urgency=medium
 
