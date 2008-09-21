@@ -1,5 +1,6 @@
 # Patches from upstream SVN
 svn-044-4010_gio-sharp-destdir
+svn_folder-export
 
 # Patches that haven't been applied upstream yet.
 debian_fix-distclean
