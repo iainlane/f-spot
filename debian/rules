@@ -14,6 +14,7 @@ export DEB_DH_MAKESHLIBS_ARGS="-n"
 CFLAGS := -Wall -g
 
 DEB_CONFIGURE_SCRIPT_ENV := LDFLAGS="-Wl,-O1 -Wl,--as-needed"
+DEB_CONFIGURE_USER_FLAGS += MCS=/usr/bin/csc
 DEB_CONFIGURE_EXTRA_FLAGS := --disable-scrollkeeper
 
 common-configure-indep::

@@ -11,10 +11,14 @@ f-spot (0.4.4-2) experimental; urgency=low
     + Replaced mono-gmcs build-dep with mono-devel >= 2.0 as part of the
       Mono 2.0 transition.
     + Enhanced package description.
+    + Added gtk-sharp2-gapi to build-deps.
   * debian/patches/debian_use_csc.dpatch:
     + Replaces hardcoded compiler calls with MCS variable from configure.
+      (thanks to Iain Lane <laney@ubuntu.com> for the patch)
+  * debian/rules:
+    + Pass csc compiler variable to configure.
 
- -- Mirco Bauer <meebey@debian.org>  Mon, 15 Dec 2008 23:59:13 +0100
+ -- Mirco Bauer <meebey@debian.org>  Tue, 16 Dec 2008 00:21:33 +0100
 
 f-spot (0.4.4-1) unstable; urgency=medium
 
