@@ -11,8 +11,10 @@ f-spot (0.4.4-2) experimental; urgency=low
     + Replaced mono-gmcs build-dep with mono-devel >= 2.0 as part of the
       Mono 2.0 transition.
     + Enhanced package description.
+  * debian/patches/debian_use_csc.dpatch:
+    + Replaces hardcoded compiler calls with MCS variable from configure.
 
- -- Mirco Bauer <meebey@debian.org>  Mon, 15 Dec 2008 23:44:58 +0100
+ -- Mirco Bauer <meebey@debian.org>  Mon, 15 Dec 2008 23:59:13 +0100
 
 f-spot (0.4.4-1) unstable; urgency=medium
 
