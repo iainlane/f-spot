@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 5.0.0),
  cli-common-dev (>= 0.5.4),
  cdbs,
  dpatch,
- mono-gmcs (>= 1.1.17) | c-sharp-2.0-compiler,
+ mono-devel (>= 2.0),
  libgtk2.0-dev (>= 2.6),
  libgtk2.0-cil (>= 2.8),
  libgnome2-dev (>= 2.2),
@@ -52,7 +52,8 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${cli:Depends}, dbus
 Recommends: dcraw, sqlite, sqlite3, dbus-x11
 Description: personal photo management application
- F-Spot is meant to be an easy-to-use photo management
- application.  It allows for importing of your existing
- photo collections, tagging photos with identifiers,
- as well as doing simple edits of photos (e.g. rotating).
+ F-Spot is a full-featured personal photo management application for the
+ GNOME desktop. It simplifies digital photography by providing intuitive
+ tools to help you share, touch-up, find and organize your images.
+ It allows for importing of your existing photo collections, tagging photos
+ with identifiers, as well as doing simple edits of photos (e.g. rotating).
