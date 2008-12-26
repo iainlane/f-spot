@@ -38,7 +38,9 @@ Build-Depends: debhelper (>= 5.0.0),
  libglu1-mesa-dev,
  libglitz1-dev,
  libglitz-glx1-dev,
+ libjpeg62-dev,
  libxml-parser-perl,
+ gtk-sharp2-gapi,
  gnome-screensaver,
  gnome-doc-utils (>= 0.3.2),
  docbook-xml,
@@ -50,7 +52,7 @@ Vcs-Browser: http://svn.debian.org/wsvn/pkg-cli-apps/packages/f-spot/trunk/
 
 Package: f-spot
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${cli:Depends}, dbus
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${cli:Depends}, dbus, gvfs-bin
 Recommends: dcraw, sqlite, sqlite3, dbus-x11
 Description: personal photo management application
  F-Spot is a full-featured personal photo management application for the

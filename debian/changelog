@@ -1,4 +1,4 @@
-f-spot (0.4.4-2) experimental; urgency=low
+f-spot (0.5.0.3-1) UNRELEASED; urgency=low
 
   [ David Paleino ]
   * debian/patches/:
@@ -18,7 +18,32 @@ f-spot (0.4.4-2) experimental; urgency=low
   * debian/rules:
     + Pass csc compiler variable to configure.
 
- -- Mirco Bauer <meebey@debian.org>  Tue, 16 Dec 2008 00:21:33 +0100
+  [ Iain Lane ]
+  * New upstream version 0.5.0.3, based on Ubuntu package (Closes: #499615)
+  * debian/control: Build-depend on libgjpeg62-dev, add gvfs-bin dependency
+    so that gphoto patch below works.
+  * debian/watch: Update to correct regex.
+  * debian/patches/f-spot-import-gphoto.dpatch: Add. Patch by Martin Pitt to
+    allow f-spot to import from gphoto:/// URLs.
+  * debian/patches/ubuntu_fname_quote_percent.dpatch: Add. Escape '%' in
+    filenames so that importing from gvfs fuse paths works. Thanks to Martin
+    Pitt.
+  * debian/patches/svn-r455_fix-crash-on-icon-size-change.dpatch: Add.
+    Backport upstream patch to fix crash when enabling 'Color Management' in
+    preferences. Thanks to Chris Coulson.
+  * debian/patches/ubuntu_importer-targetdir-selector.dpatch: Add. Add a
+    destination directory selector to the camera import dialog. Thanks to
+    Matvey Kozhev.
+  * debian/patches/debian_unlink_nunit, debian_link-system-flickrnet:
+    Updated for new upstream version, thanks to Chris Coulson
+  * debian/patches/svn-folder-export,
+    debian/patches/debian_from-svn-gio-sharp-destdir,
+    debian/patches/debian_flickrnet-2.1.5-port.dpatch,
+    debian/patches/svn-044-4010_gio-sharp-destdir.dpatch: Removed, now
+    upstream.
+  * debian/patches/98_autoreconf.dpatch: Refresh.
+
+ -- Iain Lane <laney@ubuntu.com>  Fri, 26 Dec 2008 21:18:05 +0000
 
 f-spot (0.4.4-1) unstable; urgency=medium
 

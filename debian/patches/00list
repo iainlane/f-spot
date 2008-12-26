@@ -1,7 +1,3 @@
-# Patches from upstream SVN
-svn-044-4010_gio-sharp-destdir
-svn_folder-export
-
 # Patches that haven't been applied upstream yet.
 debian_fix-distclean
 debian_libfspot-linkage
@@ -12,9 +8,14 @@ debian_no-dup-app-icons
 debian_link-system-mono-addins
 debian_link-system-flickrnet
 debian_link-system-gnome-keyring
-debian_flickrnet-2.1.5-port
 debian_fix_f-spot.exe.config
+f-spot-import-gphoto
+svn-r4555_fix-crash-on-icon-size-change.dpatch
+
 debian_use_csc
+
+ubuntu_importer-targetdir-selector
+ubuntu_fname_quote_percent
 
 # Patches to be applied last.
 98_autoreconf

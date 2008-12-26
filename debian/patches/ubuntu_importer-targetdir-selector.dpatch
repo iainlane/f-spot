@@ -1,0 +1,88 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## ubuntu_importer-targetdir-selector.dpatch by Chris Coulson <chrisccoulson@googlemail.com>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad f-spot-0.5.0.2~/src/CameraFileSelectionDialog.cs f-spot-0.5.0.2/src/CameraFileSelectionDialog.cs
+--- f-spot-0.5.0.2~/src/CameraFileSelectionDialog.cs	2008-09-26 09:27:39.000000000 +0100
++++ f-spot-0.5.0.2/src/CameraFileSelectionDialog.cs	2008-10-06 19:11:16.000000000 +0100
+@@ -33,6 +33,7 @@
+ 		[Widget] Gtk.OptionMenu tag_option_menu;
+ 		[Widget] Gtk.CheckButton attach_check;
+ 		[Widget] Gtk.CheckButton duplicate_check;
++		[Widget] Gtk.FileChooserButton dest_dir_chooser;
+ 
+ 		GPhotoCamera camera;
+ 		ListStore preview_list_store;
+@@ -91,6 +92,8 @@
+ 			attach_check.Toggled += HandleTagToggled;
+ 			HandleTagToggled (null, null);
+ 			
++			dest_dir_chooser.SetCurrentFolder(FSpot.Global.PhotoDirectory);
++			
+ 			GetPreviews ();
+ 		}
+ 		
+@@ -279,7 +282,11 @@
+ 
+ 				return new SaveResult (path, true);
+ 			} else {
+-				string dest = FileImportBackend.ChooseLocation (path);
++				string dest;
++				if (dest_dir_chooser.Filename == FSpot.Global.PhotoDirectory)
++					dest = FileImportBackend.ChooseLocation (path);
++				else
++					dest = Path.Combine (dest_dir_chooser.Filename, camfile.FileName.ToLower ());
+ 				System.IO.File.Move (path, dest);
+ 
+ 				return new SaveResult (dest, false);
+diff -urNad f-spot-0.5.0.2~/src/f-spot.glade f-spot-0.5.0.2/src/f-spot.glade
+--- f-spot-0.5.0.2~/src/f-spot.glade	2008-10-06 11:10:21.000000000 +0100
++++ f-spot-0.5.0.2/src/f-spot.glade	2008-10-06 19:16:04.000000000 +0100
+@@ -647,10 +647,44 @@
+               </widget>
+               <packing>
+                 <property name="expand">False</property>
++                <property name="fill">False</property>
+                 <property name="position">2</property>
+               </packing>
+             </child>
+             <child>
++              <widget class="GtkHBox" id="hbox7">
++                <property name="visible">True</property>
++                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
++                <child>
++                  <widget class="GtkLabel" id="label6">
++                    <property name="visible">True</property>
++                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
++                    <property name="label" translatable="yes">Target location:	</property>
++                  </widget>
++                  <packing>
++                    <property name="expand">False</property>
++                    <property name="fill">False</property>
++                  </packing>
++                </child>
++                <child>
++                  <widget class="GtkFileChooserButton" id="dest_dir_chooser">
++                    <property name="visible">True</property>
++                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
++                    <property name="action">GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER</property>
++                    <property name="title" translatable="yes">Choose destination directory</property>
++                  </widget>
++                  <packing>
++                    <property name="position">1</property>
++                  </packing>
++                </child>
++              </widget>
++              <packing>
++                <property name="expand">False</property>
++                <property name="fill">False</property>
++                <property name="position">3</property>
++              </packing>
++            </child>
++            <child>
+               <widget class="GtkCheckButton" id="duplicate_check">
+                 <property name="visible">True</property>
+                 <property name="can_focus">True</property>
