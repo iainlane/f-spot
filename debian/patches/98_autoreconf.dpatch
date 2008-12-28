@@ -7,7 +7,7 @@
 @DPATCH@
 diff -urNad f-spot-0.5.0.3~/INSTALL f-spot-0.5.0.3/INSTALL
 --- f-spot-0.5.0.3~/INSTALL	2008-09-12 14:21:36.000000000 +0100
-+++ f-spot-0.5.0.3/INSTALL	2008-12-26 21:56:34.000000000 +0000
++++ f-spot-0.5.0.3/INSTALL	2008-12-28 01:52:06.000000000 +0000
 @@ -1,38 +1,54 @@
 +Installation Instructions
 +*************************
@@ -290,7 +290,7 @@ diff -urNad f-spot-0.5.0.3~/INSTALL f-spot-0.5.0.3/INSTALL
 -`configure' also accepts some other, not widely useful, options.
 diff -urNad f-spot-0.5.0.3~/Makefile.in f-spot-0.5.0.3/Makefile.in
 --- f-spot-0.5.0.3~/Makefile.in	2008-10-18 12:48:14.000000000 +0100
-+++ f-spot-0.5.0.3/Makefile.in	2008-12-26 21:56:34.000000000 +0000
++++ f-spot-0.5.0.3/Makefile.in	2008-12-28 01:52:06.000000000 +0000
 @@ -204,6 +204,7 @@
  MAKEINFO = @MAKEINFO@
  MCS = @MCS@
@@ -315,7 +315,7 @@ diff -urNad f-spot-0.5.0.3~/Makefile.in f-spot-0.5.0.3/Makefile.in
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  SUBDIRS = \
-@@ -309,14 +308,12 @@
+@@ -309,7 +308,6 @@
  	semweb		\
  	docs		\
  	glitz-sharp	\
@@ -323,14 +323,7 @@ diff -urNad f-spot-0.5.0.3~/Makefile.in f-spot-0.5.0.3/Makefile.in
  	icons		\
  	libeog		\
  	libjpegtran	\
- 	libfspot	\
- 	libgphoto2-sharp \
- 	Tao		\
--	mono-addins	\
- 	tools		\
- 	po		\
- 	src		\
-@@ -330,14 +327,12 @@
+@@ -330,7 +328,6 @@
  	dpap-sharp	\
  	docs		\
  	glitz-sharp	\
@@ -338,14 +331,7 @@ diff -urNad f-spot-0.5.0.3~/Makefile.in f-spot-0.5.0.3/Makefile.in
  	icons		\
  	libeog		\
  	libjpegtran	\
- 	libfspot	\
- 	libgphoto2-sharp \
- 	Tao		\
--	mono-addins	\
- 	tools		\
- 	po		\
- 	src		\
-@@ -375,7 +370,6 @@
+@@ -375,7 +372,6 @@
          intltool-extract        \
          intltool-merge          \
          intltool-update         \
@@ -355,7 +341,7 @@ diff -urNad f-spot-0.5.0.3~/Makefile.in f-spot-0.5.0.3/Makefile.in
  UPDATE_DESKTOP = \
 diff -urNad f-spot-0.5.0.3~/Tao/Makefile.in f-spot-0.5.0.3/Tao/Makefile.in
 --- f-spot-0.5.0.3~/Tao/Makefile.in	2008-10-18 12:48:07.000000000 +0100
-+++ f-spot-0.5.0.3/Tao/Makefile.in	2008-12-26 21:56:27.000000000 +0000
++++ f-spot-0.5.0.3/Tao/Makefile.in	2008-12-28 01:51:59.000000000 +0000
 @@ -171,6 +171,7 @@
  MAKEINFO = @MAKEINFO@
  MCS = @MCS@
@@ -382,7 +368,7 @@ diff -urNad f-spot-0.5.0.3~/Tao/Makefile.in f-spot-0.5.0.3/Tao/Makefile.in
  SUBDIRS = \
 diff -urNad f-spot-0.5.0.3~/Tao/Tao.GlPostProcess/Makefile.in f-spot-0.5.0.3/Tao/Tao.GlPostProcess/Makefile.in
 --- f-spot-0.5.0.3~/Tao/Tao.GlPostProcess/Makefile.in	2008-10-18 12:48:07.000000000 +0100
-+++ f-spot-0.5.0.3/Tao/Tao.GlPostProcess/Makefile.in	2008-12-26 21:56:27.000000000 +0000
++++ f-spot-0.5.0.3/Tao/Tao.GlPostProcess/Makefile.in	2008-12-28 01:51:59.000000000 +0000
 @@ -63,7 +63,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -416,7 +402,7 @@ diff -urNad f-spot-0.5.0.3~/Tao/Tao.GlPostProcess/Makefile.in f-spot-0.5.0.3/Tao
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -276,13 +275,13 @@
+@@ -276,7 +275,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -425,15 +411,6 @@ diff -urNad f-spot-0.5.0.3~/Tao/Tao.GlPostProcess/Makefile.in f-spot-0.5.0.3/Tao
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -291,7 +290,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -445,7 +422,7 @@ diff -urNad f-spot-0.5.0.3~/Tao/Tao.GlPostProcess/Makefile.in f-spot-0.5.0.3/Tao
  ASSEMBLY_NAME = Tao.GlPostProcess
 diff -urNad f-spot-0.5.0.3~/Tao/Tao.OpenGl/Makefile.in f-spot-0.5.0.3/Tao/Tao.OpenGl/Makefile.in
 --- f-spot-0.5.0.3~/Tao/Tao.OpenGl/Makefile.in	2008-10-18 12:48:07.000000000 +0100
-+++ f-spot-0.5.0.3/Tao/Tao.OpenGl/Makefile.in	2008-12-26 21:56:28.000000000 +0000
++++ f-spot-0.5.0.3/Tao/Tao.OpenGl/Makefile.in	2008-12-28 01:51:59.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -479,7 +456,7 @@ diff -urNad f-spot-0.5.0.3~/Tao/Tao.OpenGl/Makefile.in f-spot-0.5.0.3/Tao/Tao.Op
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -488,15 +465,6 @@ diff -urNad f-spot-0.5.0.3~/Tao/Tao.OpenGl/Makefile.in f-spot-0.5.0.3/Tao/Tao.Op
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -508,7 +476,7 @@ diff -urNad f-spot-0.5.0.3~/Tao/Tao.OpenGl/Makefile.in f-spot-0.5.0.3/Tao/Tao.Op
  ASSEMBLY_NAME = Tao.OpenGl
 diff -urNad f-spot-0.5.0.3~/Tao/Tao.OpenGl.ExtensionLoader/Makefile.in f-spot-0.5.0.3/Tao/Tao.OpenGl.ExtensionLoader/Makefile.in
 --- f-spot-0.5.0.3~/Tao/Tao.OpenGl.ExtensionLoader/Makefile.in	2008-10-18 12:48:07.000000000 +0100
-+++ f-spot-0.5.0.3/Tao/Tao.OpenGl.ExtensionLoader/Makefile.in	2008-12-26 21:56:27.000000000 +0000
++++ f-spot-0.5.0.3/Tao/Tao.OpenGl.ExtensionLoader/Makefile.in	2008-12-28 01:51:59.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -542,7 +510,7 @@ diff -urNad f-spot-0.5.0.3~/Tao/Tao.OpenGl.ExtensionLoader/Makefile.in f-spot-0.
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -551,15 +519,6 @@ diff -urNad f-spot-0.5.0.3~/Tao/Tao.OpenGl.ExtensionLoader/Makefile.in f-spot-0.
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -571,7 +530,7 @@ diff -urNad f-spot-0.5.0.3~/Tao/Tao.OpenGl.ExtensionLoader/Makefile.in f-spot-0.
  ASSEMBLY_NAME = Tao.OpenGl.ExtensionLoader
 diff -urNad f-spot-0.5.0.3~/Tao/Tao.OpenGl.Glu/Makefile.in f-spot-0.5.0.3/Tao/Tao.OpenGl.Glu/Makefile.in
 --- f-spot-0.5.0.3~/Tao/Tao.OpenGl.Glu/Makefile.in	2008-10-18 12:48:07.000000000 +0100
-+++ f-spot-0.5.0.3/Tao/Tao.OpenGl.Glu/Makefile.in	2008-12-26 21:56:27.000000000 +0000
++++ f-spot-0.5.0.3/Tao/Tao.OpenGl.Glu/Makefile.in	2008-12-28 01:51:59.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -605,7 +564,7 @@ diff -urNad f-spot-0.5.0.3~/Tao/Tao.OpenGl.Glu/Makefile.in f-spot-0.5.0.3/Tao/Ta
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -614,15 +573,6 @@ diff -urNad f-spot-0.5.0.3~/Tao/Tao.OpenGl.Glu/Makefile.in f-spot-0.5.0.3/Tao/Ta
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -634,7 +584,7 @@ diff -urNad f-spot-0.5.0.3~/Tao/Tao.OpenGl.Glu/Makefile.in f-spot-0.5.0.3/Tao/Ta
  ASSEMBLY_NAME = Tao.OpenGl.Glu
 diff -urNad f-spot-0.5.0.3~/aclocal.m4 f-spot-0.5.0.3/aclocal.m4
 --- f-spot-0.5.0.3~/aclocal.m4	2008-10-18 12:48:04.000000000 +0100
-+++ f-spot-0.5.0.3/aclocal.m4	2008-12-26 21:56:20.000000000 +0000
++++ f-spot-0.5.0.3/aclocal.m4	2008-12-28 01:51:52.000000000 +0000
 @@ -13,8 +13,8 @@
  
  m4_ifndef([AC_AUTOCONF_VERSION],
@@ -1305,7 +1255,7 @@ diff -urNad f-spot-0.5.0.3~/aclocal.m4 f-spot-0.5.0.3/aclocal.m4
  	echo "$$1[]_PKG_ERRORS" >&AS_MESSAGE_LOG_FD
 diff -urNad f-spot-0.5.0.3~/autom4te.cache/output.0 f-spot-0.5.0.3/autom4te.cache/output.0
 --- f-spot-0.5.0.3~/autom4te.cache/output.0	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/autom4te.cache/output.0	2008-12-26 21:49:29.000000000 +0000
++++ f-spot-0.5.0.3/autom4te.cache/output.0	2008-12-28 01:51:30.000000000 +0000
 @@ -0,0 +1,11968 @@
 +@%:@! /bin/sh
 +@%:@ Guess values for system-dependent variables and create Makefiles.
@@ -13277,8 +13227,8 @@ diff -urNad f-spot-0.5.0.3~/autom4te.cache/output.0 f-spot-0.5.0.3/autom4te.cach
 +
 diff -urNad f-spot-0.5.0.3~/autom4te.cache/output.1 f-spot-0.5.0.3/autom4te.cache/output.1
 --- f-spot-0.5.0.3~/autom4te.cache/output.1	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/autom4te.cache/output.1	2008-12-26 21:56:26.000000000 +0000
-@@ -0,0 +1,19840 @@
++++ f-spot-0.5.0.3/autom4te.cache/output.1	2008-12-28 01:51:58.000000000 +0000
+@@ -0,0 +1,19844 @@
 +@%:@! /bin/sh
 +@%:@ Guess values for system-dependent variables and create Makefiles.
 +@%:@ Generated by GNU Autoconf 2.61 for F-Spot 0.5.0.3.
@@ -30354,7 +30304,7 @@ diff -urNad f-spot-0.5.0.3~/autom4te.cache/output.1 f-spot-0.5.0.3/autom4te.cach
 +GNOME_ICON_THEME_PREFIX=`$PKG_CONFIG --variable=prefix gnome-icon-theme`
 +
 +
-+ac_config_files="$ac_config_files Makefile dbus-sharp/Makefile dbus-sharp-glib/Makefile dpap-sharp/Makefile dpap-sharp/lib/Makefile dpap-sharp/dpap-client/Makefile dpap-sharp/dpap-server/Makefile dpap-sharp/DPAPService/Makefile dpap-sharp/DPAPBrowser/Makefile docs/Makefile gnome-keyring-sharp/Makefile icons/Makefile libeog/Makefile libeog/cursors/Makefile libjpegtran/Makefile libfspot/Makefile libgphoto2-sharp/Makefile semweb/Makefile tools/Makefile po/Makefile.in src/Core/Defines.cs src/AssemblyInfo.cs src/f-spot.exe.config src/Cms.dll.config src/Makefile glitz-sharp/Makefile glitz-sharp/src/Makefile Tao/Makefile Tao/Tao.OpenGl/Makefile Tao/Tao.OpenGl.Glu/Makefile Tao/Tao.GlPostProcess/Makefile Tao/Tao.OpenGl.ExtensionLoader/Makefile extensions/Makefile extensions/Exporters/Makefile extensions/Exporters/CDExport/Makefile extensions/Exporters/DefaultExporters/Makefile extensions/Exporters/FlickrExport/Makefile extensions/Exporters/GalleryExport/Makefile extensions/Exporters/FacebookExport/Makefile extensions/Exporters/FolderExport/Makefile extensions/Exporters/SmugMugExport/SmugMugNet/Makefile extensions/Exporters/SmugMugExport/Makefile extensions/Exporters/TabbloExport/Makefile extensions/Exporters/TabbloExport/Tabblo/Makefile extensions/Exporters/PicasaWebExport/Makefile extensions/Exporters/PicasaWebExport/google-sharp/Makefile extensions/Exporters/ZipExport/Makefile extensions/Services/Makefile extensions/Services/BeagleService/Makefile extensions/Services/DBusService/Makefile extensions/Tools/Makefile extensions/Tools/RawPlusJpeg/Makefile extensions/Tools/ChangePhotoPath/Makefile extensions/Tools/HashJob/Makefile extensions/Tools/DevelopInUFraw/Makefile extensions/Tools/MergeDb/Makefile f-spot.pc f-spot.spec f-spot.desktop.in f-spot-view.desktop.in f-spot-import.desktop.in"
++ac_config_files="$ac_config_files Makefile dbus-sharp/Makefile dbus-sharp-glib/Makefile dpap-sharp/Makefile dpap-sharp/lib/Makefile dpap-sharp/dpap-client/Makefile dpap-sharp/dpap-server/Makefile dpap-sharp/DPAPService/Makefile dpap-sharp/DPAPBrowser/Makefile docs/Makefile gnome-keyring-sharp/Makefile icons/Makefile libeog/Makefile libeog/cursors/Makefile libjpegtran/Makefile libfspot/Makefile libgphoto2-sharp/Makefile mono-addins/Makefile mono-addins/Mono.Addins/Makefile mono-addins/Mono.Addins.Gui/Makefile mono-addins/Mono.Addins.Setup/Makefile semweb/Makefile tools/Makefile po/Makefile.in src/Core/Defines.cs src/AssemblyInfo.cs src/f-spot.exe.config src/Cms.dll.config src/Makefile glitz-sharp/Makefile glitz-sharp/src/Makefile Tao/Makefile Tao/Tao.OpenGl/Makefile Tao/Tao.OpenGl.Glu/Makefile Tao/Tao.GlPostProcess/Makefile Tao/Tao.OpenGl.ExtensionLoader/Makefile extensions/Makefile extensions/Exporters/Makefile extensions/Exporters/CDExport/Makefile extensions/Exporters/DefaultExporters/Makefile extensions/Exporters/FlickrExport/Makefile extensions/Exporters/GalleryExport/Makefile extensions/Exporters/FacebookExport/Makefile extensions/Exporters/FolderExport/Makefile extensions/Exporters/SmugMugExport/SmugMugNet/Makefile extensions/Exporters/SmugMugExport/Makefile extensions/Exporters/TabbloExport/Makefile extensions/Exporters/TabbloExport/Tabblo/Makefile extensions/Exporters/PicasaWebExport/Makefile extensions/Exporters/PicasaWebExport/google-sharp/Makefile extensions/Exporters/ZipExport/Makefile extensions/Services/Makefile extensions/Services/BeagleService/Makefile extensions/Services/DBusService/Makefile extensions/Tools/Makefile extensions/Tools/RawPlusJpeg/Makefile extensions/Tools/ChangePhotoPath/Makefile extensions/Tools/HashJob/Makefile extensions/Tools/DevelopInUFraw/Makefile extensions/Tools/MergeDb/Makefile f-spot.pc f-spot.spec f-spot.desktop.in f-spot-view.desktop.in f-spot-import.desktop.in"
 +
 +cat >confcache <<\_ACEOF
 +# This file is a shell script that caches the results of configure
@@ -31269,6 +31219,10 @@ diff -urNad f-spot-0.5.0.3~/autom4te.cache/output.1 f-spot-0.5.0.3/autom4te.cach
 +    "libjpegtran/Makefile") CONFIG_FILES="$CONFIG_FILES libjpegtran/Makefile" ;;
 +    "libfspot/Makefile") CONFIG_FILES="$CONFIG_FILES libfspot/Makefile" ;;
 +    "libgphoto2-sharp/Makefile") CONFIG_FILES="$CONFIG_FILES libgphoto2-sharp/Makefile" ;;
++    "mono-addins/Makefile") CONFIG_FILES="$CONFIG_FILES mono-addins/Makefile" ;;
++    "mono-addins/Mono.Addins/Makefile") CONFIG_FILES="$CONFIG_FILES mono-addins/Mono.Addins/Makefile" ;;
++    "mono-addins/Mono.Addins.Gui/Makefile") CONFIG_FILES="$CONFIG_FILES mono-addins/Mono.Addins.Gui/Makefile" ;;
++    "mono-addins/Mono.Addins.Setup/Makefile") CONFIG_FILES="$CONFIG_FILES mono-addins/Mono.Addins.Setup/Makefile" ;;
 +    "semweb/Makefile") CONFIG_FILES="$CONFIG_FILES semweb/Makefile" ;;
 +    "tools/Makefile") CONFIG_FILES="$CONFIG_FILES tools/Makefile" ;;
 +    "po/Makefile.in") CONFIG_FILES="$CONFIG_FILES po/Makefile.in" ;;
@@ -33121,7 +33075,7 @@ diff -urNad f-spot-0.5.0.3~/autom4te.cache/output.1 f-spot-0.5.0.3/autom4te.cach
 +
 diff -urNad f-spot-0.5.0.3~/autom4te.cache/output.2 f-spot-0.5.0.3/autom4te.cache/output.2
 --- f-spot-0.5.0.3~/autom4te.cache/output.2	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/autom4te.cache/output.2	2008-12-26 21:54:45.000000000 +0000
++++ f-spot-0.5.0.3/autom4te.cache/output.2	2008-12-28 01:51:30.000000000 +0000
 @@ -0,0 +1,12082 @@
 +@%:@! /bin/sh
 +@%:@ Guess values for system-dependent variables and create Makefiles.
@@ -45207,7 +45161,7 @@ diff -urNad f-spot-0.5.0.3~/autom4te.cache/output.2 f-spot-0.5.0.3/autom4te.cach
 +
 diff -urNad f-spot-0.5.0.3~/autom4te.cache/output.3 f-spot-0.5.0.3/autom4te.cache/output.3
 --- f-spot-0.5.0.3~/autom4te.cache/output.3	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/autom4te.cache/output.3	2008-12-26 21:56:09.000000000 +0000
++++ f-spot-0.5.0.3/autom4te.cache/output.3	2008-12-28 01:51:30.000000000 +0000
 @@ -0,0 +1,19844 @@
 +@%:@! /bin/sh
 +@%:@ Guess values for system-dependent variables and create Makefiles.
@@ -65055,7 +65009,7 @@ diff -urNad f-spot-0.5.0.3~/autom4te.cache/output.3 f-spot-0.5.0.3/autom4te.cach
 +
 diff -urNad f-spot-0.5.0.3~/autom4te.cache/requests f-spot-0.5.0.3/autom4te.cache/requests
 --- f-spot-0.5.0.3~/autom4te.cache/requests	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/autom4te.cache/requests	2008-12-26 21:56:27.000000000 +0000
++++ f-spot-0.5.0.3/autom4te.cache/requests	2008-12-28 01:51:59.000000000 +0000
 @@ -0,0 +1,481 @@
 +# This file was generated by Autom4te Wed Jul 23 10:17:38 UTC 2008.
 +# It contains the lists of macros which have been traced.
@@ -65540,7 +65494,7 @@ diff -urNad f-spot-0.5.0.3~/autom4te.cache/requests f-spot-0.5.0.3/autom4te.cach
 +
 diff -urNad f-spot-0.5.0.3~/autom4te.cache/traces.0 f-spot-0.5.0.3/autom4te.cache/traces.0
 --- f-spot-0.5.0.3~/autom4te.cache/traces.0	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/autom4te.cache/traces.0	2008-12-26 21:49:29.000000000 +0000
++++ f-spot-0.5.0.3/autom4te.cache/traces.0	2008-12-28 01:51:30.000000000 +0000
 @@ -0,0 +1,1754 @@
 +m4trace:/usr/share/aclocal/glib-2.0.m4:8: -1- AC_DEFUN([AM_PATH_GLIB_2_0], [dnl 
 +dnl Get the cflags and libraries from pkg-config
@@ -67298,8 +67252,8 @@ diff -urNad f-spot-0.5.0.3~/autom4te.cache/traces.0 f-spot-0.5.0.3/autom4te.cach
 +m4trace:configure.in:331: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
 diff -urNad f-spot-0.5.0.3~/autom4te.cache/traces.1 f-spot-0.5.0.3/autom4te.cache/traces.1
 --- f-spot-0.5.0.3~/autom4te.cache/traces.1	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/autom4te.cache/traces.1	2008-12-26 21:56:26.000000000 +0000
-@@ -0,0 +1,1155 @@
++++ f-spot-0.5.0.3/autom4te.cache/traces.1	2008-12-28 01:51:58.000000000 +0000
+@@ -0,0 +1,1159 @@
 +m4trace:aclocal.m4:9951: -1- m4_include([acinclude.m4])
 +m4trace:configure.in:1: -1- AC_INIT([F-Spot], [0.5.0.3])
 +m4trace:configure.in:1: -1- m4_pattern_forbid([^_?A[CHUM]_])
@@ -68391,6 +68345,10 @@ diff -urNad f-spot-0.5.0.3~/autom4te.cache/traces.1 f-spot-0.5.0.3/autom4te.cach
 +libjpegtran/Makefile
 +libfspot/Makefile
 +libgphoto2-sharp/Makefile
++mono-addins/Makefile
++mono-addins/Mono.Addins/Makefile
++mono-addins/Mono.Addins.Gui/Makefile
++mono-addins/Mono.Addins.Setup/Makefile
 +semweb/Makefile
 +tools/Makefile
 +po/Makefile.in
@@ -68457,7 +68415,7 @@ diff -urNad f-spot-0.5.0.3~/autom4te.cache/traces.1 f-spot-0.5.0.3/autom4te.cach
 +m4trace:configure.in:331: -1- AC_REQUIRE_AUX_FILE([ltmain.sh])
 diff -urNad f-spot-0.5.0.3~/autom4te.cache/traces.2 f-spot-0.5.0.3/autom4te.cache/traces.2
 --- f-spot-0.5.0.3~/autom4te.cache/traces.2	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/autom4te.cache/traces.2	2008-12-26 21:54:45.000000000 +0000
++++ f-spot-0.5.0.3/autom4te.cache/traces.2	2008-12-28 01:51:30.000000000 +0000
 @@ -0,0 +1,1805 @@
 +m4trace:/usr/share/aclocal/gconf-2.m4:8: -1- AC_DEFUN([AM_GCONF_SOURCE_2], [
 +  if test "x$GCONF_SCHEMA_INSTALL_SOURCE" = "x"; then
@@ -70266,7 +70224,7 @@ diff -urNad f-spot-0.5.0.3~/autom4te.cache/traces.2 f-spot-0.5.0.3/autom4te.cach
 +m4trace:configure.in:331: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
 diff -urNad f-spot-0.5.0.3~/autom4te.cache/traces.3 f-spot-0.5.0.3/autom4te.cache/traces.3
 --- f-spot-0.5.0.3~/autom4te.cache/traces.3	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/autom4te.cache/traces.3	2008-12-26 21:56:09.000000000 +0000
++++ f-spot-0.5.0.3/autom4te.cache/traces.3	2008-12-28 01:51:30.000000000 +0000
 @@ -0,0 +1,3387 @@
 +m4trace:/usr/share/aclocal/argz.m4:12: -1- AC_DEFUN([gl_FUNC_ARGZ], [gl_PREREQ_ARGZ
 +
@@ -73747,7 +73705,7 @@ diff -urNad f-spot-0.5.0.3~/config.h.in~ f-spot-0.5.0.3/config.h.in~
 +#undef VERSION
 diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
 --- f-spot-0.5.0.3~/configure	2008-10-18 12:48:15.000000000 +0100
-+++ f-spot-0.5.0.3/configure	2008-12-26 21:56:23.000000000 +0000
++++ f-spot-0.5.0.3/configure	2008-12-28 01:51:55.000000000 +0000
 @@ -1,9 +1,9 @@
  #! /bin/sh
  # Guess values for system-dependent variables and create Makefiles.
@@ -78533,7 +78491,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
 -else
 -  OBJDUMP="$ac_cv_prog_OBJDUMP"
 -fi
- 
+-
 -test -z "$OBJDUMP" && OBJDUMP=objdump
 -
 -
@@ -78543,7 +78501,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
 -
 -
 -
--
+ 
 -{ $as_echo "$as_me:$LINENO: checking how to recognize dependent libraries" >&5
 -$as_echo_n "checking how to recognize dependent libraries... " >&6; }
 +{ echo "$as_me:$LINENO: checking how to recognize dependent libraries" >&5
@@ -85195,7 +85153,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
  
  
 -ac_config_files="$ac_config_files Makefile dbus-sharp/Makefile dbus-sharp-glib/Makefile dpap-sharp/Makefile dpap-sharp/lib/Makefile dpap-sharp/dpap-client/Makefile dpap-sharp/dpap-server/Makefile dpap-sharp/DPAPService/Makefile dpap-sharp/DPAPBrowser/Makefile docs/Makefile gnome-keyring-sharp/Makefile icons/Makefile libeog/Makefile libeog/cursors/Makefile libjpegtran/Makefile libfspot/Makefile libgphoto2-sharp/Makefile mono-addins/Makefile mono-addins/Mono.Addins/Makefile mono-addins/Mono.Addins.Gui/Makefile mono-addins/Mono.Addins.Setup/Makefile semweb/Makefile tools/Makefile po/Makefile.in src/Core/Defines.cs src/AssemblyInfo.cs src/f-spot.exe.config src/Cms.dll.config src/Makefile glitz-sharp/Makefile glitz-sharp/src/Makefile Tao/Makefile Tao/Tao.OpenGl/Makefile Tao/Tao.OpenGl.Glu/Makefile Tao/Tao.GlPostProcess/Makefile Tao/Tao.OpenGl.ExtensionLoader/Makefile extensions/Makefile extensions/Exporters/Makefile extensions/Exporters/CDExport/Makefile extensions/Exporters/DefaultExporters/Makefile extensions/Exporters/FlickrExport/Makefile extensions/Exporters/FlickrExport/FlickrNet/Makefile extensions/Exporters/GalleryExport/Makefile extensions/Exporters/FacebookExport/Makefile extensions/Exporters/FolderExport/Makefile extensions/Exporters/SmugMugExport/SmugMugNet/Makefile extensions/Exporters/SmugMugExport/Makefile extensions/Exporters/TabbloExport/Makefile extensions/Exporters/TabbloExport/Tabblo/Makefile extensions/Exporters/PicasaWebExport/Makefile extensions/Exporters/PicasaWebExport/google-sharp/Makefile extensions/Exporters/ZipExport/Makefile extensions/Services/Makefile extensions/Services/BeagleService/Makefile extensions/Services/DBusService/Makefile extensions/Tools/Makefile extensions/Tools/RawPlusJpeg/Makefile extensions/Tools/ChangePhotoPath/Makefile extensions/Tools/HashJob/Makefile extensions/Tools/DevelopInUFraw/Makefile extensions/Tools/MergeDb/Makefile f-spot.pc f-spot.spec f-spot.desktop.in f-spot-view.desktop.in f-spot-import.desktop.in"
-+ac_config_files="$ac_config_files Makefile dbus-sharp/Makefile dbus-sharp-glib/Makefile dpap-sharp/Makefile dpap-sharp/lib/Makefile dpap-sharp/dpap-client/Makefile dpap-sharp/dpap-server/Makefile dpap-sharp/DPAPService/Makefile dpap-sharp/DPAPBrowser/Makefile docs/Makefile gnome-keyring-sharp/Makefile icons/Makefile libeog/Makefile libeog/cursors/Makefile libjpegtran/Makefile libfspot/Makefile libgphoto2-sharp/Makefile semweb/Makefile tools/Makefile po/Makefile.in src/Core/Defines.cs src/AssemblyInfo.cs src/f-spot.exe.config src/Cms.dll.config src/Makefile glitz-sharp/Makefile glitz-sharp/src/Makefile Tao/Makefile Tao/Tao.OpenGl/Makefile Tao/Tao.OpenGl.Glu/Makefile Tao/Tao.GlPostProcess/Makefile Tao/Tao.OpenGl.ExtensionLoader/Makefile extensions/Makefile extensions/Exporters/Makefile extensions/Exporters/CDExport/Makefile extensions/Exporters/DefaultExporters/Makefile extensions/Exporters/FlickrExport/Makefile extensions/Exporters/GalleryExport/Makefile extensions/Exporters/FacebookExport/Makefile extensions/Exporters/FolderExport/Makefile extensions/Exporters/SmugMugExport/SmugMugNet/Makefile extensions/Exporters/SmugMugExport/Makefile extensions/Exporters/TabbloExport/Makefile extensions/Exporters/TabbloExport/Tabblo/Makefile extensions/Exporters/PicasaWebExport/Makefile extensions/Exporters/PicasaWebExport/google-sharp/Makefile extensions/Exporters/ZipExport/Makefile extensions/Services/Makefile extensions/Services/BeagleService/Makefile extensions/Services/DBusService/Makefile extensions/Tools/Makefile extensions/Tools/RawPlusJpeg/Makefile extensions/Tools/ChangePhotoPath/Makefile extensions/Tools/HashJob/Makefile extensions/Tools/DevelopInUFraw/Makefile extensions/Tools/MergeDb/Makefile f-spot.pc f-spot.spec f-spot.desktop.in f-spot-view.desktop.in f-spot-import.desktop.in"
++ac_config_files="$ac_config_files Makefile dbus-sharp/Makefile dbus-sharp-glib/Makefile dpap-sharp/Makefile dpap-sharp/lib/Makefile dpap-sharp/dpap-client/Makefile dpap-sharp/dpap-server/Makefile dpap-sharp/DPAPService/Makefile dpap-sharp/DPAPBrowser/Makefile docs/Makefile gnome-keyring-sharp/Makefile icons/Makefile libeog/Makefile libeog/cursors/Makefile libjpegtran/Makefile libfspot/Makefile libgphoto2-sharp/Makefile mono-addins/Makefile mono-addins/Mono.Addins/Makefile mono-addins/Mono.Addins.Gui/Makefile mono-addins/Mono.Addins.Setup/Makefile semweb/Makefile tools/Makefile po/Makefile.in src/Core/Defines.cs src/AssemblyInfo.cs src/f-spot.exe.config src/Cms.dll.config src/Makefile glitz-sharp/Makefile glitz-sharp/src/Makefile Tao/Makefile Tao/Tao.OpenGl/Makefile Tao/Tao.OpenGl.Glu/Makefile Tao/Tao.GlPostProcess/Makefile Tao/Tao.OpenGl.ExtensionLoader/Makefile extensions/Makefile extensions/Exporters/Makefile extensions/Exporters/CDExport/Makefile extensions/Exporters/DefaultExporters/Makefile extensions/Exporters/FlickrExport/Makefile extensions/Exporters/GalleryExport/Makefile extensions/Exporters/FacebookExport/Makefile extensions/Exporters/FolderExport/Makefile extensions/Exporters/SmugMugExport/SmugMugNet/Makefile extensions/Exporters/SmugMugExport/Makefile extensions/Exporters/TabbloExport/Makefile extensions/Exporters/TabbloExport/Tabblo/Makefile extensions/Exporters/PicasaWebExport/Makefile extensions/Exporters/PicasaWebExport/google-sharp/Makefile extensions/Exporters/ZipExport/Makefile extensions/Services/Makefile extensions/Services/BeagleService/Makefile extensions/Services/DBusService/Makefile extensions/Tools/Makefile extensions/Tools/RawPlusJpeg/Makefile extensions/Tools/ChangePhotoPath/Makefile extensions/Tools/HashJob/Makefile extensions/Tools/DevelopInUFraw/Makefile extensions/Tools/MergeDb/Makefile f-spot.pc f-spot.spec f-spot.desktop.in f-spot-view.desktop.in f-spot-import.desktop.in"
  
  cat >confcache <<\_ACEOF
  # This file is a shell script that caches the results of configure
@@ -85733,18 +85691,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
  
  # Handling of arguments.
  for ac_config_target in $ac_config_targets
-@@ -18247,10 +17988,6 @@
-     "libjpegtran/Makefile") CONFIG_FILES="$CONFIG_FILES libjpegtran/Makefile" ;;
-     "libfspot/Makefile") CONFIG_FILES="$CONFIG_FILES libfspot/Makefile" ;;
-     "libgphoto2-sharp/Makefile") CONFIG_FILES="$CONFIG_FILES libgphoto2-sharp/Makefile" ;;
--    "mono-addins/Makefile") CONFIG_FILES="$CONFIG_FILES mono-addins/Makefile" ;;
--    "mono-addins/Mono.Addins/Makefile") CONFIG_FILES="$CONFIG_FILES mono-addins/Mono.Addins/Makefile" ;;
--    "mono-addins/Mono.Addins.Gui/Makefile") CONFIG_FILES="$CONFIG_FILES mono-addins/Mono.Addins.Gui/Makefile" ;;
--    "mono-addins/Mono.Addins.Setup/Makefile") CONFIG_FILES="$CONFIG_FILES mono-addins/Mono.Addins.Setup/Makefile" ;;
-     "semweb/Makefile") CONFIG_FILES="$CONFIG_FILES semweb/Makefile" ;;
-     "tools/Makefile") CONFIG_FILES="$CONFIG_FILES tools/Makefile" ;;
-     "po/Makefile.in") CONFIG_FILES="$CONFIG_FILES po/Makefile.in" ;;
-@@ -18271,7 +18008,6 @@
+@@ -18271,7 +18012,6 @@
      "extensions/Exporters/CDExport/Makefile") CONFIG_FILES="$CONFIG_FILES extensions/Exporters/CDExport/Makefile" ;;
      "extensions/Exporters/DefaultExporters/Makefile") CONFIG_FILES="$CONFIG_FILES extensions/Exporters/DefaultExporters/Makefile" ;;
      "extensions/Exporters/FlickrExport/Makefile") CONFIG_FILES="$CONFIG_FILES extensions/Exporters/FlickrExport/Makefile" ;;
@@ -85752,7 +85699,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
      "extensions/Exporters/GalleryExport/Makefile") CONFIG_FILES="$CONFIG_FILES extensions/Exporters/GalleryExport/Makefile" ;;
      "extensions/Exporters/FacebookExport/Makefile") CONFIG_FILES="$CONFIG_FILES extensions/Exporters/FacebookExport/Makefile" ;;
      "extensions/Exporters/FolderExport/Makefile") CONFIG_FILES="$CONFIG_FILES extensions/Exporters/FolderExport/Makefile" ;;
-@@ -18298,8 +18034,8 @@
+@@ -18298,8 +18038,8 @@
      "f-spot-import.desktop.in") CONFIG_FILES="$CONFIG_FILES f-spot-import.desktop.in" ;;
      "po/stamp-it") CONFIG_COMMANDS="$CONFIG_COMMANDS po/stamp-it" ;;
  
@@ -85763,7 +85710,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
     { (exit 1); exit 1; }; };;
    esac
  done
-@@ -18340,143 +18076,368 @@
+@@ -18340,143 +18080,368 @@
    (umask 077 && mkdir "$tmp")
  } ||
  {
@@ -86241,7 +86188,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
  
  # VPATH may cause trouble with some makes, so we remove $(srcdir),
  # ${srcdir} and @srcdir@ from VPATH if srcdir is ".", strip leading and
-@@ -18493,133 +18454,19 @@
+@@ -18493,133 +18458,19 @@
  }'
  fi
  
@@ -86379,7 +86326,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
     { (exit 1); exit 1; }; };;
    :[FH]-) ac_tag=-:-;;
    :[FH]*) ac_tag=$ac_tag:$ac_tag.in;;
-@@ -18648,38 +18495,26 @@
+@@ -18648,38 +18499,26 @@
  	   [\\/$]*) false;;
  	   *) test -f "$srcdir/$ac_f" && ac_f="$srcdir/$ac_f";;
  	   esac ||
@@ -86426,7 +86373,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
      esac
      ;;
    esac
-@@ -18689,7 +18524,7 @@
+@@ -18689,7 +18528,7 @@
  	 X"$ac_file" : 'X\(//\)[^/]' \| \
  	 X"$ac_file" : 'X\(//\)$' \| \
  	 X"$ac_file" : 'X\(/\)' \| . 2>/dev/null ||
@@ -86435,7 +86382,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
      sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
  	    s//\1/
  	    q
-@@ -18715,7 +18550,7 @@
+@@ -18715,7 +18554,7 @@
      as_dirs=
      while :; do
        case $as_dir in #(
@@ -86444,7 +86391,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
        *) as_qdir=$as_dir;;
        esac
        as_dirs="'$as_qdir' $as_dirs"
-@@ -18724,7 +18559,7 @@
+@@ -18724,7 +18563,7 @@
  	 X"$as_dir" : 'X\(//\)[^/]' \| \
  	 X"$as_dir" : 'X\(//\)$' \| \
  	 X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
@@ -86453,7 +86400,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
      sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
  	    s//\1/
  	    q
-@@ -18745,17 +18580,17 @@
+@@ -18745,17 +18584,17 @@
        test -d "$as_dir" && break
      done
      test -z "$as_dirs" || eval "mkdir $as_dirs"
@@ -86475,7 +86422,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
    case $ac_top_builddir_sub in
    "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
    *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
-@@ -18800,13 +18635,12 @@
+@@ -18800,13 +18639,12 @@
    esac
  _ACEOF
  
@@ -86491,7 +86438,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
    p
    q
  }
-@@ -18815,14 +18649,13 @@
+@@ -18815,14 +18653,13 @@
  /@infodir@/p
  /@localedir@/p
  /@mandir@/p
@@ -86510,7 +86457,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
    ac_datarootdir_hack='
    s&@datadir@&$datadir&g
    s&@docdir@&$docdir&g
-@@ -18836,16 +18669,15 @@
+@@ -18836,16 +18673,15 @@
  # Neutralize VPATH when `$srcdir' = `.'.
  # Shell code in configure.ac might set extrasub.
  # FIXME: do we really want to maintain this feature?
@@ -86531,7 +86478,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
  s&@srcdir@&$ac_srcdir&;t t
  s&@abs_srcdir@&$ac_abs_srcdir&;t t
  s&@top_srcdir@&$ac_top_srcdir&;t t
-@@ -18856,60 +18688,121 @@
+@@ -18856,60 +18692,121 @@
  s&@INSTALL@&$ac_INSTALL&;t t
  s&@MKDIR_P@&$ac_MKDIR_P&;t t
  $ac_datarootdir_hack
@@ -86688,7 +86635,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
  _am_stamp_count=1
  for _am_header in $config_headers :; do
    case $_am_header in
-@@ -18924,7 +18817,7 @@
+@@ -18924,7 +18821,7 @@
  	 X"$_am_arg" : 'X\(//\)[^/]' \| \
  	 X"$_am_arg" : 'X\(//\)$' \| \
  	 X"$_am_arg" : 'X\(/\)' \| . 2>/dev/null ||
@@ -86697,7 +86644,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
      sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
  	    s//\1/
  	    q
-@@ -18944,8 +18837,8 @@
+@@ -18944,8 +18841,8 @@
  	  s/.*/./; q'`/stamp-h$_am_stamp_count
   ;;
  
@@ -86708,7 +86655,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
   ;;
    esac
  
-@@ -18967,7 +18860,7 @@
+@@ -18967,7 +18864,7 @@
  	 X"$mf" : 'X\(//\)[^/]' \| \
  	 X"$mf" : 'X\(//\)$' \| \
  	 X"$mf" : 'X\(/\)' \| . 2>/dev/null ||
@@ -86717,7 +86664,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
      sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
  	    s//\1/
  	    q
-@@ -19011,7 +18904,7 @@
+@@ -19011,7 +18908,7 @@
  	 X"$file" : 'X\(//\)[^/]' \| \
  	 X"$file" : 'X\(//\)$' \| \
  	 X"$file" : 'X\(/\)' \| . 2>/dev/null ||
@@ -86726,7 +86673,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
      sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
  	    s//\1/
  	    q
-@@ -19037,7 +18930,7 @@
+@@ -19037,7 +18934,7 @@
      as_dirs=
      while :; do
        case $as_dir in #(
@@ -86735,7 +86682,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
        *) as_qdir=$as_dir;;
        esac
        as_dirs="'$as_qdir' $as_dirs"
-@@ -19046,7 +18939,7 @@
+@@ -19046,7 +18943,7 @@
  	 X"$as_dir" : 'X\(//\)[^/]' \| \
  	 X"$as_dir" : 'X\(//\)$' \| \
  	 X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
@@ -86744,7 +86691,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
      sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
  	    s//\1/
  	    q
-@@ -19067,8 +18960,8 @@
+@@ -19067,8 +18964,8 @@
        test -d "$as_dir" && break
      done
      test -z "$as_dirs" || eval "mkdir $as_dirs"
@@ -86755,7 +86702,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
     { (exit 1); exit 1; }; }; }
      # echo "creating $dirpart/$file"
      echo '# dummy' > "$dirpart/$file"
-@@ -19197,9 +19090,6 @@
+@@ -19197,9 +19094,6 @@
  reload_flag=$lt_reload_flag
  reload_cmds=$lt_reload_cmds
  
@@ -86765,7 +86712,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
  # Method to check whether dependent libraries are shared objects.
  deplibs_check_method=$lt_deplibs_check_method
  
-@@ -19715,6 +19605,11 @@
+@@ -19715,6 +19609,11 @@
        esac ;;
      "src/f-spot":F) chmod +x src/f-spot ;;
      "po/stamp-it":C)
@@ -86777,7 +86724,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
      rm -f "po/stamp-it" "po/stamp-it.tmp" "po/POTFILES" "po/Makefile.tmp"
      >"po/stamp-it.tmp"
      sed '/^#/d
-@@ -19723,17 +19618,11 @@
+@@ -19723,17 +19622,11 @@
  	'"s|^|	$ac_top_srcdir/|" \
        "$srcdir/po/POTFILES.in" | sed '$!s/$/ \\/' >"po/POTFILES"
  
@@ -86796,7 +86743,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
      rm -f "po/Makefile.tmp"
      mv "po/stamp-it.tmp" "po/stamp-it"
     ;;
-@@ -19747,11 +19636,6 @@
+@@ -19747,11 +19640,6 @@
  chmod +x $CONFIG_STATUS
  ac_clean_files=$ac_clean_files_save
  
@@ -86808,7 +86755,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
  
  # configure is writing to config.log, and then calls config.status.
  # config.status does its own redirection, appending to config.log.
-@@ -19779,8 +19663,7 @@
+@@ -19779,8 +19667,7 @@
  #
  if test "$no_recursion" != yes; then
  
@@ -86818,7 +86765,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
    ac_sub_configure_args=
    ac_prev=
    eval "set x $ac_configure_args"
-@@ -19809,11 +19692,9 @@
+@@ -19809,11 +19696,9 @@
        ac_prev=prefix ;;
      -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
        ;;
@@ -86831,7 +86778,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
        esac
        ac_sub_configure_args="$ac_sub_configure_args '$ac_arg'" ;;
      esac
-@@ -19823,7 +19704,7 @@
+@@ -19823,7 +19708,7 @@
    # in subdir configurations.
    ac_arg="--prefix=$prefix"
    case $ac_arg in
@@ -86840,7 +86787,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
    esac
    ac_sub_configure_args="'$ac_arg' $ac_sub_configure_args"
  
-@@ -19832,10 +19713,6 @@
+@@ -19832,10 +19717,6 @@
      ac_sub_configure_args="--silent $ac_sub_configure_args"
    fi
  
@@ -86851,7 +86798,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
    ac_popdir=`pwd`
    for ac_dir in : $subdirs; do test "x$ac_dir" = x: && continue
  
-@@ -19844,8 +19721,8 @@
+@@ -19844,8 +19725,8 @@
      test -d "$srcdir/$ac_dir" || continue
  
      ac_msg="=== configuring in $ac_dir (`pwd`/$ac_dir)"
@@ -86862,7 +86809,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
      { as_dir="$ac_dir"
    case $as_dir in #(
    -*) as_dir=./$as_dir;;
-@@ -19854,7 +19731,7 @@
+@@ -19854,7 +19735,7 @@
      as_dirs=
      while :; do
        case $as_dir in #(
@@ -86871,7 +86818,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
        *) as_qdir=$as_dir;;
        esac
        as_dirs="'$as_qdir' $as_dirs"
-@@ -19863,7 +19740,7 @@
+@@ -19863,7 +19744,7 @@
  	 X"$as_dir" : 'X\(//\)[^/]' \| \
  	 X"$as_dir" : 'X\(//\)$' \| \
  	 X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
@@ -86880,7 +86827,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
      sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
  	    s//\1/
  	    q
-@@ -19884,17 +19761,17 @@
+@@ -19884,17 +19765,17 @@
        test -d "$as_dir" && break
      done
      test -z "$as_dirs" || eval "mkdir $as_dirs"
@@ -86902,7 +86849,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
    case $ac_top_builddir_sub in
    "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
    *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
-@@ -19933,8 +19810,8 @@
+@@ -19933,8 +19814,8 @@
        # This should be Cygnus configure.
        ac_sub_configure=$ac_aux_dir/configure
      else
@@ -86913,7 +86860,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
        ac_sub_configure=
      fi
  
-@@ -19947,21 +19824,17 @@
+@@ -19947,21 +19828,17 @@
  	ac_sub_cache_file=$ac_top_build_prefix$cache_file ;;
        esac
  
@@ -86941,7 +86888,7 @@ diff -urNad f-spot-0.5.0.3~/configure f-spot-0.5.0.3/configure
  
 diff -urNad f-spot-0.5.0.3~/dbus-sharp/Makefile.in f-spot-0.5.0.3/dbus-sharp/Makefile.in
 --- f-spot-0.5.0.3~/dbus-sharp/Makefile.in	2008-10-18 12:48:07.000000000 +0100
-+++ f-spot-0.5.0.3/dbus-sharp/Makefile.in	2008-12-26 21:56:28.000000000 +0000
++++ f-spot-0.5.0.3/dbus-sharp/Makefile.in	2008-12-28 01:52:00.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -86975,7 +86922,7 @@ diff -urNad f-spot-0.5.0.3~/dbus-sharp/Makefile.in f-spot-0.5.0.3/dbus-sharp/Mak
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -86984,15 +86931,6 @@ diff -urNad f-spot-0.5.0.3~/dbus-sharp/Makefile.in f-spot-0.5.0.3/dbus-sharp/Mak
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -87004,7 +86942,7 @@ diff -urNad f-spot-0.5.0.3~/dbus-sharp/Makefile.in f-spot-0.5.0.3/dbus-sharp/Mak
  ASSEMBLY_NAME = NDesk.DBus
 diff -urNad f-spot-0.5.0.3~/dbus-sharp-glib/Makefile.in f-spot-0.5.0.3/dbus-sharp-glib/Makefile.in
 --- f-spot-0.5.0.3~/dbus-sharp-glib/Makefile.in	2008-10-18 12:48:07.000000000 +0100
-+++ f-spot-0.5.0.3/dbus-sharp-glib/Makefile.in	2008-12-26 21:56:28.000000000 +0000
++++ f-spot-0.5.0.3/dbus-sharp-glib/Makefile.in	2008-12-28 01:52:00.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -87038,7 +86976,7 @@ diff -urNad f-spot-0.5.0.3~/dbus-sharp-glib/Makefile.in f-spot-0.5.0.3/dbus-shar
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -87047,15 +86985,6 @@ diff -urNad f-spot-0.5.0.3~/dbus-sharp-glib/Makefile.in f-spot-0.5.0.3/dbus-shar
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -87067,7 +86996,7 @@ diff -urNad f-spot-0.5.0.3~/dbus-sharp-glib/Makefile.in f-spot-0.5.0.3/dbus-shar
  ASSEMBLY_NAME = NDesk.DBus.GLib
 diff -urNad f-spot-0.5.0.3~/depcomp f-spot-0.5.0.3/depcomp
 --- f-spot-0.5.0.3~/depcomp	2008-09-12 14:21:36.000000000 +0100
-+++ f-spot-0.5.0.3/depcomp	2008-12-26 21:56:33.000000000 +0000
++++ f-spot-0.5.0.3/depcomp	2008-12-28 01:52:05.000000000 +0000
 @@ -1,7 +1,10 @@
  #! /bin/sh
 -
@@ -87471,7 +87400,7 @@ diff -urNad f-spot-0.5.0.3~/depcomp f-spot-0.5.0.3/depcomp
 +# End:
 diff -urNad f-spot-0.5.0.3~/docs/Makefile.in f-spot-0.5.0.3/docs/Makefile.in
 --- f-spot-0.5.0.3~/docs/Makefile.in	2008-10-18 12:48:08.000000000 +0100
-+++ f-spot-0.5.0.3/docs/Makefile.in	2008-12-26 21:56:28.000000000 +0000
++++ f-spot-0.5.0.3/docs/Makefile.in	2008-12-28 01:52:00.000000000 +0000
 @@ -184,6 +184,7 @@
  MAKEINFO = @MAKEINFO@
  MCS = @MCS@
@@ -87498,7 +87427,7 @@ diff -urNad f-spot-0.5.0.3~/docs/Makefile.in f-spot-0.5.0.3/docs/Makefile.in
  _clean_doc_header = $(if $(DOC_H_FILE),clean-doc-header)
 diff -urNad f-spot-0.5.0.3~/dpap-sharp/DPAPBrowser/Makefile.in f-spot-0.5.0.3/dpap-sharp/DPAPBrowser/Makefile.in
 --- f-spot-0.5.0.3~/dpap-sharp/DPAPBrowser/Makefile.in	2008-10-18 12:48:08.000000000 +0100
-+++ f-spot-0.5.0.3/dpap-sharp/DPAPBrowser/Makefile.in	2008-12-26 21:56:28.000000000 +0000
++++ f-spot-0.5.0.3/dpap-sharp/DPAPBrowser/Makefile.in	2008-12-28 01:52:00.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -87532,7 +87461,7 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/DPAPBrowser/Makefile.in f-spot-0.5.0.3/dp
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -87541,15 +87470,6 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/DPAPBrowser/Makefile.in f-spot-0.5.0.3/dp
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -87561,7 +87481,7 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/DPAPBrowser/Makefile.in f-spot-0.5.0.3/dp
  PLUGIN_NAME = DPAPBrowser
 diff -urNad f-spot-0.5.0.3~/dpap-sharp/DPAPService/Makefile.in f-spot-0.5.0.3/dpap-sharp/DPAPService/Makefile.in
 --- f-spot-0.5.0.3~/dpap-sharp/DPAPService/Makefile.in	2008-10-18 12:48:08.000000000 +0100
-+++ f-spot-0.5.0.3/dpap-sharp/DPAPService/Makefile.in	2008-12-26 21:56:28.000000000 +0000
++++ f-spot-0.5.0.3/dpap-sharp/DPAPService/Makefile.in	2008-12-28 01:52:00.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -87595,7 +87515,7 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/DPAPService/Makefile.in f-spot-0.5.0.3/dp
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -87604,15 +87524,6 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/DPAPService/Makefile.in f-spot-0.5.0.3/dp
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -87624,7 +87535,7 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/DPAPService/Makefile.in f-spot-0.5.0.3/dp
  PLUGIN_NAME = DPAPService
 diff -urNad f-spot-0.5.0.3~/dpap-sharp/Makefile.in f-spot-0.5.0.3/dpap-sharp/Makefile.in
 --- f-spot-0.5.0.3~/dpap-sharp/Makefile.in	2008-10-18 12:48:08.000000000 +0100
-+++ f-spot-0.5.0.3/dpap-sharp/Makefile.in	2008-12-26 21:56:29.000000000 +0000
++++ f-spot-0.5.0.3/dpap-sharp/Makefile.in	2008-12-28 01:52:00.000000000 +0000
 @@ -172,6 +172,7 @@
  MAKEINFO = @MAKEINFO@
  MCS = @MCS@
@@ -87651,7 +87562,7 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/Makefile.in f-spot-0.5.0.3/dpap-sharp/Mak
  SUBDIRS = \
 diff -urNad f-spot-0.5.0.3~/dpap-sharp/dpap-client/Makefile.in f-spot-0.5.0.3/dpap-sharp/dpap-client/Makefile.in
 --- f-spot-0.5.0.3~/dpap-sharp/dpap-client/Makefile.in	2008-10-18 12:48:08.000000000 +0100
-+++ f-spot-0.5.0.3/dpap-sharp/dpap-client/Makefile.in	2008-12-26 21:56:29.000000000 +0000
++++ f-spot-0.5.0.3/dpap-sharp/dpap-client/Makefile.in	2008-12-28 01:52:00.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -87685,7 +87596,7 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/dpap-client/Makefile.in f-spot-0.5.0.3/dp
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -87694,15 +87605,6 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/dpap-client/Makefile.in f-spot-0.5.0.3/dp
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -87714,7 +87616,7 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/dpap-client/Makefile.in f-spot-0.5.0.3/dp
  ASSEMBLY_NAME = dpap-client
 diff -urNad f-spot-0.5.0.3~/dpap-sharp/dpap-server/Makefile.in f-spot-0.5.0.3/dpap-sharp/dpap-server/Makefile.in
 --- f-spot-0.5.0.3~/dpap-sharp/dpap-server/Makefile.in	2008-10-18 12:48:08.000000000 +0100
-+++ f-spot-0.5.0.3/dpap-sharp/dpap-server/Makefile.in	2008-12-26 21:56:29.000000000 +0000
++++ f-spot-0.5.0.3/dpap-sharp/dpap-server/Makefile.in	2008-12-28 01:52:00.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -87748,7 +87650,7 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/dpap-server/Makefile.in f-spot-0.5.0.3/dp
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -87757,15 +87659,6 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/dpap-server/Makefile.in f-spot-0.5.0.3/dp
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -87777,7 +87670,7 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/dpap-server/Makefile.in f-spot-0.5.0.3/dp
  ASSEMBLY_NAME = dpap-server
 diff -urNad f-spot-0.5.0.3~/dpap-sharp/lib/Makefile.in f-spot-0.5.0.3/dpap-sharp/lib/Makefile.in
 --- f-spot-0.5.0.3~/dpap-sharp/lib/Makefile.in	2008-10-18 12:48:08.000000000 +0100
-+++ f-spot-0.5.0.3/dpap-sharp/lib/Makefile.in	2008-12-26 21:56:29.000000000 +0000
++++ f-spot-0.5.0.3/dpap-sharp/lib/Makefile.in	2008-12-28 01:52:01.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -87811,7 +87704,7 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/lib/Makefile.in f-spot-0.5.0.3/dpap-sharp
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -87820,15 +87713,6 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/lib/Makefile.in f-spot-0.5.0.3/dpap-sharp
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -87840,7 +87724,7 @@ diff -urNad f-spot-0.5.0.3~/dpap-sharp/lib/Makefile.in f-spot-0.5.0.3/dpap-sharp
  ASSEMBLY_NAME = dpap-sharp
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/CDExport/Makefile.in f-spot-0.5.0.3/extensions/Exporters/CDExport/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/CDExport/Makefile.in	2008-10-18 12:48:08.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/CDExport/Makefile.in	2008-12-26 21:56:29.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/CDExport/Makefile.in	2008-12-28 01:52:01.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -87874,7 +87758,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/CDExport/Makefile.in f-spot-0.5
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -87883,15 +87767,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/CDExport/Makefile.in f-spot-0.5
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -87903,7 +87778,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/CDExport/Makefile.in f-spot-0.5
  PLUGIN_NAME = CDExport
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/DefaultExporters/Makefile.in f-spot-0.5.0.3/extensions/Exporters/DefaultExporters/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/DefaultExporters/Makefile.in	2008-10-18 12:48:09.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/DefaultExporters/Makefile.in	2008-12-26 21:56:29.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/DefaultExporters/Makefile.in	2008-12-28 01:52:01.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -87937,7 +87812,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/DefaultExporters/Makefile.in f-
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -87946,15 +87821,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/DefaultExporters/Makefile.in f-
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -87966,7 +87832,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/DefaultExporters/Makefile.in f-
  PLUGIN_MANIFEST = DefaultExporters.addin.xml
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FacebookExport/Makefile.in f-spot-0.5.0.3/extensions/Exporters/FacebookExport/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/FacebookExport/Makefile.in	2008-10-18 12:48:09.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/FacebookExport/Makefile.in	2008-12-26 21:56:29.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/FacebookExport/Makefile.in	2008-12-28 01:52:01.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -88000,7 +87866,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FacebookExport/Makefile.in f-sp
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -88009,15 +87875,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FacebookExport/Makefile.in f-sp
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -88029,7 +87886,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FacebookExport/Makefile.in f-sp
  PLUGIN_NAME = FacebookExport
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FlickrExport/Makefile.in f-spot-0.5.0.3/extensions/Exporters/FlickrExport/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/FlickrExport/Makefile.in	2008-10-18 12:48:09.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/FlickrExport/Makefile.in	2008-12-26 21:56:29.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/FlickrExport/Makefile.in	2008-12-28 01:52:01.000000000 +0000
 @@ -45,13 +45,6 @@
  CONFIG_CLEAN_FILES =
  SOURCES =
@@ -88089,7 +87946,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FlickrExport/Makefile.in f-spot
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -298,13 +285,13 @@
+@@ -298,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -88098,15 +87955,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FlickrExport/Makefile.in f-spot
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -313,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -88270,13 +88118,13 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FlickrExport/Makefile.in f-spot
 -	test -z "$(CTAGS_ARGS)$$tags$$unique" \
 -	  || $(CTAGS) $(CTAGSFLAGS) $(AM_CTAGSFLAGS) $(CTAGS_ARGS) \
 -	     $$tags $$unique
--
++CTAGS:
+ 
 -GTAGS:
 -	here=`$(am__cd) $(top_builddir) && pwd` \
 -	  && cd $(top_srcdir) \
 -	  && gtags -i $(GTAGS_ARGS) $$here
-+CTAGS:
- 
+-
 -distclean-tags:
 -	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
  
@@ -88446,7 +88294,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FlickrExport/Makefile.in f-spot
  install-data-hook:
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FolderExport/Makefile.in f-spot-0.5.0.3/extensions/Exporters/FolderExport/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/FolderExport/Makefile.in	2008-10-18 12:48:09.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/FolderExport/Makefile.in	2008-12-26 21:56:30.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/FolderExport/Makefile.in	2008-12-28 01:52:01.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -88480,7 +88328,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FolderExport/Makefile.in f-spot
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -88489,15 +88337,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FolderExport/Makefile.in f-spot
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -88509,7 +88348,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FolderExport/Makefile.in f-spot
  PLUGIN_NAME = FolderExport
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/GalleryExport/Makefile.in f-spot-0.5.0.3/extensions/Exporters/GalleryExport/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/GalleryExport/Makefile.in	2008-10-18 12:48:09.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/GalleryExport/Makefile.in	2008-12-26 21:56:30.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/GalleryExport/Makefile.in	2008-12-28 01:52:01.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -88543,7 +88382,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/GalleryExport/Makefile.in f-spo
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -88552,15 +88391,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/GalleryExport/Makefile.in f-spo
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -88572,7 +88402,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/GalleryExport/Makefile.in f-spo
  PLUGIN_NAME = GalleryExport
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/Makefile.in f-spot-0.5.0.3/extensions/Exporters/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/Makefile.in	2008-10-18 12:48:09.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/Makefile.in	2008-12-26 21:56:30.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/Makefile.in	2008-12-28 01:52:01.000000000 +0000
 @@ -171,6 +171,7 @@
  MAKEINFO = @MAKEINFO@
  MCS = @MCS@
@@ -88599,7 +88429,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/Makefile.in f-spot-0.5.0.3/exte
  SUBDIRS = \
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/PicasaWebExport/Makefile.in f-spot-0.5.0.3/extensions/Exporters/PicasaWebExport/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/PicasaWebExport/Makefile.in	2008-10-18 12:48:10.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/PicasaWebExport/Makefile.in	2008-12-26 21:56:30.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/PicasaWebExport/Makefile.in	2008-12-28 01:52:02.000000000 +0000
 @@ -85,7 +85,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -88633,7 +88463,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/PicasaWebExport/Makefile.in f-s
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -298,13 +297,13 @@
+@@ -298,7 +297,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -88642,15 +88472,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/PicasaWebExport/Makefile.in f-s
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -313,7 +312,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -88662,7 +88483,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/PicasaWebExport/Makefile.in f-s
  PLUGIN_NAME = PicasaWebExport
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/PicasaWebExport/google-sharp/Makefile.in f-spot-0.5.0.3/extensions/Exporters/PicasaWebExport/google-sharp/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/PicasaWebExport/google-sharp/Makefile.in	2008-10-18 12:48:10.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/PicasaWebExport/google-sharp/Makefile.in	2008-12-26 21:56:30.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/PicasaWebExport/google-sharp/Makefile.in	2008-12-28 01:52:02.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -88696,7 +88517,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/PicasaWebExport/google-sharp/Ma
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -88705,15 +88526,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/PicasaWebExport/google-sharp/Ma
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -88725,7 +88537,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/PicasaWebExport/google-sharp/Ma
  ASSEMBLY_NAME = Mono.Google
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/SmugMugExport/Makefile.in f-spot-0.5.0.3/extensions/Exporters/SmugMugExport/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/SmugMugExport/Makefile.in	2008-10-18 12:48:10.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/SmugMugExport/Makefile.in	2008-12-26 21:56:30.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/SmugMugExport/Makefile.in	2008-12-28 01:52:02.000000000 +0000
 @@ -85,7 +85,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -88759,7 +88571,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/SmugMugExport/Makefile.in f-spo
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -298,13 +297,13 @@
+@@ -298,7 +297,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -88768,15 +88580,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/SmugMugExport/Makefile.in f-spo
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -313,7 +312,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -88788,7 +88591,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/SmugMugExport/Makefile.in f-spo
  PLUGIN_NAME = SmugMugExport
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/SmugMugExport/SmugMugNet/Makefile.in f-spot-0.5.0.3/extensions/Exporters/SmugMugExport/SmugMugNet/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/SmugMugExport/SmugMugNet/Makefile.in	2008-10-18 12:48:10.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/SmugMugExport/SmugMugNet/Makefile.in	2008-12-26 21:56:30.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/SmugMugExport/SmugMugNet/Makefile.in	2008-12-28 01:52:02.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -88822,7 +88625,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/SmugMugExport/SmugMugNet/Makefi
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -88831,15 +88634,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/SmugMugExport/SmugMugNet/Makefi
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -88851,7 +88645,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/SmugMugExport/SmugMugNet/Makefi
  ASSEMBLY_NAME = SmugMugNet
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/TabbloExport/Makefile.in f-spot-0.5.0.3/extensions/Exporters/TabbloExport/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/TabbloExport/Makefile.in	2008-10-18 12:48:10.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/TabbloExport/Makefile.in	2008-12-26 21:56:31.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/TabbloExport/Makefile.in	2008-12-28 01:52:02.000000000 +0000
 @@ -85,7 +85,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -88885,7 +88679,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/TabbloExport/Makefile.in f-spot
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -298,13 +297,13 @@
+@@ -298,7 +297,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -88894,15 +88688,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/TabbloExport/Makefile.in f-spot
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -313,7 +312,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -88914,7 +88699,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/TabbloExport/Makefile.in f-spot
  PLUGIN_NAME = TabbloExport
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/TabbloExport/Tabblo/Makefile.in f-spot-0.5.0.3/extensions/Exporters/TabbloExport/Tabblo/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/TabbloExport/Tabblo/Makefile.in	2008-10-18 12:48:10.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/TabbloExport/Tabblo/Makefile.in	2008-12-26 21:56:31.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/TabbloExport/Tabblo/Makefile.in	2008-12-28 01:52:02.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -88948,7 +88733,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/TabbloExport/Tabblo/Makefile.in
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -88957,15 +88742,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/TabbloExport/Tabblo/Makefile.in
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -88977,7 +88753,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/TabbloExport/Tabblo/Makefile.in
  ASSEMBLY_NAME = Mono.Tabblo
 diff -urNad f-spot-0.5.0.3~/extensions/Exporters/ZipExport/Makefile.in f-spot-0.5.0.3/extensions/Exporters/ZipExport/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Exporters/ZipExport/Makefile.in	2008-10-18 12:48:10.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Exporters/ZipExport/Makefile.in	2008-12-26 21:56:31.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Exporters/ZipExport/Makefile.in	2008-12-28 01:52:02.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -89011,7 +88787,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/ZipExport/Makefile.in f-spot-0.
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -89020,15 +88796,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/ZipExport/Makefile.in f-spot-0.
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -89040,7 +88807,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/ZipExport/Makefile.in f-spot-0.
  PLUGIN_NAME = ZipExport
 diff -urNad f-spot-0.5.0.3~/extensions/Makefile.in f-spot-0.5.0.3/extensions/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Makefile.in	2008-10-18 12:48:10.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Makefile.in	2008-12-26 21:56:31.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Makefile.in	2008-12-28 01:52:03.000000000 +0000
 @@ -181,6 +181,7 @@
  MAKEINFO = @MAKEINFO@
  MCS = @MCS@
@@ -89067,7 +88834,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Makefile.in f-spot-0.5.0.3/extensions/Mak
  SUBDIRS = \
 diff -urNad f-spot-0.5.0.3~/extensions/Services/BeagleService/Makefile.in f-spot-0.5.0.3/extensions/Services/BeagleService/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Services/BeagleService/Makefile.in	2008-10-18 12:48:11.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Services/BeagleService/Makefile.in	2008-12-26 21:56:31.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Services/BeagleService/Makefile.in	2008-12-28 01:52:03.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -89101,7 +88868,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Services/BeagleService/Makefile.in f-spot
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -89110,15 +88877,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Services/BeagleService/Makefile.in f-spot
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -89130,7 +88888,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Services/BeagleService/Makefile.in f-spot
  PLUGIN_NAME = BeagleService
 diff -urNad f-spot-0.5.0.3~/extensions/Services/DBusService/Makefile.in f-spot-0.5.0.3/extensions/Services/DBusService/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Services/DBusService/Makefile.in	2008-10-18 12:48:11.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Services/DBusService/Makefile.in	2008-12-26 21:56:31.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Services/DBusService/Makefile.in	2008-12-28 01:52:03.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -89164,7 +88922,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Services/DBusService/Makefile.in f-spot-0
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -89173,15 +88931,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Services/DBusService/Makefile.in f-spot-0
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -89193,7 +88942,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Services/DBusService/Makefile.in f-spot-0
  PLUGIN_NAME = DBusService
 diff -urNad f-spot-0.5.0.3~/extensions/Services/Makefile.in f-spot-0.5.0.3/extensions/Services/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Services/Makefile.in	2008-10-18 12:48:11.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Services/Makefile.in	2008-12-26 21:56:31.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Services/Makefile.in	2008-12-28 01:52:03.000000000 +0000
 @@ -171,6 +171,7 @@
  MAKEINFO = @MAKEINFO@
  MCS = @MCS@
@@ -89220,7 +88969,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Services/Makefile.in f-spot-0.5.0.3/exten
  SUBDIRS = \
 diff -urNad f-spot-0.5.0.3~/extensions/Tools/ChangePhotoPath/Makefile.in f-spot-0.5.0.3/extensions/Tools/ChangePhotoPath/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Tools/ChangePhotoPath/Makefile.in	2008-10-18 12:48:11.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Tools/ChangePhotoPath/Makefile.in	2008-12-26 21:56:31.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Tools/ChangePhotoPath/Makefile.in	2008-12-28 01:52:03.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -89254,7 +89003,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/ChangePhotoPath/Makefile.in f-spot-
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -89263,15 +89012,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/ChangePhotoPath/Makefile.in f-spot-
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -89283,7 +89023,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/ChangePhotoPath/Makefile.in f-spot-
  PLUGIN_NAME = ChangePhotoPath
 diff -urNad f-spot-0.5.0.3~/extensions/Tools/DevelopInUFraw/Makefile.in f-spot-0.5.0.3/extensions/Tools/DevelopInUFraw/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Tools/DevelopInUFraw/Makefile.in	2008-10-18 12:48:11.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Tools/DevelopInUFraw/Makefile.in	2008-12-26 21:56:32.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Tools/DevelopInUFraw/Makefile.in	2008-12-28 01:52:03.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -89317,7 +89057,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/DevelopInUFraw/Makefile.in f-spot-0
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -89326,15 +89066,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/DevelopInUFraw/Makefile.in f-spot-0
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -89346,7 +89077,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/DevelopInUFraw/Makefile.in f-spot-0
  PLUGIN_NAME = DevelopInUFRaw
 diff -urNad f-spot-0.5.0.3~/extensions/Tools/HashJob/Makefile.in f-spot-0.5.0.3/extensions/Tools/HashJob/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Tools/HashJob/Makefile.in	2008-10-18 12:48:11.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Tools/HashJob/Makefile.in	2008-12-26 21:56:32.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Tools/HashJob/Makefile.in	2008-12-28 01:52:03.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -89380,7 +89111,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/HashJob/Makefile.in f-spot-0.5.0.3/
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -89389,15 +89120,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/HashJob/Makefile.in f-spot-0.5.0.3/
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -89409,7 +89131,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/HashJob/Makefile.in f-spot-0.5.0.3/
  PLUGIN_NAME = HashJob
 diff -urNad f-spot-0.5.0.3~/extensions/Tools/Makefile.in f-spot-0.5.0.3/extensions/Tools/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Tools/Makefile.in	2008-10-18 12:48:11.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Tools/Makefile.in	2008-12-26 21:56:32.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Tools/Makefile.in	2008-12-28 01:52:03.000000000 +0000
 @@ -171,6 +171,7 @@
  MAKEINFO = @MAKEINFO@
  MCS = @MCS@
@@ -89436,7 +89158,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/Makefile.in f-spot-0.5.0.3/extensio
  SUBDIRS = \
 diff -urNad f-spot-0.5.0.3~/extensions/Tools/MergeDb/Makefile.in f-spot-0.5.0.3/extensions/Tools/MergeDb/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Tools/MergeDb/Makefile.in	2008-10-18 12:48:11.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Tools/MergeDb/Makefile.in	2008-12-26 21:56:32.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Tools/MergeDb/Makefile.in	2008-12-28 01:52:03.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -89470,7 +89192,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/MergeDb/Makefile.in f-spot-0.5.0.3/
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -89479,15 +89201,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/MergeDb/Makefile.in f-spot-0.5.0.3/
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -89499,7 +89212,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/MergeDb/Makefile.in f-spot-0.5.0.3/
  PLUGIN_NAME = MergeDb
 diff -urNad f-spot-0.5.0.3~/extensions/Tools/RawPlusJpeg/Makefile.in f-spot-0.5.0.3/extensions/Tools/RawPlusJpeg/Makefile.in
 --- f-spot-0.5.0.3~/extensions/Tools/RawPlusJpeg/Makefile.in	2008-10-18 12:48:12.000000000 +0100
-+++ f-spot-0.5.0.3/extensions/Tools/RawPlusJpeg/Makefile.in	2008-12-26 21:56:32.000000000 +0000
++++ f-spot-0.5.0.3/extensions/Tools/RawPlusJpeg/Makefile.in	2008-12-28 01:52:04.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -89533,7 +89246,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/RawPlusJpeg/Makefile.in f-spot-0.5.
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -89542,15 +89255,6 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/RawPlusJpeg/Makefile.in f-spot-0.5.
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -89562,7 +89266,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Tools/RawPlusJpeg/Makefile.in f-spot-0.5.
  PLUGIN_NAME = RawPlusJpeg
 diff -urNad f-spot-0.5.0.3~/gio-sharp/aclocal.m4 f-spot-0.5.0.3/gio-sharp/aclocal.m4
 --- f-spot-0.5.0.3~/gio-sharp/aclocal.m4	2008-09-12 12:56:50.000000000 +0100
-+++ f-spot-0.5.0.3/gio-sharp/aclocal.m4	2008-12-26 21:56:13.000000000 +0000
++++ f-spot-0.5.0.3/gio-sharp/aclocal.m4	2008-12-28 01:51:45.000000000 +0000
 @@ -87,14 +87,16 @@
  # _PKG_CONFIG([VARIABLE], [COMMAND], [MODULES])
  # ---------------------------------------------
@@ -89602,7 +89306,7 @@ diff -urNad f-spot-0.5.0.3~/gio-sharp/aclocal.m4 f-spot-0.5.0.3/gio-sharp/acloca
  	echo "$$1[]_PKG_ERRORS" >&AS_MESSAGE_LOG_FD
 diff -urNad f-spot-0.5.0.3~/gio-sharp/autom4te.cache/output.0 f-spot-0.5.0.3/gio-sharp/autom4te.cache/output.0
 --- f-spot-0.5.0.3~/gio-sharp/autom4te.cache/output.0	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/gio-sharp/autom4te.cache/output.0	2008-12-26 21:49:33.000000000 +0000
++++ f-spot-0.5.0.3/gio-sharp/autom4te.cache/output.0	2008-12-28 01:51:31.000000000 +0000
 @@ -0,0 +1,4204 @@
 +@%:@! /bin/sh
 +@%:@ Guess values for system-dependent variables and create Makefiles.
@@ -93810,7 +93514,7 @@ diff -urNad f-spot-0.5.0.3~/gio-sharp/autom4te.cache/output.0 f-spot-0.5.0.3/gio
 +
 diff -urNad f-spot-0.5.0.3~/gio-sharp/autom4te.cache/output.1 f-spot-0.5.0.3/gio-sharp/autom4te.cache/output.1
 --- f-spot-0.5.0.3~/gio-sharp/autom4te.cache/output.1	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/gio-sharp/autom4te.cache/output.1	2008-12-26 21:56:15.000000000 +0000
++++ f-spot-0.5.0.3/gio-sharp/autom4te.cache/output.1	2008-12-28 01:51:46.000000000 +0000
 @@ -0,0 +1,4204 @@
 +@%:@! /bin/sh
 +@%:@ Guess values for system-dependent variables and create Makefiles.
@@ -98018,7 +97722,7 @@ diff -urNad f-spot-0.5.0.3~/gio-sharp/autom4te.cache/output.1 f-spot-0.5.0.3/gio
 +
 diff -urNad f-spot-0.5.0.3~/gio-sharp/autom4te.cache/requests f-spot-0.5.0.3/gio-sharp/autom4te.cache/requests
 --- f-spot-0.5.0.3~/gio-sharp/autom4te.cache/requests	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/gio-sharp/autom4te.cache/requests	2008-12-26 21:56:16.000000000 +0000
++++ f-spot-0.5.0.3/gio-sharp/autom4te.cache/requests	2008-12-28 01:51:48.000000000 +0000
 @@ -0,0 +1,137 @@
 +# This file was generated by Autom4te Wed Jul 23 10:17:38 UTC 2008.
 +# It contains the lists of macros which have been traced.
@@ -98159,7 +97863,7 @@ diff -urNad f-spot-0.5.0.3~/gio-sharp/autom4te.cache/requests f-spot-0.5.0.3/gio
 +
 diff -urNad f-spot-0.5.0.3~/gio-sharp/autom4te.cache/traces.0 f-spot-0.5.0.3/gio-sharp/autom4te.cache/traces.0
 --- f-spot-0.5.0.3~/gio-sharp/autom4te.cache/traces.0	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/gio-sharp/autom4te.cache/traces.0	2008-12-26 21:49:33.000000000 +0000
++++ f-spot-0.5.0.3/gio-sharp/autom4te.cache/traces.0	2008-12-28 01:51:31.000000000 +0000
 @@ -0,0 +1,772 @@
 +m4trace:/usr/share/aclocal/pkg.m4:26: -1- AC_DEFUN([PKG_PROG_PKG_CONFIG], [m4_pattern_forbid([^_?PKG_[A-Z_]+$])
 +m4_pattern_allow([^PKG_CONFIG(_PATH)?$])
@@ -98935,7 +98639,7 @@ diff -urNad f-spot-0.5.0.3~/gio-sharp/autom4te.cache/traces.0 f-spot-0.5.0.3/gio
 +m4trace:configure.in:103: -1- m4_pattern_allow([^LTLIBOBJS$])
 diff -urNad f-spot-0.5.0.3~/gio-sharp/autom4te.cache/traces.1 f-spot-0.5.0.3/gio-sharp/autom4te.cache/traces.1
 --- f-spot-0.5.0.3~/gio-sharp/autom4te.cache/traces.1	1970-01-01 01:00:00.000000000 +0100
-+++ f-spot-0.5.0.3/gio-sharp/autom4te.cache/traces.1	2008-12-26 21:56:15.000000000 +0000
++++ f-spot-0.5.0.3/gio-sharp/autom4te.cache/traces.1	2008-12-28 01:51:46.000000000 +0000
 @@ -0,0 +1,369 @@
 +m4trace:configure.in:1: -1- AC_INIT([README])
 +m4trace:configure.in:1: -1- m4_pattern_forbid([^_?A[CHUM]_])
@@ -99308,7 +99012,7 @@ diff -urNad f-spot-0.5.0.3~/gio-sharp/autom4te.cache/traces.1 f-spot-0.5.0.3/gio
 +m4trace:configure.in:103: -1- AC_SUBST_TRACE([MKDIR_P])
 diff -urNad f-spot-0.5.0.3~/gio-sharp/configure f-spot-0.5.0.3/gio-sharp/configure
 --- f-spot-0.5.0.3~/gio-sharp/configure	2008-09-12 12:56:51.000000000 +0100
-+++ f-spot-0.5.0.3/gio-sharp/configure	2008-12-26 21:56:15.000000000 +0000
++++ f-spot-0.5.0.3/gio-sharp/configure	2008-12-28 01:51:47.000000000 +0000
 @@ -2484,10 +2484,11 @@
  { echo "$as_me:$LINENO: checking for MONO_DEPENDENCY" >&5
  echo $ECHO_N "checking for MONO_DEPENDENCY... $ECHO_C" >&6; }
@@ -99497,7 +99201,7 @@ diff -urNad f-spot-0.5.0.3~/gio-sharp/configure f-spot-0.5.0.3/gio-sharp/configu
  	echo "$GAPI_PKG_ERRORS" >&5
 diff -urNad f-spot-0.5.0.3~/glitz-sharp/Makefile.in f-spot-0.5.0.3/glitz-sharp/Makefile.in
 --- f-spot-0.5.0.3~/glitz-sharp/Makefile.in	2008-10-18 12:48:12.000000000 +0100
-+++ f-spot-0.5.0.3/glitz-sharp/Makefile.in	2008-12-26 21:56:32.000000000 +0000
++++ f-spot-0.5.0.3/glitz-sharp/Makefile.in	2008-12-28 01:52:04.000000000 +0000
 @@ -171,6 +171,7 @@
  MAKEINFO = @MAKEINFO@
  MCS = @MCS@
@@ -99524,7 +99228,7 @@ diff -urNad f-spot-0.5.0.3~/glitz-sharp/Makefile.in f-spot-0.5.0.3/glitz-sharp/M
  SUBDIRS = src
 diff -urNad f-spot-0.5.0.3~/glitz-sharp/src/Makefile.in f-spot-0.5.0.3/glitz-sharp/src/Makefile.in
 --- f-spot-0.5.0.3~/glitz-sharp/src/Makefile.in	2008-10-18 12:48:12.000000000 +0100
-+++ f-spot-0.5.0.3/glitz-sharp/src/Makefile.in	2008-12-26 21:56:32.000000000 +0000
++++ f-spot-0.5.0.3/glitz-sharp/src/Makefile.in	2008-12-28 01:52:04.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -99558,7 +99262,7 @@ diff -urNad f-spot-0.5.0.3~/glitz-sharp/src/Makefile.in f-spot-0.5.0.3/glitz-sha
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -99567,15 +99271,6 @@ diff -urNad f-spot-0.5.0.3~/glitz-sharp/src/Makefile.in f-spot-0.5.0.3/glitz-sha
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -99587,7 +99282,7 @@ diff -urNad f-spot-0.5.0.3~/glitz-sharp/src/Makefile.in f-spot-0.5.0.3/glitz-sha
  ASSEMBLY_NAME = NDesk.Glitz
 diff -urNad f-spot-0.5.0.3~/gnome-keyring-sharp/Makefile.in f-spot-0.5.0.3/gnome-keyring-sharp/Makefile.in
 --- f-spot-0.5.0.3~/gnome-keyring-sharp/Makefile.in	2008-10-18 12:48:12.000000000 +0100
-+++ f-spot-0.5.0.3/gnome-keyring-sharp/Makefile.in	2008-12-26 21:56:32.000000000 +0000
++++ f-spot-0.5.0.3/gnome-keyring-sharp/Makefile.in	2008-12-28 01:52:04.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -99621,7 +99316,7 @@ diff -urNad f-spot-0.5.0.3~/gnome-keyring-sharp/Makefile.in f-spot-0.5.0.3/gnome
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -99630,15 +99325,6 @@ diff -urNad f-spot-0.5.0.3~/gnome-keyring-sharp/Makefile.in f-spot-0.5.0.3/gnome
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -99650,7 +99336,7 @@ diff -urNad f-spot-0.5.0.3~/gnome-keyring-sharp/Makefile.in f-spot-0.5.0.3/gnome
  ASSEMBLY_NAME = gnome-keyring-sharp
 diff -urNad f-spot-0.5.0.3~/icons/Makefile.in f-spot-0.5.0.3/icons/Makefile.in
 --- f-spot-0.5.0.3~/icons/Makefile.in	2008-10-18 12:48:12.000000000 +0100
-+++ f-spot-0.5.0.3/icons/Makefile.in	2008-12-26 21:56:33.000000000 +0000
++++ f-spot-0.5.0.3/icons/Makefile.in	2008-12-28 01:52:04.000000000 +0000
 @@ -159,6 +159,7 @@
  MAKEINFO = @MAKEINFO@
  MCS = @MCS@
@@ -99689,7 +99375,7 @@ diff -urNad f-spot-0.5.0.3~/icons/Makefile.in f-spot-0.5.0.3/icons/Makefile.in
  	devices,camera-photo-24.png		\
 diff -urNad f-spot-0.5.0.3~/intltool-extract.in f-spot-0.5.0.3/intltool-extract.in
 --- f-spot-0.5.0.3~/intltool-extract.in	2008-10-17 19:48:06.000000000 +0100
-+++ f-spot-0.5.0.3/intltool-extract.in	2008-12-26 21:47:02.000000000 +0000
++++ f-spot-0.5.0.3/intltool-extract.in	2008-12-28 01:51:31.000000000 +0000
 @@ -745,6 +745,18 @@
      }
  }
@@ -99711,7 +99397,7 @@ diff -urNad f-spot-0.5.0.3~/intltool-extract.in f-spot-0.5.0.3/intltool-extract.
  
 diff -urNad f-spot-0.5.0.3~/intltool-merge.in f-spot-0.5.0.3/intltool-merge.in
 --- f-spot-0.5.0.3~/intltool-merge.in	2008-10-17 19:48:06.000000000 +0100
-+++ f-spot-0.5.0.3/intltool-merge.in	2008-12-26 21:47:02.000000000 +0000
++++ f-spot-0.5.0.3/intltool-merge.in	2008-12-28 01:51:31.000000000 +0000
 @@ -1208,6 +1208,24 @@
  
      close OUTPUT;
@@ -99739,7 +99425,7 @@ diff -urNad f-spot-0.5.0.3~/intltool-merge.in f-spot-0.5.0.3/intltool-merge.in
  sub schemas_merge_translations
 diff -urNad f-spot-0.5.0.3~/intltool-update.in f-spot-0.5.0.3/intltool-update.in
 --- f-spot-0.5.0.3~/intltool-update.in	2008-10-17 19:48:06.000000000 +0100
-+++ f-spot-0.5.0.3/intltool-update.in	2008-12-26 21:47:02.000000000 +0000
++++ f-spot-0.5.0.3/intltool-update.in	2008-12-28 01:51:31.000000000 +0000
 @@ -600,13 +600,33 @@
      return 0;
  }
@@ -99777,7 +99463,7 @@ diff -urNad f-spot-0.5.0.3~/intltool-update.in f-spot-0.5.0.3/intltool-update.in
  	     ."\n *** Without it, intltool-update can not generate files.\n";
 diff -urNad f-spot-0.5.0.3~/libeog/Makefile.in f-spot-0.5.0.3/libeog/Makefile.in
 --- f-spot-0.5.0.3~/libeog/Makefile.in	2008-10-18 12:48:12.000000000 +0100
-+++ f-spot-0.5.0.3/libeog/Makefile.in	2008-12-26 21:56:33.000000000 +0000
++++ f-spot-0.5.0.3/libeog/Makefile.in	2008-12-28 01:52:04.000000000 +0000
 @@ -51,7 +51,9 @@
  am__installdirs = "$(DESTDIR)$(fspotlibdir)"
  fspotlibLTLIBRARIES_INSTALL = $(INSTALL)
@@ -99823,7 +99509,7 @@ diff -urNad f-spot-0.5.0.3~/libeog/Makefile.in f-spot-0.5.0.3/libeog/Makefile.in
  EXTRA_DIST = libeog-marshal.list
 diff -urNad f-spot-0.5.0.3~/libeog/cursors/Makefile.in f-spot-0.5.0.3/libeog/cursors/Makefile.in
 --- f-spot-0.5.0.3~/libeog/cursors/Makefile.in	2008-10-18 12:48:12.000000000 +0100
-+++ f-spot-0.5.0.3/libeog/cursors/Makefile.in	2008-12-26 21:56:33.000000000 +0000
++++ f-spot-0.5.0.3/libeog/cursors/Makefile.in	2008-12-28 01:52:04.000000000 +0000
 @@ -159,6 +159,7 @@
  MAKEINFO = @MAKEINFO@
  MCS = @MCS@
@@ -99850,7 +99536,7 @@ diff -urNad f-spot-0.5.0.3~/libeog/cursors/Makefile.in f-spot-0.5.0.3/libeog/cur
  EXTRA_DIST = \
 diff -urNad f-spot-0.5.0.3~/libfspot/Makefile.in f-spot-0.5.0.3/libfspot/Makefile.in
 --- f-spot-0.5.0.3~/libfspot/Makefile.in	2008-10-18 12:48:13.000000000 +0100
-+++ f-spot-0.5.0.3/libfspot/Makefile.in	2008-12-26 21:56:33.000000000 +0000
++++ f-spot-0.5.0.3/libfspot/Makefile.in	2008-12-28 01:52:04.000000000 +0000
 @@ -53,6 +53,7 @@
  LTLIBRARIES = $(fspotlib_LTLIBRARIES)
  am__DEPENDENCIES_1 =
@@ -99894,7 +99580,7 @@ diff -urNad f-spot-0.5.0.3~/libfspot/Makefile.in f-spot-0.5.0.3/libfspot/Makefil
  	$(top_builddir)/libjpegtran/libfspotjpegtran.la	\
 diff -urNad f-spot-0.5.0.3~/libgphoto2-sharp/Makefile.in f-spot-0.5.0.3/libgphoto2-sharp/Makefile.in
 --- f-spot-0.5.0.3~/libgphoto2-sharp/Makefile.in	2008-10-18 12:48:13.000000000 +0100
-+++ f-spot-0.5.0.3/libgphoto2-sharp/Makefile.in	2008-12-26 21:56:33.000000000 +0000
++++ f-spot-0.5.0.3/libgphoto2-sharp/Makefile.in	2008-12-28 01:52:05.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -99928,7 +99614,7 @@ diff -urNad f-spot-0.5.0.3~/libgphoto2-sharp/Makefile.in f-spot-0.5.0.3/libgphot
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -99937,15 +99623,6 @@ diff -urNad f-spot-0.5.0.3~/libgphoto2-sharp/Makefile.in f-spot-0.5.0.3/libgphot
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -99957,7 +99634,7 @@ diff -urNad f-spot-0.5.0.3~/libgphoto2-sharp/Makefile.in f-spot-0.5.0.3/libgphot
  ASSEMBLY_NAME = libgphoto2-sharp
 diff -urNad f-spot-0.5.0.3~/libjpegtran/Makefile.in f-spot-0.5.0.3/libjpegtran/Makefile.in
 --- f-spot-0.5.0.3~/libjpegtran/Makefile.in	2008-10-18 12:48:13.000000000 +0100
-+++ f-spot-0.5.0.3/libjpegtran/Makefile.in	2008-12-26 21:56:33.000000000 +0000
++++ f-spot-0.5.0.3/libjpegtran/Makefile.in	2008-12-28 01:52:05.000000000 +0000
 @@ -51,7 +51,8 @@
  am__installdirs = "$(DESTDIR)$(fspotlibdir)"
  fspotlibLTLIBRARIES_INSTALL = $(INSTALL)
@@ -100002,7 +99679,7 @@ diff -urNad f-spot-0.5.0.3~/libjpegtran/Makefile.in f-spot-0.5.0.3/libjpegtran/M
  
 diff -urNad f-spot-0.5.0.3~/ltmain.sh f-spot-0.5.0.3/ltmain.sh
 --- f-spot-0.5.0.3~/ltmain.sh	2008-10-17 19:48:07.000000000 +0100
-+++ f-spot-0.5.0.3/ltmain.sh	2008-12-26 21:56:17.000000000 +0000
++++ f-spot-0.5.0.3/ltmain.sh	2008-12-28 01:51:49.000000000 +0000
 @@ -1,6 +1,6 @@
  # Generated from ltmain.m4sh.
  
@@ -101166,57 +100843,36 @@ diff -urNad f-spot-0.5.0.3~/ltmain.sh f-spot-0.5.0.3/ltmain.sh
  	  esac
  	  $ECHO > $output "\
  # $outputname - a libtool library file
+diff -urNad f-spot-0.5.0.3~/mono-addins/Makefile.in f-spot-0.5.0.3/mono-addins/Makefile.in
+--- f-spot-0.5.0.3~/mono-addins/Makefile.in	2008-10-18 12:48:13.000000000 +0100
++++ f-spot-0.5.0.3/mono-addins/Makefile.in	2008-12-28 01:52:05.000000000 +0000
+@@ -171,6 +171,7 @@
+ MAKEINFO = @MAKEINFO@
+ MCS = @MCS@
+ MKDIR_P = @MKDIR_P@
++MKINSTALLDIRS = @MKINSTALLDIRS@
+ MONO = @MONO@
+ MONO_NUNIT_CFLAGS = @MONO_NUNIT_CFLAGS@
+ MONO_NUNIT_LIBS = @MONO_NUNIT_LIBS@
+@@ -187,7 +188,6 @@
+ NUNIT_DEFINES = @NUNIT_DEFINES@
+ NUNIT_LIBS = @NUNIT_LIBS@
+ NUNIT_PKG = @NUNIT_PKG@
+-OBJDUMP = @OBJDUMP@
+ OBJEXT = @OBJEXT@
+ OMF_DIR = @OMF_DIR@
+ OTOOL = @OTOOL@
+@@ -266,7 +266,6 @@
+ subdirs = @subdirs@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+-top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ SUBDIRS = \
 diff -urNad f-spot-0.5.0.3~/mono-addins/Mono.Addins/Makefile.in f-spot-0.5.0.3/mono-addins/Mono.Addins/Makefile.in
 --- f-spot-0.5.0.3~/mono-addins/Mono.Addins/Makefile.in	2008-10-18 12:48:13.000000000 +0100
-+++ f-spot-0.5.0.3/mono-addins/Mono.Addins/Makefile.in	2008-12-26 21:47:02.000000000 +0000
-@@ -290,9 +290,9 @@
- LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
- LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
- LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
-diff -urNad f-spot-0.5.0.3~/mono-addins/Mono.Addins.Gui/Makefile.in f-spot-0.5.0.3/mono-addins/Mono.Addins.Gui/Makefile.in
---- f-spot-0.5.0.3~/mono-addins/Mono.Addins.Gui/Makefile.in	2008-10-18 12:48:13.000000000 +0100
-+++ f-spot-0.5.0.3/mono-addins/Mono.Addins.Gui/Makefile.in	2008-12-26 21:47:02.000000000 +0000
-@@ -290,9 +290,9 @@
- LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
- LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
- LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
-diff -urNad f-spot-0.5.0.3~/mono-addins/Mono.Addins.Setup/Makefile.in f-spot-0.5.0.3/mono-addins/Mono.Addins.Setup/Makefile.in
---- f-spot-0.5.0.3~/mono-addins/Mono.Addins.Setup/Makefile.in	2008-10-18 12:48:13.000000000 +0100
-+++ f-spot-0.5.0.3/mono-addins/Mono.Addins.Setup/Makefile.in	2008-12-26 21:47:02.000000000 +0000
-@@ -290,9 +290,9 @@
- LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
- LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
- LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
-diff -urNad f-spot-0.5.0.3~/semweb/Makefile.in f-spot-0.5.0.3/semweb/Makefile.in
---- f-spot-0.5.0.3~/semweb/Makefile.in	2008-10-18 12:48:13.000000000 +0100
-+++ f-spot-0.5.0.3/semweb/Makefile.in	2008-12-26 21:56:33.000000000 +0000
++++ f-spot-0.5.0.3/mono-addins/Mono.Addins/Makefile.in	2008-12-28 01:52:05.000000000 +0000
 @@ -73,7 +73,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -101250,7 +100906,7 @@ diff -urNad f-spot-0.5.0.3~/semweb/Makefile.in f-spot-0.5.0.3/semweb/Makefile.in
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -286,13 +285,13 @@
+@@ -286,7 +285,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -101259,15 +100915,168 @@ diff -urNad f-spot-0.5.0.3~/semweb/Makefile.in f-spot-0.5.0.3/semweb/Makefile.in
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
+@@ -301,7 +300,7 @@
+ 	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
+ CSC_FLAGS = -debug
+-CSC_LIB = gmcs $(CSC_FLAGS) -target:library
++CSC_LIB = $(MCS) $(CSC_FLAGS) -target:library
+ MONO_DEBUGFLAGS = --debug
+ RUNTIME = mono $(MONO_DEBUGFLAGS)
+ ASSEMBLY_NAME = Mono.Addins
+diff -urNad f-spot-0.5.0.3~/mono-addins/Mono.Addins.Gui/Makefile.in f-spot-0.5.0.3/mono-addins/Mono.Addins.Gui/Makefile.in
+--- f-spot-0.5.0.3~/mono-addins/Mono.Addins.Gui/Makefile.in	2008-10-18 12:48:13.000000000 +0100
++++ f-spot-0.5.0.3/mono-addins/Mono.Addins.Gui/Makefile.in	2008-12-28 01:52:05.000000000 +0000
+@@ -73,7 +73,7 @@
+ CFLAGS = @CFLAGS@
+ CPP = @CPP@
+ CPPFLAGS = @CPPFLAGS@
+-CSC = gmcs $(CSC_FLAGS) -target:exe
++CSC = $(MCS) $(CSC_FLAGS) -target:exe
+ CSC_DEFINES = @CSC_DEFINES@
+ CYGPATH_W = @CYGPATH_W@
+ DATADIRNAME = @DATADIRNAME@
+@@ -170,6 +170,7 @@
+ MAKEINFO = @MAKEINFO@
+ MCS = @MCS@
+ MKDIR_P = @MKDIR_P@
++MKINSTALLDIRS = @MKINSTALLDIRS@
+ MONO = @MONO@
+ MONO_NUNIT_CFLAGS = @MONO_NUNIT_CFLAGS@
+ MONO_NUNIT_LIBS = @MONO_NUNIT_LIBS@
+@@ -186,7 +187,6 @@
+ NUNIT_DEFINES = @NUNIT_DEFINES@
+ NUNIT_LIBS = @NUNIT_LIBS@
+ NUNIT_PKG = @NUNIT_PKG@
+-OBJDUMP = @OBJDUMP@
+ OBJEXT = @OBJEXT@
+ OMF_DIR = @OMF_DIR@
+ OTOOL = @OTOOL@
+@@ -265,7 +265,6 @@
+ subdirs = @subdirs@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+-top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
+@@ -286,7 +285,7 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
++LINK_KEYRING = -pkg:gnome-keyring-sharp
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+@@ -301,7 +300,7 @@
+ 	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
+ 
+ CSC_FLAGS = -debug
+-CSC_LIB = gmcs $(CSC_FLAGS) -target:library
++CSC_LIB = $(MCS) $(CSC_FLAGS) -target:library
+ MONO_DEBUGFLAGS = --debug
+ RUNTIME = mono $(MONO_DEBUGFLAGS)
+ ASSEMBLY_NAME = Mono.Addins.Gui
+diff -urNad f-spot-0.5.0.3~/mono-addins/Mono.Addins.Setup/Makefile.in f-spot-0.5.0.3/mono-addins/Mono.Addins.Setup/Makefile.in
+--- f-spot-0.5.0.3~/mono-addins/Mono.Addins.Setup/Makefile.in	2008-10-18 12:48:13.000000000 +0100
++++ f-spot-0.5.0.3/mono-addins/Mono.Addins.Setup/Makefile.in	2008-12-28 01:52:05.000000000 +0000
+@@ -73,7 +73,7 @@
+ CFLAGS = @CFLAGS@
+ CPP = @CPP@
+ CPPFLAGS = @CPPFLAGS@
+-CSC = gmcs $(CSC_FLAGS) -target:exe
++CSC = $(MCS) $(CSC_FLAGS) -target:exe
+ CSC_DEFINES = @CSC_DEFINES@
+ CYGPATH_W = @CYGPATH_W@
+ DATADIRNAME = @DATADIRNAME@
+@@ -170,6 +170,7 @@
+ MAKEINFO = @MAKEINFO@
+ MCS = @MCS@
+ MKDIR_P = @MKDIR_P@
++MKINSTALLDIRS = @MKINSTALLDIRS@
+ MONO = @MONO@
+ MONO_NUNIT_CFLAGS = @MONO_NUNIT_CFLAGS@
+ MONO_NUNIT_LIBS = @MONO_NUNIT_LIBS@
+@@ -186,7 +187,6 @@
+ NUNIT_DEFINES = @NUNIT_DEFINES@
+ NUNIT_LIBS = @NUNIT_LIBS@
+ NUNIT_PKG = @NUNIT_PKG@
+-OBJDUMP = @OBJDUMP@
+ OBJEXT = @OBJEXT@
+ OMF_DIR = @OMF_DIR@
+ OTOOL = @OTOOL@
+@@ -265,7 +265,6 @@
+ subdirs = @subdirs@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+-top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
+@@ -286,7 +285,7 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
++LINK_KEYRING = -pkg:gnome-keyring-sharp
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
+@@ -301,7 +300,7 @@
+ 	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
+ 
+ CSC_FLAGS = -debug
+-CSC_LIB = gmcs $(CSC_FLAGS) -target:library
++CSC_LIB = $(MCS) $(CSC_FLAGS) -target:library
+ MONO_DEBUGFLAGS = --debug
+ RUNTIME = mono $(MONO_DEBUGFLAGS)
+ ASSEMBLY_NAME = Mono.Addins.Setup
+diff -urNad f-spot-0.5.0.3~/semweb/Makefile.in f-spot-0.5.0.3/semweb/Makefile.in
+--- f-spot-0.5.0.3~/semweb/Makefile.in	2008-10-18 12:48:13.000000000 +0100
++++ f-spot-0.5.0.3/semweb/Makefile.in	2008-12-28 01:52:05.000000000 +0000
+@@ -73,7 +73,7 @@
+ CFLAGS = @CFLAGS@
+ CPP = @CPP@
+ CPPFLAGS = @CPPFLAGS@
+-CSC = gmcs $(CSC_FLAGS) -target:exe
++CSC = $(MCS) $(CSC_FLAGS) -target:exe
+ CSC_DEFINES = @CSC_DEFINES@
+ CYGPATH_W = @CYGPATH_W@
+ DATADIRNAME = @DATADIRNAME@
+@@ -170,6 +170,7 @@
+ MAKEINFO = @MAKEINFO@
+ MCS = @MCS@
+ MKDIR_P = @MKDIR_P@
++MKINSTALLDIRS = @MKINSTALLDIRS@
+ MONO = @MONO@
+ MONO_NUNIT_CFLAGS = @MONO_NUNIT_CFLAGS@
+ MONO_NUNIT_LIBS = @MONO_NUNIT_LIBS@
+@@ -186,7 +187,6 @@
+ NUNIT_DEFINES = @NUNIT_DEFINES@
+ NUNIT_LIBS = @NUNIT_LIBS@
+ NUNIT_PKG = @NUNIT_PKG@
+-OBJDUMP = @OBJDUMP@
+ OBJEXT = @OBJEXT@
+ OMF_DIR = @OMF_DIR@
+ OTOOL = @OTOOL@
+@@ -265,7 +265,6 @@
+ subdirs = @subdirs@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+-top_build_prefix = @top_build_prefix@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
+@@ -286,7 +285,7 @@
+ DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
+ DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
+ DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
+-LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
++LINK_KEYRING = -pkg:gnome-keyring-sharp
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS = \
 @@ -301,7 +300,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -101279,7 +101088,7 @@ diff -urNad f-spot-0.5.0.3~/semweb/Makefile.in f-spot-0.5.0.3/semweb/Makefile.in
  ASSEMBLY_NAME = SemWeb
 diff -urNad f-spot-0.5.0.3~/src/Makefile.in f-spot-0.5.0.3/src/Makefile.in
 --- f-spot-0.5.0.3~/src/Makefile.in	2008-10-18 12:48:13.000000000 +0100
-+++ f-spot-0.5.0.3/src/Makefile.in	2008-12-26 21:56:34.000000000 +0000
++++ f-spot-0.5.0.3/src/Makefile.in	2008-12-28 01:52:05.000000000 +0000
 @@ -79,7 +79,7 @@
  CFLAGS = @CFLAGS@
  CPP = @CPP@
@@ -101313,7 +101122,7 @@ diff -urNad f-spot-0.5.0.3~/src/Makefile.in f-spot-0.5.0.3/src/Makefile.in
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
  DIR_ADDINS_ADDINS = $(top_builddir)/mono-addins/Mono.Addins
-@@ -292,13 +291,13 @@
+@@ -292,7 +291,7 @@
  DIR_TAO_GLU = $(top_builddir)/Tao/Tao.OpenGl.Glu
  DIR_TAO_EXTENSIONLOADER = $(top_builddir)/Tao/Tao.OpenGl.ExtensionLoader
  DIR_TAO_GLPOSTPROCESS = $(top_builddir)/Tao/Tao.GlPostProcess
@@ -101322,15 +101131,6 @@ diff -urNad f-spot-0.5.0.3~/src/Makefile.in f-spot-0.5.0.3/src/Makefile.in
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS = \
--	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
--	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
--	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
-+	-pkg:mono-addins		\
-+	-pkg:mono-addins-setup		\
-+	-pkg:mono-addins-gui
- 
- LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = \
 @@ -307,7 +306,7 @@
  	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
  
@@ -101358,7 +101158,7 @@ diff -urNad f-spot-0.5.0.3~/src/Makefile.in f-spot-0.5.0.3/src/Makefile.in
  	-pkg:glade-sharp-2.0			\
 diff -urNad f-spot-0.5.0.3~/tools/Makefile.in f-spot-0.5.0.3/tools/Makefile.in
 --- f-spot-0.5.0.3~/tools/Makefile.in	2008-10-18 12:48:14.000000000 +0100
-+++ f-spot-0.5.0.3/tools/Makefile.in	2008-12-26 21:56:34.000000000 +0000
++++ f-spot-0.5.0.3/tools/Makefile.in	2008-12-28 01:52:06.000000000 +0000
 @@ -174,6 +174,7 @@
  MAKEINFO = @MAKEINFO@
  MCS = @MCS@
