@@ -5,7 +5,7 @@ debian_libfspoteog-linkage
 debian_libfspotjpegtran-linkage
 debian_unlink-nunit
 debian_no-dup-app-icons
-#debian_link-system-mono-addins
+debian_link-system-mono-addins
 debian_link-system-flickrnet
 debian_link-system-gnome-keyring
 debian_fix_f-spot.exe.config
