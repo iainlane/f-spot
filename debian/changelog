@@ -42,8 +42,9 @@ f-spot (0.5.0.3-1) UNRELEASED; urgency=low
     debian/patches/svn-044-4010_gio-sharp-destdir.dpatch: Removed, now
     upstream.
   * debian/patches/98_autoreconf.dpatch: Refresh.
+  * Add myself to Uploders. 
 
- -- Iain Lane <laney@ubuntu.com>  Sun, 28 Dec 2008 01:40:22 +0000
+ -- Iain Lane <laney@ubuntu.com>  Thu, 01 Jan 2009 22:10:52 +0000
 
 f-spot (0.4.4-1) unstable; urgency=medium
 
