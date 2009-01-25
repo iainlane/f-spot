@@ -1,0 +1,33 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## debian_link_2.0_profile_cairo.dpatch by  <chris@CowboyLaputopu>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: The libmono-cairo2.0-cil package does not ship mono-cario.pc
+## DP: This is waiting for the Mono 2.0 transition to be completed
+## DP: Until then, manually link with -r:Mono.Cairo
+
+@DPATCH@
+diff -urNad f-spot-0.5.0.3~/configure.in f-spot-0.5.0.3/configure.in
+--- f-spot-0.5.0.3~/configure.in	2008-10-18 05:54:15.000000000 +1100
++++ f-spot-0.5.0.3/configure.in	2009-01-25 10:42:16.956459186 +1100
+@@ -69,7 +69,8 @@
+ LCMS_REQUIRED=1.12
+ dnl -- LIBGPHOTO2_REQUIRED=2.1.4
+ 
+-PKG_CHECK_MODULES(F, libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED libexif >= $LIBEXIF_REQUIRED_MIN libexif < $LIBEXIF_REQUIRED_MAX glade-sharp-2.0 >= $GTKSHARP_REQUIRED gnome-vfs-sharp-2.0 >= $GTKSHARP_REQUIRED gtk+-2.0 >= $GTK_REQUIRED mono >= $MONO_REQUIRED mono-cairo >= $MONO_CAIRO_REQUIRED)
++PKG_CHECK_MODULES(F, libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED libexif >= $LIBEXIF_REQUIRED_MIN libexif < $LIBEXIF_REQUIRED_MAX glade-sharp-2.0 >= $GTKSHARP_REQUIRED gnome-vfs-sharp-2.0 >= $GTKSHARP_REQUIRED gtk+-2.0 >= $GTK_REQUIRED mono >= $MONO_REQUIRED)
++F_LIBS="$F_LIBS -r:Mono.Cairo"
+ AC_SUBST(F_CFLAGS)
+ AC_SUBST(F_LIBS)
+ 
+@@ -120,9 +121,7 @@
+ if pkg-config --atleast-version=2.0 mono; then
+    CSC_DEFINES="$CSC_DEFINES -d:MONO_2_0"
+ fi
+-if pkg-config --atleast-version=1.2.5 mono-cairo; then
+-   CSC_DEFINES="$CSC_DEFINES -d:CAIRO_1_2_5"
+-fi
++CSC_DEFINES="$CSC_DEFINES -d:CAIRO_1_2_5"
+ 
+ dnl - Choose PreferenceBackend (default to gconf)
+ AC_ARG_ENABLE([gconf],[AC_HELP_STRING([--disable-gconf], [build without gconf preference backend])],,)

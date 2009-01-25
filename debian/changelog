@@ -41,10 +41,19 @@ f-spot (0.5.0.3-1) UNRELEASED; urgency=low
     debian/patches/debian_flickrnet-2.1.5-port.dpatch,
     debian/patches/svn-044-4010_gio-sharp-destdir.dpatch: Removed, now
     upstream.
-  * debian/patches/98_autoreconf.dpatch: Refresh.
   * Add myself to Uploders. 
 
- -- Iain Lane <laney@ubuntu.com>  Thu, 01 Jan 2009 22:10:52 +0000
+  [ Christopher James Halse Rogers ]
+  * debian/patches/debian_link_2.0_profile_cairo.dpatch:
+    + Link f-spot against the 2.0 profile Mono.Cairo and remove checks for
+      mono-cairo.  libmono-cairo2.0-cil doesn't ship mono-cairo.pc, so we need
+      to specify it manually.
+  * debian/control:
+    + gnome-sharp2 transition:
+      - lib{gnome,gconf,gnome-vfs}2.0-cil -> lib{gnome,gconf,gnome-vfs}2.24-cil
+  * debian/patches/98_autoreconf.dpatch: Refresh.
+
+ -- Christopher James Halse Rogers <chris@CowboyLaputopu>  Sun, 25 Jan 2009 12:05:37 +1100
 
 f-spot (0.4.4-1) unstable; urgency=medium
 

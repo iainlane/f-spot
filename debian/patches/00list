@@ -13,6 +13,7 @@ f-spot-import-gphoto
 svn-r4555_fix-crash-on-icon-size-change.dpatch
 
 debian_use_csc
+debian_link_2.0_profile_cairo
 
 ubuntu_importer-targetdir-selector
 ubuntu_fname_quote_percent
