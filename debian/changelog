@@ -22,6 +22,8 @@ f-spot (0.5.0.3-1) UNRELEASED; urgency=low
   * New upstream version 0.5.0.3, based on Ubuntu package (Closes: #499615)
   * debian/control: Build-depend on libjpeg62-dev, add gvfs-bin dependency
     so that gphoto patch below works.
+  * debian/control: Buid-depend on mono-addins >= 0.4 so that edit sidebar
+    works properly and we do not have to use embedded copy of m-a.
   * debian/watch: Update to correct regex.
   * debian/patches/f-spot-import-gphoto.dpatch: Add. Patch by Martin Pitt to
     allow f-spot to import from gphoto:/// URLs.
@@ -41,7 +43,8 @@ f-spot (0.5.0.3-1) UNRELEASED; urgency=low
     debian/patches/debian_flickrnet-2.1.5-port.dpatch,
     debian/patches/svn-044-4010_gio-sharp-destdir.dpatch: Removed, now
     upstream.
-  * Add myself to Uploders. 
+  * debian/control, debian/rules: Regenerate autotools during the build
+  * Add myself to Uploaders. 
 
   [ Christopher James Halse Rogers ]
   * debian/patches/debian_link_2.0_profile_cairo.dpatch:
@@ -51,9 +54,8 @@ f-spot (0.5.0.3-1) UNRELEASED; urgency=low
   * debian/control:
     + gnome-sharp2 transition:
       - lib{gnome,gconf,gnome-vfs}2.0-cil -> lib{gnome,gconf,gnome-vfs}2.24-cil
-  * debian/patches/98_autoreconf.dpatch: Refresh.
 
- -- Christopher James Halse Rogers <chris@CowboyLaputopu>  Sun, 25 Jan 2009 12:05:37 +1100
+ -- Iain Lane <laney@ubuntu.com>  Sun, 01 Feb 2009 20:15:17 +0000
 
 f-spot (0.4.4-1) unstable; urgency=medium
 

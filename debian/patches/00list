@@ -19,5 +19,4 @@ ubuntu_importer-targetdir-selector
 ubuntu_fname_quote_percent
 
 # Patches to be applied last.
-98_autoreconf
 99_ltmain_as-needed
