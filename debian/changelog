@@ -1,4 +1,4 @@
-f-spot (0.5.0.3-1) UNRELEASED; urgency=low
+f-spot (0.5.0.3-1) experimental; urgency=low
 
   [ David Paleino ]
   * debian/patches/:
