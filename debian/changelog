@@ -1,4 +1,4 @@
-f-spot (0.5.0.3-2) experimental; urgency=low
+f-spot (0.5.0.3-2) UNRELEASED; urgency=low
 
   * debian/patches/svn-r4545_locales-import.dpatch: Patch backported from SVN
     trunk revision 4545 - initialize the translation catalog earlier (LP: #293305)
