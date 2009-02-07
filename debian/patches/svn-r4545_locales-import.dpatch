@@ -1,0 +1,39 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## svn-r4545_locales-import.dpatch by Chris Coulson <chrisccoulson@googlemail.com>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Patch backported from SVN trunk revision 4545
+## DP: initialize the translation catalog earlier. Fix a nasty bug.
+## DP: Launchpad bug: https://bugs.launchpad.net/ubuntu/+source/f-spot/+bug/293305
+
+@DPATCH@
+diff -urNad f-spot-0.5.0.3~/src/main.cs f-spot-0.5.0.3/src/main.cs
+--- f-spot-0.5.0.3~/src/main.cs	2008-10-18 11:54:25.000000000 +0100
++++ f-spot-0.5.0.3/src/main.cs	2009-02-06 17:39:58.000000000 +0000
+@@ -72,7 +72,8 @@
+ 		program = new Program (Defines.PACKAGE, 
+ 				       Defines.VERSION, 
+ 				       Modules.UI, args);		
+-		
++
++		Catalog.Init ("f-spot", Defines.LOCALE_DIR);		
+ 		FSpot.Global.PhotoDirectory = Preferences.Get<string> (Preferences.STORAGE_PATH);
+ 
+ 		for (int i = 0; i < args.Length && !shutdown; i++) {
+@@ -170,8 +171,6 @@
+ 		}
+ 
+ 		if (slideshow == true) {
+-			Catalog.Init ("f-spot", Defines.LOCALE_DIR);
+-				
+ 			Core core = new Core ();
+ 			core.ShowSlides (null);
+ 			program.Run ();
+@@ -231,7 +230,6 @@
+ 							Gtk.Rc.AddDefaultFile (Preferences.Get<string> (Preferences.GTK_RC));
+ 						}
+ 						
+-						Catalog.Init ("f-spot", Defines.LOCALE_DIR);
+ 						try {
+ 							Gtk.Window.DefaultIconList = new Gdk.Pixbuf [] {
+ 								GtkUtil.TryLoadIcon (FSpot.Global.IconTheme, "f-spot", 16, (Gtk.IconLookupFlags)0),

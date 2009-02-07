@@ -11,6 +11,7 @@ debian_link-system-gnome-keyring
 debian_fix_f-spot.exe.config
 f-spot-import-gphoto
 svn-r4555_fix-crash-on-icon-size-change.dpatch
+svn-r4545_locales-import.dpatch
 
 debian_use_csc
 debian_link_2.0_profile_cairo
