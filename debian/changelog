@@ -1,5 +1,12 @@
-f-spot (0.5.0.3-2) UNRELEASED; urgency=low
+f-spot (0.5.0.3-2) unstable; urgency=low
 
+  [ Mirco Bauer]
+  * Upload to unstable.
+  * debian/control:
+    + Lowered GNOME# build-deps to 2.0 ABI as that transition didn't happen
+      yet in unstable.
+
+  [ Iain Lane ]
   * debian/patches/svn-r4545_locales-import.dpatch: Patch backported from SVN
     trunk revision 4545 - initialize the translation catalog earlier (LP: #293305)
     (Closes: #514457). Thanks to Florian Heinle for finding the patch and to
