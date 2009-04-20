@@ -1,3 +1,11 @@
+f-spot (0.5.0.3-3) unstable; urgency=low
+
+  * debian/control:
+    + Replaced libgnome2.0-cil build-dep with libgnome2.24-cil as part of
+      the GNOME# 2.24 transition.
+
+ -- Mirco Bauer <meebey@debian.org>  Mon, 02 Mar 2009 22:31:14 +0100
+
 f-spot (0.5.0.3-2) unstable; urgency=low
 
   [ Mirco Bauer]
