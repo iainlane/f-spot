@@ -1,0 +1,38 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## ubuntu_1024x600_CDExport.cs.dpatch by  <Ying-Chun Liu (PaulLiu) <grandpaul@gmail.com>>
+##
+## DP: small screen compatibility
+## DP: LP: #320817
+## DP: http://bugzilla.gnome.org/show_bug.cgi?id=569183
+
+@DPATCH@
+diff -urNad f-spot-0.5.0.3~/extensions/Exporters/CDExport/CDExport.cs f-spot-0.5.0.3/extensions/Exporters/CDExport/CDExport.cs
+--- f-spot-0.5.0.3~/extensions/Exporters/CDExport/CDExport.cs	2009-01-24 19:41:57.000000000 +0800
++++ f-spot-0.5.0.3/extensions/Exporters/CDExport/CDExport.cs	2009-01-24 19:49:12.006265409 +0800
+@@ -48,6 +48,13 @@
+ 			xml = new Glade.XML (null, "CDExport.glade", dialog_name, "f-spot");
+ 			xml.Autoconnect (this);
+ 
++			if (Gdk.Screen.Default.Height <= 600) {
++			    Gtk.Widget thumbScrolledWindow;
++			    thumbScrolledWindow = xml.GetWidget ("thumb_scrolledwindow");
++			    if (thumbScrolledWindow != null) {
++			       thumbScrolledWindow.SetSizeRequest(512,System.Math.Max(512-(768-Gdk.Screen.Default.Height),100));
++			    }
++			}
+ 			this.selection = selection;
+ 
+ 			// Calculate the total size
+@@ -74,6 +81,12 @@
+ 
+ 			thumb_scrolledwindow.Add (view);
+ 			Dialog.ShowAll ();
++			if (Gdk.Screen.Default.Height <= 600) {
++			   int oldw=0;
++			   int oldh=0;
++			   Dialog.GetSize(out oldw,out oldh);
++			   Dialog.Resize(oldw,Gdk.Screen.Default.Height*7/10);
++			}
+ 
+ 			previous_frame.Visible = IsEmpty (dest);
+ 			//LoadHistory ();

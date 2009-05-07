@@ -1,13 +1,14 @@
 #! /bin/sh /usr/share/dpatch/dpatch-run
-## ubuntu_importer-targetdir-selector.dpatch by Chris Coulson <chrisccoulson@googlemail.com>
+## ubuntu_importer-targetdir-selector.dpatch by Martin Pitt <martin.pitt@ubuntu.com>
 ##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
+## DP: Add a target directory selector to the camera import dialog, so that
+## DP: people can continue to use their customized directory layout.
+## DP: LP: #182858, http://bugzilla.gnome.org/show_bug.cgi?id=511569
 
 @DPATCH@
-diff -urNad f-spot-0.5.0.2~/src/CameraFileSelectionDialog.cs f-spot-0.5.0.2/src/CameraFileSelectionDialog.cs
---- f-spot-0.5.0.2~/src/CameraFileSelectionDialog.cs	2008-09-26 09:27:39.000000000 +0100
-+++ f-spot-0.5.0.2/src/CameraFileSelectionDialog.cs	2008-10-06 19:11:16.000000000 +0100
+diff -urNad f-spot-0.5.0.3~/src/CameraFileSelectionDialog.cs f-spot-0.5.0.3/src/CameraFileSelectionDialog.cs
+--- f-spot-0.5.0.3~/src/CameraFileSelectionDialog.cs	2008-09-26 10:27:39.000000000 +0200
++++ f-spot-0.5.0.3/src/CameraFileSelectionDialog.cs	2009-03-25 13:17:50.000000000 +0100
 @@ -33,6 +33,7 @@
  		[Widget] Gtk.OptionMenu tag_option_menu;
  		[Widget] Gtk.CheckButton attach_check;
@@ -16,16 +17,17 @@ diff -urNad f-spot-0.5.0.2~/src/CameraFileSelectionDialog.cs f-spot-0.5.0.2/src/
  
  		GPhotoCamera camera;
  		ListStore preview_list_store;
-@@ -91,6 +92,8 @@
+@@ -90,6 +91,9 @@
+ 			CreateTagMenu ();
  			attach_check.Toggled += HandleTagToggled;
  			HandleTagToggled (null, null);
++		
++                        if (File.Exists(FSpot.Global.PhotoDirectory))	
++			    dest_dir_chooser.SetCurrentFolder(FSpot.Global.PhotoDirectory);
  			
-+			dest_dir_chooser.SetCurrentFolder(FSpot.Global.PhotoDirectory);
-+			
  			GetPreviews ();
  		}
- 		
-@@ -279,7 +282,11 @@
+@@ -279,7 +283,11 @@
  
  				return new SaveResult (path, true);
  			} else {
@@ -38,9 +40,9 @@ diff -urNad f-spot-0.5.0.2~/src/CameraFileSelectionDialog.cs f-spot-0.5.0.2/src/
  				System.IO.File.Move (path, dest);
  
  				return new SaveResult (dest, false);
-diff -urNad f-spot-0.5.0.2~/src/f-spot.glade f-spot-0.5.0.2/src/f-spot.glade
---- f-spot-0.5.0.2~/src/f-spot.glade	2008-10-06 11:10:21.000000000 +0100
-+++ f-spot-0.5.0.2/src/f-spot.glade	2008-10-06 19:16:04.000000000 +0100
+diff -urNad f-spot-0.5.0.3~/src/f-spot.glade f-spot-0.5.0.3/src/f-spot.glade
+--- f-spot-0.5.0.3~/src/f-spot.glade	2008-10-18 12:54:25.000000000 +0200
++++ f-spot-0.5.0.3/src/f-spot.glade	2009-03-25 13:15:07.000000000 +0100
 @@ -647,10 +647,44 @@
                </widget>
                <packing>

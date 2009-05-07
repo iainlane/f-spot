@@ -1,3 +1,27 @@
+f-spot (0.5.0.3-4) UNRELEASED; urgency=low
+
+  * Backport new patches added in Ubuntu:
+    + ubuntu_1024x600_CDExport.cs.dpatch:
+      - Make the CD exporting dialog not exceed the available resolution on
+        small screens.     
+    + ubuntu_fix_export_crash_FlickrRemote.cs.dpatch:
+      - Do not crash when attempting to upload images without internet
+        connectivity
+    + ubuntu_nofuse_fix_photo_import.dpatch:
+      - Set X-GIO-NoFuse so that gvfs URI are correctly used
+    + ubuntu_raw_escape_quote.dpatch
+      - Escape "'" in UFRaw plugin to correct escaping error in dutch locale
+    + svn-display-sidebar.dpatch
+      - Display sidebar by default
+    + svn-no-versionellipze.dpatch
+      - Do not ellipise the version menu labels
+  * ubuntu_importer-targetdir-selector.dpatch: Only set the directory if it
+    exists
+  * debian/control: Drop sqlite, sqlite3 recommends as these were only needed
+    for the DB migration which happened in Lenny
+
+ -- Iain Lane <laney@ubuntu.com>  Thu, 07 May 2009 15:28:33 +0100
+
 f-spot (0.5.0.3-3) unstable; urgency=low
 
   * debian/control:

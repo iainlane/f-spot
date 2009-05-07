@@ -1,0 +1,16 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## DP: Add escaping of "'" to DevelopInUfraw plugin, so developing RAW files
+## DP: works again in the Dutch locale. Thanks to Martijn van de Streek!
+## DP: Ubuntu: https://launchpad.net/bugs/346648
+## DP: Upstream: http://bugzilla.gnome.org/show_bug.cgi?id=576411
+@DPATCH@
+--- f-spot-0.5.0.3.orig/extensions/Tools/DevelopInUFraw/DevelopInUFRaw.cs
++++ f-spot-0.5.0.3/extensions/Tools/DevelopInUFraw/DevelopInUFRaw.cs
+@@ -178,6 +178,7 @@
+ 			escaped = escaped.Replace (" ", "\\ ");
+ 			escaped = escaped.Replace ("(", "\\(");
+ 			escaped = escaped.Replace (")", "\\)");
++			escaped = escaped.Replace ("'", "\\'");
+ 			return escaped;
+ 		}
+ 

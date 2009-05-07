@@ -1,0 +1,26 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## svn-no-versionellipze.dpatch by Sebastien Bacher <seb128@ubuntu.com>
+##
+## DP: Do not ellipize the version menu labels (taken from upstream svn)
+## DP: LP: #296852, #356989
+
+@DPATCH@
+diff -urNad f-spot-0.5.0.3~/src/PhotoVersionMenu.cs f-spot-0.5.0.3/src/PhotoVersionMenu.cs
+--- f-spot-0.5.0.3~/src/PhotoVersionMenu.cs	2008-10-18 12:54:25.000000000 +0200
++++ f-spot-0.5.0.3/src/PhotoVersionMenu.cs	2009-04-08 14:27:57.000000000 +0200
+@@ -56,7 +56,6 @@
+ 			menu_item.Show ();
+ 			menu_item.Sensitive = true;
+ 			((Gtk.Label)menu_item.Child).UseUnderline = false;
+-			((Gtk.Label)menu_item.Child).Ellipsize = Pango.EllipsizeMode.End;
+ 			menu_item.Activated += new EventHandler (HandleMenuItemActivated);
+ 
+ 			item_infos [i ++] = new MenuItemInfo (menu_item, id);
+@@ -68,7 +67,6 @@
+ 			MenuItem no_edits_menu_item = new MenuItem (Mono.Unix.Catalog.GetString ("(No Edits)"));
+ 			no_edits_menu_item.Show ();
+ 			no_edits_menu_item.Sensitive = false;
+-			((Gtk.Label)no_edits_menu_item.Child).Ellipsize = Pango.EllipsizeMode.End;
+ 			Append (no_edits_menu_item);
+ 		}
+ 	}

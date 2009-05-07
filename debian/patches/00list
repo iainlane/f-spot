@@ -18,6 +18,13 @@ debian_link_2.0_profile_cairo
 
 ubuntu_importer-targetdir-selector
 ubuntu_fname_quote_percent
+ubuntu_1024x600_CDExport.cs.dpatch
+ubuntu_fix_export_crash_FlickrRemote.cs.dpatch
+ubuntu_nofuse_fix_photo_import.dpatch
+ubuntu_raw_escape_quote.dpatch
+
+svn-display-sidebar.dpatch
+svn-no-versionellipze.dpatch
 
 # Patches to be applied last.
 99_ltmain_as-needed
