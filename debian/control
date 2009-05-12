@@ -2,7 +2,7 @@ Source: f-spot
 Section: gnome
 Priority: optional
 Maintainer: Debian CLI Applications Team <pkg-cli-apps-team@lists.alioth.debian.org>
-Uploaders: Tim Retout <tim@retout.co.uk>, Mirco Bauer <meebey@debian.org>, Iain Lane <laney@ubuntu.com>
+Uploaders: Mirco Bauer <meebey@debian.org>, Iain Lane <laney@ubuntu.com>
 Build-Depends: debhelper (>= 5.0.0),
  cli-common-dev (>= 0.5.4),
  cdbs,
