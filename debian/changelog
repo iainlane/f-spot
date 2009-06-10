@@ -1,8 +1,17 @@
 f-spot (0.5.0.3-5) UNRELEASED; urgency=low
 
+  [ Tim Retout ]
   * Remove self from Uploaders.
 
- -- Tim Retout <tim@retout.co.uk>  Tue, 12 May 2009 23:03:09 +0100
+  [ Iain Lane ]
+  * debian/patches/ubuntu_importer-targetdir-selector.dpatch: Swap File.Exists
+    for Directory.Exists as we are checking for the presence of a directory
+    and File.Exists returns False if called on a directory, even if it does
+    exist. The effect of this bug was that the import dialog defaulted to
+    the user's home directory despite any configuration that may be in place.
+    Thanks to Graham Bleach. (LP: #354264)
+
+ -- Iain Lane <laney@ubuntu.com>  Wed, 10 Jun 2009 19:39:13 +0100
 
 f-spot (0.5.0.3-4) unstable; urgency=low
 

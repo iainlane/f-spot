@@ -22,7 +22,7 @@ diff -urNad f-spot-0.5.0.3~/src/CameraFileSelectionDialog.cs f-spot-0.5.0.3/src/
  			attach_check.Toggled += HandleTagToggled;
  			HandleTagToggled (null, null);
 +		
-+                        if (File.Exists(FSpot.Global.PhotoDirectory))	
++                        if (Directory.Exists(FSpot.Global.PhotoDirectory))	
 +			    dest_dir_chooser.SetCurrentFolder(FSpot.Global.PhotoDirectory);
  			
  			GetPreviews ();
