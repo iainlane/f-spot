@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## gio-sharp-pcfile.dpatch by Iain Lane <laney@ubuntu.com>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Shouldn't include the dllmap file in pcfile
+
+@DPATCH@
+diff -urNad f-spot-0.5.0.3~/gio-sharp/gio/gio-sharp-unstable.pc.in f-spot-0.5.0.3/gio-sharp/gio/gio-sharp-unstable.pc.in
+--- f-spot-0.5.0.3~/gio-sharp/gio/gio-sharp-unstable.pc.in	2008-05-09 11:10:41.000000000 +0100
++++ f-spot-0.5.0.3/gio-sharp/gio/gio-sharp-unstable.pc.in	2009-07-05 18:19:42.000000000 +0100
+@@ -6,7 +6,7 @@
+ Name: GIO#
+ Description: GIO# - GIO .NET Binding
+ Version: @VERSION@
+-Libraries: ${assemblies_dir}/gio-sharp.dll ${assemblies_dir}/gio-sharp.dll.config
++Libraries: ${assemblies_dir}/gio-sharp.dll 
+ Requires: glib-sharp-2.0
+ Cflags:
+ Libs: -r:${assemblies_dir}/gio-sharp.dll

@@ -48,7 +48,7 @@ Build-Depends: debhelper (>= 5.0.0),
  libtool,
  autoconf,
  automake1.10
-Standards-Version: 3.8.0
+Standards-Version: 3.8.2.0
 Homepage: http://www.f-spot.org/
 Vcs-Svn: svn://svn.debian.org/svn/pkg-cli-apps/packages/f-spot/trunk/
 Vcs-Browser: http://svn.debian.org/wsvn/pkg-cli-apps/packages/f-spot/trunk/
