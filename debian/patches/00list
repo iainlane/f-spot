@@ -15,6 +15,7 @@ svn-r4545_locales-import.dpatch
 
 debian_use_csc
 debian_link_2.0_profile_cairo
+debian_dont_link_libmono.dpatch
 
 ubuntu_importer-targetdir-selector
 ubuntu_fname_quote_percent

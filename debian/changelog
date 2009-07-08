@@ -1,3 +1,11 @@
+f-spot (0.5.0.3-6) UNRELEASED; urgency=low
+
+  * debian/patches/debian_dont_link_libmono.dpatch:
+    + Small patch to prevent libmono0 linkage in F-Spot's unmanaged
+      libraries. This should save dependency chain space
+
+ -- Jo Shields <directhex@apebox.org>  Wed, 08 Jul 2009 23:28:35 +0100
+
 f-spot (0.5.0.3-5) unstable; urgency=low
 
   [ Tim Retout ]
