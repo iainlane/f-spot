@@ -37,6 +37,7 @@ binary-install/f-spot::
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.so
 	cp $(CURDIR)/debian/NDesk.Glitz.dll.config \
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/
+	rm $(CURDIR)/debian/f-spot/usr/lib/pkgconfig/gio-sharp-unstable.pc
 
 clean::
 	rm -rf $(MONO_SHARED_DIR)/.wapi

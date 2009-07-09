@@ -1,12 +1,4 @@
-f-spot (0.5.0.3-6) UNRELEASED; urgency=low
-
-  * debian/patches/debian_dont_link_libmono.dpatch:
-    + Small patch to prevent libmono0 linkage in F-Spot's unmanaged
-      libraries. This should save dependency chain space
-
- -- Jo Shields <directhex@apebox.org>  Wed, 08 Jul 2009 23:28:35 +0100
-
-f-spot (0.5.0.3-5) unstable; urgency=low
+f-spot (0.5.0.3-5) UNRELEASED; urgency=low
 
   [ Tim Retout ]
   * Remove self from Uploaders.
@@ -18,12 +10,17 @@ f-spot (0.5.0.3-5) unstable; urgency=low
     exist. The effect of this bug was that the import dialog defaulted to
     the user's home directory despite any configuration that may be in place.
     Thanks to Graham Bleach. (LP: #354264)
-  * debian/patches/gio-sharp-pcfile.dpatch: Add new patch to remove
-    gio-sharp.dll.config from gio#'s pcfile. Thanks to Bojan Rajkovic.
-    (Closes: #532943)
+  * debian/rules: Remove gio-sharp-unstable.pc from the package. f-spot is not
+    the authorative source for gio-sharp and therefore should not make it
+    available to others to use. (Closes: #532943)
   * debian/control: Bump standards-version, no changes 
 
- -- Iain Lane <laney@ubuntu.com>  Sun, 05 Jul 2009 18:54:14 +0100
+  [ Jo Shields ]
+  * debian/patches/debian_dont_link_libmono.dpatch:
+    + Small patch to prevent libmono0 linkage in F-Spot's unmanaged
+      libraries. This should save dependency chain space
+
+ -- Iain Lane <laney@ubuntu.com>  Thu, 09 Jul 2009 22:23:28 +0100
 
 f-spot (0.5.0.3-4) unstable; urgency=low
 
