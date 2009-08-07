@@ -1,0 +1,1224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML 4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book id="f-spot" lang="pt_BR">
+	<bookinfo>
+		<title>O Manual do F-Spot</title>
+		<abstract role="description">
+			<para>Este é o manual do usuário para F-Spot, um gerenciador de fotos pessoais do GNOME.</para>
+		</abstract>
+		<subtitle>Este é o manual do usuário para F-Spot, um gerenciador de fotos pessoais do GNOME.</subtitle>
+		<copyright>
+			<year>2007-2008</year>
+			<holder>Aaron Bockover, Gabriel Burt, Miguel de Icaza, Bengt Thuree</holder>
+		</copyright><copyright><year>2007</year><holder>Vladimir Melo (vladimirmelo@foresightlinux.org)</holder></copyright>
+		<publisher>
+			<publishername>Projeto de Documentação do GNOME</publishername>
+		</publisher>
+		<authorgroup>
+			<author>
+				<firstname>Miguel</firstname>
+				<surname>de Icaza</surname>
+			</author>
+			<author>
+				<firstname>Aaron</firstname>
+				<surname>Bockover</surname>
+			</author>
+			<author>
+				<firstname>Bengt</firstname>
+				<surname>Thuree</surname>
+			</author>
+			<author>
+				<firstname>Gabriel</firstname>
+				<surname>Burt</surname>
+			</author>
+			<author>
+				<firstname>Alexandre</firstname>
+				<surname>Prokoudine</surname>
+			</author>
+			<author role="maintainer">
+				<firstname>Stephane</firstname>
+				<surname>Delcroix</surname>
+			</author>
+		</authorgroup>
+		<!--<include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>-->
+		<revhistory>
+			<revision>
+				<revnumber>0.5</revnumber>
+				<date>2008-09-25</date>
+			</revision>
+			<revision>
+				<revnumber>0.4</revnumber>
+				<date>2008-09-12</date>
+			</revision>
+			<revision>
+				<revnumber>0.3</revnumber>
+				<date>2007-07-26</date>
+			</revision>
+		 </revhistory>
+	</bookinfo>
+
+	<chapter id="organizing">
+		<title>Organizando suas fotos</title>
+		
+		<sect1 id="import">
+			<title>Importar</title>
+
+			<para>Você pode importar fotos de seu disco rígido ou de sua câmera. Quando importar suas fotos para o F-Spot de sua câmera, sempre será feita uma cópia delas, deixando você livre para limpar a memória de sua câmera. Por padrão, F-Spot fará uma cópia das fotos importadas de seu disco rígido. Desmarque a opção <guilabel>Copiar</guilabel> do diálogo de importação ou mantenha pressionado <keycap>Shift</keycap> ao arrastar as fotos para o F-Spot se não desejar copiá-las de seu disco rígido.</para>
+			
+			<para>
+				By default, F-Spot copies your photos to the 
+				<filename class="directory">~/Photos</filename> folder. You can change 
+				the folder F-Spot uses in <guilabel>Preferences</guilabel> dialog 
+				(<menuchoice><guimenu>Edit</guimenu><guimenuitem>Preferences</guimenuitem>
+				</menuchoice>). You can also disable physical copying of images to that 
+				directory and make F-Spot only reference to existing files. For that you 
+				need to disable checkbox <guilabel>Copy files to the Photos folder</guilabel>. 
+			</para>
+
+			<para>
+				If all the photos you are importing at one time are from a particular event, 
+				or have some other characteristic in common, you can create a tag for them 
+				so you can later find them with ease. To do this, follow the instructions from  
+				<xref linkend="tag"/> to create a new tag, then when you are importing 
+				them, check the button for <guilabel>Attach Tag</guilabel> and choose the 
+				tag you created. 
+			</para>
+			
+			<tip>
+				<para>
+					F-Spot uses a database stored at 
+					<filename>~/.gnome2/f-spot/photos.db</filename>. Note, to access it, use 
+					the sqlite3 command. You can also manually specify path to a database by 
+					running F-Spot with <option>-b</option> option.
+				</para>
+			</tip>
+			
+			<para>
+				After an import, F-Spot will display the pictures of the latest import 
+				roll only. Read <xref linkend="enjoying-search"/> to learn how to deal 
+				with import rolls.
+			</para>
+			<para>
+				You can also import directly from Mozilla 
+				<ulink url="http://www.mozilla.com/en-US/firefox/">Firefox</ulink> and 
+				<ulink url="http://www.mozilla.com/en-US/thunderbird/">Thunderbird</ulink> using 
+				<ulink url="https://addons.mozilla.org/en-US/firefox/addon/7091">Firefox</ulink> 
+				and <ulink url="https://addons.mozilla.org/en-US/thunderbird/addon/7011">Thunderbird</ulink> 
+				F-Spot importer extensions written by 
+				<ulink url="http://personalpages.tds.net/~cdovel/">Pizzach</ulink>.
+			</para>
+		</sect1>
+		
+		<sect1 id="edit">
+			<title>Editar</title>
+			
+			<para>Se você der um clique duplo ou digitar enter sobre uma imagem, você acessará o modo Editar, onde pode remover olho vermelho, cortar, e ajustar brilho e cores.</para>
+			
+			<sect2 id="edit-versions">
+				<title>Versões</title>
+				
+				<para>Quando você editar suas fotos, uma nova cópia (chamada uma versão) é criada, de forma que sua original nunca é alterada. Depois da primeira edição de foto, as edições subseqüentes modificarão a mesma versão. Se quiser criar múltiplas versões de sua foto, talvez com diferentes cortes e cores, pode fazer isso através da opção <menuchoice><guimenu>Arquivo</guimenu><guimenuitem>Criar uma nova versão</guimenuitem></menuchoice>.</para>
+			</sect2>
+
+			<sect2 id="edit-crop">
+				<title>Cortar</title>
+				
+				<para>
+					Cropping an image is a great way to improve the quality of a photograph by 
+					improving how it is framed. You crop a photo by selecting the part of the photo 
+					you want to keep. If you want your photo to be the exact dimensions necessary 
+					for a certain print size, you can constrain the kind of selection F-Spot will allow 
+					you to draw by choosing the appropriate size from the constraint drop down. 
+					See the <xref linkend="edit-remove-red-eye"/> below for details on making 
+					a selection on your photo.
+				</para>
+				<figure>
+					<title>Crop tool</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-crop.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<para>Uma vez que tenha feito sua seleção de corte, você deve clicar no botão cortar abaixo da imagem para finalizar o corte. Se você estiver trabalhando com a foto original, o corte cria uma nova versão da sua foto.</para>
+			</sect2>
+			
+			<sect2 id="edit-straighten">
+				<title>Straighten</title>
+				
+				<para>
+					Straighten effect is a tool to level a photo, quite helpful for landscapes 
+					taken without a tripod, when (imaginary) line of horizon is not at 0°. 
+					This tool rotates an image by a specified angle and automagically crops the 
+					resulted image, so that you always see a perfect rectangle.
+				</para>
+				<figure>
+					<title>Straighten tool</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-straighten.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+
+			<sect2 id="edit-adjust-colors">
+				<title>Ajustar Cores</title>
+				
+				<para>
+					To adjust the brightness, contrast, and colors of a photo, first click 
+					the <guibutton>Adjust the photo colors</guibutton> icon to open the 
+					adjustment dialog. Change then some settings and save them with 
+					<guibutton>OK</guibutton>. 
+				</para>
+				<figure>
+					<title>Adjust Colors tool</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-adjust-colors.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+			
+			<sect2 id="edit-auto-color">
+				<title>AutoColor</title>
+				
+				<para>
+					This effect automatically adjusts color levels to make a pretty balanced 
+					picture color-wise. It serves best for pictures taken with automatical 
+					white balance, when camera didn't manage to do the job well.
+				</para>
+				<figure>
+					<title>AutoColor</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-autocolor.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+
+			<sect2 id="edit-desaturate">
+				<title>Desaturate</title>
+				
+				<para>
+					To make a colorful photo a black and white one, open a photo of choice 
+					and press <guibutton>Desaturate</guibutton> button.
+				</para>
+				<figure>
+					<title>Desaturation tool</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-desaturate.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+
+			<sect2 id="edit-sepia">
+				<title>Sepia</title>
+				
+				<para>
+					To make a colorful photo look like an old-style picture in sepia tones, 
+					open a photo of choice and press <guibutton>Sepia</guibutton> button.
+				</para>
+				<figure>
+					<title>Desaturation tool</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-sepia.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+
+			<sect2 id="edit-remove-red-eye">
+				<title>Remover Olhos Vermelhos</title>
+				
+				<para>
+					To remove redeye from a photo, you need to select a zone containing 
+					the eyes. You may want to zoom in on the image to accurately select 
+					the eyes in the photo. You should be able to correct both eyes on the 
+					same person in one shot, or even the eyes from multiple people at once. 
+					If this doesn't work for you, or the selected zone contains some vivid 
+					red parts (lips, ...) you'll probably have to correct one red eye at a time.
+				</para>
+				<para>Para fazer sua seleção, clique em um canto do retângulo que será sua seleção, e arraste seu mouse para o canto da diagonal e libere. Você pode redimensionar sua seleção arrastando suas bordas, ou movê-la clicando no centro e arrastando para onde quiser.</para>
+				<para>
+					Once you have selected a zone, you can remove the red from it by 
+					clicking the red-eye button beneath the photo.
+				</para>
+				<figure>
+					<title>Red-Eye tool</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-red-eye.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<tip>
+					<para>
+						You can change the threshold for redeyes detection by changing 
+						the gconf key 
+						<filename class="directory">/apps/f-spot/edit/redeye_threshold</filename>.
+					</para>
+				</tip>
+			</sect2>
+			
+			<sect2 id="edit-soft-focus">
+				<title>Soft Focus</title>
+				
+				<para>
+					In photography sharpening one region of a picture, while blurring 
+					all the rest, is a way to make an emphasis and grab attention. 
+					It is achieved by using a lens that allows shooting with a short 
+					distance in front of and beyond the subject that appears to be in 
+					focus. Soft focus effect is a way to emulate such a lens.
+				</para>
+				<figure>
+					<title>Soft Focus tool</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-soft-focus.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<para>
+					Click to choose central point of the area you want to be in focus 
+					and adjust amount of blurring, then click <guibutton>OK</guibutton>.
+				</para>
+			</sect2>
+
+			<sect2 id="edit-sharpen">
+				<title>Sharpen</title>
+				
+				<para>
+					Out-of-focus photographs and most digitized images often need a 
+					sharpness correction. The Unsharp Mask effect sharpens edges of 
+					the elements without increasing noise or blemish. To sharpen a 
+					photo choose <menuchoice><guimenu>Edit</guimenu>
+					<guimenuitem>Sharpen...</guimenuitem></menuchoice> and specify the 
+					following values:
+				</para>
+				
+				<itemizedlist>
+					<listitem>
+						<para>
+							<parameter class="option">Amount</parameter> — strength of sharpening.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<parameter class="option">Radius</parameter> — how many pixels on either 
+							side of an edge will be affected by sharpening. High resolution images 
+							allow higher radius.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<parameter class="option">Threshold</parameter> — the minimum difference 
+							in pixel values that indicates an edge where sharpen must be applied. 
+							This helps avoiding creation of blemishes in face, sky or water surface.
+						</para>
+					</listitem>
+				</itemizedlist>
+			</sect2>
+			
+			<sect2 id="edit-describe">
+				<title>Descrever</title>
+				
+				<para>Você também pode colocar a descrição da imagem clicando na caixa de entrada de texto abaixo da imagem e digitando.</para>
+				<para>Uma vez que tenha feito sua seleção de corte, você deve clicar no botão cortar abaixo da imagem para finalizar o corte. Se você estiver trabalhando com a foto original, o corte cria uma nova versão da sua foto.</para>
+			</sect2>
+
+			<sect2 id="edit-adjust-time">
+				<title>Adjust Time</title>
+				
+				<para>
+					In both 'browse' or 'edit' modes, you can adjust the time of one 
+					or multiple pictures (<menuchoice><guimenu>Edit</guimenu>
+					<guimenuitem>Adjust Time</guimenuitem></menuchoice>). Adjusting 
+					the time of multiple pictures at once helps you shift all an import 
+					roll if, e.g. the time on your camera is badly set or if you forgot 
+					to change it according to DST.
+				</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="tag">
+			<title>Etiqueta</title>
+			<para>F-Spot lhe possibilita organizar e curtir suas fotos ao associá-las às várias etiquetas personalizáveis. Uma etiqueta é basicamente um rótulo. F-Spot vem com etiquetas padronizadas de início; você é livre para alterá-las e adicionar novas. Por exemplo, se você quiser criar uma etiqueta para um evento especifico, você pode criar uma etiqueta com o mesmo nome do evento na categoria Eventos.</para>
+			<para>Existem várias formas de etiquetar fotos:</para>
+			<itemizedlist>
+				<listitem>
+					<para>arraste e solte a(s) foto(s) sobre a etiqueta</para>
+				</listitem>
+				<listitem>
+					<para>arraste e solte a etiqueta sobre a(s) foto(s)</para>
+				</listitem>
+				<listitem>
+					<para>através do menu de contexto da foto</para>
+				</listitem>
+				<listitem>
+					<para>através dos menus Etiquetas e Editar</para>
+				</listitem>
+				<listitem>
+					<para>ao digitá-las (pressione <keycap>t</keycap> para exibir a barra de texto de etiqueta, digite etiquetas separadas por vírgula) - com o complemento ao pressionar tab!</para>
+				</listitem>
+			</itemizedlist>
+			<para>A primeira foto que você associar a uma etiqueta será usada para o ícone da etiqueta.Você pode sempre editar o nome da etiqueta, da etiqueta principal e do ícone através do menu de contexto escolhendo <guilabel>Editar etiqueta</guilabel>.</para>
+			<para>Você pode alterar uma etiqueta principal arrastando-a e soltando-a onde desejar. Você pode também editar o nome da etiqueta selecionando-a e pressionando <keycap>F2</keycap>. Por último, se você tem o controle árvore de etiqueta ativo (por exemplo, acabou de clicar numa etiqueta), pode iniciar a digitar o nome de uma etiqueta, e todas as etiquetas expandidas na lista serão procuradas e você pulará para aquelas correspondentes.</para>
+			
+			<para>
+				You can also change size of tag icons in the sidebar or even make tag 
+				icons invisible by selecting preferred option from <menuchoice>
+				<guimenu>View</guimenu><guimenuitem>Tag Icons</guimenuitem></menuchoice> 
+				menu.
+			</para>
+			
+			<tip>
+				<para>
+					F-Spot can write tags as metadata fields into JPEG files. Tags for 
+					various RAW files, PNG, TIFF, and others are written to F-Spot's 
+					database. You will have to re-tag these files if you re-import your 
+					collection.
+				</para>
+			</tip>
+		</sect1>
+	</chapter>
+
+	<chapter id="enjoying">
+		<title>Curtindo suas fotos</title>
+		<sect1 id="enjoying-browse">
+			<title>Navegar</title>
+			<para>Você pode usar o controle deslizante para navegar pelas suas fotos por mês ou diretório. Para alterar essa configuração, vá em<menuchoice><guimenu>Ver</guimenu><guimenuitem>Ordenar por</guimenuitem></menuchoice>.</para>
+		</sect1>
+		<sect1 id="enjoying-search">
+			<title>Pesquisar</title>
+			
+			<para>
+				F-Spot uses search search filters to help you better define search criteria.
+			</para>
+			
+			<sect2 id="enjoying-search-tags">
+				<title>Tags</title>
+				
+				<para>Você pode iniciar uma pesquisa dando um clique duplo ou ativando uma etiqueta da lista de etiquetas. Como alternativa, pode mostrar a barra de pesquisa com <menuchoice><guimenu>Localizar</guimenu><guimenuitem>Mostrar Barra de Pesquisa</guimenuitem></menuchoice>. Com a barra de pesquisa exibida, você pode arrastar a etiqueta para a barra de pesquisa.</para>
+				<para>Para localizar fotos que estejam marcadas por duas etiquetas, ative a primeira na exibição de etiqueta ou arraste-a para a barra de pesquisa, então arraste a segunda etiqueta e solte-a sobre a primeira. Você pode também usar o menu de contexto da segunda etiqueta na exibição de etiqueta, ou usar o menu <guimenu>Localizar</guimenu>, e escolher <guimenuitem>Localizar Com...</guimenuitem> e selecionar a primeira etiqueta (ou grupo de etiquetas).</para>
+				<para>Você pode arrastar o ícone da etiqueta na barra de pesquisa para alterar de encontrando por essa e outra etiqueta para encontrando por essa ou outra etiqueta.</para>
+				<para>Você pode procurar por fotos que não tenham uma etiqueta específica ao dar um clique duplo na etiqueta na barra de pesquisa. Como alternativa, pode abrir o menu de contexto da etiqueta na barra de pesquisa e selecionar <guimenuitem>Excluir</guimenuitem>.</para>
+				<para>Para remover a etiqueta da barra de pesquisa, arraste-a para fora da barra de pesquisa, ou vá ao menu de contexto e selecione <guimenuitem>Remover</guimenuitem>.</para>
+				<para>Por padrão, fotos etiquetadas como <emphasis>Ocultas</emphasis> não serão mostradas. Você deve incluir explicitamente a etiqueta <emphasis>Ocultas</emphasis> em sua pesquisa para mostrar essas fotos.</para>
+			</sect2>
+
+			<sect2 id="enjoying-search-import-rolls">
+				<title>Import Rolls</title>
+				<para>
+					F-Spot remembers what pictures were imported every now and then. Use 
+					<menuchoice><guimenu>Find</guimenu><guisubmenu>Import Roll</guisubmenu>
+					<guimenuitem>Last import roll</guimenuitem></menuchoice> to limit search 
+					to last importing session or use <menuchoice><guimenu>Find</guimenu>
+					<guisubmenu>Import Roll</guisubmenu><guimenuitem>Select Import Rolls...</guimenuitem>
+					</menuchoice> to make a finer selection of imported photos:
+				</para>
+				<itemizedlist>
+					<listitem>
+						<para>
+							<parameter class="option">At</parameter> — to select photos from a particular importing session
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<parameter class="option">After</parameter> — to select all photos imported begining with a particular importing sessio
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<parameter class="option">Between</parameter> — to select all photos imported between two particular importing sessions
+						</para>
+					</listitem>
+				</itemizedlist>
+				<para>
+					Every time you change settings of the filter, amount of selected photos 
+					will appear in the bottom part of the dialog.
+				</para>
+				<para>
+					When you apply Import Roll filter, in the Find bar you will see 
+					<guilabel>Find: Import Roll</guilabel>. Now you can add some other 
+					filter to finetune your selection.
+				</para>
+				<para>
+					If you don't need the Import Roll filter anymore, choose <menuchoice>
+					<guimenu>Find</guimenu><guisubmenu>Import Roll</guisubmenu>
+					<guimenuitem>Clear roll filter</guimenuitem></menuchoice> to remove 
+					Import Roll from search criteria. You can also click the close button 
+					(<guibutton>X</guibutton>) of the search bar to discard all the current 
+					search options.
+				</para>
+				<tip>
+					<para>
+						The number of displayed rolls in the dialog is defined by the gconf key 
+						<filename class="directory">/apps/f-spot/import/gui_roll_history</filename>. 
+						Default value is 10.
+					</para>
+				</tip>
+			</sect2>
+			
+			<sect2 id="enjoying-search-type-to-find">
+				<title>Type-to-find</title>
+				<para>Existe também uma entrada digite-para-localizar. Pressione <keycap>/</keycap> para abri-la. Não é possível usar ao mesmo tempo como barra de localização. Você pode digitar consultas como "EtiquetaA e (EtiquetaB ou (EtiquetaC e EtiquetaD))". Em qualquer ponto, se F-Spot reconhecer o que você digitou como uma consulta válida, irá atualizar sua pesquisa. Ainda não há suporte para o operador <emphasis>não</emphasis>.</para>
+				
+				<para>
+					This function will also search for the typed text into photos comments and filename.
+				</para>
+			</sect2>
+		</sect1>
+		
+		<sect1 id="enjoying-fullscreen-mode-and-slideshows">
+			<title>Modo Tela Cheia e Apresentação de Slide</title>
+			<para>Para menos distrações e maior exibição, você pode ver suas fotos em modo tela cheia. Você controla quando mostrar a próxima foto ou retornar à anterior. Entre em modo tela cheia pressionando <keycap>F11</keycap> a qualquer hora ou pressionando o botão na barra de ferramentas.</para>
+			<figure>
+				<title>Tela Cheia</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="figures/f-spot-fullscreen.png"/>
+					</imageobject>
+				</mediaobject>
+			</figure>
+			<para>No modo apresentação de slides, você pode se acomodar e ver suas fotos como se elas fossem apresentadas para você. Pode iniciar a apresentação ao apertar o botão na barra de ferramentas.</para>
+			<figure>
+				<title>Apresentação de Slide</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="figures/f-spot-slideshow.png"/>
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</sect1>
+	</chapter>
+	
+	<chapter id="sharing">
+		<title>Compartilhando suas fotos</title>
+		
+		<abstract>
+			<para>Existem muitas formas de compartilhar suas fotos usando F-Spot. Todos os métodos a seguir compartilharão apenas as fotos selecionadas quando forem executados.</para>
+		</abstract>
+		
+		<sect1 id="sharing-e-mail">
+			<title>E-mail</title>
+			<para>Enviar por e-mail suas fotos diretamente do F-Spot com o menu <menuchoice><guimenu>Arquivo</guimenu><guimenuitem>Enviar E-mail</guimenuitem></menuchoice> .</para>
+			<note>
+				<title>Note 1</title>
+				<para>
+					The email program used for this is defined at the GNOME level. 
+					You can change the default e-mailer for your user using the 
+					<application>Preferred Applications</application> tool in 
+					<menuchoice><guimenu>System</guimenu>
+					<guisubmenu>Preferences</guisubmenu></menuchoice>.
+				</para>
+			</note>
+			<note>
+				<title>Note 2</title>
+				<para>
+					If some of the photos you'd like to send by email are in a format 
+					that F-Spot can't write (e.g. RAW images), the size selection dialog 
+					will become insensitive and the originals will be sent.
+				</para>
+			</note>
+			<tip>
+				<para>
+					If you're sending resized pictures, F-Spot will keep the modified versions 
+					somewhere in the <filename class="directory">/tmp</filename> directory for 
+					30 seconds. It's not an issue with evolution, which makes it's own local 
+					copy of the attachments, but could be a bit shorter if you're using Thunderbird. 
+					You can change the delay by editing the gconf key 
+					<filename class="directory">/apps/f-spot/export/email/delete_timeout_seconds</filename>.
+				</para>
+			</tip>
+		</sect1>
+
+		<sect1 id="sharing-print">
+			<title>Imprimir</title>
+			<para>Imprimir suas fotos com o menu <menuchoice><guimenu>Arquivo</guimenu><guimenuitem>Imprimir</guimenuitem></menuchoice> .</para>
+		</sect1>
+
+		<sect1 id="sharing-burn-to-cd">
+			<title>Gravar para CD</title>
+			<para>
+				Burn your photos to CD or DVD with the <menuchoice><guimenu>File</guimenu>
+				<guisubmenu>Export</guisubmenu><guimenuitem>Export to CD</guimenuitem>
+				</menuchoice> menu.
+			</para>
+		</sect1>
+
+		<sect1 id="website-gallery-folder">
+			<title>Gerar uma Galeria Online ou Pasta</title>
+			<para>O recurso <menuchoice><guimenu>Arquivo</guimenu><guimenuitem>Exportar</guimenuitem><guimenuitem>Exportar para Pasta</guimenuitem></menuchoice> lhe permite três maneiras de exportar suas imagens.</para>
+			<itemizedlist>
+				<listitem>
+					<para><guilabel>Usar Original</guilabel> exporta suas fotos prontas para serem usadas com o software livre <ulink url="http://jimmac.musichall.cz/original.php"> Original Photo Gallery</ulink> de Jakub Steiner. Se não estiver certo desta opção, provavelmente não é a apropriada para você.</para>
+				</listitem>
+				<listitem>
+					<para><guilabel>Usar arquivos HTML estáticos</guilabel> exporta suas fotos para um site interativo, pronto para você enviar.</para>
+				</listitem>
+				<listitem>
+					<para><guilabel>Arquivos Simples</guilabel> exporta suas imagens como arquivos para dentro de diretórios, sem colocá-las em uma galeria.</para>
+				</listitem>
+			</itemizedlist>
+		</sect1>
+
+		<sect1 id="sharing-flickr-or-php-gallery">
+			<title>Post to your online galleries</title>
+			<para>
+				If you use Flickr, SmugMug, 23hq or Picasa Web Album, you can post your files 
+				directly from F-Spot with the <menuchoice><guimenu>File</guimenu>
+				<guisubmenu>Export</guisubmenu></menuchoice> menu, choosing corresponding submenu item.
+			</para>
+			<para>Se você usa o programa PHP conhecido como <ulink url="http://gallery.sourceforge.net/"> Gallery</ulink>, você pode postar suas fotos para um álbum existente com o menu <menuchoice><guimenu>Arquivo</guimenu><guimenuitem>Exportar</guimenuitem><guimenuitem>Exportar para Galeria Online</guimenuitem></menuchoice> . Você deve primeiro habilitar o módulo Remoto dentro de sua instalação do Gallery.</para>
+			<note>
+				<title>Note for Gallery 2.2 users</title>
+				<para>
+					The Remote plugin for Gallery should be 1.0.8 or newer.
+				</para>
+			</note>
+			<para>
+				<ulink url="http://pennave.sourceforge.net">PennAve</ulink> is a Python 
+				web-application that directly uses F-Spot's database to present a dynamic 
+				gallery of your photos and tags.
+			</para>
+			<para>
+				<ulink url="http://www.conduit-project.org">Conduit</ulink> is an application 
+				that can sync photos that have a particular tag with your Flickr or Picasa 
+				Web Album web storage.
+			</para>
+		</sect1>
+	</chapter>
+
+	<chapter id="cms">
+		<title>Color management</title>
+
+		<sect1 id="cms-what-is-cms">
+			<title>What's color management</title>
+			
+			<para>
+				When you capture a photo and look at it on a display, it looks different than 
+				on a camera's preview display or on any other display. It will also look 
+				different when you print it. This is because every device has unique color 
+				reproduction capabilities.
+			</para>
+
+			<para>
+				Color management system (CMS) is a tool to achieve reliable color reproduction 
+				for both display and output (e.g. a printer). A CMS relies on color profiles 
+				to map original colors to the color that a device can reproduce so that colors 
+				will appear the same way everywhere — on a computer LCD monitor, on a print 
+				from your local photolab etc.
+			</para>
+		</sect1>
+
+		<sect1 id="cms-what-is-icc-profile">
+			<title>What's a color profile</title>
+			
+			<para>
+				A color profile is a file with either .icc (thus its is often called an ICC 
+				profile) or .icm extension that describes how device's colors correspond to a 
+				universal description of colors.
+			</para>
+
+			<para>
+				There are several types of profiles: 
+			</para>
+
+			<itemizedlist>
+				<listitem>
+					<para>
+						Input device profile. It's profile for a camera or a profile that an 
+						application like XSane embeds into a scanned image. 
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Working space profile. It's a profile that describes color space in 
+						which all operations are done inside an application. Usually very wide 
+						gamut profiles like AdobeRGB1998 or ProPhotoRGB are used for that.
+					</para>				
+				</listitem>
+				<listitem>
+					<para>
+						Display profile. It's a profile for a monitor. 
+					</para>				
+				</listitem>
+				<listitem>
+					<para>
+						Output profile. This is usually a profile for you printer. 
+					</para>				
+				</listitem>
+			</itemizedlist>					
+
+			<para>
+				Currently F-Spot allows setting only display and output profiles. 
+				All color operations are done in sRGB color space. 
+			</para>
+		</sect1>
+
+		<sect1 id="cms-how-to-get-icc-profile">
+			<title>How to get my screen/printer color profile </title>
+
+			<para>
+				There are few ways to get a color profile. 
+			</para>
+			
+			<sect2 id="cms-icc-from-cd-or-internet">
+				<title> From CD or Internet </title>
+
+				<para>
+					Many hardware manufacturers put color profiles into CD in the bundle. 
+					If you have one (from monitor or printer), you can use it. Or you can 
+					download it from the Internet (usually, from support section of the 
+					manufacturer's web site). Some camera manufacturers (Nikon, Canon) 
+					also provide ICC profiles.
+				</para>
+			</sect2>
+
+			<sect2 id="cms-icc-from-calibrating-and-profiling">
+				<title>Calibrating and profiling</title>
+
+				<para>
+					Best results can be achieved by calibrating and profiling devices with 
+					a measurement device. It is not so difficult, but it means that you need 
+					a spectrophotometer to do all measurements and create an ICC profile.
+				</para>
+
+				<para>
+					If you are on Windows or Mac OS X, you can use manufacturer's software 
+					coming with a spectrophotometer. On Linux you will have to use either 
+					<ulink url="http://www.argyllcms.com">Argyll</ulink>, which is a set of 
+					versatile command line tools, or 
+					<ulink url="http://lprof.sourceforge.net/">LProf</ulink>, which has a 
+					graphical user interface. 
+				</para>
+				<para>
+					Please refer to documentation of third party hardware and software 
+					vendors for details.
+				</para>
+			</sect2>
+
+			<sect2 id="cms-icc-from-embedding">
+				<title>Embedding</title>
+
+				<para>
+					Image formats themselves (such as TIFF, JPEG, PNG...) may contain embedded 
+					color profiles. If color management is enabled, F-Spot looks for such 
+					embedded profiles and takes them into consideration.
+				</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="cms-how-to-use">
+			<title>How to use color management in F-Spot</title>
+			
+			<para>
+				Color management in F-Spot can use only RGB profiles at this time 
+				(and you can't see other profiles in the F-Spot).
+			</para>
+
+			<itemizedlist>
+				<listitem>
+					<para>
+						Copy your color profiles into the 
+						<filename class="directory">/usr/share/color/icc</filename> or 
+						<filename class="directory">/usr/local/share./color/icc</filename> 
+						directory.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Enable the color management with the <menuchoice>
+						<guimenu>Edit</guimenu><guimenuitem>Preferences</guimenuitem>
+						</menuchoice> menu.
+					</para>				
+				</listitem>
+				<listitem>
+					<para>
+						Select <guilabel>Display</guilabel> and <guilabel>Output</guilabel> 
+						profiles.
+					</para>				
+				</listitem>
+			</itemizedlist>					
+
+			<tip>
+				<para>
+					You can use <ulink url="http://burtonini.com/blog/computers/xicc">xicc</ulink> 
+					to load ICC profile to display and use the loaded profile from F-Spot. 
+					Just mark the checkbox <guilabel>Try to use the system display 
+					profile</guilabel>.
+				</para>
+			</tip>
+		</sect1>
+	</chapter>
+	
+	<chapter id="extend">
+		<title>Extend functionality</title>
+		
+		<sect1 id="extend-what-extensions-are">
+			<title>What extensions are</title>
+
+			<para>
+				F-Spot extensions are means to add new functionality to the application. 
+				F-Spot supports two types of extension: exporters (which allow exporting 
+				photos to new web services or data storages) and tools (which allow new 
+				ways of color correction, duplicate photos finders etc.). Extensions are 
+				distributed in form of extension packages.
+			</para>
+			<para>
+				In the best traditions of not reinventing the wheel extensions can use other 
+				extensions, which means that one extension cannot work, if another extension 
+				is not installed. This concept of dependance actually means that
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						you cannot install an extension, if the extension it depends on, is not present in the system
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						you cannot remove an extension on which some other extension depends
+					</para>
+				</listitem>
+			</itemizedlist>
+		</sect1>
+		
+		<sect1 id="extend-managing-extensions">
+			<title>Managing extensions</title>
+			
+			<para>
+				To manage extensions choose <menuchoice><guimenu>Edit</guimenu>
+				<guimenuitem>Manage Extensions</guimenuitem></menuchoice> menu item.
+			</para>
+
+			<sect2 id="extend-managing-extensions-managing-extension-repositories">
+				<title>Managing extension repositories</title>
+
+				<para>
+					Simply put, repositories are extension storages. They can be either network 
+					or local. To add a new repository click Repositories button, choose type of 
+					the repository you are about to add and provide either URL or path. If the URL 
+					or path you specified doesn't contain a description (index) file for extensions, 
+					a warning message will pop up to tell you that.
+				</para>
+				<para>
+					To remove a repository click <guibutton>Repositories</guibutton> button again, 
+					choose the repository you are about to delete and click 
+					<guibutton>Delete</guibutton> button.
+				</para>
+			</sect2>
+			
+			<sect2 id="extend-managing-extensions-installing-and-updating-extensions">
+				<title>Installing and updating extensions</title>
+
+				<para>
+					To install an extension click <guibutton>Install extensions...</guibutton> button. 
+					In the newly presented dialog
+				</para>
+				<orderedlist>
+					<listitem>
+						<para>
+							Choose repository to install from all known repositories or just one of 
+							available repositories.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Choose, what extension packages you want to see: All, Only new, Only updates.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Click the <guibutton>Update</guibutton> button to update list of available 
+							extension packages by given criteria.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Choose extensions you want to install/update, click <guibutton>Information</guibutton> 
+							to see summary on selected package, if you want to.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Click <guibutton>Forward</guibutton> to proceed with installation.
+						</para>
+					</listitem>
+				</orderedlist>
+			</sect2>
+			
+			<sect2 id="extend-managing-extensions-enabling-and-disabling-extensions">
+				<title>Enabling and disabling extensions</title>
+
+				<para>
+					You might want to temporarily enable or disable a particular extension package, 
+					for example, if the extension is not stable enough to handle a large amount of 
+					photos or if menus get crowded with extensions.
+				</para>
+				<para>
+					In the <guilabel>Manage Extensions</guilabel> dialog select the extension 
+					package and click <guibutton>Enable</guibutton> or <guibutton>Disable</guibutton>. 
+					You will have to restart F-Spot to let changes apply.
+				</para>
+			</sect2>
+			
+			<sect2 id="extend-managing-extensions-removing-extensions">
+				<title>Removing extensions</title>
+
+				<para>
+					If you don't need an extension you can remove it from the system completely. 
+					In the <guilabel>Manage Extensions</guilabel> dialog select the extension 
+					package you want to remove and click <guibutton>Delete</guibutton>.
+				</para>
+			</sect2>
+			
+			<sect2 id="extend-managing-extensions-reading-summary-of-extensions">
+				<title>Reading summary of extensions</title>
+
+				<para>
+					Every extension package contains metadata that provides the following information about the extension:
+				</para>
+
+				<orderedlist>
+					<listitem>
+						<para>
+							Description, which usually covers puprose of the extension
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Version
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Author
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Dependencies
+						</para>
+					</listitem>
+				</orderedlist>
+				
+				<para>
+					In the <guilabel>Manage Extensions</guilabel> dialog select the extension 
+					package you want to read summary of and click <guibutton>Information</guibutton>.
+				</para>
+			</sect2>
+		</sect1>
+		
+		<sect1 id="extend-developing-extensions">
+			<title>Developing extensions</title>
+
+			<para>
+				<ulink url="http://f-spot.org/Extend_F-Spot">Extend F-Spot</ulink> document 
+				gives instructions on developing your own extensions for F-Spot.
+			</para>
+		</sect1>
+	</chapter>
+	
+	<chapter id="shortcuts">
+		<title>Atalhos</title>
+		
+		<sect1 id="Global-Shortcuts">
+			<title>Atalhos Globais</title>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<thead>
+						<row>
+							<entry>Tecla</entry>
+							<entry>Ação</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<keycap>[</keycap>
+							</entry>
+							<entry>Rotacionar as fotos selecionadas à esquerda</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>]</keycap>
+							</entry>
+							<entry>Rotacionar as fotos selecionadas à direita</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>Del</keycap>
+							</entry>
+							<entry>
+								Remove selected photos from F-Spot's catalogue
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Shift</keycap><keycap>Del</keycap></keycombo>
+							</entry>
+							<entry>
+								Delete selected photos permanently from the drive
+							</entry>
+						</row>
+ 
+						<row>
+							<entry>
+								<keycap>t</keycap>
+							</entry>
+							<entry>Ver ou editar etiquetas para fotos selecionadas</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>F11</keycap>
+							</entry>
+							<entry>Visualização tela cheia</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo>
+							</entry>
+							<entry>Exibir informações sobre a foto</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>Igual</keycap></keycombo>
+							</entry>
+							<entry>Zoom-in</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>Menos</keycap></keycombo>
+							</entry>
+							<entry>Zoom-out</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo>
+							</entry>
+							<entry>Importar fotos</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Alt</keycap><keycap>0-5</keycap></keycombo>
+							</entry>
+							<entry>
+								Alt plus a number from 0 to 5 rate the selected picture(s)
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</sect1>
+		
+		<sect1 id="shortcuts-browse-mode">
+			<title>Atalhos do Modo de Navegação</title>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<thead>
+						<row>
+							<entry>Tecla</entry>
+							<entry>Ação</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>A</keycap></keycombo>
+							</entry>
+							<entry>Selecionar todas</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap>
+								<keycap>A</keycap></keycombo>
+							</entry>
+							<entry>Desmarcar todas</entry>
+						</row>
+						<row>
+							<entry>
+								Arrow keys or <keycap>H</keycap>, <keycap>J</keycap>, 
+								<keycap>K</keycap>, <keycap>L</keycap>
+							</entry>
+							<entry>Mover foco</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>Ctrl</keycap>-Arrow key
+							</entry>
+							<entry>Mover o foco sem alterar a seleção</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>Barra de espaço</keycap>
+							</entry>
+							<entry>Selecionar ou desmarcar a foto ativa</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Shift</keycap>
+								<keycap>Arrow key</keycap></keycombo>
+							</entry>
+							<entry>Alterar a seleção da foto</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap>
+								<keycap>Left arrow or Right arrow</keycap></keycombo>
+							</entry>
+							<entry>Adicionar/Remover todas as fotos na linha, na direção pressionada, para a seleção</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>V</keycap>
+							</entry>
+							<entry>Abre janela instantânea para uma visualização maior da foto apontada pelo mouse</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Shift</keycap><keycap>V</keycap></keycombo>
+							</entry>
+							<entry>Abre janela instantânea para uma visualização maior de um histograma da foto apontada pelo mouse</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</sect1>
+		
+		<sect1 id="shortcuts-tag">
+			<title>Atalhos de Etiquetas</title>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<thead>
+						<row>
+							<entry>Tecla</entry>
+							<entry>Ação</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<keycap>F2</keycap>
+							</entry>
+							<entry>Renomear etiqueta selecionada</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>T</keycap></keycombo>
+							</entry>
+							<entry>Adicionar etiquetas às fotos selecionadas</entry>
+						</row>
+						<row>
+							<entry>n/a</entry>
+							<entry>Arraste e solte etiquetas para movê-las</entry>
+						</row>
+						<row>
+							<entry>n/a</entry>
+							<entry>Digite o nome da etiqueta para pular até ela (apenas se etiqueta for mostrada/expandida)</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</sect1>
+
+		<sect1 id="shortcuts-edit-mode">
+			<title>Atalhos do Modo de Edição</title>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<thead>
+						<row>
+							<entry>Tecla</entry>
+							<entry>Ação</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<keycap>Page Up</keycap>, <keycap>Backspace</keycap>, <keycap>B</keycap>
+							</entry>
+							<entry>Ir para a Foto Anterior</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>Page Down</keycap>, <keycap>Barra de espaço</keycap>, <keycap>N</keycap>
+							</entry>
+							<entry>Ir para a Foto Seguinte</entry>
+						</row>
+						<row>
+							<entry>
+								Arrow keys or <keycap>H</keycap>, <keycap>J</keycap>, 
+								<keycap>K</keycap>, <keycap>L</keycap>
+							</entry>
+							<entry>
+								Go to Previous/Next photo or move around a zoomed photo
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>f</keycap>
+							</entry>
+							<entry>Visualização tela cheia</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>0</keycap>
+							</entry>
+							<entry>Ajustar a imagem para a tela</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>1</keycap>
+							</entry>
+							<entry>Fator de Zoom para 1.0 (1 pixel da tela por pixel da imagem)</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>2</keycap>
+							</entry>
+							<entry>Fator de Zoom para 2.0 (4 pixels da tela por pixel da imagem)</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>Escapar</keycap>
+							</entry>
+							<entry>Retorna ao modo Navegador</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>V</keycap>
+							</entry>
+							<entry>
+								Examine photo with magnifying glass (Loupe). Doubleclick on the 
+								Loupe, or type <keycap>v</keycap> again to close it.
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>Shift</keycap>-Mousewheel
+							</entry>
+							<entry>
+								Faster filmstrip scrolling
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>i</keycap>
+							</entry>
+							<entry>
+								Toggle infobox visibility ''(only when in full screen)''
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</sect1>
+	</chapter>
+
+</book>
