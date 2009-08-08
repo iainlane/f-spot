@@ -17,7 +17,7 @@ using Banshee.Database;
 using FSpot.Utils;
 using FSpot;
 
-public class RollStore : DbStore
+public class RollStore : DbStore<Roll>
 {
 	public RollStore (QueuedSqliteDatabase database, bool is_new) : base (database, false)
 	{
@@ -25,9 +25,9 @@ public class RollStore : DbStore
 			return;
 
 		Database.ExecuteNonQuery (
-			"CREATE TABLE rolls (                            " +
-			"	id          INTEGER PRIMARY KEY NOT NULL,  " +
-			"       time        INTEGER NOT NULL		   " +
+			"CREATE TABLE rolls (\n" +
+			"	id	INTEGER PRIMARY KEY NOT NULL, \n" +
+			"       time	INTEGER NOT NULL\n" +
 			")");
 	}
 
@@ -47,7 +47,7 @@ public class RollStore : DbStore
 		return Create (System.DateTime.UtcNow);
 	}
 
-	public override DbItem Get (uint id)
+	public override Roll Get (uint id)
 	{
 		Roll roll = LookupInCache (id) as Roll;
 		if (roll != null)
@@ -56,20 +56,20 @@ public class RollStore : DbStore
 		SqliteDataReader reader = Database.Query(new DbCommand ("SELECT time FROM rolls WHERE id = :id", "id", id));
 
 		if (reader.Read ()) {
-			roll = new Roll (id, Convert.ToUInt32 (reader [0]));
+			roll = new Roll (id, Convert.ToUInt32 (reader ["time"]));
 			AddToCache (roll);
 		}
 
 		return roll;
 	}
 
-	public override void Remove (DbItem item)
+	public override void Remove (Roll item)
 	{
 		RemoveFromCache (item);
 		Database.ExecuteNonQuery (new DbCommand ("DELETE FROM rolls WHERE id = :id", "id", item.Id));
 	}
 
-	public override void Commit (DbItem item)
+	public override void Commit (Roll item)
 	{
 		// Nothing to do here, since all the properties of a roll are immutable.
 	}
@@ -77,9 +77,9 @@ public class RollStore : DbStore
 	public uint PhotosInRoll (Roll roll)
 	{
 		uint number_of_photos = 0;
-		using (SqliteDataReader reader = Database.Query (new DbCommand ("SELECT count(*) FROM photos WHERE roll_id = :id", "id", roll.Id))) {
+		using (SqliteDataReader reader = Database.Query (new DbCommand ("SELECT count(*) AS count FROM photos WHERE roll_id = :id", "id", roll.Id))) {
 			if (reader.Read ())
-				number_of_photos = Convert.ToUInt32 (reader [0]);
+				number_of_photos = Convert.ToUInt32 (reader ["count"]);
                
 			reader.Close ();
 		}
@@ -95,17 +95,17 @@ public class RollStore : DbStore
 	{
 		ArrayList list = new ArrayList ();
 
-		string query = "SELECT DISTINCT rolls.id, rolls.time FROM rolls, photos WHERE photos.roll_id = rolls.id ORDER BY rolls.time DESC";
+		string query = "SELECT DISTINCT rolls.id AS roll_id, rolls.time AS roll_time FROM rolls, photos WHERE photos.roll_id = rolls.id ORDER BY rolls.time DESC";
 		if (limit >= 0)
 			query += " LIMIT " + limit;
 
 		using (SqliteDataReader reader = Database.Query(query)) {
 			while (reader.Read ()) {
-				uint id = Convert.ToUInt32 (reader[0]);
+				uint id = Convert.ToUInt32 (reader["roll_id"]);
 
 				Roll roll = LookupInCache (id) as Roll;
 				if (roll == null) {
-					roll = new Roll (id, Convert.ToUInt32 (reader[1]));
+					roll = new Roll (id, Convert.ToUInt32 (reader["roll_time"]));
 					AddToCache (roll);
 				}
 				list.Add (roll);

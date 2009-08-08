@@ -12,7 +12,6 @@
 using Gdk;
 using GLib;
 using Gtk;
-using GtkSharp;
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -29,11 +28,13 @@ namespace FSpot {
 		FSpot.Delay commit_delay; 
 	
 		private bool has_selection = false;
-		private FSpot.PhotoImageView photo_view;
+		private PhotoImageView photo_view;
 		private ScrolledWindow photo_view_scrolled;
 		private EventBox background;
 		
 		private Filmstrip filmstrip;
+		VBox inner_vbox;
+		HBox inner_hbox;
 	
 		private Widgets.TagView tag_view;
 		
@@ -53,10 +54,13 @@ namespace FSpot {
 		public delegate void UpdateFinishedHandler (PhotoView view);
 		public event UpdateFinishedHandler UpdateFinished;
 
-		public delegate void DoubleClickedHandler (Widget widget, BrowsableEventArgs args);
-		public event DoubleClickedHandler DoubleClicked;
+		public event EventHandler<BrowsableEventArgs> DoubleClicked;
 	
-		public FSpot.PhotoImageView View {
+		public Orientation FilmstripOrientation {
+			get { return filmstrip.Orientation; }
+		}
+	
+		public PhotoImageView View {
 			get { return photo_view; }
 		}
 	
@@ -217,8 +221,13 @@ namespace FSpot {
 			changed_photo = Item.Index;
 			commit_delay.Start ();
 	 	}
+
+		public void UpdateTagView ()
+		{
+			tag_view.QueueDraw ();
+		}
 	
-		private void HandlePhotoChanged (FSpot.PhotoImageView view)
+		void HandlePhotoChanged (object sender, EventArgs e)
 		{
 			if (query is PhotoQuery) {
 				CommitPendingChanges ();
@@ -235,6 +244,56 @@ namespace FSpot {
 		{
 			CommitPendingChanges ();
 			Dispose ();
+		}
+	
+		private void OnPreferencesChanged (object sender, NotifyEventArgs args)
+		{
+			LoadPreference (args.Key);
+		}
+
+		private void LoadPreference (String key)
+		{
+			switch (key) {
+			case Preferences.FILMSTRIP_ORIENTATION:
+				PlaceFilmstrip ((Orientation) Preferences.Get<int> (key));
+				break;
+			}
+		}
+
+		public void PlaceFilmstrip (Orientation pos)
+		{
+			PlaceFilmstrip (pos, false);
+		}
+
+		public void PlaceFilmstrip (Orientation pos, bool force)
+		{
+			if (!force && filmstrip.Orientation == pos)
+				return;
+			filmstrip.Orientation = pos;
+
+			System.Collections.IEnumerator widgets;
+			switch (pos) {
+			case Orientation.Horizontal:
+				widgets = inner_hbox.AllChildren.GetEnumerator ();
+				while (widgets.MoveNext ())
+					if (widgets.Current == filmstrip) {
+						inner_hbox.Remove (filmstrip);
+						break;
+					}
+				inner_vbox.PackStart (filmstrip, false, false, 0); 
+				inner_vbox.ReorderChild (filmstrip, 0);
+				break;
+			case Orientation.Vertical:
+				widgets = inner_vbox.AllChildren.GetEnumerator ();
+				while (widgets.MoveNext ())
+					if (widgets.Current == filmstrip) {
+						inner_vbox.Remove (filmstrip);
+						break;
+					}
+				inner_hbox.PackEnd (filmstrip, false, false, 0);
+				break;
+			}
+			Preferences.Set (Preferences.FILMSTRIP_ORIENTATION, (int) pos);
 		}
 	
 		public bool FilmStripVisibility {
@@ -263,12 +322,13 @@ namespace FSpot {
 			frame.ShadowType = ShadowType.In;
 			vbox.PackStart (background, true, true, 0);
 			
-			Box inner_vbox = new VBox (false , 2);
+			inner_vbox = new VBox (false , 2);
+			inner_hbox = new HBox (false , 2);
 	
-			frame.Add (inner_vbox);
+			frame.Add (inner_hbox);
 			
 			BrowsablePointer bp = new BrowsablePointer (query, -1);
-			photo_view = new FSpot.PhotoImageView (bp);
+			photo_view = new PhotoImageView (bp);
 	
 			filmstrip = new Filmstrip (bp);
 			Gdk.Pixbuf bg = new Gdk.Pixbuf (Gdk.Colorspace.Rgb, true, 8, 1, 69);
@@ -276,7 +336,7 @@ namespace FSpot {
 			filmstrip.BackgroundTile = bg;
 			filmstrip.ThumbOffset = 1;
 			filmstrip.Spacing = 4;
-			inner_vbox.PackStart (filmstrip, false, false, 0);
+			PlaceFilmstrip ((Orientation) Preferences.Get <int> (Preferences.FILMSTRIP_ORIENTATION), true);
 	
 			photo_view.PhotoChanged += HandlePhotoChanged;
 	
@@ -288,35 +348,37 @@ namespace FSpot {
 			photo_view_scrolled.Child.ButtonPressEvent += HandleButtonPressEvent;
 			photo_view.AddEvents ((int) EventMask.KeyPressMask);
 			inner_vbox.PackStart (photo_view_scrolled, true, true, 0);
+			inner_hbox.PackStart (inner_vbox, true, true, 0);
 			
-			HBox inner_hbox = new HBox (false, 2);
+			HBox lower_hbox = new HBox (false, 2);
 			//inner_hbox.BorderWidth = 6;
 	
 			tag_view = new Widgets.TagView (MainWindow.ToolTips);
-			inner_hbox.PackStart (tag_view, false, true, 0);
+			lower_hbox.PackStart (tag_view, false, true, 0);
 	
 			Label comment = new Label (Catalog.GetString ("Comment:"));
-			inner_hbox.PackStart (comment, false, false, 0);
+			lower_hbox.PackStart (comment, false, false, 0);
 			description_entry = new Entry ();
-			inner_hbox.PackStart (description_entry, true, true, 0);
+			lower_hbox.PackStart (description_entry, true, true, 0);
 			description_entry.Changed += HandleDescriptionChanged;
 	
 			rating = new Widgets.Rating();
-			inner_hbox.PackStart (rating, false, false, 0);
+			lower_hbox.PackStart (rating, false, false, 0);
 			rating.Changed += HandleRatingChanged;
 	
 			SetColors ();
 			
-			inner_vbox.PackStart (inner_hbox, false, true, 0);
+			inner_vbox.PackStart (lower_hbox, false, true, 0);
 	
 			vbox.ShowAll ();
 	
 			Realized += delegate (object o, EventArgs e) {SetColors ();};
+			Preferences.SettingChanged += OnPreferencesChanged;
 		}
 
 		~PhotoView ()
 		{
-			FSpot.Utils.Log.DebugFormat ("Finalizer called on {0}. Should be Disposed", GetType ());		
+			FSpot.Utils.Log.Debug ("Finalizer called on {0}. Should be Disposed", GetType ());		
 			Dispose (false);	
 		}
 

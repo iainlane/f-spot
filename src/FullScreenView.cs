@@ -38,9 +38,8 @@ namespace FSpot {
 			//going fullscreen on the same screen the parent window
 			Gdk.Screen screen = Screen;
 			int monitor = screen.GetMonitorAtWindow (parent.GdkWindow);
-			Gdk.Rectangle bounds = screen.GetMonitorGeometry(monitor);
-			Move(bounds.X, 0);
-
+			Gdk.Rectangle bounds = screen.GetMonitorGeometry (monitor);
+			Move (bounds.X, bounds.Y);
 
 			string style = "style \"test\" {\n" +
 				"GtkToolbar::shadow_type = GTK_SHADOW_NONE\n" +
@@ -74,9 +73,7 @@ namespace FSpot {
 					Catalog.GetString ("Exit fullscreen"),
 					null,
 					null);
-#if GTK_2_10
 				exit_full_screen.IconName = "view-restore";
-#endif
 				exit_full_screen.Activated += ExitAction;
 				actions.Add (exit_full_screen);
 
@@ -84,9 +81,7 @@ namespace FSpot {
 					Catalog.GetString ("Slideshow"),
 					Catalog.GetString ("Start slideshow"),
 					null);
-#if GTK_2_10
 				slide_show.IconName = "media-playback-start";
-#endif
 				slide_show.Activated += SlideShowAction;
 				actions.Add (slide_show);
 
@@ -104,7 +99,7 @@ namespace FSpot {
 				this.Add (notebook);
 				view.Show ();
 				view.MotionNotifyEvent += HandleViewMotion;
-				view.PointerMode = ImageView.PointerModeType.Scroll;
+				view.PointerMode = PointerMode.Scroll;
 				
 				scroll.ScrolledWindow.Add (view);
 
@@ -120,31 +115,14 @@ namespace FSpot {
 
 				Gtk.Action action = new PreviousPictureAction (view.Item);
 				actions.Add (action);
-#if GTK_2_10
 				tbar.Insert (action.CreateToolItem () as ToolItem, -1);
-#else
-				t_item = action.CreateToolItem () as ToolItem;
-				(t_item as ToolButton).IconName = "gtk-go-back-ltr"; 
-				tbar.Insert (t_item, -1);
-#endif
 
 				play_pause_button = (actions [SlideShow]).CreateToolItem () as ToolButton;
-#if GTK_2_10
 				tbar.Insert (play_pause_button, -1);
-#else
-				play_pause_button.IconName = "media-playback-start";
-				tbar.Insert (play_pause_button, -1);
-#endif
 
 				action = new NextPictureAction (view.Item);
 				actions.Add (action);
-#if GTK_2_10
 				tbar.Insert (action.CreateToolItem () as ToolItem, -1);
-#else
-				t_item = action.CreateToolItem () as ToolItem;
-				(t_item as ToolButton).IconName = "gtk-go-forward-ltr"; 
-				tbar.Insert (t_item, -1);
-#endif
 
 				t_item = new ToolItem ();
 				t_item.Child = new Label (Catalog.GetString ("Slide transition:"));
@@ -162,23 +140,11 @@ namespace FSpot {
 
 				action = new RotateLeftAction (view.Item);
 				actions.Add (action);
-#if GTK_2_10
 				tbar.Insert (action.CreateToolItem () as ToolItem, -1);
-#else
-				t_item = action.CreateToolItem () as ToolItem;
-				(t_item as ToolButton).IconName = "object-rotate-left"; 
-				tbar.Insert (t_item, -1);
-#endif
 
 				action = new RotateRightAction (view.Item);
 				actions.Add (action);
-#if GTK_2_10
 				tbar.Insert (action.CreateToolItem () as ToolItem, -1);
-#else
-				t_item = action.CreateToolItem () as ToolItem;
-				(t_item as ToolButton).IconName = "object-rotate-right"; 
-				tbar.Insert (t_item, -1);
-#endif
 
 				info_button = (ToggleToolButton) ((actions [Info]).CreateToolItem () as ToolItem);
 				tbar.Insert (info_button, -1);
@@ -224,11 +190,11 @@ namespace FSpot {
 		
 		private void ShowCursor () 
 		{
-			view.PointerMode = ImageView.PointerModeType.Scroll;
+			view.PointerMode = PointerMode.Scroll;
 			this.GdkWindow.Cursor = null;
 		}
 		
-		private void HandleItemChanged (object sender, BrowsablePointerChangedArgs args)
+		private void HandleItemChanged (object sender, BrowsablePointerChangedEventArgs args)
 		{
 			if (scroll.ControlBox.Visible)
 				scroll.ShowControls ();
@@ -311,12 +277,12 @@ namespace FSpot {
 		public bool PlayPause ()
 		{
 			if (notebook.CurrentPage == 0) {
-				FSpot.Utils.ScreenSaver.Inhibit ("Running slideshow mode");
+				FSpot.Platform.ScreenSaver.Inhibit ("Running slideshow mode");
 				notebook.CurrentPage = 1;
 				play_pause_button.IconName = "media-playback-pause";
 				display.Start ();
 			} else {
-				FSpot.Utils.ScreenSaver.UnInhibit ();
+				FSpot.Platform.ScreenSaver.UnInhibit ();
 				notebook.CurrentPage = 0;
 				play_pause_button.IconName = "media-playback-start";
 				display.Stop ();
@@ -327,7 +293,7 @@ namespace FSpot {
 		public void Quit ()
 		{
 			hide_cursor_delay.Stop ();
-			FSpot.Utils.ScreenSaver.UnInhibit ();
+			FSpot.Platform.ScreenSaver.UnInhibit ();
 
 			this.Destroy ();
 		}

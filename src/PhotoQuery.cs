@@ -61,7 +61,6 @@ namespace FSpot {
 		private PhotoStore store;
 		private Term terms;
 		private Tag [] tags;
-		private string extra_condition;
 
 		static int query_count = 0;
 		static int QueryCount {
@@ -90,7 +89,7 @@ namespace FSpot {
 			foreach (IQueryCondition condition in conditions)
 				SetCondition (condition);
 
-			store.QueryToTemp (temp_table, (Tag [])null, null, Range, RollSet, RatingRange, OrderByTime);
+			RequestReload ();
 		}
 
 		public int Count {
@@ -163,34 +162,14 @@ namespace FSpot {
 		}
 
 		public Term Terms {
-			get {
-				return terms;
-			}
+			get { return terms; }
 			set {
 				terms = value;
 				untagged = false;
 				RequestReload ();
 			}
 		}
-
-		public string ExtraCondition {
-			get {
-				return extra_condition;
-			}
-			
-			set {
-				if (extra_condition == value)
-					return;
-
-				extra_condition = value;
-
-				if (value != null)
-					untagged = false;
-
- 				RequestReload ();
- 			}
- 		}
-		
+	
 		public DateRange Range {
 			get { return GetCondition<DateRange> (); }
 			set {
@@ -205,8 +184,12 @@ namespace FSpot {
 			set {
 				if (untagged != value) {
 					untagged = value;
-					if (untagged)
-						extra_condition = null;
+					
+					if (untagged) {
+						UnSetCondition<TagConditionWrapper> ();
+						UnSetCondition<HiddenTag> ();
+					}
+					
 					RequestReload ();
 				}
 			}
@@ -225,6 +208,32 @@ namespace FSpot {
 			set {
 				if (value == null && UnSetCondition<RatingRange>() || value != null && SetCondition (value))
 					RequestReload ();
+			}
+		}
+		
+		public HiddenTag HiddenTag {
+			get { return GetCondition<HiddenTag> (); }
+			set {
+				if (value == null && UnSetCondition<HiddenTag>() || value != null && SetCondition (value))
+					RequestReload ();
+			}
+		}
+		
+		public TagConditionWrapper TagTerm {
+			get { return GetCondition<TagConditionWrapper> (); }
+			set {
+				if (value == null && UnSetCondition<TagConditionWrapper>()
+				    || value != null && SetCondition (value)) {
+					
+					if (value != null) {
+						untagged = false;
+						SetCondition (HiddenTag.ShowHiddenTag);
+					} else {
+						UnSetCondition<HiddenTag> ();
+					}
+					
+					RequestReload ();
+				}
 			}
 		}
 
@@ -247,10 +256,26 @@ namespace FSpot {
 		public void RequestReload ()
 		{
 			uint timer = Log.DebugTimerStart ();
-			if (untagged)
-				store.QueryToTemp (temp_table, new UntaggedCondition (), Range, RollSet, RatingRange, OrderByTime);
-			else
-				store.QueryToTemp (temp_table, terms, extra_condition, Range, RollSet, RatingRange, OrderByTime);
+			IQueryCondition[] condition_array;
+			
+			int i = 0;
+			if (untagged) {
+				condition_array = new IQueryCondition[conditions.Count + 1];
+				condition_array[0] = new UntaggedCondition ();
+				i = 1;
+			} else {
+				condition_array = new IQueryCondition[conditions.Count + 2];
+		//		condition_array[0] = new TagConditionWrapper (extra_condition);
+				condition_array[1] = new TagConditionWrapper (terms != null ? terms.SqlCondition () : null);
+				i = 2;
+			}
+			
+			foreach (IQueryCondition condition in Conditions.Values) {
+				condition_array[i] = condition;
+				i++;
+			}
+	
+			store.QueryToTemp (temp_table, condition_array);
 
 			count = -1;
 			cache = new PhotoCache (store, temp_table);
@@ -258,6 +283,7 @@ namespace FSpot {
 
 			if (Changed != null)
 				Changed (this);
+			
 			Log.DebugTimerPrint (timer, "Reloading the query took {0}");
 		}
 		
@@ -294,6 +320,9 @@ namespace FSpot {
 
 		private int LookupItem (System.DateTime date, bool asc)
 		{
+			if (Count == 0)
+				return -1;
+			
 			uint timer = Log.DebugTimerStart ();
 			int low = 0;
 			int high = Count - 1;
@@ -337,7 +366,7 @@ namespace FSpot {
 			store.Commit (to_commit.ToArray ());
 		}
 
-		private void MarkChanged (object sender, DbItemEventArgs args)
+		private void MarkChanged (object sender, DbItemEventArgs<Photo> args)
 		{
 			int [] indexes = IndicesOf (args.Items);
 

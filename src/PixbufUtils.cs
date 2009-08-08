@@ -1,3 +1,14 @@
+//
+// FSpot.PixbufUtils.cs
+//
+// Author(s):
+//	Ettore Perazzoli
+//	Larry Ewing  <lewing@novell.com>
+//	Stephane Delcroix  <stephane@declroix.org>
+//
+// This is free software. See COPYING for details
+//
+
 using Gdk;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -6,57 +17,7 @@ using System.IO;
 using FSpot;
 using FSpot.Utils;
 
-/**
-  1        2       3      4         5            6           7          8
-
-888888  888888      88  88      8888888888  88                  88  8888888888
-88          88      88  88      88  88      88  88          88  88      88  88
-8888      8888    8888  8888    88          8888888888  8888888888          88
-88          88      88  88
-88          88  888888  888888
-
-t-l     t-r     b-r     b-l     l-t         r-t         r-b             l-b
-
-**/
-
-public enum PixbufOrientation {
-	TopLeft = 1,
-	TopRight = 2,
-	BottomRight = 3,
-	BottomLeft = 4,
-	LeftTop = 5,
-	RightTop = 6,
-	RightBottom = 7,
-	LeftBottom = 8
-}
-
 public class PixbufUtils {
-		
-	static public PixbufOrientation Rotate270 (PixbufOrientation orientation)
-	{
-		PixbufOrientation [] rot = new PixbufOrientation [] {
-			PixbufOrientation.LeftBottom, 
-			PixbufOrientation.LeftTop,
-			PixbufOrientation.RightTop,
-			PixbufOrientation.RightBottom, 
-			PixbufOrientation.BottomLeft,
-			PixbufOrientation.TopLeft,
-			PixbufOrientation.TopRight,
-			PixbufOrientation.BottomRight
-		};
-
-		orientation = rot [((int)orientation) -1];
-		return orientation;
-	}
-
-	static public PixbufOrientation Rotate90 (PixbufOrientation orientation)
-	{
-		orientation = Rotate270 (orientation);
-		orientation = Rotate270 (orientation);
-		orientation = Rotate270 (orientation);
-		return orientation;
-	}
-
 	static Pixbuf error_pixbuf = null;
 	public static Pixbuf ErrorPixbuf {
 		get {
@@ -157,10 +118,10 @@ public class PixbufUtils {
 			
 			loader.Close ();
 			Pixbuf orig = loader.Pixbuf;
-			Gdk.Pixbuf rotated = TransformOrientation (orig, orientation, true);
+			Gdk.Pixbuf rotated = FSpot.Utils.PixbufUtils.TransformOrientation (orig, orientation);
 			
 			if (orig != rotated) {
-				CopyThumbnailOptions (orig, rotated);
+				FSpot.Utils.PixbufUtils.CopyThumbnailOptions (orig, rotated);
 				orig.Dispose ();
 			}
 			loader.Dispose ();
@@ -186,7 +147,7 @@ public class PixbufUtils {
 		if (pixbuf == null)
 			return null;
 		Pixbuf result = new Pixbuf (pixbuf, 0, 0, pixbuf.Width, pixbuf.Height);
-		CopyThumbnailOptions (pixbuf, result);
+		FSpot.Utils.PixbufUtils.CopyThumbnailOptions (pixbuf, result);
 		return result;
 	}
 
@@ -207,7 +168,7 @@ public class PixbufUtils {
 		else
 			result = pixbuf.Copy ();
 
-		CopyThumbnailOptions (pixbuf, result);
+		FSpot.Utils.PixbufUtils.CopyThumbnailOptions (pixbuf, result);
 
 		return result;
 	}
@@ -276,30 +237,6 @@ public class PixbufUtils {
 		
 	}
 	
-
-	// 
-	// FIXME this is actually not public api and we should do a verison check,
-	// but frankly I'm irritated that it isn't public so I don't much care.
-	//
-	[DllImport("libgdk_pixbuf-2.0-0.dll")]
-	static extern bool gdk_pixbuf_set_option(IntPtr raw, string key, string value);
-	
-	public static bool SetOption(Gdk.Pixbuf pixbuf, string key, string value)
-	{
-		
-		if (value != null)
-			return gdk_pixbuf_set_option(pixbuf.Handle, key, value);
-		else
-			return false;
-	}
-	
-	public static void CopyThumbnailOptions (Gdk.Pixbuf src, Gdk.Pixbuf dest)
-	{
-		if (src != null && dest != null) {
-			PixbufUtils.SetOption (dest, "tEXt::Thumb::URI", src.GetOption ("tEXt::Thumb::URI"));
-			PixbufUtils.SetOption (dest, "tEXt::Thumb::MTime", src.GetOption ("tEXt::Thumb::MTime"));
-		}
-	}
 
 	public static void Save (Gdk.Pixbuf pixbuf, System.IO.Stream stream, string type, string [] options, string [] values)
 	{
@@ -456,28 +393,6 @@ public class PixbufUtils {
 		return scaled;
 	}
 
-	public static string Resize (string orig_path, int size, bool copy_meta)
-	{
-		string version_path = System.IO.Path.GetTempFileName ();
-		Resize (orig_path, version_path, size, copy_meta);
-		return version_path;
-	}
-
-	public static void Resize (string orig_path, string dest_path, int size, bool copy_meta)
-	{
-		Exif.ExifData exif_data;
-		if (copy_meta)
-			exif_data = new Exif.ExifData (orig_path);
-		else 
-			exif_data = new Exif.ExifData ();
-
-		Gdk.Pixbuf image = PixbufUtils.LoadAtMaxSize (orig_path, size, size);
-
-		PixbufUtils.SaveJpeg (image, dest_path, 95, exif_data);
-		image.Dispose ();
-	}
-	
-
 	public static Pixbuf Flatten (Pixbuf pixbuf)
 	{
 		if (!pixbuf.HasAlpha)
@@ -514,24 +429,29 @@ public class PixbufUtils {
 		// The DCF spec says thumbnails should be 160x120 always
 		Pixbuf thumbnail = ScaleToAspect (pixbuf, 160, 120);
 		byte [] thumb_data = Save (thumbnail, "jpeg", null, null);
-		exif_data.Data = thumb_data;
 		thumbnail.Dispose ();
 
-		// Most of the things we will set will be in the 0th ifd
-		Exif.ExifContent content = exif_data.GetContents (Exif.Ifd.Zero);
-
-		// reset the orientation tag the default is top/left
-		content.GetEntry (Exif.Tag.Orientation).Reset ();
-
-		// set the write time in the datetime tag
-		content.GetEntry (Exif.Tag.DateTime).Reset ();
-
-		// set the software tag
-		content.GetEntry (Exif.Tag.Software).SetData (FSpot.Defines.PACKAGE + " version " + FSpot.Defines.VERSION);
-
-		byte [] data = exif_data.Save ();
+		byte [] data = new byte [0]; 
 		FPixbufJpegMarker [] marker = new FPixbufJpegMarker [0];
 		bool result = false;
+
+		if (exif_data != null && exif_data.Handle.Handle != IntPtr.Zero) {
+			exif_data.Data = thumb_data;
+
+			// Most of the things we will set will be in the 0th ifd
+			Exif.ExifContent content = exif_data.GetContents (Exif.Ifd.Zero);
+
+			// reset the orientation tag the default is top/left
+			content.GetEntry (Exif.Tag.Orientation).Reset ();
+
+			// set the write time in the datetime tag
+			content.GetEntry (Exif.Tag.DateTime).Reset ();
+
+			// set the software tag
+			content.GetEntry (Exif.Tag.Software).SetData (FSpot.Defines.PACKAGE + " version " + FSpot.Defines.VERSION);
+
+			data = exif_data.Save ();
+		}
 
 		unsafe {
 			if (data.Length > 0) {
@@ -577,12 +497,6 @@ public class PixbufUtils {
 		return ret;
 	}	
 
-#if OLDREDEYE
-	[DllImport ("libfspot")]
-	static extern void f_pixbuf_remove_redeye (IntPtr src);
-
-	public static Gdk.Pixbuf RemoveRedeye (Gdk.Pixbuf src, Gdk.Rectangle area)
-#else
 	public unsafe static Gdk.Pixbuf RemoveRedeye (Gdk.Pixbuf src, Gdk.Rectangle area)
 	{
 		return RemoveRedeye (src, area, -15);
@@ -590,14 +504,9 @@ public class PixbufUtils {
 
 	public unsafe static Gdk.Pixbuf RemoveRedeye (Gdk.Pixbuf src, Gdk.Rectangle area, int threshold)
 	//threshold, factors and comparisons borrowed from the gimp plugin 'redeye.c' by Robert Merkel
-#endif
 	{
 		Gdk.Pixbuf copy = src.Copy ();
 		Gdk.Pixbuf selection = new Gdk.Pixbuf (copy, area.X, area.Y, area.Width, area.Height);
-#if OLREDEYE
-		f_pixbuf_remove_redeye (selection.Handle);
-		selection.Dispose ();
-#else
 		byte *spix = (byte *)selection.Pixels;
 		int h = selection.Height;
 		int w = selection.Width;
@@ -622,7 +531,6 @@ public class PixbufUtils {
 			spix += selection.Rowstride;
 		}
 
-#endif
 		return copy;
 	}
 
@@ -742,11 +650,11 @@ public class PixbufUtils {
 			
 			using (MemoryStream mem = new MemoryStream (thumb_data)) {
 				Gdk.Pixbuf thumb = new Gdk.Pixbuf (mem);
+				Gdk.Pixbuf rotated;
 
-				Gdk.Pixbuf rotated = PixbufUtils.TransformOrientation (thumb, orientation);
+				using (thumb)
+					rotated = FSpot.Utils.PixbufUtils.TransformOrientation (thumb, orientation);
 				
-				if (rotated != thumb)
-					thumb.Dispose ();
 				return rotated;
 			}			
 		}
@@ -766,7 +674,15 @@ public class PixbufUtils {
 
 		return orientation;
 	}
+
+	public static PixbufOrientation GetOrientation (System.Uri uri)
+	{
+		using (FSpot.ImageFile img = FSpot.ImageFile.Create (uri)) {
+			return img.Orientation;
+		}	
+	}
 	
+	[Obsolete ("Use GetOrientation (System.Uri) instead")]
 	public static PixbufOrientation GetOrientation (string path)
 	{
 		using (FSpot.ImageFile img = FSpot.ImageFile.Create (path)) {
@@ -788,128 +704,6 @@ public class PixbufUtils {
 		return ret;
 	}
 
-	public static Gdk.Pixbuf TransformOrientation (Gdk.Pixbuf src, PixbufOrientation orientation, bool copy_data)
-	{
-		Gdk.Pixbuf pixbuf;
-		if (src == null)
-			return null;
-		
-		switch (orientation) {
-		case PixbufOrientation.LeftTop:
-		case PixbufOrientation.LeftBottom:
-		case PixbufOrientation.RightTop:
-		case PixbufOrientation.RightBottom:	
-			pixbuf = new Gdk.Pixbuf (src.Colorspace, src.HasAlpha, 
-						 src.BitsPerSample,
-						 src.Height, src.Width);
-			break;
-		case PixbufOrientation.TopRight:
-		case PixbufOrientation.BottomRight:
-		case PixbufOrientation.BottomLeft:
-			pixbuf = new Gdk.Pixbuf (src.Colorspace, src.HasAlpha, 
-						 src.BitsPerSample,
-						 src.Width, src.Height);
-			break;
-		default:
-			pixbuf = src;
-			break;
-		}
-
-		if (copy_data && src != pixbuf) 
-			TransformAndCopy (src, pixbuf, orientation, new Gdk.Rectangle (0, 0, src.Width, src.Height));
-
-		return pixbuf;
-	}
-
-	public static Gdk.Pixbuf TransformOrientation (Gdk.Pixbuf src, PixbufOrientation orientation)
-	{
-		return TransformOrientation (src, orientation, true);
-	}
-
-	public static Gdk.Rectangle TransformOrientation (Gdk.Pixbuf src, Gdk.Rectangle args, PixbufOrientation orientation)
-	{
-		return TransformOrientation (src.Width, src.Height, args, orientation);
-	}
-	
-	public static Gdk.Rectangle TransformOrientation (int total_width, int total_height, Gdk.Rectangle args, PixbufOrientation orientation)
-	{
-		Gdk.Rectangle area = args;
-		
-		switch (orientation) {
-		case PixbufOrientation.BottomRight:
-			area.X = total_width - args.X - args.Width;
-			area.Y = total_height - args.Y - args.Height;
-			break;
-		case PixbufOrientation.TopRight:
-			area.X = total_width - args.X - args.Width;
-			break;
-		case PixbufOrientation.BottomLeft:
-			area.Y = total_height - args.Y - args.Height;
-			break;
-		case PixbufOrientation.LeftTop:
-			area.X = args.Y;
-			area.Y = args.X;
-			area.Width = args.Height;
-			area.Height = args.Width;
-			break;
-		case PixbufOrientation.RightBottom:
-			area.X = total_height - args.Y - args.Height;
-			area.Y = total_width - args.X - args.Width;
-			area.Width = args.Height;
-			area.Height = args.Width;
-			break;
-		case PixbufOrientation.RightTop:
-			area.X = total_height - args.Y - args.Height;
-			area.Y = args.X;
-			area.Width = args.Height;
-			area.Height = args.Width;
-			break;
-		case PixbufOrientation.LeftBottom:
-			area.X = args.Y;
-			area.Y = total_width - args.X - args.Width;
-			area.Width = args.Height;
-			area.Height = args.Width;
-			break;
-		default:
-			break;
-		}
-		
-		return area;
-	}
-	
-	public static Gdk.Rectangle TransformAndCopy (Gdk.Pixbuf src, Gdk.Pixbuf dest, PixbufOrientation orientation, Gdk.Rectangle args)
-	{
-		Gdk.Rectangle area = TransformOrientation (src, args, orientation);
-
-		int step = 256;
-
-		Gdk.Rectangle rect = new Gdk.Rectangle (args.X, args.Y, 
-							Math.Min (step, args.Width),
-							Math.Min (step, args.Height));
-
-		Gdk.Rectangle trect = TransformOrientation (src, rect, orientation);
-		Gdk.Pixbuf tmp = new Gdk.Pixbuf (src.Colorspace, src.HasAlpha, 
-						 src.BitsPerSample,
-						 trect.Width, trect.Height);
-
-		Gdk.Rectangle subarea;
-		BlockProcessor proc = new BlockProcessor (args, 256);
-		while (proc.Step (out subarea)) {
-			Gdk.Rectangle trans = TransformOrientation (src, subarea, orientation);
-			Gdk.Pixbuf ssub = new Gdk.Pixbuf (src, subarea.X, subarea.Y,
-							  subarea.Width, subarea.Height);
-
-			Gdk.Pixbuf tsub = new Gdk.Pixbuf (tmp, 0, 0, trans.Width, trans.Height);
-			CopyWithOrientation (ssub, tsub, orientation);
-
-			tsub.CopyArea (0, 0, trans.Width, trans.Height, dest, trans.X, trans.Y);
-			ssub.Dispose ();
-			tsub.Dispose ();
-		}
-
-		tmp.Dispose ();
-		return area;
-	}
 	// Bindings from libf.
 
 	[DllImport ("libfspot")]
@@ -932,13 +726,13 @@ public class PixbufUtils {
 		}
 	}
 
-	[DllImport ("libfspot")]
-	static extern void f_pixbuf_copy_with_orientation (IntPtr src, IntPtr dest, int orientation);
-
-	public static void CopyWithOrientation (Gdk.Pixbuf src, Gdk.Pixbuf dest, PixbufOrientation orientation)
-	{
-		f_pixbuf_copy_with_orientation (src.Handle, dest.Handle, (int)orientation);
-	}
+//	[DllImport ("libfspot")]
+//	static extern void f_pixbuf_copy_with_orientation (IntPtr src, IntPtr dest, int orientation);
+//
+//	public static void CopyWithOrientation (Gdk.Pixbuf src, Gdk.Pixbuf dest, PixbufOrientation orientation)
+//	{
+//		f_pixbuf_copy_with_orientation (src.Handle, dest.Handle, (int)orientation);
+//	}
 
 #if false
 	[DllImport("glibsharpglue")]

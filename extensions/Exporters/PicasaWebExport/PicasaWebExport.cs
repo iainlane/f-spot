@@ -53,7 +53,7 @@ namespace FSpotGoogleExport {
 
 		public PicasaWeb Connect ()
 		{
-			System.Console.WriteLine ("GoogleAccount.Connect()");
+			Log.Debug ("GoogleAccount.Connect()");
 			GoogleConnection conn = new GoogleConnection (GoogleService.Picasa);
 			ServicePointManager.CertificatePolicy = new NoCheckCertificatePolicy ();
 			if (unlock_captcha == null || token == null)
@@ -200,7 +200,7 @@ namespace FSpotGoogleExport {
 					Ring.DeleteItem(keyring, result.ItemID);
 				}
 			} catch (Exception e) {
-				Console.WriteLine(e);
+				Log.DebugException (e);
 			}
 			accounts.Remove (account);
 			MarkChanged ();
@@ -250,7 +250,7 @@ namespace FSpotGoogleExport {
 
 				}
 			} catch (Exception e) {
-				Console.Error.WriteLine(e);
+				Log.DebugException (e);
 			}
 
 			MarkChanged ();
@@ -520,7 +520,7 @@ namespace FSpotGoogleExport {
 
 		IBrowsableItem [] items;
 		int photo_index;
-		FSpot.ThreadProgressDialog progress_dialog;
+		ThreadProgressDialog progress_dialog;
 
 		ArrayList accounts;
 		private GoogleAccount account;
@@ -588,7 +588,6 @@ namespace FSpotGoogleExport {
 			export_tag = tag_check.Active;
 
 			if (account != null) {
-				//System.Console.WriteLine ("history = {0}", album_optionmenu.History);
 				album = (PicasaAlbum) account.Picasa.GetAlbums() [Math.Max (0, album_optionmenu.History)];
 				photo_index = 0;
 
@@ -597,7 +596,7 @@ namespace FSpotGoogleExport {
 				command_thread = new System.Threading.Thread (new System.Threading.ThreadStart (this.Upload));
 				command_thread.Name = Catalog.GetString ("Uploading Pictures");
 
-				progress_dialog = new FSpot.ThreadProgressDialog (command_thread, items.Length);
+				progress_dialog = new ThreadProgressDialog (command_thread, items.Length);
 				progress_dialog.Start ();
 
 				// Save these settings for next time
@@ -618,9 +617,9 @@ namespace FSpotGoogleExport {
 		private void HandleUploadProgress(object o, UploadProgressEventArgs args)
 		{
 				if (approx_size == 0)
-					progress_dialog.ProgressText = System.String.Format (Catalog.GetString ("{0} Sent"), SizeUtil.ToHumanReadable(args.BytesSent));
+					progress_dialog.ProgressText = System.String.Format (Catalog.GetString ("{0} Sent"), GLib.Format.SizeForDisplay (args.BytesSent));
 				else
-					progress_dialog.ProgressText = System.String.Format (Catalog.GetString ("{0} of approx. {1}"), SizeUtil.ToHumanReadable(sent_bytes + args.BytesSent), SizeUtil.ToHumanReadable(approx_size));
+					progress_dialog.ProgressText = System.String.Format (Catalog.GetString ("{0} of approx. {1}"), GLib.Format.SizeForDisplay (sent_bytes + args.BytesSent), GLib.Format.SizeForDisplay (approx_size));
 				progress_dialog.Fraction = ((photo_index - 1) / (double) items.Length) + (args.BytesSent / (args.BytesTotal * (double) items.Length));
 		}
 
@@ -638,7 +637,7 @@ namespace FSpotGoogleExport {
 			sent_bytes = 0;
 			approx_size = 0;
 
-			System.Console.WriteLine ("Starting Upload to Picasa");
+			Log.Debug ("Starting Upload to Picasa");
 
 			FilterSet filters = new FilterSet ();
 			filters.Add (new JpegFilter ());
@@ -656,7 +655,7 @@ namespace FSpotGoogleExport {
 					IBrowsableItem item = items[photo_index];
 
 					FileInfo file_info;
-					Console.WriteLine ("uploading {0}", photo_index);
+					Log.Debug ("Picasa uploading " + photo_index);
 
 					progress_dialog.Message = String.Format (Catalog.GetString ("Uploading picture \"{0}\" ({1} of {2})"),
 										 item.Name, photo_index+1, items.Length);
@@ -692,10 +691,13 @@ namespace FSpotGoogleExport {
 					progress_dialog.Message = String.Format (Catalog.GetString ("Error Uploading To Gallery: {0}"),
 										 e.Message);
 					progress_dialog.ProgressText = Catalog.GetString ("Error");
-					System.Console.WriteLine (e);
+					Log.DebugException (e);
 
-					if (progress_dialog.PerformRetrySkip ())
+					if (progress_dialog.PerformRetrySkip ()) {
 						photo_index--;
+						if (photo_index == 0)
+							approx_size = 0;
+					}
 				}
 			}
 
@@ -705,7 +707,7 @@ namespace FSpotGoogleExport {
 			progress_dialog.ButtonLabel = Gtk.Stock.Ok;
 
 			if (browser) {
-				GnomeUtil.UrlShow (album.Link);
+				GtkBeans.Global.ShowUri (Dialog.Screen, album.Link);
 			}
 		}
 
@@ -773,22 +775,18 @@ namespace FSpotGoogleExport {
 					long ql = account.Picasa.QuotaLimit;
 
 					StringBuilder sb = new StringBuilder("<small>");
-					sb.Append(Catalog.GetString("Available space:"));
-					sb.Append(SizeUtil.ToHumanReadable (ql - qu));
-					sb.Append(" (");
-					sb.Append(100 * qu / ql);
-					sb.Append("% used out of ");
-					sb.Append(SizeUtil.ToHumanReadable (ql));
-					sb.Append(")");
+					sb.Append(String.Format (Catalog.GetString ("Available space: {0}, {1}% used out of {2}"),
+								GLib.Format.SizeForDisplay(ql - qu),
+								(100 * qu / ql),
+								GLib.Format.SizeForDisplay (ql)));
 					sb.Append("</small>");
-
 					status_label.Text = sb.ToString();
 					status_label.UseMarkup = true;
 
 					album_button.Sensitive = true;
 				}
 			} catch (CaptchaException exc){
-				System.Console.WriteLine("Your google account is locked");
+				Log.Debug ("Your Google account is locked");
 				if (selected != null)
 					account = selected;
 
@@ -797,11 +795,10 @@ namespace FSpotGoogleExport {
 
 				new GoogleAccountDialog (this.Dialog, account, false, exc);
 
-				System.Console.WriteLine ("Your google account is locked, you can unlock it by visiting: {0}", CaptchaException.UnlockCaptchaURL);
+				Log.Warning ("Your Google account is locked, you can unlock it by visiting: {0}", CaptchaException.UnlockCaptchaURL);
 
 			} catch (System.Exception) {
-				System.Console.WriteLine ("Can not connect to Picasa. Bad username ? password ? network connection ?");
-				//System.Console.WriteLine ("{0}",ex);
+				Log.Warning ("Can not connect to Picasa. Bad username? password? network connection?");
 				if (selected != null)
 					account = selected;
 
@@ -838,7 +835,7 @@ namespace FSpotGoogleExport {
 				try {
 					albums = picasa.GetAlbums();
 				} catch {
-					Console.WriteLine("Can't get the albums");
+					Log.Warning ("Picasa: can't get the albums");
 					albums = null;
 					picasa = null;
 				}
@@ -890,9 +887,12 @@ namespace FSpotGoogleExport {
 			PicasaAlbum a = albums [album_optionmenu.History];
 			export_button.Sensitive = a.PicturesRemaining >= items.Length;
 			if (album_status_label.Visible = !export_button.Sensitive) {
-				album_status_label.Text = String.Format (Catalog.GetString ("<small>The selected album has a limit of {0} pictures,\n" +
-									   "which would be passed with the current selection of {1} images</small>"),
-									a.PicturesCount + a.PicturesRemaining, items.Length);
+				StringBuilder sb = new StringBuilder("<small>");
+				sb.Append(String.Format (Catalog.GetString ("The selected album has a limit of {0} pictures,\n" +
+								"which would be passed with the current selection of {1} images"),
+								a.PicturesCount + a.PicturesRemaining, items.Length));
+				sb.Append("</small>");
+				album_status_label.Text = String.Format (sb.ToString());
 				album_status_label.UseMarkup = true;
 			} else {
 				album_status_label.Text = String.Empty;
@@ -919,33 +919,26 @@ namespace FSpotGoogleExport {
 
 		void LoadPreference (string key)
 		{
-			object val = Preferences.Get (key);
-
-			if (val == null)
-				return;
-
-			//System.Console.WriteLine ("Setting {0} to {1}", key, val);
-
 			switch (key) {
 			case SCALE_KEY:
-				if (scale_check.Active != (bool) val) {
-					scale_check.Active = (bool) val;
-					rotate_check.Sensitive = !(bool) val;
+				if (scale_check.Active != Preferences.Get<bool> (key)) {
+					scale_check.Active = Preferences.Get<bool> (key);
+					rotate_check.Sensitive = ! Preferences.Get<bool> (key);
 				}
 				break;
 
 			case SIZE_KEY:
-				size_spin.Value = (double) (int) val;
+				size_spin.Value = (double) Preferences.Get<int> (key);
 				break;
 
 			case BROWSER_KEY:
-				if (browser_check.Active != (bool) val)
-					browser_check.Active = (bool) val;
+				if (browser_check.Active != Preferences.Get<bool> (key))
+					browser_check.Active = Preferences.Get<bool> (key);
 				break;
 
 			case ROTATE_KEY:
-				if (rotate_check.Active != (bool) val)
-					rotate_check.Active = (bool) val;
+				if (rotate_check.Active != Preferences.Get<bool> (key))
+					rotate_check.Active = Preferences.Get<bool> (key);
 				break;
 
 //			case Preferences.EXPORT_GALLERY_META:
@@ -954,8 +947,8 @@ namespace FSpotGoogleExport {
 //				break;
 
 			case TAG_KEY:
-				if (tag_check.Active != (bool) val)
-					tag_check.Active = (bool) val;
+				if (tag_check.Active != Preferences.Get<bool> (key))
+					tag_check.Active = Preferences.Get<bool> (key);
 				break;
 			}
 		}

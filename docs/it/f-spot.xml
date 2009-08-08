@@ -8,9 +8,9 @@
 		</abstract>
 		<subtitle>Questo è il manuale utente di F-Spot, un gestore di fotografie per GNOME.</subtitle>
 		<copyright>
-			<year>2007-2008</year>
+			<year>2007-2009</year>
 			<holder>Aaron Bockover, Gabriel Burt, Miguel de Icaza, Bengt Thuree</holder>
-		</copyright><copyright><year>2007</year><holder>Lorenzo Travaglio (ltrav02@yahoo.it)</holder></copyright>
+		</copyright><copyright><year>2007, 2009</year><holder>Lorenzo Travaglio (ltrav02@yahoo.it)</holder></copyright>
 		<publisher>
 			<publishername>Progetto documentazione di GNOME</publishername>
 		</publisher>
@@ -44,11 +44,11 @@
 		<revhistory>
 			<revision>
 				<revnumber>0.5</revnumber>
-				<date>2008-09-25</date>
+				<date>25/09/2008</date>
 			</revision>
 			<revision>
 				<revnumber>0.4</revnumber>
-				<date>2008-09-12</date>
+				<date>12/09/2008</date>
 			</revision>
 			<revision>
 				<revnumber>0.3</revnumber>
@@ -63,53 +63,57 @@
 		<sect1 id="import">
 			<title>Importare fotografie</title>
 
-			<para>È possibile importare fotografie dal proprio disco fisso o dalla propria fotocamera. Quando vengono importate dalla fotocamera, ne viene sempre creata una copia, lasciando all'utente la libertà di cancellarle dalla memoria della fotocamera. In modo predefinito viene creata una copia delle fotografie importate dal disco fisso. Se non si desidera copiarle, deselezionare l'opzione <guilabel>Copia i file nella cartella delle foto</guilabel> nel dialogo di importazione oppure tenere premuto il tasto <keycap>Maiusc</keycap> durante il trascinamento delle immagini in F-Spot.</para>
+			<para>È possibile importare fotografie dal proprio disco fisso o dalla propria fotocamera. Quando vengono importate dalla fotocamera, ne viene sempre creata una copia, lasciando all'utente la libertà di cancellare la memoria della fotocamera. In modo predefinito viene creata una copia delle fotografie importate dal disco fisso. Se non si desidera copiarle, deselezionare l'opzione <guilabel>Copia i file nella cartella delle foto</guilabel> nel dialogo di importazione oppure tenere premuto il tasto <keycap>Maiusc</keycap> durante il trascinamento delle immagini in F-Spot.</para>
 			
-			<para>
-				By default, F-Spot copies your photos to the 
-				<filename class="directory">~/Photos</filename> folder. You can change 
-				the folder F-Spot uses in <guilabel>Preferences</guilabel> dialog 
-				(<menuchoice><guimenu>Edit</guimenu><guimenuitem>Preferences</guimenuitem>
-				</menuchoice>). You can also disable physical copying of images to that 
-				directory and make F-Spot only reference to existing files. For that you 
-				need to disable checkbox <guilabel>Copy files to the Photos folder</guilabel>. 
-			</para>
-
+			<para>In modo predefinito F-Spot copia le fotografie nella directory </para>
+			<para>Per verificare se una o più immagini siano già state importate dalla posizione selezionata è possibile selezionare l'opzione <guilabel>Rileva duplicati</guilabel>. F-Spot cercherà di rilevare se una copia esatta dell'immagine sia già presente e in caso affermativo non effettuerà l'importazione.</para>
 			<para>Nel caso in cui si stiano importando fotografie relative ad un particolare evento o che abbiano qualche altra caratteristica in comune, è possibile creare un'etichetta che le contraddistingua per poterle facilmente ritrovare in seguito. Per fare questo occorre seguire le istruzioni della sezione <xref linkend="tag"/>. Durante l'importazione sarà necessario fare clic su <guilabel>Applica etichetta</guilabel> e scegliere l'etichetta creata in precedenza.</para>
 			
 			<tip>
-				<para>F-Spot usa un database contenuto in <filename>~/.gnome2/f-spot/photos.db</filename>. Per l'accesso vengono usati i comandi di sqlite3. È possibile indicare un diverso percorso per un database lanciando F-Spot con l'opzione <option>-b</option>.</para>
+				<para>
+					F-Spot uses a database stored at 
+					<filename>~/.config/f-spot/photos.db</filename>. Note, to access it, use 
+					the sqlite3 command. You can also manually specify path to a database by 
+					running F-Spot with <option>-b</option> option.
+				</para>
 			</tip>
 			
 			<para>Dopo un'importazione F-Spot visualizzerà solamente le fotografie dell'ultimo rullino importato. Consultare <xref linkend="enjoying-search"/> per ulteriori informazioni sull'importazione dei rullini.</para>
-			<para>
-				You can also import directly from Mozilla 
-				<ulink url="http://www.mozilla.com/en-US/firefox/">Firefox</ulink> and 
-				<ulink url="http://www.mozilla.com/en-US/thunderbird/">Thunderbird</ulink> using 
-				<ulink url="https://addons.mozilla.org/en-US/firefox/addon/7091">Firefox</ulink> 
-				and <ulink url="https://addons.mozilla.org/en-US/thunderbird/addon/7011">Thunderbird</ulink> 
-				F-Spot importer extensions written by 
-				<ulink url="http://personalpages.tds.net/~cdovel/">Pizzach</ulink>.
-			</para>
+			<para>È anche possibile importare direttamente da Mozilla <ulink url="http://www.mozilla.com/en-US/firefox/">Firefox</ulink> e <ulink url="http://www.mozilla.com/en-US/thunderbird/">Thunderbird</ulink> mediante <ulink url="https://addons.mozilla.org/en-US/firefox/addon/7091">Firefox</ulink> e <ulink url="https://addons.mozilla.org/en-US/thunderbird/addon/7011">Thunderbird</ulink> le estensioni di Firefox e Thunderbird per l'importazione in F-Spot scritte da <ulink url="http://personalpages.tds.net/~cdovel/">Pizzach</ulink>.</para>
 		</sect1>
 		
 		<sect1 id="edit">
 			<title>Modificare una fotografia</title>
 			
-			<para>Facendo doppio clic con il mouse o premendo Invio su un'immagine si attiva la modalità Modifica mediante la quale è possibile rimuoverne gli occhi rossi, ritagliarla o regolarne luminosità e colore.</para>
+			<para>Facendo doppio clic con il mouse o premendo Invio su un'immagine si attiva la modalità Modifica mediante la quale è possibile rimuovere gli occhi rossi, ritagliarla o regolarne luminosità e colore.</para>
 			
 			<sect2 id="edit-versions">
 				<title>Versioni</title>
 				
-				<para>Quando si modifica una fotografia ne viene creata una copia (denominata versione), per cui l'originale rimane inalterata. Le modifiche successive agiranno sulla stessa versione. Se si desidera intenzionalmente creare versioni multiple, ad esempio per sperimentare diverse gradazioni di colore, ritagli o luminosità, ciò è possibile mediante l'opzione <menuchoice><guimenu>File</guimenu><guimenuitem>Crea nuova versione</guimenuitem></menuchoice>.</para>
+				<para>
+					When you edit your photos, a new copy (called a version) is created, 
+					so your original is never altered. After your first edit to a photo, subsequent 
+					edits will modify the same version. If you want to create multiple versions 
+					of your photo, perhaps with different cropping or coloring, you can do so 
+					via the <menuchoice><guimenu>File</guimenu>
+					<guimenuitem>Create new version</guimenuitem></menuchoice> option.
+				</para>
 			</sect2>
 
 			<sect2 id="edit-crop">
 				<title>Ritagliare</title>
 				
-				<para>Ritagliare una fotografia è un buon modo per aumentarne la qualità migliorandone l'inquadratura. Il ritaglio si effettua selezionando la porzione di fotografia che interessa. Se si desidera che il risultato finale abbia dimensioni adatte per la stampa, è possibile impostare il formato del ritaglio mediante lista di selezione. Consultare <xref linkend="edit-remove-red-eye"/> per i dettagli sull'impostazione della selezione.</para>
+				<para>
+					Cropping an image is a great way to improve the quality of a photograph by 
+					change how it is framed. You crop a photo by selecting the part of the photo 
+					you want to keep. If you want your photo to be the exact dimensions necessary 
+					for a certain print size, you can constrain the kind of selection F-Spot will allow 
+					you to draw by choosing the appropriate size from the constraint drop down. 
+					See the <xref linkend="edit-remove-red-eye"/> below for details on making 
+					a selection on your photo.
+				</para>
 				<figure>
-					<title>Strumento Ritaglia</title>
+					<title>Strumento ritaglia</title>
 					<mediaobject>
 						<imageobject>
 							<imagedata fileref="figures/f-spot-crop.png"/>
@@ -122,7 +126,7 @@
 			<sect2 id="edit-straighten">
 				<title>Raddrizzamento</title>
 				
-				<para>Si tratta di un accessorio per livellare una fotografia, utile ad esempio per le foto di paesaggio scattate senza un treppiede in cui l'orizzonte (immaginario) non sia a 0°. Questo accessorio ruota l'immagine dell'angolo indicato e contemporaneamente la ritaglia in modo che risulti sempre rettangolare.</para>
+				<para>Si tratta di uno strumento per livellare una fotografia, utile ad esempio per le foto di paesaggio scattate senza un treppiede in cui l'orizzonte (immaginario) non sia a 0°. Questo strumento ruota l'immagine dell'angolo indicato e contemporaneamente la ritaglia in modo che risulti sempre rettangolare.</para>
 				<figure>
 					<title>Strumento raddrizzatore</title>
 					<mediaobject>
@@ -136,9 +140,9 @@
 			<sect2 id="edit-adjust-colors">
 				<title>Regolare i colori</title>
 				
-				<para>Per ritoccare la luminosità, il contrasto oppure i colori di una fotografia, fare clic sull'icona <guibutton>Regola i colori della fotografia</guibutton> per aprire il menu di fotoritocco. Una volta terminate le modifiche premere <guibutton>OK</guibutton> per applicarle.</para>
+				<para>Per ritoccare la luminosità, il contrasto oppure i colori di una fotografia, fare clic sull'icona <guibutton>Regola i colori della fotografia</guibutton> per aprire il menù di fotoritocco. Una volta terminate le modifiche premere <guibutton>OK</guibutton> per applicarle.</para>
 				<figure>
-					<title>Strumento Regolazione colori</title>
+					<title>Strumento regolazione colori</title>
 					<mediaobject>
 						<imageobject>
 							<imagedata fileref="figures/f-spot-adjust-colors.png"/>
@@ -192,7 +196,7 @@
 			<sect2 id="edit-remove-red-eye">
 				<title>Rimuovere gli occhi rossi</title>
 				
-				<para>Per rimuovere l'effetto occhi rossi occorre selezionare la zona contenente gli occhi. È possibile ingrandire l'immagine per selezionare accuratamente gli occhi. È possibile correggere entrambi gli occhi di una persona o più persone in un colpo solo. Se l'effetto non dovesse essere soddisfacente, o se sono presenti parti rosse (ad esempio le labbra) sarà probabilmente necessario correggere un occhio alla volta.</para>
+				<para>Per rimuovere l'effetto occhi rossi occorre selezionare la zona contenente gli occhi. È possibile ingrandire l'immagine per selezionare accuratamente gli occhi ed è anche possibile correggere entrambi gli occhi di una persona o più persone in un colpo solo. Se l'effetto non dovesse essere soddisfacente, o in presenza di parti rosse (ad esempio le labbra) sarà probabilmente necessario correggere un occhio alla volta.</para>
 				<para>Per selezionare fare clic su un angolo del rettangolo che formerà la selezione e trascinare il mouse nell'angolo opposto lungo la diagonale e rilasciarlo. Si può ridimensionare la selezione trascinandone i bordi e si può muoverla facendo clic nel mezzo e trascinandola dove si desidera.</para>
 				<para>Terminata la selezione dell'occhio, si può effettuare la rimozione dell'effetto occhi rossi premendo il pulsante posto sotto la fotografia stessa.</para>
 				<figure>
@@ -226,17 +230,17 @@
 			<sect2 id="edit-sharpen">
 				<title>Nitidezza</title>
 				
-				<para>Le fotografie sfocate e molte immagini digitalizzate spesso richiedono una correzione della nitidezza. L'effetto Maschera di Contrasto migliora la nitidezza degli orli degli elementi senza incrementare il rumore o introdurre difetti. Per rendere più nitida una foto selezionare <menuchoice><guimenu>Modifica</guimenu><guimenuitem>Nitidezza...</guimenuitem></menuchoice> e specificare i seguenti valori:</para>
+				<para>Le fotografie sfocate e molte immagini digitalizzate spesso richiedono una correzione della nitidezza. L'effetto Maschera di contrasto migliora la nitidezza degli orli degli elementi senza incrementare il rumore o introdurre difetti. Per rendere più nitida una foto selezionare <menuchoice><guimenu>Modifica</guimenu><guimenuitem>Nitidezza...</guimenuitem></menuchoice> e specificare i seguenti valori:</para>
 				
 				<itemizedlist>
 					<listitem>
-						<para><parameter class="option">Ammontare</parameter> - forza della nitidezza.</para>
+						<para><parameter class="option">Ammontare</parameter> — forza della nitidezza.</para>
 					</listitem>
 					<listitem>
-						<para><parameter class="option">Raggio</parameter> - quantità di pixel su entrambi i lati dell'orlo che verranno interessati dall'affilatura. Immagini ad alta risoluzione richiederanno un raggio maggiore.</para>
+						<para><parameter class="option">Raggio</parameter> — quantità di pixel su entrambi i lati dell'orlo che verranno interessati dall'affilatura. Immagini ad alta risoluzione richiederanno un raggio maggiore.</para>
 					</listitem>
 					<listitem>
-						<para><parameter class="option">Soglia</parameter> - la minima differenza in valori di pixel che indentifica un orlo quando viene applicata l'affilatura. Serve per evitare l'introduzione di difetti sui volti, nel cielo o sulle superfici liquide.</para>
+						<para><parameter class="option">Soglia</parameter> — la minima differenza in valori di pixel che indentifica un orlo quando viene applicata l'affilatura. Serve per evitare l'introduzione di difetti sui volti, nel cielo o sulle superfici liquide.</para>
 					</listitem>
 				</itemizedlist>
 			</sect2>
@@ -267,13 +271,28 @@
 					<para>trascinando l'etichetta sulle fotografie</para>
 				</listitem>
 				<listitem>
-					<para>mediante il menu ottenuto premendo il tasto destro del mouse sulla fotografia</para>
+					<para>mediante il menù ottenuto premendo il tasto destro del mouse sulla fotografia</para>
 				</listitem>
 				<listitem>
-					<para>mediante i menu Etichette e Modifica</para>
+					<para>mediante i menù Etichette e Modifica</para>
 				</listitem>
 				<listitem>
-					<para>attivando la casella di inserimento etichette mediante <keycap>t</keycap> ed inserendo le etichette, separandole con una virgola. Il tasto di tabulazione permette il completamento automatico dell'etichetta!</para>
+					<para>
+						by typing them in. Press <keycap>t</keycap> to pop up the tag
+						entry bar. Here you can enter the tags, separated by commas.
+					</para>
+					<para>
+						You can also use auto-completion in this entry bar: After
+						entering the beginning of a tag name, press
+						<keycap>Tab</keycap> to see the first possible completion. You can
+						cycle between other possible completions by pressing
+						<keycap>Tab</keycap> again, and backwards with
+						<keycombo action="simul"><keycap>Shift</keycap><keycap>Tab</keycap></keycombo>.
+						To confirm the suggested completion and enter a new tag, press
+						<keycap>,</keycap>. By pressing <keycap>Enter</keycap> you
+						leave the tag entry bar, possibly confirming the current
+						completion. To abort the auto completion, just keep on typing.
+					</para>
 				</listitem>
 			</itemizedlist>
 			<para>La prima fotografia associata all'etichetta verrà usata come icona per tutte le etichette di quel tipo. È possibile modificare il nome dell'etichetta, il suo genitore o l'icona selezionando <guilabel>Modifica etichetta</guilabel>.</para>
@@ -296,13 +315,15 @@
 		<sect1 id="enjoying-search">
 			<title>Ricerca</title>
 			
-			<para>F-Spot usa i filtri di ricerca per aiutare nella migliore definizione dei criteri di ricerca.</para>
+			<para>
+				F-Spot uses search filters to help you better define search criteria.
+			</para>
 			
 			<sect2 id="enjoying-search-tags">
 				<title>Contrassegnare le fotografie</title>
 				
-				<para>La ricerca si attiva con un doppio clic o attivando un'etichetta dalla lista delle etichette. In alternativa è possibile attivare la barra di ricerca con <menuchoice><guimenu>Trova</guimenu><guimenuitem>Visualizza barra della ricerca</guimenuitem></menuchoice>. Con la barra di ricerca attiva si possono trascinare etichette dalla lista alla barra di ricerca.</para>
-				<para>Per cercare una fotografia contrassegnata con due o più etichette occorre attivare la prima nella lista delle etichette o trascinandola nella barra di ricerca, quindi trascinare la seconda sopra alla prima. È anche possibile fare clic con il tasto destro sulla seconda etichetta nella lista delle etichette, oppure utilizzare il menu <guimenu>Trova</guimenu> selezionare <guimenuitem>Trova con...</guimenuitem> e scegliere la prima etichetta.</para>
+				<para>La ricerca inizia con un doppio clic o attivando un'etichetta dalla lista delle etichette. In alternativa è possibile attivare la barra di ricerca con <menuchoice><guimenu>Trova</guimenu><guimenuitem>Visualizza barra della ricerca</guimenuitem></menuchoice>. Con la barra di ricerca attiva si possono trascinare etichette dalla lista alla barra di ricerca.</para>
+				<para>Per cercare una fotografia contrassegnata con due o più etichette occorre attivare la prima nella lista delle etichette o trascinandola nella barra di ricerca, quindi trascinare la seconda sopra alla prima. È anche possibile fare clic con il tasto destro sulla seconda etichetta nella lista delle etichette, oppure utilizzare il menù <guimenu>Trova</guimenu> selezionare <guimenuitem>Trova con...</guimenuitem> e scegliere la prima etichetta.</para>
 				<para>È possibile trascinare un'etichetta sulla barra di ricerca per cambiare la modalità di ricerca da "cerca questa e un'altra etichetta" a "cerca questa o un'altra etichetta".</para>
 				<para>È possibile cercare una fotografia che non disponga di una particolare etichetta tramite un doppio clic su un'etichetta nella barra di ricerca. In alternativa è possibile fare doppio clic nella barra delle etichette e selezionare <guimenuitem>Escludi</guimenuitem>.</para>
 				<para>Per rimuovere un'etichetta dalla ricerca occorre trascinarla fuori dalla barra di ricerca oppure fare clic con il tasto destro del mouse e selezionare <guimenuitem>Rimuovi</guimenuitem>.</para>
@@ -310,24 +331,27 @@
 			</sect2>
 
 			<sect2 id="enjoying-search-import-rolls">
-				<title>Importa fotografie</title>
+				<title>Fotografie Importate</title>
 				<para>F-Spot ricorda quali immagini sono state importate. Selezionare <menuchoice><guimenu>Trova</guimenu><guisubmenu>Importa rullino</guisubmenu><guimenuitem>Ultimo rullino importato</guimenuitem></menuchoice> per limitare la ricerca all'ultima importazione o usare <menuchoice><guimenu>Trova</guimenu><guisubmenu>Importa rullini</guisubmenu><guimenuitem>Seleziona importazione rullini...</guimenuitem></menuchoice> per una più fine selezione delle fotografie importate:</para>
 				<itemizedlist>
 					<listitem>
+						<para><parameter class="option">A</parameter> — per selezionare foto da una particolare sessione importata</para>
+					</listitem>
+					<listitem>
 						<para>
-							<parameter class="option">At</parameter> — to select photos from a particular importing session
+							<parameter class="option">After</parameter> — to select all photos imported begining with a particular importing session
 						</para>
 					</listitem>
 					<listitem>
-						<para><parameter class="option">Dopoclass&gt; - per selezionare tutte le foto importate iniziando da una sessione particolare</parameter></para>
-					</listitem>
-					<listitem>
-						<para><parameter class="option">Traclass&gt; - per selezionare tutte le foto importate tra due particolari sessioni</parameter></para>
+						<para><parameter class="option">Tra</parameter> — per selezionare tutte le foto importate tra due particolari sessioni</para>
 					</listitem>
 				</itemizedlist>
-				<para>Ogni qualvolta si cambiano le impostazioni dei filtri, la quantità totale di fotografie verrà visualizzata nella parte inferiore della finestra di dialogo.</para>
-				<para>Quando si applica il filtro di Importazione Rullino, nella barra di ricerca si potrà osservare la dicitura <guilabel>Trova: Importa Rullino</guilabel>. Si possono a questo punto aggiungere altri filtri per finalizzare la propria selezione.</para>
-				<para>Se non si vuole proseguire ulteriormente nell'importazione dei rullini, scegliere <guimenu>Trova</guimenu><guisubmenu>Importa Rullini</guisubmenu><guimenuitem>Cancella filtri rullino</guimenuitem></para>
+				<para>
+					Every time you change settings of the filter, the amount of selected photos 
+					will appear in the bottom part of the dialog.
+				</para>
+				<para>Quando si applica il filtro di Importazione rullino, nella barra di ricerca si potrà osservare la dicitura <guilabel>Trova: Importa rullino</guilabel>. Si possono a questo punto aggiungere altri filtri per finalizzare la propria selezione.</para>
+				<para>Se il filtro Importazione rullino non serve più, scegliere <guimenu>Trova</guimenu><guisubmenu>Importa rullini</guisubmenu><guimenuitem>Cancella filtri rullino</guimenuitem></para>
 				<tip>
 					<para>Il numero dei rullini visualizzati nella finestra di dialogo è definito dalla variabile gconf <filename class="directory">/apps/f-spot/import/gui_roll_history</filename>. Il suo valore predefinito è 10.</para>
 				</tip>
@@ -335,11 +359,9 @@
 			
 			<sect2 id="enjoying-search-type-to-find">
 				<title>Casella di digitazione</title>
-				<para>Esiste inoltre una ricerca tramite casella di digitazione. Premere <keycap>/</keycap> per aprirla. Questa non può essere usata quando sia attiva la barra di ricerca. È possibile inserire parametri di ricerca quali "EtichettaA e (EtichettaB oppure (EtichettaC e EtichettaD))". L'operatore <emphasis>not</emphasis> non è ancora supportato.</para>
+				<para>Esiste inoltre una ricerca tramite casella di digitazione. Premere <keycap>/</keycap> per aprirla. Questa non può essere usata quando sia attiva la barra di ricerca. È possibile inserire parametri di ricerca quali "EtichettaA e (EtichettaB oppure (EtichettaC e EtichettaD))". Ad ogni istante, se F-Spot riconosce un'interrogazione valida, aggiorna la ricerca. L'operatore <emphasis>not</emphasis> non è ancora supportato.</para>
 				
-				<para>
-					This function will also search for the typed text into photos comments and filename.
-				</para>
+				<para>Questa funzione ricercherà il testo anche nei commenti alle foto e nei nomi dei file.</para>
 			</sect2>
 		</sect1>
 		
@@ -375,10 +397,10 @@
 		
 		<sect1 id="sharing-e-mail">
 			<title>Inviare E-mail</title>
-			<para>È possibile inviare le fotografie direttamente da F-Spot tramite il menu <menuchoice><guimenu>File</guimenu><guimenuitem>Invia email</guimenuitem></menuchoice>.</para>
+			<para>È possibile inviare le fotografie direttamente da F-Spot tramite il menù <menuchoice><guimenu>File</guimenu><guimenuitem>Invia email</guimenuitem></menuchoice>.</para>
 			<note>
 				<title>Nota 1</title>
-				<para>Il gestore e-mail in uso è definito a livello GNOME. È possibile modificare il gestore di default mediante lo strumento <application>Applicazioni preferite</application> in <menuchoice><guimenu>Sistema</guimenu><guisubmenu>Preferenze</guisubmenu></menuchoice>.</para>
+				<para>Il gestore e-mail in uso è definito a livello GNOME. È possibile modificare il gestore predefinito mediante lo strumento <application>Applicazioni preferite</application> in <menuchoice><guimenu>Sistema</guimenu><guisubmenu>Preferenze</guisubmenu></menuchoice>.</para>
 			</note>
 			<note>
 				<title>Nota 2</title>
@@ -390,13 +412,13 @@
 		</sect1>
 
 		<sect1 id="sharing-print">
-			<title>Stampa</title>
-			<para>La stampa delle fotografie si ottiene mediante il menu <menuchoice><guimenu>File</guimenu><guimenuitem>Stampa</guimenuitem></menuchoice>.</para>
+			<title>Stampare</title>
+			<para>La stampa delle fotografie si ottiene mediante il menù <menuchoice><guimenu>File</guimenu><guimenuitem>Stampa</guimenuitem></menuchoice>.</para>
 		</sect1>
 
 		<sect1 id="sharing-burn-to-cd">
 			<title>Scrivere un CD</title>
-			<para>È possibile masterizzare le proprie fotografie direttamente su CD o DVD tramite il menu <menuchoice><guimenu>File</guimenu><guimenuitem>Esporta</guimenuitem><guimenuitem>Esporta su CD</guimenuitem></menuchoice>.</para>
+			<para>È possibile masterizzare le proprie fotografie direttamente su CD o DVD tramite il menù <menuchoice><guimenu>File</guimenu><guimenuitem>Esporta</guimenuitem><guimenuitem>Esporta su CD</guimenuitem></menuchoice>.</para>
 		</sect1>
 
 		<sect1 id="website-gallery-folder">
@@ -417,184 +439,103 @@
 
 		<sect1 id="sharing-flickr-or-php-gallery">
 			<title>Inviare al proprio gestore di gallerie fotografiche</title>
-			<para>Se si usa Flickr, SmugMug, 23hq o Picasa Web Album è possibile inviare i propri file direttamente da F-Spot tramite il menù <menuchoice><guimenu>File</guimenu><guisubmenu>Esporta</guisubmenu></menuchoice>, selezionando la corrispondente voce di sottomenù.</para>
-			<para>Se si usa un software PHP conosciuto come <ulink url="http://gallery.sourceforge.net/"> Gallery</ulink> è possibile inviare le foto al proprio album esistente tramite il menu <menuchoice><guimenu>File</guimenu><guimenuitem>Esporta</guimenuitem><guimenuitem>Esporta su galleria web</guimenuitem></menuchoice>. Occorre prima abilitare il modulo Remoto all'interno della propria installazione di Gallery.</para>
+			<para>
+				If you use Flickr, SmugMug, 23hq, Tabblo, Facebook, Zooomr or Picasa Web Album, you can post your files 
+				directly from F-Spot with the <menuchoice><guimenu>File</guimenu>
+				<guisubmenu>Export</guisubmenu></menuchoice> menu, choosing corresponding submenu item.
+			</para>
+			<para>Se si usa un software PHP conosciuto come <ulink url="http://gallery.sourceforge.net/"> Gallery</ulink> è possibile inviare le foto al proprio album esistente tramite il menù <menuchoice><guimenu>File</guimenu><guimenuitem>Esporta</guimenuitem><guimenuitem>Esporta su galleria web</guimenuitem></menuchoice>. Occorre prima abilitare il modulo Remoto all'interno della propria installazione di Gallery.</para>
 			<note>
 				<title>Note per gli utenti di Gallery 2.2</title>
 				<para>Il plugin Remote per Gallery deve essere alla versione 1.0.8 o più recente.</para>
 			</note>
-			<para>
-				<ulink url="http://pennave.sourceforge.net">PennAve</ulink> is a Python 
-				web-application that directly uses F-Spot's database to present a dynamic 
-				gallery of your photos and tags.
-			</para>
-			<para>
-				<ulink url="http://www.conduit-project.org">Conduit</ulink> is an application 
-				that can sync photos that have a particular tag with your Flickr or Picasa 
-				Web Album web storage.
-			</para>
+			<para><ulink url="http://pennave.sourceforge.net">PennAve</ulink> è un'applicazione web scritta in Python che usa direttamente il database di F-Spot per presentare una galleria dinamica delle proprie foto ed etichette.</para>
+			<para><ulink url="http://www.conduit-project.org">Conduit</ulink> è un'applicazione che permette la sincronizzazione di fotografie con un'etichetta particolare con il proprio archivio Flickr o Picasa Web Album.</para>
 		</sect1>
 	</chapter>
 
 	<chapter id="cms">
-		<title>Color management</title>
+		<title>Gestione dei colori</title>
 
 		<sect1 id="cms-what-is-cms">
-			<title>What's color management</title>
+			<title>Che cos'è la gestione dei colori</title>
 			
-			<para>
-				When you capture a photo and look at it on a display, it looks different than 
-				on a camera's preview display or on any other display. It will also look 
-				different when you print it. This is because every device has unique color 
-				reproduction capabilities.
-			</para>
+			<para>Quando si osserva una foto sul monitor questa appare differente da quella osservata nella previsualizzazione della fotocamera o su un altro monitor. Risulta essere anche diversa quando la si stampa. Questo perché ogni dispositivo ha una sua propria capacità di riprodurre i colori.</para>
 
-			<para>
-				Color management system (CMS) is a tool to achieve reliable color reproduction 
-				for both display and output (e.g. a printer). A CMS relies on color profiles 
-				to map original colors to the color that a device can reproduce so that colors 
-				will appear the same way everywhere — on a computer LCD monitor, on a print 
-				from your local photolab etc.
-			</para>
+			<para>Il Sistema di gestione dei colori (Color management system, CMS) è uno strumento per ottenere una fedele riproduzione dei colori tanto sul video quanto sui dispositivi di uscita (ad. es.: la stampante). Questo sistema si basa su profili colore per trasformare ogni colore nel corrispondente colore riproducibile dal dispositivo; in questo modo i colori appariranno gli stessi ovunque, su un monitor LCD oppure sulla stampa del laboratorio fotografico etc.</para>
 		</sect1>
 
 		<sect1 id="cms-what-is-icc-profile">
-			<title>What's a color profile</title>
+			<title>Che cos'è un profilo colore</title>
 			
-			<para>
-				A color profile is a file with either .icc (thus its is often called an ICC 
-				profile) or .icm extension that describes how device's colors correspond to a 
-				universal description of colors.
-			</para>
+			<para>Un profilo colore è un file con estensione .icc (da cui il nome «profilo ICC») o .icm che contiene la corrispondenza tra i colori riprodotti da un dispositivo e la loro descrizione standard.</para>
 
-			<para>
-				There are several types of profiles: 
-			</para>
+			<para>Ci sono molti tipi di profili:</para>
 
 			<itemizedlist>
 				<listitem>
-					<para>
-						Input device profile. It's profile for a camera or a profile that an 
-						application like XSane embeds into a scanned image. 
-					</para>
+					<para>Profilo per dispositivo di input. È un profilo per fotocamera o per un'applicazione come XSane relativa ad un'immagine scandita.</para>
 				</listitem>
 				<listitem>
-					<para>
-						Working space profile. It's a profile that describes color space in 
-						which all operations are done inside an application. Usually very wide 
-						gamut profiles like AdobeRGB1998 or ProPhotoRGB are used for that.
-					</para>				
+					<para>Profilo per area di lavoro. È un profilo descrivente lo spazio colore sul quale operano le applicazioni. Solitamente i profili più usati sono «AdobeRGB1998» oppure «ProPhotoRGB».</para>				
 				</listitem>
 				<listitem>
-					<para>
-						Display profile. It's a profile for a monitor. 
-					</para>				
+					<para>Profilo display. È un profilo per monitor.</para>				
 				</listitem>
 				<listitem>
-					<para>
-						Output profile. This is usually a profile for you printer. 
-					</para>				
+					<para>Profilo di output. Generalmente usato per la stampante.</para>				
 				</listitem>
 			</itemizedlist>					
 
-			<para>
-				Currently F-Spot allows setting only display and output profiles. 
-				All color operations are done in sRGB color space. 
-			</para>
+			<para>Attualmente F-Spot gestisce solamente i profili «output» e «display». La gestione dei colori viene effettuata nello spazio colore sRGB.</para>
 		</sect1>
 
 		<sect1 id="cms-how-to-get-icc-profile">
-			<title>How to get my screen/printer color profile </title>
+			<title>Come prelevare i profili per il monitor e la stampante</title>
 
-			<para>
-				There are few ways to get a color profile. 
-			</para>
+			<para>Ci sono molti modi per prelevare un profilo colore.</para>
 			
 			<sect2 id="cms-icc-from-cd-or-internet">
-				<title> From CD or Internet </title>
+				<title>Da un CD o da Internet</title>
 
-				<para>
-					Many hardware manufacturers put color profiles into CD in the bundle. 
-					If you have one (from monitor or printer), you can use it. Or you can 
-					download it from the Internet (usually, from support section of the 
-					manufacturer's web site). Some camera manufacturers (Nikon, Canon) 
-					also provide ICC profiles.
-				</para>
+				<para>Molti produttori hardware inseriscono il profilo colore all'interno del CD o lo inseriscono nella confezione. Se si dispone di uno di questi (per monitor o stampante) lo si può usare direttamente. Tali profili sono anche scaricabili via Internet dalla sezione «Supporto» del sito web del produttore. Anche alcuni produttori di fotocamere (Nikon, Canon) forniscono i profili ICC.</para>
 			</sect2>
 
 			<sect2 id="cms-icc-from-calibrating-and-profiling">
-				<title>Calibrating and profiling</title>
+				<title>Calibrazione ed impostazione profilo</title>
 
-				<para>
-					Best results can be achieved by calibrating and profiling devices with 
-					a measurement device. It is not so difficult, but it means that you need 
-					a spectrophotometer to do all measurements and create an ICC profile.
-				</para>
+				<para>I migliori risultati si ottengono calibrando ed impostando i profili mediante uno strumento di misura. Non è difficile, ma occorre avere a disposizione uno spettrofotometro per effettuare le misurazioni e creare un profilo ICC.</para>
 
-				<para>
-					If you are on Windows or Mac OS X, you can use manufacturer's software 
-					coming with a spectrophotometer. On Linux you will have to use either 
-					<ulink url="http://www.argyllcms.com">Argyll</ulink>, which is a set of 
-					versatile command line tools, or 
-					<ulink url="http://lprof.sourceforge.net/">LProf</ulink>, which has a 
-					graphical user interface. 
-				</para>
-				<para>
-					Please refer to documentation of third party hardware and software 
-					vendors for details.
-				</para>
+				<para>Utilizzando Windows o Mac OS X è possibile usare il software del produttore, generato da uno spettrofotometro. Con Linux è possibile usare sia <ulink url="http://www.argyllcms.com">Argyll</ulink>, un insieme versatile di strumenti a riga di comando, oppure <ulink url="http://lprof.sourceforge.net/">LProf</ulink>, dotato di interfaccia grafica.</para>
+				<para>Fare riferimento alla documentazione dei fornitori di hardware o software di terze parti per ulteriori dettagli.</para>
 			</sect2>
 
 			<sect2 id="cms-icc-from-embedding">
-				<title>Embedding</title>
+				<title>Incapsulamento</title>
 
-				<para>
-					Image formats themselves (such as TIFF, JPEG, PNG...) may contain embedded 
-					color profiles. If color management is enabled, F-Spot looks for such 
-					embedded profiles and takes them into consideration.
-				</para>
+				<para>Alcuni formati immagine (quali TIFF, JPG, PNG, etc.) possono contenere al loro interno profili colore. Se la gestione del colore è abilitata, F-Spot cercherà i profili colore e li utilizzerà.</para>
 			</sect2>
 		</sect1>
 
 		<sect1 id="cms-how-to-use">
-			<title>How to use color management in F-Spot</title>
+			<title>Come usare la gestione colore in F-Spot</title>
 			
-			<para>
-				Color management in F-Spot can use only RGB profiles at this time 
-				(and you can't see other profiles in the F-Spot).
-			</para>
+			<para>Attualmente F-Spot può gestire solamente i profili RGB (nessun altro profilo è visualizzabile).</para>
 
 			<itemizedlist>
 				<listitem>
-					<para>
-						Copy your color profiles into the 
-						<filename class="directory">/usr/share/color/icc</filename> or 
-						<filename class="directory">/usr/local/share./color/icc</filename> 
-						directory.
-					</para>
+					<para>Copiare i propri profili colore in una delle directory <filename class="directory">/usr/share/color/icc</filename> o <filename class="directory">/usr/local/share/color/icc</filename>.</para>
 				</listitem>
 				<listitem>
-					<para>
-						Enable the color management with the <menuchoice>
-						<guimenu>Edit</guimenu><guimenuitem>Preferences</guimenuitem>
-						</menuchoice> menu.
-					</para>				
+					<para>La stampa delle fotografie si ottiene mediante il menù <menuchoice><guimenu>File</guimenu><guimenuitem>Stampa</guimenuitem></menuchoice>.</para>				
 				</listitem>
 				<listitem>
-					<para>
-						Select <guilabel>Display</guilabel> and <guilabel>Output</guilabel> 
-						profiles.
-					</para>				
+					<para>Selezionare i profili <guilabel>Display</guilabel> e <guilabel>Output</guilabel>.</para>				
 				</listitem>
 			</itemizedlist>					
 
 			<tip>
-				<para>
-					You can use <ulink url="http://burtonini.com/blog/computers/xicc">xicc</ulink> 
-					to load ICC profile to display and use the loaded profile from F-Spot. 
-					Just mark the checkbox <guilabel>Try to use the system display 
-					profile</guilabel>.
-				</para>
+				<para>Sul sito <ulink url="http://burtonini.com/blog/computers/xicc">xicc"ulink&gt; Prova a usare il profilo di sistema.</ulink></para>
 			</tip>
 		</sect1>
 	</chapter>
@@ -605,7 +546,7 @@
 		<sect1 id="extend-what-extensions-are">
 			<title>Cosa sono le estensioni</title>
 
-			<para>Le estensioni di F-Spot sono metodi per aggiungere nuove funzionalità all'applicazione. F-Spot supporta due tipi di estensioni: esportazione (che permette l'esportazione di foto a nuovi archivi o servizi web) e strumenti (che consentono nuove correzioni di colore, ricerca di foto duplicate etc.). Le estensioni vengono distribuite in forma di pacchetti di estensione.</para>
+			<para>Le estensioni di F-Spot sono metodi per aggiungere nuove funzionalità all'applicazione. F-Spot supporta due tipi di estensioni: esportazione (che permette l'esportazione di foto a nuovi archivi o servizi web) e strumenti (che consentono nuove correzioni di colore, ricerca di foto duplicate ecc.). Le estensioni vengono distribuite in forma di pacchetti di estensione.</para>
 			<para>Nella miglior tradizione di non reinventare la ruota, le estensioni possono usare altre estensioni, il che significa che un'estensione non può lavorare se un'altra non è installata. Questo concetto di dipendenza attualmente significa che</para>
 			<itemizedlist>
 				<listitem>
@@ -655,8 +596,11 @@
 			<sect2 id="extend-managing-extensions-enabling-and-disabling-extensions">
 				<title>Abilitare e disabilitare le estensioni</title>
 
-				<para>È possibile abilitare o disabilitare temporaneamente un pacchetto di estensione, ad esempio se non è abbastanza stabile per gestire un gran numero di fotografie oppure se i menu risultano ristretti dalle estensioni.</para>
-				<para>Nella finestra di dialogo <guilabel>Gestione Estensioni</guilabel> selezionare il pacchetto di estensione e fare clic su <guibutton>Abilita</guibutton> o <guibutton>Disabilita</guibutton>. I cambiamenti saranno attivati alla successiva ripartenza di F-Spot.</para>
+				<para>È possibile abilitare o disabilitare temporaneamente un pacchetto di estensione, ad esempio se non è abbastanza stabile per gestire un gran numero di fotografie oppure se i menù risultano affollati di estensioni.</para>
+				<para>
+					In the <guilabel>Manage Extensions</guilabel> dialog select the extension 
+					package and click <guibutton>Enable</guibutton> or <guibutton>Disable</guibutton>. 
+				</para>
 			</sect2>
 			
 			<sect2 id="extend-managing-extensions-removing-extensions">
@@ -724,18 +668,16 @@
 						</row>
 						<row>
 							<entry>
-								<keycap>Del</keycap>
+								<keycap>Canc</keycap>
 							</entry>
-							<entry>
-								Remove selected photos from F-Spot's catalogue
-							</entry>
+							<entry>Rimuove dal catalogo di F-Spot le foto selezionate</entry>
 						</row>
 						<row>
 							<entry>
-								<keycombo><keycap>Maiusc</keycap><keycap>Del</keycap></keycombo>
+								<keycombo><keycap>Maiusc</keycap><keycap>Canc</keycap></keycombo>
 							</entry>
 							<entry>
-								Delete selected photos permanently from the drive
+								Delete selected photos permanently from the drive. If possible, they will moved to trash.
 							</entry>
 						</row>
  
@@ -779,9 +721,7 @@
 							<entry>
 								<keycombo><keycap>Alt</keycap><keycap>0-5</keycap></keycombo>
 							</entry>
-							<entry>
-								Alt plus a number from 0 to 5 rate the selected picture(s)
-							</entry>
+							<entry>«Alt» più un numero da 0 a 5 assegna il voto alle fotografie selezionate</entry>
 						</row>
 					</tbody>
 				</tgroup>
@@ -813,37 +753,32 @@
 							<entry>Deseleziona tutto</entry>
 						</row>
 						<row>
-							<entry>
-								Arrow keys or <keycap>H</keycap>, <keycap>J</keycap>, 
-								<keycap>K</keycap>, <keycap>L</keycap>
-							</entry>
+							<entry>Tasti freccia (su, giù, sinistra, destra) o tasti <keycap>H</keycap>, <keycap>J</keycap>, <keycap>K</keycap>, <keycap>L</keycap></entry>
 							<entry>Sposta il focus</entry>
 						</row>
 						<row>
-							<entry>
-								<keycap>Ctrl</keycap>-Arrow key
-							</entry>
+							<entry><keycap>Ctrl</keycap>-Tasto freccia</entry>
 							<entry>Sposta il focus senza cambiare la selezione</entry>
 						</row>
 						<row>
 							<entry>
 								<keycap>Barra spaziatrice</keycap>
 							</entry>
-							<entry>Seleziona o deseleziona la foto su cui è il focus</entry>
+							<entry>Seleziona o deseleziona la foto su cui si trova il focus</entry>
 						</row>
 						<row>
 							<entry>
 								<keycombo><keycap>Maiusc</keycap>
-								<keycap>Arrow key</keycap></keycombo>
+								<keycap>Tasto freccia</keycap></keycombo>
 							</entry>
 							<entry>Cambia la selezione della foto</entry>
 						</row>
 						<row>
 							<entry>
 								<keycombo><keycap>Ctrl</keycap><keycap>Maiusc</keycap>
-								<keycap>Left arrow or Right arrow</keycap></keycombo>
+								<keycap>Freccia sinistra o freccia destra</keycap></keycombo>
 							</entry>
-							<entry>Aggiunge/rimuove tutte le foto della riga, nella direzione premuta, alla selezione</entry>
+							<entry>Aggiunge o rimuove alla selezione tutte le foto della riga, nella direzione premuta</entry>
 						</row>
 						<row>
 							<entry>
@@ -910,24 +845,23 @@
 					</thead>
 					<tbody>
 						<row>
-							<entry>
-								<keycap>Pagina su</keycap>, <keycap>Backspace</keycap>, <keycap>B</keycap>
-							</entry>
+							<entry><keycap>Pagina su</keycap>, <keycap>Backspace</keycap>, <keycap>B</keycap></entry>
 							<entry>Va alla foto precedente</entry>
 						</row>
 						<row>
-							<entry>
-								<keycap>Pagina giù</keycap>, <keycap>Barra spaziatrice</keycap>, <keycap>N</keycap>
-							</entry>
-							<entry>Va alla prossima foto</entry>
+							<entry><keycap>Pagina giù</keycap>, <keycap>Barra spaziatrice</keycap>, <keycap>N</keycap></entry>
+							<entry>Va alla foto successiva</entry>
+						</row>
+						<row>
+							<entry>Tasti freccia (su, giù, sinistra, destra) o tasti <keycap>H</keycap>, <keycap>J</keycap>, <keycap>K</keycap>, <keycap>L</keycap></entry>
+							<entry>Va alla foto precedente o successiva oppure si muove su una foto ingrandita</entry>
 						</row>
 						<row>
 							<entry>
-								Arrow keys or <keycap>H</keycap>, <keycap>J</keycap>, 
-								<keycap>K</keycap>, <keycap>L</keycap>
+								<keycap>R</keycap>
 							</entry>
 							<entry>
-								Go to Previous/Next photo or move around a zoomed photo
+								Go to a random photo
 							</entry>
 						</row>
 						<row>
@@ -964,23 +898,17 @@
 							<entry>
 								<keycap>V</keycap>
 							</entry>
-							<entry>Esaminare le foto con la lente di ingrandimento (Loupe). Fare doppio clic su Loupe o digitare <keycap>v</keycap> nuovamente per chiudere.</entry>
+							<entry>Esamina le foto con la lente di ingrandimento (Loupe). Fare doppio clic sulla lente di ingrandimento o digitare <keycap>v</keycap> nuovamente per chiudere.</entry>
 						</row>
 						<row>
-							<entry>
-								<keycap>Maiusc</keycap>-Mousewheel
-							</entry>
-							<entry>
-								Faster filmstrip scrolling
-							</entry>
+							<entry><keycap>Maiusc</keycap>-Rotellina del mouse</entry>
+							<entry>Scorrimento veloce del rullino</entry>
 						</row>
 						<row>
 							<entry>
 								<keycap>i</keycap>
 							</entry>
-							<entry>
-								Toggle infobox visibility ''(only when in full screen)''
-							</entry>
+							<entry>Commuta la visibilità dell'infobox (solo in modalità a schermo intero)</entry>
 						</row>
 					</tbody>
 				</tgroup>

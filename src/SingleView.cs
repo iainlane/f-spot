@@ -8,6 +8,7 @@ using FSpot.Extensions;
 using FSpot.Utils;
 using FSpot.UI.Dialog;
 using FSpot.Widgets;
+using FSpot.Platform;
 
 namespace FSpot {
 	public class SingleView {
@@ -30,6 +31,11 @@ namespace FSpot {
 		[Glade.Widget] Gtk.Scale zoom_scale;
 
 		[Glade.Widget] Label status_label;
+
+		[Glade.Widget] ImageMenuItem rotate_left;
+		[Glade.Widget] ImageMenuItem rotate_right;
+
+		ToolButton rr_button, rl_button;
 
 		Sidebar sidebar;
 
@@ -77,12 +83,12 @@ namespace FSpot {
 			Gtk.Toolbar toolbar = new Gtk.Toolbar ();
 			toolbar_hbox.PackStart (toolbar);
 		
-			ToolButton rl_button = GtkUtil.ToolButtonFromTheme ("object-rotate-left", Catalog.GetString ("Rotate Left"), true);
+			rl_button = GtkUtil.ToolButtonFromTheme ("object-rotate-left", Catalog.GetString ("Rotate Left"), true);
 			rl_button.Clicked += HandleRotate270Command;
 			rl_button.SetTooltip (toolTips, Catalog.GetString ("Rotate photo left"), null);
 			toolbar.Insert (rl_button, -1);
 
-			ToolButton rr_button = GtkUtil.ToolButtonFromTheme ("object-rotate-right", Catalog.GetString ("Rotate Right"), true);
+			rr_button = GtkUtil.ToolButtonFromTheme ("object-rotate-right", Catalog.GetString ("Rotate Right"), true);
 			rr_button.Clicked += HandleRotate90Command;
 			rr_button.SetTooltip (toolTips, Catalog.GetString ("Rotate photo right"), null);
 			toolbar.Insert (rr_button, -1);
@@ -101,8 +107,10 @@ namespace FSpot {
 
 			collection = new UriCollection (uris);
 
-			TargetEntry [] dest_table = {   new TargetEntry ("text/uri-list", 0, 0),
-							new TargetEntry ("text/plain", 0, 1)};
+			TargetEntry [] dest_table = {
+				FSpot.DragDropTargets.UriListEntry,
+				FSpot.DragDropTargets.PlainTextEntry
+			};
 			
 			directory_view = new FSpot.Widgets.IconView (collection);
 			directory_view.Selection.Changed += HandleSelectionChanged;
@@ -160,11 +168,14 @@ namespace FSpot {
 			collection.Changed += HandleCollectionChanged;
 
 			// wrap the methods to fit to the delegate
-			image_view.Item.Changed += delegate (BrowsablePointer pointer, BrowsablePointerChangedArgs old) {
-															IBrowsableItem [] item = {pointer.Current};
-															PhotoArray item_array = new PhotoArray (item);
-															sidebar.HandleSelectionChanged (item_array);
-													};
+			image_view.Item.Changed += delegate (object sender, BrowsablePointerChangedEventArgs old) {
+					BrowsablePointer pointer = sender as BrowsablePointer;
+					if (pointer == null)
+						return;
+					IBrowsableItem [] item = {pointer.Current};
+					PhotoArray item_array = new PhotoArray (item);
+					sidebar.HandleSelectionChanged (item_array);
+			};
 			
 			image_view.Item.Collection.ItemsChanged += sidebar.HandleSelectionItemsChanged;
 
@@ -198,6 +209,8 @@ namespace FSpot {
 
 			if (collection.Count > 1)
 				ShowSidebar = true;
+
+			rotate_left.Sensitive = rotate_right.Sensitive = rr_button.Sensitive = rl_button.Sensitive = collection.Count != 0;
 
 			UpdateStatusLabel ();
 		}
@@ -261,8 +274,12 @@ namespace FSpot {
 			UpdateStatusLabel ();
 		}
 
-		private void HandleItemChanged (BrowsablePointer pointer, BrowsablePointerChangedArgs old)
+		private void HandleItemChanged (object sender, BrowsablePointerChangedEventArgs old)
 		{
+			BrowsablePointer pointer = sender as BrowsablePointer;
+			if (pointer == null)
+				return;
+
 			directory_view.FocusCell = pointer.Index;
 			directory_view.Selection.Clear ();
 			if (collection.Count > 0) {
@@ -273,14 +290,12 @@ namespace FSpot {
 
 		void HandleSetAsBackgroundCommand (object sender, EventArgs args)
 		{
-#if !NOGCONF
 			IBrowsableItem current = image_view.Item.Current;
 
 			if (current == null)
 				return;
 
-			GnomeUtil.SetBackgroundImage (current.DefaultVersionUri.LocalPath);
-#endif
+			Desktop.SetBackgroundImage (current.DefaultVersionUri.LocalPath);
 		}
 
 		private void HandleViewToolbar (object sender, System.EventArgs args)
@@ -452,23 +467,22 @@ namespace FSpot {
 
 		void HandleDragDataReceived (object sender, DragDataReceivedArgs args) 
 		{
-		
-		switch (args.Info) {
-		case 0:
-		case 1:
-			/* 
-			 * If the drop is coming from inside f-spot then we don't want to import 
-			 */
-			if (Gtk.Drag.GetSourceWidget (args.Context) != null)
+			if (args.Info == FSpot.DragDropTargets.UriListEntry.Info
+			    || args.Info == FSpot.DragDropTargets.PlainTextEntry.Info) {
+				
+				/* 
+				 * If the drop is coming from inside f-spot then we don't want to import 
+				 */
+				if (Gtk.Drag.GetSourceWidget (args.Context) != null)
+					return;
+				
+				UriList list = args.SelectionData.GetUriListData ();
+				collection.LoadItems (list.ToArray());
+				
+				Gtk.Drag.Finish (args.Context, true, false, args.Time);
+				
 				return;
-
-			UriList list = new UriList (args.SelectionData);
-			collection.LoadItems (list.ToArray());
-
-			break;
-		}
-
-		Gtk.Drag.Finish (args.Context, true, false, args.Time);
+			}
 		}
 
 		private void UpdateStatusLabel ()
@@ -568,16 +582,16 @@ namespace FSpot {
 
 			case Preferences.VIEWER_TRANSPARENCY:
 				if (Preferences.Get<string> (key) == "CHECK_PATTERN")
-					image_view.SetCheckSize (2);
+					image_view.CheckPattern = CheckPattern.Dark;
 				else if (Preferences.Get<string> (key) == "COLOR")
-					image_view.SetTransparentColor (Preferences.Get<string> (Preferences.VIEWER_TRANS_COLOR));
+					image_view.CheckPattern = new CheckPattern (Preferences.Get<string> (Preferences.VIEWER_TRANS_COLOR));
 				else // NONE
-					image_view.SetTransparentColor (image_view.Style.BaseColors [(int)Gtk.StateType.Normal]);
+					image_view.CheckPattern = new CheckPattern (image_view.Style.BaseColors [(int)Gtk.StateType.Normal]);
 				break;
 
 			case Preferences.VIEWER_TRANS_COLOR:
 				if (Preferences.Get<string> (Preferences.VIEWER_TRANSPARENCY) == "COLOR")
-					image_view.SetTransparentColor (Preferences.Get<string> (key));
+					image_view.CheckPattern = new CheckPattern (Preferences.Get<string> (key));
 				break;
 			}
 		}

@@ -89,8 +89,36 @@ namespace Mono.Facebook
 				T response = (T)response_serializer.Deserialize(new MemoryStream(response_bytes));
 				return response;
 			}
-			catch {
-				Error error = (Error) ErrorSerializer.Deserialize (new MemoryStream (response_bytes));
+			catch (InvalidOperationException e) {
+				Error error;
+				try {
+					error = (Error) ErrorSerializer.Deserialize (new MemoryStream (response_bytes));
+				} catch {
+					throw e;
+				}
+				throw new FacebookException (error.ErrorCode, error.ErrorMsg);
+			}
+		}
+
+		public bool GetBoolResponse (string method_name, params FacebookParam[] parameters)
+		{
+			string url = FormatGetUrl (method_name, parameters);
+			byte[] response_bytes = GetResponseBytes (url);
+
+			XmlDocument doc = new XmlDocument ();
+			doc.LoadXml (Encoding.Default.GetString (response_bytes));
+
+			try {
+				return System.Convert.ToBoolean(Int32.Parse(doc.InnerText));
+			}
+			catch (FormatException e) {
+				Error error;
+				try {
+					error = (Error) ErrorSerializer.Deserialize (new MemoryStream (response_bytes));
+				} catch {
+					Console.Error.WriteLine("Parse error: Inner text was '{0}'", doc.InnerText);
+					throw e;
+				}
 				throw new FacebookException (error.ErrorCode, error.ErrorMsg);
 			}
 		}

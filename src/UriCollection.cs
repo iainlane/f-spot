@@ -5,6 +5,9 @@
  *	Larry Ewing  (lewing@novell.com)
  *	Stephane Delcroix  (stephane@delcroix.org)
  *
+ * Copyright (c) 2005-2009 Novell, Inc.
+ * Copyright (c) 2007 Stephane Delcroix
+ *
  * This is free software. See COPYING for details
  */
 
@@ -14,13 +17,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 
+using GLib;
+
 namespace FSpot {
 	public class UriCollection : PhotoList {
 		public UriCollection () : base (new IBrowsableItem [0])
 		{
 		}
 
-		public UriCollection (FileInfo [] files) : this ()
+		public UriCollection (System.IO.FileInfo [] files) : this ()
 		{
 			LoadItems (files);
 		}
@@ -36,20 +41,16 @@ namespace FSpot {
 				//Console.WriteLine ("using image loader {0}", uri.ToString ());
 				Add (new FileBrowsableItem (uri));
 			} else {
-				Gnome.Vfs.FileInfo info = new Gnome.Vfs.FileInfo (uri.ToString (),
-						Gnome.Vfs.FileInfoOptions.GetMimeType);
+				GLib.FileInfo info = FileFactory.NewForUri (uri).QueryInfo ("standard::type,standard::content-type", FileQueryInfoFlags.None, null);
 
-
-				//Console.WriteLine ("url {0} MimeType {1}", uri, info.MimeType);
-
-				if (info.Type == Gnome.Vfs.FileType.Directory)
+				if (info.FileType == FileType.Directory)
 					new DirectoryLoader (this, uri);
 				else {
 					// FIXME ugh...
-					if (info.MimeType == "text/xml"
-						|| info.MimeType == "application/xml"
-					|| info.MimeType == "application/rss+xml"
-					|| info.MimeType == "text/plain") {
+					if (info.ContentType == "text/xml"
+					 || info.ContentType == "application/xml"
+					 || info.ContentType == "application/rss+xml"
+					 || info.ContentType == "text/plain") {
 						new RssLoader (this, uri);
 					}
 				}
@@ -107,45 +108,40 @@ namespace FSpot {
 		{
 			UriCollection collection;
 			Uri uri;
+			GLib.File file;
 
 			public DirectoryLoader (UriCollection collection, System.Uri uri)
 			{
 				this.collection = collection;
 				this.uri = uri;
-				Gnome.Vfs.Directory.GetEntries (uri.ToString (),
-						Gnome.Vfs.FileInfoOptions.Default,
-						20,
-						(int)Gnome.Vfs.Async.Priority.Default,
-						InfoLoaded);
+				file = FileFactory.NewForUri (uri);
+				file.EnumerateChildrenAsync ("standard::*",
+							     FileQueryInfoFlags.None,
+							     500,
+							     null,
+							     InfoLoaded);
+										    
 			}
 
-			private void InfoLoaded (Gnome.Vfs.Result result, Gnome.Vfs.FileInfo []info, uint entries_read)
+			void InfoLoaded (GLib.Object o, GLib.AsyncResult res)
 			{
-				if (result != Gnome.Vfs.Result.Ok && result != Gnome.Vfs.Result.ErrorEof)
-					return;
-
-				ArrayList items = new ArrayList ();
-
-				for (int i = 0; i < entries_read; i++) {
-					Gnome.Vfs.Uri vfs = new Gnome.Vfs.Uri (uri.ToString ());
-					vfs = vfs.AppendFileName (info [i].Name);
-					Uri file = new Uri (vfs.ToString ());
-					System.Console.WriteLine ("tesing uri = {0}", file.ToString ());
-
-					if (FSpot.ImageFile.HasLoader (file))
-						items.Add (new FileBrowsableItem (file));
+				List<FileBrowsableItem> items = new List<FileBrowsableItem> ();
+				foreach (GLib.FileInfo info in file.EnumerateChildrenFinish (res)) {
+					Uri i = file.GetChild (info.Name).Uri;
+					FSpot.Utils.Log.Debug ("testing uri = {0}", i);
+					if (FSpot.ImageFile.HasLoader (i))
+						items.Add (new FileBrowsableItem (i));
 				}
-
 				Gtk.Application.Invoke (items, System.EventArgs.Empty, delegate (object sender, EventArgs args) {
-					collection.Add (items.ToArray (typeof (FileBrowsableItem)) as FileBrowsableItem []);
+					collection.Add (items.ToArray ());
 				});
 			}
 		}
 
-		protected void LoadItems (FileInfo [] files)
+		protected void LoadItems (System.IO.FileInfo [] files)
 		{
 			List<IBrowsableItem> items = new List<IBrowsableItem> ();
-			foreach (FileInfo f in files) {
+			foreach (var f in files) {
 				if (FSpot.ImageFile.HasLoader (f.FullName)) {
 					Console.WriteLine (f.FullName);
 					items.Add (new FileBrowsableItem (f.FullName));

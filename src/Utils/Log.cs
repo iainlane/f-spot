@@ -32,8 +32,6 @@ using System.Collections.Generic;
 
 namespace FSpot.Utils
 {
-    public delegate void LogNotifyHandler (LogNotifyEventArgs args);
-
     public class LogNotifyEventArgs : EventArgs
     {
         private LogEntry entry;
@@ -50,6 +48,7 @@ namespace FSpot.Utils
         
     public enum LogEntryType
     {
+        Trace,
         Debug,
         Warning,
         Error,
@@ -90,7 +89,7 @@ namespace FSpot.Utils
     
     public static class Log
     {
-        public static event LogNotifyHandler Notify;
+        public static event EventHandler<LogNotifyEventArgs> Notify;
         
         private static Dictionary<uint, DateTime> timers = new Dictionary<uint, DateTime> ();
         private static uint next_timer_id = 1;
@@ -100,10 +99,20 @@ namespace FSpot.Utils
             get { return debugging; }
             set { debugging = value; }
         }
+
+        private static bool tracing = false;
+        public static bool Tracing {
+            get { return tracing; }
+            set { tracing = value; }
+        }
         
         public static void Commit (LogEntryType type, string message, string details, bool showUser)
         {
             if (type == LogEntryType.Debug && !Debugging) {
+                return;
+            }
+
+            if (type == LogEntryType.Trace && !Tracing) {
                 return;
             }
         
@@ -113,6 +122,7 @@ namespace FSpot.Utils
                     case LogEntryType.Warning: ConsoleCrayon.ForegroundColor = ConsoleColor.Yellow; break;
                     case LogEntryType.Information: ConsoleCrayon.ForegroundColor = ConsoleColor.Green; break;
                     case LogEntryType.Debug: ConsoleCrayon.ForegroundColor = ConsoleColor.Blue; break;
+                    case LogEntryType.Trace: ConsoleCrayon.ForegroundColor = ConsoleColor.Magenta; break;
                 }
                 
                 Console.Write ("[{0} {1:00}:{2:00}:{3:00}.{4:000}]", TypeString (type), DateTime.Now.Hour,
@@ -130,6 +140,11 @@ namespace FSpot.Utils
             if (showUser) {
                 OnNotify (new LogEntry (type, message, details));
             }
+
+            if (type == LogEntryType.Trace) {
+                string str = String.Format ("MARK: {0}: {1}", message, details);
+                Mono.Unix.Native.Syscall.access(str, Mono.Unix.Native.AccessModes.F_OK);
+            }
         }
 
         private static string TypeString (LogEntryType type)
@@ -139,15 +154,16 @@ namespace FSpot.Utils
                 case LogEntryType.Warning:       return "Warn ";
                 case LogEntryType.Error:         return "Error";
                 case LogEntryType.Information:   return "Info ";
+                case LogEntryType.Trace:         return "Trace";
             }
             return null;
         }
         
         private static void OnNotify (LogEntry entry)
         {
-            LogNotifyHandler handler = Notify;
+            EventHandler<LogNotifyEventArgs> handler = Notify;
             if (handler != null) {
-                handler (new LogNotifyEventArgs (entry));
+                handler (null, new LogNotifyEventArgs (entry));
             }
         }
         
@@ -248,51 +264,53 @@ namespace FSpot.Utils
             }
             
             if (isInfo) {
-                InformationFormat (message, d_message);
+                Information (message, d_message);
             } else {
-                DebugFormat (message, d_message);
+                Debug (message, d_message);
             }
         }
         
         #endregion
-        
-        #region Public Debug Methods
-                                    
-        public static void Debug (string message, string details)
+
+        #region Public Trace Methods
+        public static void Trace (string group, string format, params object [] args)
         {
-            if (Debugging) {
-                Commit (LogEntryType.Debug, message, details, false);
+            if (Tracing) {
+                Commit (LogEntryType.Trace, group, String.Format (format, args), false);
             }
         }
+        #endregion
         
+        #region Public Debug Methods
         public static void Debug (string message)
         {
             if (Debugging) {
-                Debug (message, null);
+                Commit (LogEntryType.Debug, message, null, false);
             }
         }
-        
-        public static void DebugFormat (string format, params object [] args)
+ 
+		public static void Debug (string format, params object [] args)
         {
             if (Debugging) {
                 Debug (String.Format (format, args));
             }
         }
-                
+	
+		public static void DebugException (Exception e)
+		{
+		    if (Debugging)
+		        Exception (e);
+		}
+	
+		public static void DebugException (string message, Exception e)
+		{
+		    if (Debugging)
+			Exception (message, e);
+	
+		}
         #endregion
         
         #region Public Information Methods
-            
-        public static void Information (string message)
-        {
-            Information (message, null);
-        }
-        
-        public static void Information (string message, string details)
-        {
-            Information (message, details, false);
-        }
-        
         public static void Information (string message, string details, bool showUser)
         {
             Commit (LogEntryType.Information, message, details, showUser);
@@ -303,25 +321,13 @@ namespace FSpot.Utils
             Information (message, null, showUser);
         }
         
-        public static void InformationFormat (string format, params object [] args)
+        public static void Information (string format, params object [] args)
         {
-            Information (String.Format (format, args));
+            Information (String.Format (format, args), null, false);
         }
-        
         #endregion
         
         #region Public Warning Methods
-        
-        public static void Warning (string message)
-        {
-            Warning (message, null);
-        }
-        
-        public static void Warning (string message, string details)
-        {
-            Warning (message, details, false);
-        }
-        
         public static void Warning (string message, string details, bool showUser)
         {
             Commit (LogEntryType.Warning, message, details, showUser);
@@ -331,26 +337,14 @@ namespace FSpot.Utils
         {
             Warning (message, null, showUser);
         }
-        
-        public static void WarningFormat (string format, params object [] args)
+
+		public static void Warning (string format, params object [] args)
         {
-            Warning (String.Format (format, args));
+            Warning (String.Format (format, args), false);
         }
-        
         #endregion
         
         #region Public Error Methods
-        
-        public static void Error (string message)
-        {
-            Error (message, null);
-        }
-        
-        public static void Error (string message, string details)
-        {
-            Error (message, details, false);
-        }
-        
         public static void Error (string message, string details, bool showUser)
         {
             Commit (LogEntryType.Error, message, details, showUser);
@@ -361,11 +355,10 @@ namespace FSpot.Utils
             Error (message, null, showUser);
         }
 
-        public static void ErrorFormat (string format, params object [] args)
+        public static void Error (string format, params object [] args)
         {
-            Error (String.Format (format, args));
+            Error (String.Format (format, args), null, false);
         }
-        
         #endregion
         
         #region Public Exception Methods
@@ -397,11 +390,12 @@ namespace FSpot.Utils
             // FIXME: We should save these to an actual log file
             Log.Warning (message ?? "Caught an exception", builder.ToString (), false);
         }
-        
-	public static void ExceptionFormat (Exception e, string format, params object [] args)
-	{
-		Exception (String.Format (format, args), e);
-	}
-        #endregion
+		
+		public static void Exception (Exception e, string format, params object [] args)
+		{
+			Exception (String.Format (format, args), e);
+		}
+		
+	#endregion
     }
 }

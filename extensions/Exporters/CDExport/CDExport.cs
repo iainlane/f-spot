@@ -1,54 +1,56 @@
+/*
+ * CDExport.cs
+ *
+ * Authors:
+ *   Larry Ewing <lewing@novell.com>
+ *   Lorenzo Milesi <maxxer@yetopen.it>
+ *
+ * Copyright (c) 2007-2009 Novell, Inc.
+ *
+ * This is free software. See COPYING for details.
+ */
+
 using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
+
 using Mono.Unix;
+
 using FSpot;
 using FSpot.Filters;
 using FSpot.Widgets;
 using FSpot.Utils;
-#if GIO_2_16
+using FSpot.UI.Dialog;
+
 using GLib;
-#endif
+using Gtk;
+using GtkBeans;
 
 namespace FSpotCDExport {
-	public class CDExport : FSpot.Extensions.IExporter {
+	class CDExportDialog : BuilderDialog {
 		IBrowsableCollection selection;
-
-		[Glade.Widget] Gtk.Dialog dialog;
-		[Glade.Widget] Gtk.ScrolledWindow thumb_scrolledwindow;
-		[Glade.Widget] Gtk.CheckButton remove_check;
-		[Glade.Widget] Gtk.CheckButton rotate_check;
-		[Glade.Widget] Gtk.Label size_label;
-		[Glade.Widget] Gtk.Frame previous_frame;
-
-#if GIO_2_16
 		Gtk.Window listwindow;
-		System.Uri dest = new System.Uri ("burn:///");
-#else
-		Gnome.Vfs.Uri dest = new Gnome.Vfs.Uri ("burn:///");
-#endif
+		System.Uri dest;
 
-		int photo_index;
-		bool clean;
-		bool rotate;
+		[GtkBeans.Builder.Object] ScrolledWindow thumb_scrolledwindow;
+		[GtkBeans.Builder.Object] CheckButton remove_check;
+		[GtkBeans.Builder.Object] CheckButton rotate_check;
+		[GtkBeans.Builder.Object] Label size_label;
+		[GtkBeans.Builder.Object] Frame previous_frame;
 
-		FSpot.ThreadProgressDialog progress_dialog;
-		System.Threading.Thread command_thread;
-
-		private Glade.XML xml;
-		private string dialog_name = "cd_export_dialog";
-
-		public CDExport ()
-		{
+		public bool Clean {
+			get { return remove_check.Active; }
 		}
 
-		public void Run (IBrowsableCollection selection)
+		public bool Rotate {
+			get { return rotate_check.Active; }
+		}
+
+		public CDExportDialog (IBrowsableCollection selection, System.Uri dest) : base (Assembly.GetExecutingAssembly (), "CDExport.ui", "cd_export_dialog")
 		{
-
-			xml = new Glade.XML (null, "CDExport.glade", dialog_name, "f-spot");
-			xml.Autoconnect (this);
-
 			this.selection = selection;
+			this.dest = dest;
 
 			// Calculate the total size
 			long total_size = 0;
@@ -63,27 +65,33 @@ namespace FSpotCDExport {
 				}
 			}
 
-			IconView view = new IconView (selection);
+			FSpot.Widgets.IconView view = new FSpot.Widgets.IconView (selection);
 			view.DisplayDates = false;
 			view.DisplayTags = false;
+			view.DisplayRatings = false;
 
-			Dialog.Modal = false;
-			Dialog.TransientFor = null;
+			this.Modal = false;
+			this.TransientFor = null;
 
-			size_label.Text = SizeUtil.ToHumanReadable (total_size);
+			size_label.Text = Format.SizeForDisplay (total_size);
 
 			thumb_scrolledwindow.Add (view);
-			Dialog.ShowAll ();
+			this.ShowAll ();
 
 			previous_frame.Visible = IsEmpty (dest);
 			//LoadHistory ();
 
-			Dialog.Response += HandleResponse;
+		}
+
+		bool IsEmpty (System.Uri path)
+		{
+			foreach (GLib.FileInfo fi in FileFactory.NewForUri (path).EnumerateChildren ("*", FileQueryInfoFlags.None, null))
+				return true;
+			return false;
 		}
 
 		void HandleBrowseExisting (object sender, System.EventArgs args)
 		{
-#if GIO_2_16
 			if (listwindow == null) {
 				listwindow = new Gtk.Window ("Pending files to write");
 				listwindow.SetDefaultSize (400, 200);
@@ -98,12 +106,8 @@ namespace FSpotCDExport {
 			}
 			ListAll (((listwindow.Child as Gtk.ScrolledWindow).Child as Gtk.TextView).Buffer, dest);
 			listwindow.ShowAll ();
-#else
-			GnomeUtil.UrlShow (dest.ToString ());
-#endif
 		}
 
-#if GIO_2_16
 		void ListAll (Gtk.TextBuffer t, System.Uri path)
 		{
 			GLib.File f = FileFactory.NewForUri (path);
@@ -113,41 +117,76 @@ namespace FSpotCDExport {
 					ListAll (t, new System.Uri (path, info.Name + "/"));
 			}
 		}
-#endif
+		
+		~CDExportDialog ()
+		{
+			if (listwindow != null)
+				listwindow.Destroy ();
+		}
+
+	}
+
+
+	public class CDExport : FSpot.Extensions.IExporter {
+		IBrowsableCollection selection;
+
+		System.Uri dest = new System.Uri ("burn:///");
+
+		int photo_index;
+		bool clean;
+		bool rotate;
+
+		CDExportDialog dialog;
+		ThreadProgressDialog progress_dialog;
+		System.Threading.Thread command_thread;
+
+		public CDExport ()
+		{
+		}
+
+		public void Run (IBrowsableCollection selection)
+		{
+			this.selection = selection;
+			dialog = new CDExportDialog (selection, dest);
+			//LoadHistory ();
+
+                        if (dialog.Run () != (int)ResponseType.Ok) {
+                                dialog.Destroy ();
+                                return;
+                        }
+
+			clean = dialog.Clean;
+			rotate = dialog.Rotate;
+
+			command_thread = new System.Threading.Thread (new System.Threading.ThreadStart (Transfer));
+			command_thread.Name = Catalog.GetString ("Transferring Pictures");
+
+			progress_dialog = new ThreadProgressDialog (command_thread, selection.Count);
+			progress_dialog.Start ();
+
+			dialog.Destroy ();
+		}
+
 		[DllImport ("libc")]
 		extern static int system (string program);
 
 //		//FIXME: rewrite this as a Filter
-#if GIO_2_16
 	        public static GLib.File UniqueName (System.Uri path, string shortname)
-#else
-	        public static Gnome.Vfs.Uri UniqueName (Gnome.Vfs.Uri path, string shortname)
-#endif
 	        {
 	                int i = 1;
-#if GIO_2_16
 			GLib.File dest = FileFactory.NewForUri (new System.Uri (path, shortname));
-#else
-			Gnome.Vfs.Uri target = path.Clone();
-	                Gnome.Vfs.Uri dest = target.AppendFileName(shortname);
-#endif
 	                while (dest.Exists) {
 	                        string numbered_name = System.String.Format ("{0}-{1}{2}",
 	                                                              System.IO.Path.GetFileNameWithoutExtension (shortname),
 	                                                              i++,
 	                                                              System.IO.Path.GetExtension (shortname));
 
-#if GIO_2_16
 				dest = FileFactory.NewForUri (new System.Uri (path, numbered_name));
-#else
-				dest = target.AppendFileName(numbered_name);
-#endif
 	                }
 
 	                return dest;
 	        }
 
-#if GIO_2_16
 		void Clean (System.Uri path)
 		{
 			GLib.File source = FileFactory.NewForUri (path);
@@ -157,43 +196,13 @@ namespace FSpotCDExport {
 				FileFactory.NewForUri (new System.Uri (path, info.Name)).Delete ();
 			}
 		}
-#else
-		void Clean ()
-		{
-			Gnome.Vfs.Uri target = dest.Clone ();
-			Gnome.Vfs.XferProgressCallback cb = new Gnome.Vfs.XferProgressCallback (Progress);
-			Gnome.Vfs.Xfer.XferDeleteList (new Gnome.Vfs.Uri [] {target}, Gnome.Vfs.XferErrorMode.Query, Gnome.Vfs.XferOptions.Recursive, cb);
-		}
-#endif
-
-#if GIO_2_16
-		bool IsEmpty (System.Uri path)
-		{
-			foreach (GLib.FileInfo fi in FileFactory.NewForUri (path).EnumerateChildren ("*", FileQueryInfoFlags.None, null))
-				return true;
-			return false;
-		}
-#else
-		bool IsEmpty (Gnome.Vfs.Uri path)
-		{
-			return Gnome.Vfs.Directory.GetEntries (path).Length != 0;
-		}
-#endif
 
 		public void Transfer () {
 			try {
-#if GIO_2_16
 				bool result = true;
-#else
-				Gnome.Vfs.Result result = Gnome.Vfs.Result.Ok;
-#endif
 
 				if (clean)
-#if GIO_2_16
 					Clean (dest);
-#else
-					Clean ();
-#endif
 
 				foreach (IBrowsableItem photo in selection.Items) {
 
@@ -202,53 +211,31 @@ namespace FSpotCDExport {
 						if (rotate)
 							new OrientationFilter ().Convert (request);
 
-#if GIO_2_16
 						GLib.File source = FileFactory.NewForUri (request.Current.ToString ());
-#else
-						Gnome.Vfs.Uri source = new Gnome.Vfs.Uri (request.Current.ToString ());
-						Gnome.Vfs.Uri target = dest.Clone ();
-#endif
-#if GIO_2_16
 						GLib.File target = UniqueName (dest, photo.Name);
 						FileProgressCallback cb = Progress;
-#else
-						target = UniqueName (target, photo.Name);
-						Gnome.Vfs.XferProgressCallback cb = new Gnome.Vfs.XferProgressCallback (Progress);
-#endif
 
 						progress_dialog.Message = System.String.Format (Catalog.GetString ("Transferring picture \"{0}\" To CD"), photo.Name);
 						progress_dialog.Fraction = photo_index / (double) selection.Count;
 						progress_dialog.ProgressText = System.String.Format (Catalog.GetString ("{0} of {1}"),
 											     photo_index, selection.Count);
 
-#if GIO_2_16
 						result &= source.Copy (target,
 									FileCopyFlags.None,
 									null,
 									cb);
-#else
-						result = Gnome.Vfs.Xfer.XferUri (source, target,
-										 Gnome.Vfs.XferOptions.Default,
-										 Gnome.Vfs.XferErrorMode.Abort,
-										 Gnome.Vfs.XferOverwriteMode.Replace,
-										 cb);
-#endif
 					}
 					photo_index++;
 				}
 
 				// FIXME the error dialog here is ugly and needs improvement when strings are not frozen.
-#if GIO_2_16
 				if (result) {
-#else
-				if (result == Gnome.Vfs.Result.Ok) {
-#endif
 					progress_dialog.Message = Catalog.GetString ("Done Sending Photos");
 					progress_dialog.Fraction = 1.0;
 					progress_dialog.ProgressText = Catalog.GetString ("Transfer Complete");
 					progress_dialog.ButtonLabel = Gtk.Stock.Ok;
 					progress_dialog.Hide ();
-					system ("nautilus-cd-burner");
+					system ("brasero -n");
 				} else {
 					throw new System.Exception (System.String.Format ("{0}{3}{1}{3}{2}",
 											  progress_dialog.Message,
@@ -258,6 +245,7 @@ namespace FSpotCDExport {
 				}
 
 			} catch (System.Exception e) {
+				FSpot.Utils.Log.DebugException (e);
 				progress_dialog.Message = e.ToString ();
 				progress_dialog.ProgressText = Catalog.GetString ("Error Transferring");
 				return;
@@ -270,44 +258,19 @@ namespace FSpotCDExport {
 			progress_dialog.Destroy ();
 		}
 
-#if GIO_2_16
 		private void Progress (long current_num_bytes, long total_num_bytes)
-#else
-		private int Progress (Gnome.Vfs.XferProgressInfo info)
-#endif
 		{
-#if GIO_2_16
 			progress_dialog.ProgressText = Catalog.GetString ("copying...");
-#else
-			progress_dialog.ProgressText = info.Phase.ToString ();
-#endif
 
-#if GIO_2_16
 			if (total_num_bytes > 0)
 				progress_dialog.Fraction = current_num_bytes / (double)total_num_bytes;
-#else
-			if (info.BytesTotal > 0)
-				progress_dialog.Fraction = info.BytesCopied / (double)info.BytesTotal;
-#endif
 
-#if !GIO_2_16
-			switch (info.Status) {
-			case Gnome.Vfs.XferProgressStatus.Vfserror:
-				progress_dialog.Message = Catalog.GetString ("Error: Error while transferring; Aborting");
-				return (int)Gnome.Vfs.XferErrorAction.Abort;
-			case Gnome.Vfs.XferProgressStatus.Overwrite:
-				progress_dialog.ProgressText = Catalog.GetString ("Error: File Already Exists; Aborting");
-				return (int)Gnome.Vfs.XferOverwriteAction.Abort;
-			default:
-				return 1;
-			}
-#endif
 		}
 
 		private void HandleMsg (Gnome.Vfs.ModuleCallback cb)
 		{
 			Gnome.Vfs.ModuleCallbackStatusMessage msg = cb as Gnome.Vfs.ModuleCallbackStatusMessage;
-			System.Console.WriteLine ("{0}", msg.Message);
+			FSpot.Utils.Log.Debug ("CDExport: " + msg.Message);
 		}
 
 		private void HandleAuth (Gnome.Vfs.ModuleCallback cb)
@@ -323,35 +286,5 @@ namespace FSpotCDExport {
 			fcb.Password = passwd;
 		}
 
-		private void HandleResponse (object sender, Gtk.ResponseArgs args)
-		{
-#if GIO_2_16
-			if (listwindow != null)
-				listwindow.Destroy ();
-#endif
-			if (args.ResponseId != Gtk.ResponseType.Ok) {
-				Dialog.Destroy ();
-				return;
-			}
-
-			clean = remove_check.Active;
-			rotate = rotate_check.Active;
-			Dialog.Destroy ();
-
-			command_thread = new System.Threading.Thread (new System.Threading.ThreadStart (Transfer));
-			command_thread.Name = Catalog.GetString ("Transferring Pictures");
-
-			progress_dialog = new FSpot.ThreadProgressDialog (command_thread, selection.Count);
-			progress_dialog.Start ();
-		}
-
-		private Gtk.Dialog Dialog {
-			get {
-				if (dialog == null)
-					dialog = (Gtk.Dialog) xml.GetWidget (dialog_name);
-
-				return dialog;
-			}
-		}
 	}
 }

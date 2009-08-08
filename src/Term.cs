@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using Mono.Unix;
 using Gtk;
@@ -497,7 +498,7 @@ namespace FSpot {
 				handle_box = new LiteralBox ();
 				handle_box.BorderWidth = 1;
 
-				label = new Label (tag.Name);
+				label = new Label (System.Web.HttpUtility.HtmlEncode (tag.Name));
 				label.UseMarkup = true;
 
 				image = new Gtk.Image (NormalIcon);
@@ -589,11 +590,11 @@ namespace FSpot {
 			negated_icon = null;
 			if (IsNegated) {
 				tips.SetTip (widget, String.Format (Catalog.GetString ("Not {0}"), tag.Name), null);
-				label.Text = "<s>" + tag.Name + "</s>";
+				label.Text = "<s>" + System.Web.HttpUtility.HtmlEncode (tag.Name) + "</s>";
 				image.Pixbuf = NegatedIcon;
 			} else {
 				tips.SetTip (widget, tag.Name, null);
-				label.Text = tag.Name;
+				label.Text = System.Web.HttpUtility.HtmlEncode (tag.Name);
 				image.Pixbuf = NormalIcon;
 			}
 
@@ -636,7 +637,7 @@ namespace FSpot {
 			StringBuilder ids = new StringBuilder (tag.Id.ToString ());
 
 			if (tag is Category) {
-				ArrayList tags = new ArrayList ();
+				List<Tag> tags = new List<Tag> ();
 				(tag as Category).AddDescendentsTo (tags);
 
 				for (int i = 0; i < tags.Count; i++)
@@ -757,25 +758,25 @@ namespace FSpot {
 		void HandleDragDataGet (object sender, DragDataGetArgs args)
 		{
 			args.RetVal = true;
-			switch (args.Info) {
-			case (uint) MainWindow.TargetType.TagList:
-			case (uint) MainWindow.TargetType.TagQueryItem:
+			
+			if (args.Info == DragDropTargets.TagListEntry.Info || args.Info == DragDropTargets.TagQueryEntry.Info) {
+				
+				// FIXME: do really write data
 				Byte [] data = Encoding.UTF8.GetBytes (String.Empty);
 				Atom [] targets = args.Context.Targets;
 
 				args.SelectionData.Set (targets[0], 8, data, data.Length);
 
 				return;
-			default:
-				// Drop cancelled
-				args.RetVal = false;
+			}
+			
+			// Drop cancelled
+			args.RetVal = false;
 
-				foreach (Widget w in hiddenWidgets)
+			foreach (Widget w in hiddenWidgets)
 				w.Visible = true;
 
-				focusedLiterals = null;
-				break;
-			}
+			focusedLiterals = null;
 		}
 
 		void HandleDragBegin (object sender, DragBeginArgs args)
@@ -803,16 +804,20 @@ namespace FSpot {
 			args.RetVal = true;
 		}
 
-		private void HandleDragDataReceived (object o, EventArgs args)
+		private void HandleDragDataReceived (object o, DragDataReceivedArgs args)
 		{
-			// If focusedLiterals is not null, this is a drag of a tag that's already been placed
-			if (focusedLiterals.Count == 0)
-			{
-				if (TermAdded != null)
-					TermAdded (Parent, this);
+			args.RetVal = true;
+			
+			if (args.Info == DragDropTargets.TagListEntry.Info) {
+
+				if (TagsAdded != null)
+					TagsAdded (args.SelectionData.GetTagsData (), Parent, this);
+				
+				return;
 			}
-			else
-			{
+			
+			if (args.Info == DragDropTargets.TagQueryEntry.Info) {
+
 				if (! focusedLiterals.Contains(this))
 					if (LiteralsMoved != null)
 						LiteralsMoved (focusedLiterals, Parent, this);
@@ -874,14 +879,14 @@ namespace FSpot {
 
 		private const int overlay_size = (int) (.40 * ICON_SIZE);
 
-		private static TargetEntry [] tag_target_table = new TargetEntry [] {
-					new TargetEntry ("application/x-fspot-tag-query-item", 0, (uint) MainWindow.TargetType.TagQueryItem),
-				};
+		private static TargetEntry [] tag_target_table =
+			new TargetEntry [] { DragDropTargets.TagQueryEntry };
 
-		private static TargetEntry [] tag_dest_target_table = new TargetEntry [] {
-					new TargetEntry ("application/x-fspot-tags", 0, (uint) MainWindow.TargetType.TagList),
-					new TargetEntry ("application/x-fspot-tag-query-item", 0, (uint) MainWindow.TargetType.TagQueryItem),
-				};
+		private static TargetEntry [] tag_dest_target_table =
+			new TargetEntry [] {
+				DragDropTargets.TagListEntry,
+				DragDropTargets.TagQueryEntry
+			};
 
 		private static ArrayList focusedLiterals = new ArrayList();
 		private static ArrayList hiddenWidgets = new ArrayList();
@@ -908,8 +913,8 @@ namespace FSpot {
 		public delegate void RemovedHandler (Literal group);
 		public event RemovedHandler Removed;
 
-		public delegate void TermAddedHandler (Term parent, Literal after);
-		public event TermAddedHandler TermAdded;
+		public delegate void TagsAddedHandler (Tag[] tags, Term parent, Literal after);
+		public event TagsAddedHandler TagsAdded;
 
 		public delegate void AttachTagHandler (Tag tag, Term parent, Literal after);
 		public event AttachTagHandler AttachTag;
@@ -935,7 +940,7 @@ namespace FSpot {
 		public override string SqlCondition ()
 		{
 			return String.Format (
-				       "id {0}IN (SELECT id FROM photos WHERE uri LIKE '%{1}%' OR description LIKE '%{1}%')",
+				       "id {0}IN (SELECT id FROM photos WHERE base_uri LIKE '%{1}%' OR filename LIKE '%{1}%' OR description LIKE '%{1}%')",
 				       (IsNegated ? "NOT " : ""), EscapeQuotes(text)
 			       );
 		}

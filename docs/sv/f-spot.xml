@@ -8,7 +8,7 @@
 		</abstract>
 		<subtitle>Det här är användarhandboken för F-Spot, en GNOME-hanterare för personliga foton</subtitle>
 		<copyright>
-			<year>2007-2008</year>
+			<year>2007-2009</year>
 			<holder>Aaron Bockover, Gabriel Burt, Miguel de Icaza, Bengt Thuree</holder>
 		</copyright><copyright><year>2007</year><holder>Daniel Nylander (po@danielnylander.se)</holder></copyright>
 		<publisher>
@@ -74,11 +74,22 @@
 				directory and make F-Spot only reference to existing files. For that you 
 				need to disable checkbox <guilabel>Copy files to the Photos folder</guilabel>. 
 			</para>
-
+			<para>
+				If there is a tiny chance that some of your photos are already imported 
+				from the chosen source, you can use <guilabel>Detect duplicates</guilabel> 
+				option. In this case F-Spot will try to find out if exactly this image is 
+				already present in the database and thus new copy of it should not be 
+				imported. 
+			</para>
 			<para>Om alla foton som du importerar samtidigt är från en speciell händelse, eller har några andra gemensamma egenskaper, kan du skapa ett tagg för dem så att du enkelt kan hitta dem senare. För att göra det här, följ instruktionerna i <xref linkend="tag"/> för att skapa en ny tagg. Sedan när du importerar dem ska du kryssa i rutan för <guilabel>Fäst tagg</guilabel> och välja den tagg som du skapade.</para>
 			
 			<tip>
-				<para>F-Spot använder en databas som lagras i <filename>~/.gnome2/f-spot/photos.db</filename>. Observera att du måste använda kommandot sqlite3 för att komma åt den. Du kan även manuellt ange en sökväg till en databas genom att köra F-Spot med flaggan <option>-b</option>.</para>
+				<para>
+					F-Spot uses a database stored at 
+					<filename>~/.config/f-spot/photos.db</filename>. Note, to access it, use 
+					the sqlite3 command. You can also manually specify path to a database by 
+					running F-Spot with <option>-b</option> option.
+				</para>
 			</tip>
 			
 			<para>
@@ -105,13 +116,28 @@
 			<sect2 id="edit-versions">
 				<title>Versioner</title>
 				
-				<para>När du redigerar dina foton kommer en ny kopia (kallas en version) skapas, så att ditt originalfoto förblir orört. Efter din första redigering av ett foto kommer efterföljande redigeringar att ändra samma version av fotot. Om du vill skapa flera versioner av ditt foto, kanske med olika beskäringar eller färgsättning, kan du göra det via alternativet <menuchoice><guimenu>Arkiv</guimenu><guimenuitem>Skapa ny version</guimenuitem></menuchoice>.</para>
+				<para>
+					When you edit your photos, a new copy (called a version) is created, 
+					so your original is never altered. After your first edit to a photo, subsequent 
+					edits will modify the same version. If you want to create multiple versions 
+					of your photo, perhaps with different cropping or coloring, you can do so 
+					via the <menuchoice><guimenu>File</guimenu>
+					<guimenuitem>Create new version</guimenuitem></menuchoice> option.
+				</para>
 			</sect2>
 
 			<sect2 id="edit-crop">
 				<title>Beskär</title>
 				
-				<para>Beskära en bild är ett bra sätt att förbättra kvaliteten på ett fotografi genom att skära bort oväsentliga saker. Du kan beskära ett foto genom att markera den del av fotot som du vill behålla. Om du vill att ditt foto ska ha de exakta dimensionerna som behövs för en specifik utskriftsstorlek kan du behålla den markering som F-Spot tillåter dig att rita ut genom att välja den lämpliga storleken från rullgardinslistan för begränsningar. Se <xref linkend="edit-remove-red-eye"/> nedan för detaljer om hur man gör en markering i ditt foto.</para>
+				<para>
+					Cropping an image is a great way to improve the quality of a photograph by 
+					change how it is framed. You crop a photo by selecting the part of the photo 
+					you want to keep. If you want your photo to be the exact dimensions necessary 
+					for a certain print size, you can constrain the kind of selection F-Spot will allow 
+					you to draw by choosing the appropriate size from the constraint drop down. 
+					See the <xref linkend="edit-remove-red-eye"/> below for details on making 
+					a selection on your photo.
+				</para>
 				<figure>
 					<title>Beskäringsverktyg</title>
 					<mediaobject>
@@ -344,7 +370,22 @@
 					<para>via menyerna Taggar och Redigera</para>
 				</listitem>
 				<listitem>
-					<para>genom att ange dem i (tryck <keycap>t</keycap> för att visa tagginmatningsfältet, ange taggarna kommaseparerade) - med tabulatorkomplettering!</para>
+					<para>
+						by typing them in. Press <keycap>t</keycap> to pop up the tag
+						entry bar. Here you can enter the tags, separated by commas.
+					</para>
+					<para>
+						You can also use auto-completion in this entry bar: After
+						entering the beginning of a tag name, press
+						<keycap>Tab</keycap> to see the first possible completion. You can
+						cycle between other possible completions by pressing
+						<keycap>Tab</keycap> again, and backwards with
+						<keycombo action="simul"><keycap>Shift</keycap><keycap>Tab</keycap></keycombo>.
+						To confirm the suggested completion and enter a new tag, press
+						<keycap>,</keycap>. By pressing <keycap>Enter</keycap> you
+						leave the tag entry bar, possibly confirming the current
+						completion. To abort the auto completion, just keep on typing.
+					</para>
 				</listitem>
 			</itemizedlist>
 			<para>Det första fotot som du associerar med en tagg kommer att användas som ikon för den taggen. Du kan alltid redigera namnet för en tagg, föräldratagg och ikon genom att högerklicka på den och välja <guilabel>Redigera tagg</guilabel>.</para>
@@ -378,7 +419,7 @@
 			<title>Sök</title>
 			
 			<para>
-				F-Spot uses search search filters to help you better define search criteria.
+				F-Spot uses search filters to help you better define search criteria.
 			</para>
 			
 			<sect2 id="enjoying-search-tags">
@@ -410,7 +451,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							<parameter class="option">After</parameter> — to select all photos imported begining with a particular importing sessio
+							<parameter class="option">After</parameter> — to select all photos imported begining with a particular importing session
 						</para>
 					</listitem>
 					<listitem>
@@ -420,7 +461,7 @@
 					</listitem>
 				</itemizedlist>
 				<para>
-					Every time you change settings of the filter, amount of selected photos 
+					Every time you change settings of the filter, the amount of selected photos 
 					will appear in the bottom part of the dialog.
 				</para>
 				<para>
@@ -551,7 +592,7 @@
 		<sect1 id="sharing-flickr-or-php-gallery">
 			<title>Posta till dina gallerier på nätet</title>
 			<para>
-				If you use Flickr, SmugMug, 23hq or Picasa Web Album, you can post your files 
+				If you use Flickr, SmugMug, 23hq, Tabblo, Facebook, Zooomr or Picasa Web Album, you can post your files 
 				directly from F-Spot with the <menuchoice><guimenu>File</guimenu>
 				<guisubmenu>Export</guisubmenu></menuchoice> menu, choosing corresponding submenu item.
 			</para>
@@ -845,7 +886,6 @@
 				<para>
 					In the <guilabel>Manage Extensions</guilabel> dialog select the extension 
 					package and click <guibutton>Enable</guibutton> or <guibutton>Disable</guibutton>. 
-					You will have to restart F-Spot to let changes apply.
 				</para>
 			</sect2>
 			
@@ -939,7 +979,7 @@
 								<keycombo><keycap>Skift</keycap><keycap>Del</keycap></keycombo>
 							</entry>
 							<entry>
-								Delete selected photos permanently from the drive
+								Delete selected photos permanently from the drive. If possible, they will moved to trash.
 							</entry>
 						</row>
  
@@ -1132,6 +1172,14 @@
 							</entry>
 							<entry>
 								Go to Previous/Next photo or move around a zoomed photo
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>R</keycap>
+							</entry>
+							<entry>
+								Go to a random photo
 							</entry>
 						</row>
 						<row>

@@ -8,9 +8,9 @@
 		</abstract>
 		<subtitle>Este es el manual de usuario de F-Spot, un gestor personal de fotos para GNOME.</subtitle>
 		<copyright>
-			<year>2007-2008</year>
+			<year>2007-2009</year>
 			<holder>Aaron Bockover, Gabriel Burt, Miguel de Icaza, Bengt Thuree</holder>
-		</copyright><copyright><year>2007-2008</year><holder>Jorge González (jorgegonz@svn.gnome.org)</holder></copyright><copyright><year>2007</year><holder>Eduardo Retamales (eretamales@gnome.cl)</holder></copyright><copyright><year>2007</year><holder>Javier Mazorra (mazi.debian@gmail.com)</holder></copyright><copyright><year>2007</year><holder>QA: Jorge González (jorgegonz@svn.gnome.org)</holder></copyright>
+		</copyright><copyright><year>2007-2009</year><holder>Jorge González (jorgegonz@svn.gnome.org)</holder></copyright><copyright><year>2007</year><holder>Eduardo Retamales (eretamales@gnome.cl)</holder></copyright><copyright><year>2007</year><holder>Javier Mazorra (mazi.debian@gmail.com)</holder></copyright><copyright><year>2007</year><holder>QA: Jorge González (jorgegonz@svn.gnome.org)</holder></copyright>
 		<publisher>
 			<publishername>Proyecto de documentación de GNOME</publishername>
 		</publisher>
@@ -66,11 +66,11 @@
 			<para>Puede importar sus fotos desde su disco duro o cámara. Cuando las importe desde su cámara a F-Spot, éste siempre hará una copia de las mismas, permitiéndole liberar memoria en la cámara. De forma predeterminada F-Spot realizará una copia de las fotos importadas desde su disco duro. Desmarque la opción <guilabel>Copiar</guilabel> en el diálogo de importación o mantenga pulsada <keycap>Mayús</keycap> mientras arrastra las fotos en F-Spot si no desea copiarlas desde su disco duro.</para>
 			
 			<para>De forma predeterminada, F-Spot copia sus fotos en la carpeta </para>
-
+			<para>Si hay una mínima posibilidad de que algunas de sus fotos ya estén importadas del origen seleccionado, puede usar la opción <guilabel>Detectar duplicados</guilabel>. En este caso F-Spot intentará averiguar si la imagen ya está presente en la base de datos y, de ser así, no debería importarse.</para>
 			<para>Si todas las fotos que importa a la vez son de un evento en particular o tienen otra característica en común, puede crear una etiqueta para ellas, para después poderlas encontrar con facilidad. Para hacerlo, siga las instrucciones debajo de <ulink url="tag">crear una nueva etiqueta</ulink>, después cuando las importe, active el botón <guilabel>Añadir etiqueta</guilabel> y elija la etiqueta creada.</para>
 			
 			<tip>
-				<para>F-Spot usa una base de datos almacenada en <filename>~/.gnome2/f-spot/photos.db</filename>. Nota, para acceder a ella, usa el comando sqlite3. También puede especificar manualmente la ruta de una base de datos ejecutando F-Spot con la opción <option>-b</option>.</para>
+				<para>F-Spot usa una base de datos almacenada en <filename>~/.config/f-spot/photos.db</filename>. Nota, para acceder a ella, usa el comando sqlite3. También puede especificar manualmente la ruta de una base de datos ejecutando F-Spot con la opción <option>-b</option>.</para>
 			</tip>
 			
 			<para>Despues de importar, F-Spot sólo mostrará las imágenes del último carrete importado. Lea <xref linkend="enjoying-search"/> para aprender importar carretes.</para>
@@ -85,13 +85,13 @@
 			<sect2 id="edit-versions">
 				<title>Versiones</title>
 				
-				<para>Cuando edita sus fotos, se crea una nueva copia (llamada versión), por lo que el original nunca se altera. Tras su primera edición de una foto, las siguientes ediciones modificarán la misma versión. Si quiere crear múltiples versiones de la foto, quizá con diferente recorte o color, puede hacerlo yendo a <menuchoice><guimenu>Archivo</guimenu> opción <guimenuitem>Crear nueva versión</guimenuitem></menuchoice></para>
+				<para>Cuando edita sus fotos, se crea una nueva copia (llamada versión), por lo que el original nunca se altera. Tras su primera edición de una foto, las siguientes ediciones modificarán la misma versión. Si quiere crear múltiples versiones de la foto, quizá con diferente recorte o color, puede hacerlo yendo a la opción <menuchoice><guimenu>Archivo</guimenu><guimenuitem>Crear nueva versión</guimenuitem></menuchoice>.</para>
 			</sect2>
 
 			<sect2 id="edit-crop">
 				<title>Recorte</title>
 				
-				<para>Recortar una imagen es una forma excelente de mejorar la calidad de la fotografía mejorarando cómo se enmarca. Una foto se recorta seleccionándo la parte de la foto que quiere mantener. Si quiere que su foto tenga exactamente las misma dimensiones necesarias para cierto tamaño de impresión, puede limitar el tipo de selección que F-Spot le permitirá elegir escogiendo el tamaño adecuado desde el menú desplegable limitado. Debajo verá el <xref linkend="edit-remove-red-eye"/> para obtener más detalles acerca de cómo hacer una selección en su foto.</para>
+				<para>Recortar una imagen es una forma excelente de mejorar la calidad de la fotografía mejorando cómo se enmarca. Una foto se recorta seleccionando la parte de la foto que quiere mantener. Si quiere que su foto tenga exactamente las misma dimensiones necesarias para cierto tamaño de impresión, puede limitar el tipo de selección que F-Spot le permitirá elegir escogiendo el tamaño adecuado desde el menú desplegable limitado. Debajo verá el <xref linkend="edit-remove-red-eye"/> para obtener más detalles acerca de cómo hacer una selección en su foto.</para>
 				<figure>
 					<title>Herramienta de recorte</title>
 					<mediaobject>
@@ -257,7 +257,8 @@
 					<para>a través de las etiquetas y los menús de edición</para>
 				</listitem>
 				<listitem>
-					<para>escribiéndolos (pulse <keycap>t</keycap> para mostrar la barra de entrada, introduzca las etiquetas separándolas por comas); con el completado del tabulador.</para>
+					<para>escribiéndolos. Pulse <keycap>t</keycap> para mostrar la barra de entrada de etiquetas. Aquí puede introducir las etiquetas, separándolas por comas.</para>
+					<para>También puede usar el autocompletado en esta barra de entrada: después de introducir el comienzo del nombre de una etiqueta, pulse <keycap>Tab</keycap> para ver su primer posible completado. Puede alternar entre los otros posibles completados pulsando <keycap>Tab</keycap> de nuevo, e ir hacia atrás pulsando <keycombo action="simul"><keycap>Mayús</keycap><keycap>Tab</keycap></keycombo>. Para confirmar el completado sugerido e introducir la etiqueta pulse <keycap>,</keycap>. Pulsando <keycap>Intro</keycap> dejará la barra de entrada de etiquetas, confirmando el completado actual. Para cancelar el autocompletado, simplemente siga tecleando.</para>
 				</listitem>
 			</itemizedlist>
 			<para>La primera foto que asociade con una etiqueta se usará para el icono de esa etiqueta. Siempre puede editar el nombre de la etiqueta, la etiqueta padre y el icono pulsando con el botón derecho del ratón sobre ella y escogiendo <guilabel>Editar etiqueta</guilabel>.</para>
@@ -280,7 +281,7 @@
 		<sect1 id="enjoying-search">
 			<title>Buscar</title>
 			
-			<para>F-Spot utiliza buscadores de filtros que le ayudarán a definir mejor los criterios de búsqueda.</para>
+			<para>F-Spot usa filtros de búsquedas que le ayudarán a definir mejor los criterios de búsqueda.</para>
 			
 			<sect2 id="enjoying-search-tags">
 				<title>Etiquetas</title>
@@ -301,13 +302,13 @@
 						<para><parameter class="option">En</parameter>; para seleccionar fotos de una sesión de importación en particular.</para>
 					</listitem>
 					<listitem>
-						<para><parameter class="option">Antes</parameter>; para seleccionar todas las fotos importandas comenzando desde una sessión de importación en particular.</para>
+						<para><parameter class="option">Después</parameter>; para seleccionar todas las fotos importadas comenzando desde una sesión de importación en particular.</para>
 					</listitem>
 					<listitem>
 						<para><parameter class="option">Entre</parameter>; para seleccionar todas la fotos importadas entre dos sesiones de importación particulares.</para>
 					</listitem>
 				</itemizedlist>
-				<para>Cada vez que cambie la configuración del filtro, la cantidad de fotos seleccionadas aparecerá en la parte inferior del cuadro de diálogo.</para>
+				<para>Cada vez que cambie la configuración del filtro, aparecerá la cantidad de fotos seleccionadas en la parte inferior del cuadro de diálogo.</para>
 				<para>Cuando aplica el filtro Importar carrete, en la barra de búsqueda verá <guilabel>Buscar: Importar carrete</guilabel>. Ahora puede añadir otro filtro para mejorar su selección.</para>
 				<para>Si ya no necesita el filtro Importar carrete, elija <menuchoice><guimenu>Buscar</guimenu><guisubmenu>Importar carrete</guisubmenu><guimenuitem>Limpiar el filtro de carrete</guimenuitem></menuchoice> para quitar la importación de carrete desde el criterio de búsqueda. También puede pulsar el botón cerrar (<guibutton>X</guibutton>) de la barra de búsqueda para descartar todas las opciones de búsqueda actuales.</para>
 				<tip>
@@ -397,7 +398,7 @@
 
 		<sect1 id="sharing-flickr-or-php-gallery">
 			<title>Publique en sus galerías en internet</title>
-			<para>Si usa Flickr, SmugMug, 23hq o los álbumes de Picasa Web, podrá enviar sus archivos directamente desde F-Spot con el menú <menuchoice><guimenu>Archivo</guimenu><guisubmenu>Exportar</guisubmenu></menuchoice>, eligiendo el elemento del submenú correspondiente.</para>
+			<para>Si usa Flickr, SmugMug, 23hq. Tabblo, Facebook, Zoomr o los álbumes de Picasa Web, podrá enviar sus archivos directamente desde F-Spot con el menú <menuchoice><guimenu>Archivo</guimenu><guisubmenu>Exportar</guisubmenu></menuchoice>, eligiendo el elemento del submenú correspondiente.</para>
 			<para>Si usa el software PHP conocido como <ulink url="http://gallery.sourceforge.net/">Gallery</ulink>, podrá enviar sus fotos a su álbum existente con el menú <menuchoice><guimenu>Archivo</guimenu><guimenuitem>Exportar</guimenuitem><guimenuitem>Exportar a Web Gallery</guimenuitem></menuchoice>.Primero debe habilitar el módulo remoto de su instalación de Gallery.</para>
 			<note>
 				<title>Nota para los usuarios de Gallery 2.2</title>
@@ -551,7 +552,7 @@
 				<title>Habilitar y desabilitar extensiones</title>
 
 				<para>Quizá quiera activar o desactivar temporalmente un paquete de extensión particular, por ejemplo, si la extensión no es suficientemente estable para manejar una gran cantidad de fotos o si los menús se llenan con las extensiones.</para>
-				<para>En el diálogo <guilabel>Gestionar extensiones</guilabel> seleccione el paquete de extensión y pulse el botón <guibutton>Activar</guibutton> o <guibutton>Desactivar</guibutton>. Tendrá que reiniciar F-Spot para que se apliquen los cambios.</para>
+				<para>En el diálogo <guilabel>Gestionar extensiones</guilabel> seleccione el paquete de extensión y pulse el botón <guibutton>Activar</guibutton> o <guibutton>Desactivar</guibutton>.</para>
 			</sect2>
 			
 			<sect2 id="extend-managing-extensions-removing-extensions">
@@ -627,7 +628,7 @@
 							<entry>
 								<keycombo><keycap>Mayús</keycap><keycap>Del</keycap></keycombo>
 							</entry>
-							<entry>Borrar permanentemente las fotos seleccionadas de la unidad</entry>
+							<entry>Borrar permanentemente las fotos seleccionadas de la unidad. Si es posible, se moverán a la papelera.</entry>
 						</row>
  
 						<row>
@@ -804,6 +805,12 @@
 						<row>
 							<entry>Teclas de flechas o <keycap>H</keycap>, <keycap>J</keycap>, <keycap>K</keycap>, <keycap>L</keycap></entry>
 							<entry>Ir a la Anterior/Siguiente foto o moverse por una foto ampliada</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>R</keycap>
+							</entry>
+							<entry>Ir a una foto aleatoria</entry>
 						</row>
 						<row>
 							<entry>

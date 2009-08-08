@@ -1,6 +1,5 @@
 using Gdk;
 using Gtk;
-using Gnome;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -76,10 +75,10 @@ public class FileImportBackend : ImportBackend {
 
 	private void GetListing (System.IO.DirectoryInfo dirinfo, System.IO.FileInfo [] files, bool recurse)
 	{
-		Log.DebugFormat ("Scanning {0} for new photos", dirinfo.FullName);
+		Log.Debug ("Scanning {0} for new photos", dirinfo.FullName);
 		List<Uri> existing_entries = new List<Uri> ();
 
-		foreach (Photo p in store.Query (new Uri (dirinfo.FullName)))
+		foreach (Photo p in store.Query (new Uri (dirinfo.FullName + "/")))
 			foreach (uint id in p.VersionIds)
 				existing_entries.Add (p.VersionUri (id));
 
@@ -223,7 +222,7 @@ public class FileImportBackend : ImportBackend {
 					photo = store.CheckForDuplicate (UriUtils.PathToFileUri (destination));
 
 				if (photo == null)
-					photo = store.Create (info.DestinationPath, roll.Id, out thumbnail);
+					photo = store.Create (UriUtils.PathToFileUri (info.DestinationPath), roll.Id, out thumbnail);
 				else
 				 	is_duplicate = true;
 			} else {
@@ -235,7 +234,10 @@ public class FileImportBackend : ImportBackend {
 
 				if (photo == null)
 				{
-					photo = store.Create (info.DestinationPath, info.OriginalPath, roll.Id, out thumbnail);
+					photo = store.Create (UriUtils.PathToFileUri (info.DestinationPath),
+					                      UriUtils.PathToFileUri (info.OriginalPath),
+					                      roll.Id,
+					                      out thumbnail);
 				 	
 
 					try {

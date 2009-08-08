@@ -1,6 +1,10 @@
+using System;
+
+using FSpot.Platform;
 using FSpot.Utils;
 
 namespace FSpot {
+	[Obsolete ("nuke or rename this")]
 	public class PhotoLoader {
 		public PhotoQuery query;
 
@@ -37,35 +41,14 @@ namespace FSpot {
 			return ValidateThumbnail (item.DefaultVersionUri, pixbuf);
 		}
 
-		static public bool ThumbnailIsValid (System.Uri uri, Gdk.Pixbuf thumbnail)
-		{
-			return FSpot.ThumbnailGenerator.ThumbnailIsValid (thumbnail, uri);
-		}
-
-		static public Gdk.Pixbuf ValidateThumbnail (string photo_path, Gdk.Pixbuf pixbuf)
-		{			
-			System.Uri uri = UriUtils.PathToFileUri (photo_path);
-			return ValidateThumbnail (uri, pixbuf);
-		}
-		
 		static public Gdk.Pixbuf ValidateThumbnail (System.Uri uri, Gdk.Pixbuf pixbuf)
 		{			
-			string thumbnail_path = Gnome.Thumbnail.PathForUri (uri.ToString (), 
-									    Gnome.ThumbnailSize.Large);
-
-			Gdk.Pixbuf thumbnail = ThumbnailCache.Default.GetThumbnailForPath (thumbnail_path);
-
-			if (pixbuf != null && thumbnail != null) {
-				if (!ThumbnailIsValid (uri, thumbnail)) {
-					Log.DebugFormat ("regenerating thumbnail for {0}", uri);
+			using (Gdk.Pixbuf thumbnail = ThumbnailCache.Default.GetThumbnailForUri (uri)) {
+				if (pixbuf != null && thumbnail != null && !ThumbnailFactory.ThumbnailIsValid (thumbnail, uri)) {
+					Log.Debug ("regenerating thumbnail for {0}", uri);
 					FSpot.ThumbnailGenerator.Default.Request (uri, 0, 256, 256);
 				}
-
 			}
-
-			if (thumbnail != null)
-				thumbnail.Dispose ();
-			
 			return pixbuf;
 		}
 

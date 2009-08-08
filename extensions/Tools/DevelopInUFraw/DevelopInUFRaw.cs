@@ -10,10 +10,12 @@
 using System;
 using System.IO;
 
+using Mono.Unix;
+
 using FSpot;
 using FSpot.Utils;
 using FSpot.Extensions;
-using Mono.Unix;
+using FSpot.UI.Dialog;
 
 namespace DevelopInUFRawExtension
 {
@@ -110,14 +112,14 @@ namespace DevelopInUFRawExtension
 					args += ufraw_args;
 					if (new Gnome.Vfs.Uri (Path.ChangeExtension (raw.Uri.ToString (), ".ufraw")).Exists) {
 						// We found an ID file, use that instead of the raw file
-						idfile = "--conf=" + Path.ChangeExtension (raw.Uri.LocalPath, ".ufraw");
+						idfile = "--conf=" + GLib.Shell.Quote (Path.ChangeExtension (raw.Uri.LocalPath, ".ufraw"));
 					}
 					break;
 				case "ufraw-batch":
 					args += ufraw_batch_args;
 					if (new Gnome.Vfs.Uri (Path.Combine (FSpot.Global.BaseDirectory, "batch.ufraw")).Exists) {
 						// We found an ID file, use that instead of the raw file
-						idfile = "--conf=" + Path.Combine (FSpot.Global.BaseDirectory, "batch.ufraw");
+						idfile = "--conf=" + GLib.Shell.Quote (Path.Combine (FSpot.Global.BaseDirectory, "batch.ufraw"));
 					}
 					break;
 			}
@@ -125,8 +127,8 @@ namespace DevelopInUFRawExtension
 			args += String.Format(" --overwrite --create-id=also --compression={0} --out-type=jpeg {1} --output={2} {3}",
 				ufraw_jpeg_quality,
 				idfile,
-				CheapEscape (developed.LocalPath),
-				CheapEscape (raw.Uri.ToString ()));
+				GLib.Shell.Quote (developed.LocalPath),
+				GLib.Shell.Quote (raw.Uri.LocalPath));
 			Log.Debug (executable + " " + args);
 
 			System.Diagnostics.Process ufraw = System.Diagnostics.Process.Start (executable, args);
@@ -153,16 +155,7 @@ namespace DevelopInUFRawExtension
 
 		private static string GetVersionName (Photo p)
 		{
-			return GetVersionName (p, 1);
-		}
-
-		private static string GetVersionName (Photo p, int i)
-		{
-			string name = Catalog.GetPluralString ("Developed in UFRaw", "Developed in UFRaw ({0})", i);
-			name = String.Format (name, i);
-			if (p.VersionNameExists (name))
-				return GetVersionName (p, i + 1);
-			return name;
+			return Catalog.GetString ("Developed in UFRaw");
 		}
 
 		private System.Uri GetUriForVersionName (Photo p, string version_name)
@@ -170,15 +163,6 @@ namespace DevelopInUFRawExtension
 			string name_without_ext = System.IO.Path.GetFileNameWithoutExtension (p.Name);
 			return new System.Uri (System.IO.Path.Combine (DirectoryPath (p),  name_without_ext
 					       + " (" + version_name + ")" + ".jpg"));
-		}
-
-		private static string CheapEscape (string input)
-		{
-			string escaped = input;
-			escaped = escaped.Replace (" ", "\\ ");
-			escaped = escaped.Replace ("(", "\\(");
-			escaped = escaped.Replace (")", "\\)");
-			return escaped;
 		}
 
 		private static string DirectoryPath (Photo p)
@@ -189,22 +173,15 @@ namespace DevelopInUFRawExtension
 
 		void LoadPreference (string key)
 		{
-			object val = Preferences.Get (key);
-
-			if (val == null)
-				return;
-
-			Log.Debug (String.Format ("Setting {0} to {1}", key, val));
-
 			switch (key) {
 				case UFRAW_JPEG_QUALITY_KEY:
-					ufraw_jpeg_quality = (int) val;
+					ufraw_jpeg_quality = Preferences.Get<int> (key);
 					break;
 				case UFRAW_ARGUMENTS_KEY:
-					ufraw_args = (string) val;
+					ufraw_args = Preferences.Get<string> (key);
 					break;
 				case UFRAW_BATCH_ARGUMENTS_KEY:
-					ufraw_batch_args = (string) val;
+					ufraw_batch_args = Preferences.Get<string> (key);
 					break;
 			}
 		}

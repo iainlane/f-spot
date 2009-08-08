@@ -1,6 +1,6 @@
 using Gdk;
 using Gtk;
-using GtkSharp;
+
 using Glade;
 using Mono.Addins;
 using Mono.Unix;
@@ -22,6 +22,7 @@ using FSpot.Query;
 using FSpot.Widgets;
 using FSpot.Utils;
 using FSpot.UI.Dialog;
+using FSpot.Platform;
 
 using LibGPhoto2;
 
@@ -31,104 +32,101 @@ public class MainWindow {
 
 	Db db;
 
-	Sidebar sidebar;
+	public Sidebar Sidebar;
 
 	TagSelectionWidget tag_selection_widget;
-	[Glade.Widget] Gtk.Window main_window;
+	[GtkBeans.Builder.Object] Gtk.Window main_window;
 
-	[Glade.Widget] Gtk.HPaned main_hpaned;
-	[Glade.Widget] Gtk.VBox left_vbox;
-	[Glade.Widget] Gtk.VBox group_vbox;
-	[Glade.Widget] Gtk.VBox view_vbox;
+	[GtkBeans.Builder.Object] Gtk.HPaned main_hpaned;
+	[GtkBeans.Builder.Object] Gtk.VBox left_vbox;
+	[GtkBeans.Builder.Object] Gtk.VBox group_vbox;
+	[GtkBeans.Builder.Object] Gtk.VBox view_vbox;
 
-	[Glade.Widget] Gtk.VBox toolbar_vbox;
+	[GtkBeans.Builder.Object] Gtk.VBox toolbar_vbox;
 
-	[Glade.Widget] ScrolledWindow icon_view_scrolled;
-	[Glade.Widget] Box photo_box;
-	[Glade.Widget] Notebook view_notebook;
+	[GtkBeans.Builder.Object] ScrolledWindow icon_view_scrolled;
+	[GtkBeans.Builder.Object] Box photo_box;
+	[GtkBeans.Builder.Object] Notebook view_notebook;
 	
 	ScrolledWindow tag_selection_scrolled;
 
-	[Glade.Widget] Label status_label;
+	[GtkBeans.Builder.Object] Label status_label;
 
+	[GtkBeans.Builder.Object] Gtk.UIManager uimanager;
 	// File
-	[Glade.Widget] MenuItem version_menu_item;
-	[Glade.Widget] MenuItem create_version_menu_item;
-	[Glade.Widget] MenuItem delete_version_menu_item;
-	[Glade.Widget] MenuItem rename_version_menu_item;
+	[GtkBeans.Builder.Object] Gtk.Action create_version_menu_item;
+	[GtkBeans.Builder.Object] Gtk.Action delete_version_menu_item;
+	[GtkBeans.Builder.Object] Gtk.Action rename_version_menu_item;
 	
-	[Glade.Widget] MenuItem tools;
-	[Glade.Widget] MenuItem export;
-	[Glade.Widget] MenuItem pagesetup_menu_item;
-	[Glade.Widget] MenuItem print;
-	[Glade.Widget] MenuItem send_mail;
+	[GtkBeans.Builder.Object] Gtk.Action tools;
+	[GtkBeans.Builder.Object] Gtk.Action export;
+	[GtkBeans.Builder.Object] Gtk.Action pagesetup_menu_item;
+	[GtkBeans.Builder.Object] Gtk.Action print;
+	[GtkBeans.Builder.Object] Gtk.Action send_mail;
 
 	// Edit
-	[Glade.Widget] MenuItem copy_location;
-	[Glade.Widget] MenuItem select_none;
-	[Glade.Widget] MenuItem rotate_left;
-	[Glade.Widget] MenuItem rotate_right;
+	[GtkBeans.Builder.Object] Gtk.Action copy_location;
+	[GtkBeans.Builder.Object] Gtk.Action select_none;
+	[GtkBeans.Builder.Object] Gtk.Action rotate_left;
+	[GtkBeans.Builder.Object] Gtk.Action rotate_right;
 
-	[Glade.Widget] MenuItem sharpen;
-	[Glade.Widget] MenuItem adjust_time;
+	[GtkBeans.Builder.Object] Gtk.Action sharpen;
+	[GtkBeans.Builder.Object] Gtk.Action adjust_time;
 
-	[Glade.Widget] MenuItem update_thumbnail;
-	[Glade.Widget] MenuItem delete_from_drive;
-	[Glade.Widget] MenuItem remove_from_catalog;
-	[Glade.Widget] MenuItem set_as_background;
+	[GtkBeans.Builder.Object] Gtk.Action update_thumbnail;
+	[GtkBeans.Builder.Object] Gtk.Action delete_from_drive;
+	[GtkBeans.Builder.Object] Gtk.Action remove_from_catalog;
+	[GtkBeans.Builder.Object] Gtk.Action set_as_background;
 
-	[Glade.Widget] MenuItem attach_tag;
-	[Glade.Widget] MenuItem remove_tag;
+	[GtkBeans.Builder.Object] Gtk.Action attach_tag;
+	[GtkBeans.Builder.Object] Gtk.Action remove_tag;
 
 	// View
-	[Glade.Widget] CheckMenuItem display_toolbar;
-	[Glade.Widget] CheckMenuItem display_sidebar;
-	[Glade.Widget] CheckMenuItem display_timeline;
-	[Glade.Widget] CheckMenuItem display_filmstrip;
-	[Glade.Widget] CheckMenuItem display_dates_menu_item;
-	[Glade.Widget] CheckMenuItem display_tags_menu_item;
-	[Glade.Widget] CheckMenuItem display_ratings_menu_item;
+	[GtkBeans.Builder.Object] Gtk.ToggleAction display_toolbar;
+	[GtkBeans.Builder.Object] Gtk.ToggleAction display_sidebar;
+	[GtkBeans.Builder.Object] Gtk.ToggleAction display_timeline;
+	[GtkBeans.Builder.Object] Gtk.ToggleAction display_filmstrip;
+	[GtkBeans.Builder.Object] Gtk.ToggleAction display_dates_menu_item;
+	[GtkBeans.Builder.Object] Gtk.ToggleAction display_tags_menu_item;
+	[GtkBeans.Builder.Object] Gtk.ToggleAction display_ratings_menu_item;
 
-	[Glade.Widget] MenuItem zoom_in;
-	[Glade.Widget] MenuItem zoom_out;
-	[Glade.Widget] CheckMenuItem loupe_menu_item;
+	[GtkBeans.Builder.Object] Gtk.Action zoom_in;
+	[GtkBeans.Builder.Object] Gtk.Action zoom_out;
+	[GtkBeans.Builder.Object] Gtk.ToggleAction loupe_menu_item;
 
-	[Glade.Widget] RadioMenuItem tag_icon_hidden;
-	[Glade.Widget] RadioMenuItem tag_icon_small;
-	[Glade.Widget] RadioMenuItem tag_icon_medium;
-	[Glade.Widget] RadioMenuItem tag_icon_large;
+	[GtkBeans.Builder.Object] Gtk.RadioAction tag_icon_hidden;
+	[GtkBeans.Builder.Object] Gtk.RadioAction tag_icon_small;
+	[GtkBeans.Builder.Object] Gtk.RadioAction tag_icon_medium;
+	[GtkBeans.Builder.Object] Gtk.RadioAction tag_icon_large;
 
-	[Glade.Widget] RadioMenuItem month;
-	[Glade.Widget] RadioMenuItem directory;
-	[Glade.Widget] CheckMenuItem reverse_order;
+	[GtkBeans.Builder.Object] Gtk.ToggleAction reverse_order;
+	public Gtk.ToggleAction ReverseOrderAction {
+		get { return reverse_order; }
+	}
 
 	// Find
-	[Glade.Widget] MenuItem find_by_tag;
-	[Glade.Widget] MenuItem find_add_tag;
-	[Glade.Widget] MenuItem find_add_tag_with;
-	
-	[Glade.Widget] MenuItem clear_date_range;
-	[Glade.Widget] MenuItem clear_rating_filter;
+	[GtkBeans.Builder.Object] Gtk.Action clear_date_range;
+	[GtkBeans.Builder.Object] Gtk.Action clear_rating_filter;
 
-	[Glade.Widget] CheckMenuItem find_untagged;
+	[GtkBeans.Builder.Object] Gtk.ToggleAction find_untagged;
 	
-	[Glade.Widget] MenuItem clear_roll_filter;	
+	[GtkBeans.Builder.Object] Gtk.Action clear_roll_filter;	
 	
 	// Tags
-	[Glade.Widget] MenuItem edit_selected_tag;
-	[Glade.Widget] MenuItem delete_selected_tag;
+	[GtkBeans.Builder.Object] Gtk.Action edit_selected_tag;
+	[GtkBeans.Builder.Object] Gtk.Action delete_selected_tag;
 
-	[Glade.Widget] MenuItem attach_tag_to_selection;
-	[Glade.Widget] MenuItem remove_tag_from_selection;
+	[GtkBeans.Builder.Object] Gtk.Action attach_tag_to_selection;
+	[GtkBeans.Builder.Object] Gtk.Action remove_tag_from_selection;
 	
 	// Other Widgets
-	[Glade.Widget] Scale zoom_scale;
+	[GtkBeans.Builder.Object] Scale zoom_scale;
 
-	[Glade.Widget] VBox info_vbox;
+	[GtkBeans.Builder.Object] VBox info_vbox;
 
-	[Glade.Widget] Gtk.HBox tagbar;
-	[Glade.Widget] Gtk.VBox tag_entry_container;
-	[Glade.Widget] Gtk.VBox sidebar_vbox;
+	[GtkBeans.Builder.Object] Gtk.HBox tagbar;
+	[GtkBeans.Builder.Object] Gtk.VBox tag_entry_container;
+	[GtkBeans.Builder.Object] Gtk.VBox sidebar_vbox;
 	TagEntry tag_entry;
 
 	Gtk.Toolbar toolbar;
@@ -160,6 +158,8 @@ public class MainWindow {
 	ModeType view_mode;
 	bool write_metadata = false;
 
+	Gdk.Cursor watch = new Gdk.Cursor (Gdk.CursorType.Watch);
+
 	// Tag Icon Sizes
 	public int TagsIconSize {
 		get { return (int) Tag.TagIconSize; }
@@ -170,38 +170,33 @@ public class MainWindow {
 		get { return photo_view; }
 	}
 
-	// Drag and Drop
-	public enum TargetType {
-		UriList,
-		TagList,
-		TagQueryItem,
-		PhotoList,
-		RootWindow
+	private static TargetEntry [] icon_source_target_table = 
+		new TargetEntry [] {
+			DragDropTargets.PhotoListEntry,
+			DragDropTargets.TagQueryEntry,
+			DragDropTargets.UriListEntry,
+			DragDropTargets.RootWindowEntry
 	};
-
-	private static TargetEntry [] icon_source_target_table = new TargetEntry [] {
-		new TargetEntry ("application/x-fspot-photos", 0, (uint) TargetType.PhotoList),
-		new TargetEntry ("application/x-fspot-tag-query-item", 0, (uint) TargetType.TagQueryItem),
-		new TargetEntry ("text/uri-list", 0, (uint) TargetType.UriList),
-		new TargetEntry ("application/x-root-window-drop", 0, (uint) TargetType.RootWindow)
-	};
-
-	private static TargetEntry [] icon_dest_target_table = new TargetEntry [] {
+	
+	private static TargetEntry [] icon_dest_target_table = 
+		new TargetEntry [] {
 #if ENABLE_REPARENTING
-		new TargetEntry ("application/x-fspot-photos", 0, (uint) TargetType.PhotoList),
+			DragDropTargets.PhotoListEntry,
 #endif
-		new TargetEntry ("application/x-fspot-tags", 0, (uint) TargetType.TagList),
-		new TargetEntry ("text/uri-list", 0, (uint) TargetType.UriList),
+			DragDropTargets.TagListEntry,
+			DragDropTargets.UriListEntry
 	};
-
-	private static TargetEntry [] tag_target_table = new TargetEntry [] {
-		new TargetEntry ("application/x-fspot-tags", 0, (uint) TargetType.TagList),
+	
+	private static TargetEntry [] tag_target_table = 
+		new TargetEntry [] {
+			DragDropTargets.TagListEntry
 	};
-
-	private static TargetEntry [] tag_dest_target_table = new TargetEntry [] {
-		new TargetEntry ("application/x-fspot-photos", 0, (uint) TargetType.PhotoList),
-		new TargetEntry ("text/uri-list", 0, (uint) TargetType.UriList),
-		new TargetEntry ("application/x-fspot-tags", 0, (uint) TargetType.TagList),
+	
+	private static TargetEntry [] tag_dest_target_table = 
+		new TargetEntry [] {
+			DragDropTargets.PhotoListEntry,
+			DragDropTargets.UriListEntry,
+			DragDropTargets.TagListEntry
 	};
 
 	const int PHOTO_IDX_NONE = -1;
@@ -235,9 +230,9 @@ public class MainWindow {
 		get { return selection; }
 	}
 
-    public MenuItem FindByTag {
-        get { return find_by_tag; }
-    }
+	public MenuItem FindByTag {
+		get { return uimanager.GetWidget ("/ui/menubar1/find/find_by_tag") as MenuItem; }
+	}
 
 	public InfoBox InfoBox {
 		get { return info_box; }
@@ -253,8 +248,8 @@ public class MainWindow {
 		if (Toplevel == null)
 			Toplevel = this;
 
-		Glade.XML gui = new Glade.XML (null, "f-spot.glade", "main_window", "f-spot");
-		gui.Autoconnect (this);
+		GtkBeans.Builder builder = new GtkBeans.Builder ("main_window.ui");
+		builder.Autoconnect (this);
 
 		LoadPreference (Preferences.MAIN_WINDOW_WIDTH);
 		LoadPreference (Preferences.MAIN_WINDOW_X);
@@ -264,15 +259,8 @@ public class MainWindow {
 		LoadPreference (Preferences.SIDEBAR_POSITION);
 		LoadPreference (Preferences.METADATA_EMBED_IN_IMAGE);
 
-		LoadPreference (Preferences.COLOR_MANAGEMENT_ENABLED);
- 		LoadPreference (Preferences.COLOR_MANAGEMENT_USE_X_PROFILE);
- 		FSpot.ColorManagement.LoadSettings();
-	
-#if GTK_2_10
 		pagesetup_menu_item.Activated += HandlePageSetupActivated;
-#else
-		pagesetup_menu_item.Visible = false;
-#endif
+
 		toolbar = new Gtk.Toolbar ();
 		toolbar_vbox.PackStart (toolbar);
 
@@ -283,11 +271,11 @@ public class MainWindow {
 	
 		toolbar.Insert (new SeparatorToolItem (), -1);
 
-		ToolButton rl_button = GtkUtil.ToolButtonFromTheme ("object-rotate-left", Catalog.GetString ("Rotate Left"), true);
+		rl_button = GtkUtil.ToolButtonFromTheme ("object-rotate-left", Catalog.GetString ("Rotate Left"), true);
 		rl_button.Clicked += HandleRotate270Command;
 		toolbar.Insert (rl_button, -1);
 
-		ToolButton rr_button = GtkUtil.ToolButtonFromTheme ("object-rotate-right", Catalog.GetString ("Rotate Right"), true);
+		rr_button = GtkUtil.ToolButtonFromTheme ("object-rotate-right", Catalog.GetString ("Rotate Right"), true);
 		rr_button.Clicked += HandleRotate90Command;
 		toolbar.Insert (rr_button, -1);
 
@@ -341,9 +329,9 @@ public class MainWindow {
 		display_next_button.SetTooltip (ToolTips, Catalog.GetString ("Next photo"), String.Empty);
 		display_next_button.Clicked += new EventHandler (HandleDisplayNextButtonClicked);
 
-		sidebar = new Sidebar ();
-		ViewModeChanged += sidebar.HandleMainWindowViewModeChanged;
-		sidebar_vbox.Add (sidebar);
+		Sidebar = new Sidebar ();
+		ViewModeChanged += Sidebar.HandleMainWindowViewModeChanged;
+		sidebar_vbox.Add (Sidebar);
 
 		tag_selection_scrolled = new ScrolledWindow ();
 		tag_selection_scrolled.ShadowType = ShadowType.In;
@@ -351,14 +339,14 @@ public class MainWindow {
 		tag_selection_widget = new TagSelectionWidget (db.Tags);
 		tag_selection_scrolled.Add (tag_selection_widget);
 
-		sidebar.AppendPage (tag_selection_scrolled, Catalog.GetString ("Tags"), "tag");
+		Sidebar.AppendPage (tag_selection_scrolled, Catalog.GetString ("Tags"), "tag");
 
 		AddinManager.AddExtensionNodeHandler ("/FSpot/Sidebar", OnSidebarExtensionChanged);
 
-		sidebar.Context = ViewContext.Library;
+		Sidebar.Context = ViewContext.Library;
  		
-		sidebar.CloseRequested += HideSidebar;
-		sidebar.Show ();
+		Sidebar.CloseRequested += HideSidebar;
+		Sidebar.Show ();
 
 		info_box = new InfoBox ();
 		ViewModeChanged += info_box.HandleMainWindowViewModeChanged;
@@ -368,21 +356,9 @@ public class MainWindow {
 		info_box.Context = ViewContext.Library;
 		
 		tag_selection_widget.Selection.Changed += HandleTagSelectionChanged;
-		tag_selection_widget.DragDataGet += HandleTagSelectionDragDataGet;
-		tag_selection_widget.DragDrop += HandleTagSelectionDragDrop;
-		tag_selection_widget.DragBegin += HandleTagSelectionDragBegin;
 		tag_selection_widget.KeyPressEvent += HandleTagSelectionKeyPress;
-		Gtk.Drag.SourceSet (tag_selection_widget, Gdk.ModifierType.Button1Mask | Gdk.ModifierType.Button3Mask,
-				    tag_target_table, DragAction.Copy | DragAction.Move);
-
-		tag_selection_widget.DragDataReceived += HandleTagSelectionDragDataReceived;
-		tag_selection_widget.DragMotion += HandleTagSelectionDragMotion;
-		Gtk.Drag.DestSet (tag_selection_widget, DestDefaults.All, tag_dest_target_table, 
-				  DragAction.Copy | DragAction.Move ); 
-
 		tag_selection_widget.ButtonPressEvent += HandleTagSelectionButtonPressEvent;
 		tag_selection_widget.PopupMenu += HandleTagSelectionPopupMenu;
-		tag_selection_widget.RowActivated += HandleTagSelectionRowActivated;
 		
 		LoadPreference (Preferences.TAG_ICON_SIZE);
 		
@@ -424,7 +400,7 @@ public class MainWindow {
 		view_vbox.ReorderChild (find_bar, 1);
 		main_window.KeyPressEvent += HandleKeyPressEvent;
 		
-		query_widget = new FSpot.QueryWidget (query, db, tag_selection_widget);
+		query_widget = new FSpot.QueryWidget (query, db);
 		query_widget.Logic.Changed += HandleQueryLogicChanged;
 		view_vbox.PackStart (query_widget, false, false, 0);
 		view_vbox.ReorderChild (query_widget, 2);
@@ -452,11 +428,11 @@ public class MainWindow {
 		tag_menu.NewTagHandler += delegate { HandleCreateTagAndAttach (this, null); };
 		tag_menu.TagSelected += HandleAttachTagMenuSelected;
 		tag_menu.Populate();
-		attach_tag.Submenu = tag_menu;
+		(uimanager.GetWidget("/ui/menubar1/edit2/attach_tag") as MenuItem).Submenu = tag_menu;
 		
 		PhotoTagMenu pmenu = new PhotoTagMenu ();
 		pmenu.TagSelected += HandleRemoveTagMenuSelected;
-		remove_tag.Submenu = pmenu;
+		(uimanager.GetWidget("/ui/menubar1/edit2/remove_tag") as MenuItem).Submenu = pmenu;
 		
 		Gtk.Drag.DestSet (icon_view, DestDefaults.All, icon_dest_target_table, 
 				  DragAction.Copy | DragAction.Move); 
@@ -497,14 +473,14 @@ public class MainWindow {
 		view_notebook.SwitchPage += HandleViewNotebookSwitchPage;
 		group_selector.Adaptor.GlassSet += HandleAdaptorGlassSet;
 		group_selector.Adaptor.Changed += HandleAdaptorChanged;
-		LoadPreference (Preferences.GROUP_ADAPTOR);
 		LoadPreference (Preferences.GROUP_ADAPTOR_ORDER_ASC);
+		LoadPreference (Preferences.FILMSTRIP_ORIENTATION);
 
 		this.selection = new MainSelection (this);
 		this.selection.Changed += HandleSelectionChanged;
 		this.selection.ItemsChanged += HandleSelectionItemsChanged;
-		this.selection.Changed += sidebar.HandleSelectionChanged;
-		this.selection.ItemsChanged += sidebar.HandleSelectionItemsChanged;
+		this.selection.Changed += Sidebar.HandleSelectionChanged;
+		this.selection.ItemsChanged += Sidebar.HandleSelectionItemsChanged;
 
 		Mono.Addins.AddinManager.ExtensionChanged += PopulateExtendableMenus;
 		PopulateExtendableMenus (null, null);
@@ -530,13 +506,15 @@ public class MainWindow {
 		main_window.DeleteEvent += HandleDeleteEvent;
 		
 		query_widget.HandleChanged (query);
-		query_widget.Hide ();
+		query_widget.Close ();
 
 		// When the icon_view is loaded, set it's initial scroll position
 		icon_view.SizeAllocated += HandleIconViewReady;
 
 		export.Activated += HandleExportActivated;
 		UpdateToolbar ();
+
+		(uimanager.GetWidget("/ui/menubar1/file1/close1") as MenuItem).Hide ();
 
 		Banshee.Kernel.Scheduler.Resume ();
 	}
@@ -554,7 +532,7 @@ public class MainWindow {
 	private void OnSidebarExtensionChanged (object s, ExtensionNodeEventArgs args) {
 		// FIXME: No sidebar page removal yet!
 		if (args.Change == ExtensionChange.Add)
-			sidebar.AppendPage ((args.ExtensionNode as SidebarPageNode).GetSidebarPage ());
+			Sidebar.AppendPage ((args.ExtensionNode as SidebarPageNode).GetSidebarPage ());
 	}
 
 	private Photo CurrentPhoto {
@@ -614,6 +592,8 @@ public class MainWindow {
 			
 			JumpTo (icon_view.FocusCell);
 			zoom_scale.Value = photo_view.NormalizedZoom;
+
+			photo_view.View.GrabFocus();
 			break;
 		}
 		Selection.MarkChanged ();
@@ -647,11 +627,6 @@ public class MainWindow {
 			bool prev = valid && photo_view.View.Item.Index > 0;
 			bool next = valid && photo_view.View.Item.Index < query.Count - 1;
 
-			if (valid) {
-				Gnome.Vfs.Uri vfs = new Gnome.Vfs.Uri (photo_view.View.Item.Current.DefaultVersionUri.ToString ());
-				valid = vfs.Scheme == "file";
-			}
-
 			display_previous_button.Sensitive = prev;
 			display_next_button.Sensitive = next;
 
@@ -673,10 +648,9 @@ public class MainWindow {
 		FSpot.Extensions.ExportMenuItemNode.SelectedImages = delegate () {return new FSpot.PhotoArray (SelectedPhotos ()); };
 	}
 
-	private void HandleDbItemsChanged (object sender, DbItemEventArgs args)
+	private void HandleDbItemsChanged (object sender, DbItemEventArgs<Photo> args)
 	{
-		foreach (DbItem item in args.Items) {
-			Photo p = item as Photo;
+		foreach (Photo p in args.Items) {
 			if (p == null)
 				continue;
 			if (write_metadata)
@@ -687,7 +661,7 @@ public class MainWindow {
 			query.RequestReload ();
 	}
 
-	private void HandleTagsChanged (object sender, DbItemEventArgs args)
+	private void HandleTagsChanged (object sender, DbItemEventArgs<Tag> args)
 	{
 		icon_view.QueueDraw ();
 		UpdateTagEntryFromSelection ();	
@@ -866,7 +840,7 @@ public class MainWindow {
 	{
 		UpdateMenus ();
 		UpdateTagEntryFromSelection ();
-
+		photo_view.UpdateTagView ();
 		info_box.Photos = SelectedPhotos ();
 	}
 
@@ -889,12 +863,6 @@ public class MainWindow {
 	public Photo [] SelectedPhotos () 
 	{
 		return SelectedPhotos (SelectedIds ());
-	}
-
-	[Obsolete ("MARKED FOR REMOVAL")]
-	public Photo [] ActivePhotos () 
-	{
-		return query.Photos;
 	}
 
 	public PhotoQuery Query {
@@ -923,26 +891,13 @@ public class MainWindow {
 		
 		int [] selected_ids = SelectedIds ();
 		if (command.Execute (direction, SelectedPhotos (selected_ids)))
-#if MONO_1_9_0
 			query.MarkChanged (selected_ids, new PhotoChanges () {DataChanged = true});
-#else
-		{
-			PhotoChanges changes = new PhotoChanges ();
-			changes.DataChanged = true;
-			query.MarkChanged (selected_ids, changes);
-		}
-#endif
 	}
 
 	//
 	// Tag Selection Drag Handlers
 	//
-	[Obsolete ("Use AddTagExtended (int [], Tag []) instead")]
-	public void AddTagExtended (int num, Tag [] tags)
-	{
-		AddTagExtended (new int [] {num}, tags);
-	}
-
+	
 	public void AddTagExtended (int [] nums, Tag [] tags)
 	{
 		foreach (int num in nums)
@@ -950,7 +905,7 @@ public class MainWindow {
 		query.Commit (nums);
 
 		foreach (Tag t in tags) {
-			if (t.Icon != null)
+			if (t.Icon != null || t.IconWasCleared)
 				continue;
 			// FIXME this needs a lot more work.
 			Pixbuf icon = null;
@@ -966,18 +921,24 @@ public class MainWindow {
 			db.Tags.Commit (t);
 		}
 	}
+	
+	public void SetFolderQuery (IEnumerable<Uri> uri_list)
+	{
+		ShowQueryWidget ();
+		query_widget.SetFolders (uri_list);
+	}
+	
+	public void AddTagsQuery (Tag [] tags)
+	{
+		ShowQueryWidget ();
+		query_widget.Include (tags);
+	}
 
 	public void RemoveTags (int [] nums, Tag [] tags)
 	{
 		foreach (int num in nums)
 			(query[num] as Photo).RemoveTag (tags);
 		query.Commit (nums);
-	}
-
-	void HandleTagSelectionRowActivated (object sender, RowActivatedArgs args)
-	{
-		ShowQueryWidget ();
-		query_widget.Include (new Tag [] {tag_selection_widget.TagByPath (args.Path)});
 	}
 
 	void HandleTagSelectionButtonPressEvent (object sender, ButtonPressEventArgs args)
@@ -997,179 +958,20 @@ public class MainWindow {
 		args.RetVal = true;
 	}
 
-	void HandleTagSelectionDragBegin (object sender, DragBeginArgs args)
-	{
-		Tag [] tags = tag_selection_widget.TagHighlight;
-		int len = tags.Length;
-		int size = 32;
-		int csize = size/2 + len * size / 2 + 2;
-		
-		Pixbuf container = new Pixbuf (Gdk.Colorspace.Rgb, true, 8, csize, csize);
-		container.Fill (0x00000000);
-		
-		bool use_icon = false;;
-		while (len-- > 0) {
-			Pixbuf thumbnail = tags[len].Icon;
-			
-			if (thumbnail != null) {
-				Pixbuf small = PixbufUtils.ScaleToMaxSize (thumbnail, size, size);				
-				
-				int x = len * (size/2) + (size - small.Width)/2;
-				int y = len * (size/2) + (size - small.Height)/2;
-
-				small.Composite (container, x, y, small.Width, small.Height, x, y, 1.0, 1.0, Gdk.InterpType.Nearest, 0xff);
-				small.Dispose ();
-
-				use_icon = true;
-			}
-		}
-		if (use_icon)
-			Gtk.Drag.SetIconPixbuf (args.Context, container, 0, 0);
-		container.Dispose ();
-	}
-	
-	void HandleTagSelectionDragDataGet (object sender, DragDataGetArgs args)
-	{		
-		UriList list = new UriList (SelectedPhotos ());
-
-		switch (args.Info) {
-		case (uint) TargetType.TagList:
-			Byte [] data = Encoding.UTF8.GetBytes (list.ToString ());
-			Atom [] targets = args.Context.Targets;
-			
-			args.SelectionData.Set (targets[0], 8, data, data.Length);
-			break;
-		}
-	}
-
-	void HandleTagSelectionDragDrop (object sender, DragDropArgs args)
-	{
-		args.RetVal = true;
-	}
-
-	public void HandleTagSelectionDragMotion (object o, DragMotionArgs args)
-	{
-		TreePath path;
-        TreeViewDropPosition position = TreeViewDropPosition.IntoOrAfter;
-		tag_selection_widget.GetPathAtPos (args.X, args.Y, out path);
-
-        if (path == null)
-            return;
-
-        // Tags can be dropped before, after, or into another tag
-        if (args.Context.Targets[0].Name == "application/x-fspot-tags") {
-            Gdk.Rectangle rect = tag_selection_widget.GetCellArea(path, tag_selection_widget.Columns[0]);
-            double vpos = Math.Abs(rect.Y - args.Y) / (double)rect.Height;
-            if (vpos < 0.2) {
-                position = TreeViewDropPosition.Before;
-            } else if (vpos > 0.8) {
-                position = TreeViewDropPosition.After;
-            }
-        }
-
-		tag_selection_widget.SetDragDestRow (path, position);
-
-		// Scroll if within 20 pixels of the top or bottom of the tag list
-		if (args.Y < 20)
-			tag_selection_scrolled.Vadjustment.Value -= 30;
-        else if (((o as Gtk.Widget).Allocation.Height - args.Y) < 20)
-			tag_selection_scrolled.Vadjustment.Value += 30;
-	}
-
-	public void HandleTagSelectionDragDataReceived (object o, DragDataReceivedArgs args)
-	{
-        TreePath path;
-        TreeViewDropPosition position;
-        if (!tag_selection_widget.GetDestRowAtPos((int)args.X, (int)args.Y, out path, out position))
-            return;
-
-        Tag tag = path == null ? null : tag_selection_widget.TagByPath (path);
-		if (tag == null)
-			return;
-
-		switch (args.Info) {
-		case (uint)TargetType.PhotoList:
-			db.BeginTransaction ();
-			AddTagExtended (SelectedIds (), new Tag[] {tag});
-			db.CommitTransaction ();
-			query_widget.PhotoTagsChanged (new Tag[] {tag});
-			break;
-		case (uint)TargetType.UriList:
-			UriList list = new UriList (args.SelectionData);
-			
-			db.BeginTransaction ();
-			List<Photo> photos = new List<Photo> ();
-			foreach (Uri photo_uri in list) {
-				Photo photo = db.Photos.GetByUri (photo_uri);
-				
-				// FIXME - at this point we should import the photo, and then continue
-				if (photo == null)
-					continue;
-				
-				// FIXME this should really follow the AddTagsExtended path too
-				photo.AddTag (new Tag[] {tag});
-				photos.Add (photo);
-			}
-			db.Photos.Commit (photos.ToArray ());
-			db.CommitTransaction ();
-			InvalidateViews ();
-			break;
-		case (uint)TargetType.TagList:
-			Category parent;
-            if (position == TreeViewDropPosition.Before || position == TreeViewDropPosition.After) {
-                parent = tag.Category;
-            } else {
-                parent = tag as Category;
-            }
-
-			if (parent == null || tag_selection_widget.TagHighlight.Length < 1) {
-                args.RetVal = false;
-				return;
-            }
-
-            int moved_count = 0;
-            Tag [] highlighted_tags = tag_selection_widget.TagHighlight;
-			foreach (Tag child in tag_selection_widget.TagHighlight) {
-                // FIXME with this reparenting via dnd, you cannot move a tag to root.
-                if (child != parent && child.Category != parent && !child.IsAncestorOf(parent)) {
-                    child.Category = parent as Category;
-
-                    // Saving changes will automatically cause the TreeView to be updated
-                    db.Tags.Commit (child);
-                    moved_count++;
-                }
-            }
-
-            // Reselect the same tags
-            tag_selection_widget.TagHighlight = highlighted_tags;
-
-            args.RetVal = moved_count > 0;
-			break;
-		}
-	}
-
 #if SHOW_CALENDAR
 	void HandleCalendarDaySelected (object sender, System.EventArgs args)
 	{
 		FSpot.SimpleCalendar cal = sender as FSpot.SimpleCalendar;
 		JumpTo (cal.Date);
 	}
+
+	void JumpTo (System.DateTime time)
+	{
+		JumpTo (query.LookupItem (time));*/
+	}
 #endif
 
-	private void JumpTo (System.DateTime time)
-	{
-		//FIXME this should make sure the photos are sorted by
-		//time.  This should be handled via a property that
-		//does all the needed switching.
-		if (!(group_selector.Adaptor is FSpot.TimeAdaptor))
-			HandleArrangeByTime (null, null);
-		
-		FSpot.TimeAdaptor time_adaptor = group_selector.Adaptor as FSpot.TimeAdaptor;
-		if (time_adaptor != null)
-			JumpTo (query.LookupItem (time));
-	}
-
-	private void JumpTo (int index)
+	void JumpTo (int index)
 	{
 		switch (view_mode) {
 		case ModeType.PhotoView:
@@ -1253,18 +1055,15 @@ public class MainWindow {
 
 			bool use_icon = false;;
 			while (len-- > 0) {
-				string thumbnail_path = FSpot.ThumbnailGenerator.ThumbnailPath (photos [len].DefaultVersionUri);
-				FSpot.PixbufCache.CacheEntry entry = icon_view.Cache.Lookup (thumbnail_path);
+				FSpot.PixbufCache.CacheEntry entry = icon_view.Cache.Lookup (photos [len].DefaultVersionUri);
 
 				Pixbuf thumbnail = null;
 				if (entry != null) {
-					if (FSpot.ColorManagement.IsEnabled) {
-						//FIXME
-						thumbnail = entry.ShallowCopyPixbuf ();
-						thumbnail = thumbnail.Copy ();
-						FSpot.ColorManagement.ApplyScreenProfile (thumbnail);
-					}
-					else
+					Cms.Profile screen_profile;
+					if (FSpot.ColorManagement.Profiles.TryGetValue (Preferences.Get<string> (Preferences.COLOR_MANAGEMENT_DISPLAY_PROFILE), out screen_profile)) {
+						thumbnail = entry.Pixbuf.Copy ();
+						FSpot.ColorManagement.ApplyProfile (thumbnail, screen_profile);
+					} else
 						thumbnail = entry.ShallowCopyPixbuf ();
 				}
 				
@@ -1291,35 +1090,30 @@ public class MainWindow {
 	}
 
 	void HandleIconViewDragDataGet (object sender, DragDataGetArgs args)
-	{		
-		switch (args.Info) {
-		case (uint) TargetType.UriList:
-		case (uint) TargetType.PhotoList:
-			UriList list = new UriList (SelectedPhotos ());
-			Byte [] data = Encoding.UTF8.GetBytes (list.ToString ());
-			Atom [] targets = args.Context.Targets;
-			args.SelectionData.Set (targets[0], 8, data, data.Length);
-			break;
-		case (uint) TargetType.RootWindow:
-			HandleSetAsBackgroundCommand (null, null);
-                        break;
+	{	
+		if (args.Info == DragDropTargets.UriListEntry.Info) {
+			args.SelectionData.SetUriListData (new UriList (SelectedPhotos ()), args.Context.Targets[0]);
+			return;
 		}
-		       
+		
+		if (args.Info == DragDropTargets.PhotoListEntry.Info) {
+			args.SelectionData.SetPhotosData (SelectedPhotos (), args.Context.Targets[0]);
+			return;
+		}
+		
+		if (args.Info == DragDropTargets.RootWindowEntry.Info) {
+			HandleSetAsBackgroundCommand (null, null);
+			return;
+		}
 	}
 
 	void HandleIconViewDragDrop (object sender, DragDropArgs args)
 	{
-		//Widget source = Gtk.Drag.GetSourceWidget (args.Context);
-		//Console.WriteLine ("Drag Drop {0}", source == null ? "null" : source.TypeName);
-		
 		args.RetVal = true;
 	}
 
 	void HandleIconViewDragMotion (object sender, DragMotionArgs args)
 	{
-		//Widget source = Gtk.Drag.GetSourceWidget (args.Context);
-		//Console.WriteLine ("Drag Motion {0}", source == null ? "null" : source.TypeName);
-
 		Gdk.Drag.Status (args.Context, args.Context.SuggestedAction, args.Time);
 		args.RetVal = true;
 	}
@@ -1367,8 +1161,7 @@ public class MainWindow {
 	{
 	 	Widget source = Gtk.Drag.GetSourceWidget (args.Context);     
 		
-		switch (args.Info) {
-		case (uint)TargetType.TagList:
+		if (args.Info == DragDropTargets.TagListEntry.Info) {
 			//
 			// Translate the event args from viewport space to window space,
 			// drag events use the viewport.  Owen sends his regrets.
@@ -1383,8 +1176,12 @@ public class MainWindow {
 				else 
 					AttachTags (tag_selection_widget.TagHighlight, new int [] {item});
 			}
-			break;
-		case (uint)TargetType.UriList:
+			
+			Gtk.Drag.Finish (args.Context, true, false, args.Time);
+			return;
+		}
+		
+		if (args.Info == DragDropTargets.UriListEntry.Info) {
 
 			/* 
 			 * If the drop is coming from inside f-spot then we don't want to import 
@@ -1392,35 +1189,42 @@ public class MainWindow {
 			if (source != null)
 				return;
 
-			UriList list = new UriList (args.SelectionData);
+			UriList list = args.SelectionData.GetUriListData (); 
 			ImportUriList (list, (args.Context.Action & Gdk.DragAction.Copy) != 0);
-			break;
+			
+			Gtk.Drag.Finish (args.Context, true, false, args.Time);
+			return;
+		}
+		
 #if ENABLE_REPARENTING
-		case (uint)TargetType.PhotoList:
+		if (args.Info == DragDropTargets.PhotoListEntry.Info) {
 			int p_item = icon_view.CellAtPosition (args.X + (int) icon_view.Hadjustment.Value, 
 							     args.Y + (int) icon_view.Vadjustment.Value);
 
-			if (p_item >= 0)
-			{
+			if (p_item >= 0) {
+				if (icon_view.Selection.Contains (p_item)) //We don't want to reparent ourselves!
+					return;
 				PhotoVersionCommands.Reparent cmd = new PhotoVersionCommands.Reparent ();
 				
 				cmd.Execute (db.Photos, SelectedPhotos(), query.Photos [p_item], GetToplevel (null));
 				UpdateQuery ();
 			}
-	
-			break;
-#endif
+			Gtk.Drag.Finish (args.Context, true, false, args.Time);
+			return;
 		}
-
-		Gtk.Drag.Finish (args.Context, true, false, args.Time);
+#endif
 	}
 
 	//
 	// IconView event handlers
 	// 
 
-	void HandleDoubleClicked (Widget widget, BrowsableEventArgs args)
+	void HandleDoubleClicked (object sender, BrowsableEventArgs args)
 	{
+		Widget widget = sender as Widget;
+		if (widget == null)
+			return;
+
 		switch (ViewMode) {
 		case ModeType.IconView:
 			icon_view.FocusCell = args.Items[0];
@@ -1447,26 +1251,32 @@ public class MainWindow {
 				HandleRemoveCommand (sender, args);
 			break;
 		case Gdk.Key.Key_0:
+		case Gdk.Key.KP_0:
 			if (alt)
 				HandleRatingMenuSelected (0);
 			break;
 		case Gdk.Key.Key_1:
+		case Gdk.Key.KP_1:
 			if (alt)
 				HandleRatingMenuSelected (1);
 			break;
 		case Gdk.Key.Key_2:
+		case Gdk.Key.KP_2:
 			if (alt)
 				HandleRatingMenuSelected (2);
 			break;
 		case Gdk.Key.Key_3:
+		case Gdk.Key.KP_3:
 			if (alt)
 				HandleRatingMenuSelected (3);
 			break;
 		case Gdk.Key.Key_4:
+		case Gdk.Key.KP_4:
 			if (alt)
 				HandleRatingMenuSelected (4);
 			break;
 		case Gdk.Key.Key_5:
+		case Gdk.Key.KP_5:
 			if (alt)
 				HandleRatingMenuSelected (5);
 			break;
@@ -1528,7 +1338,7 @@ public class MainWindow {
 
 	void HandlePhotoViewUpdateStarted (PhotoView sender)
 	{
-		main_window.GdkWindow.Cursor = new Gdk.Cursor (Gdk.CursorType.Watch);
+		main_window.GdkWindow.Cursor = watch;
 		// FIXME: use gdk_display_flush() when available
 		main_window.GdkWindow.Display.Sync ();
 	}
@@ -1569,6 +1379,8 @@ public class MainWindow {
 		HandleAttachTagCommand (sender, null);
 		
 		Gtk.Drag.Finish (args.Context, true, false, args.Time);
+
+ 		photo_view.View.GrabFocus();
 	}	
 
 	//
@@ -1599,6 +1411,8 @@ public class MainWindow {
 	{
 
 		MenuItem parent = sender as MenuItem;
+		if (parent == null) // We have a Gtk.Action for UI menus, so the "Edit > Remove tag" item needs special treatment
+			parent = uimanager.GetWidget("/ui/menubar1/edit2/remove_tag") as MenuItem;
 		if (parent != null && parent.Submenu is PhotoTagMenu) {
 			PhotoTagMenu menu = (PhotoTagMenu) parent.Submenu;
 			menu.Populate (SelectedPhotos ()); 
@@ -1615,7 +1429,7 @@ public class MainWindow {
 	
 	public void HandleRequireTag (object sender, EventArgs args)
  	{
-        ShowQueryWidget ();
+		ShowQueryWidget ();
 		query_widget.Require (tag_selection_widget.TagHighlight);
  	}
  
@@ -1659,6 +1473,7 @@ public class MainWindow {
 
 	public void ImportCamera (string camera_device)
 	{
+		Log.Debug ("ImportCamera {0}", camera_device);
 		GPhotoCamera cam = new GPhotoCamera();
 
 		try {
@@ -1679,10 +1494,9 @@ public class MainWindow {
 				selected_cam = 0;
 			} else {
 				bool found = false;
-				if (camera_device != null) {
-					string port = camera_device.Remove (0, "gphoto2:".Length);
-					for (int i = 0; i < num_cameras; i++)
-						if (cam.CameraList.GetValue (i) == port) {
+				if (camera_device != null)
+					for (int i = 0; i < num_cameras; i++) {
+						if (camera_device.IndexOf (cam.CameraList.GetValue(i)) != 0) {
 							selected_cam = i;
 							found = true;
 							break;
@@ -1719,61 +1533,27 @@ public class MainWindow {
 			cam.ReleaseGPhotoResources ();
 		}
 	}
-#if GTK_2_10
 	void HandlePageSetupActivated (object o, EventArgs e)
 	{
 		FSpot.Global.PageSetup = Print.RunPageSetupDialog (this.Window, FSpot.Global.PageSetup, null);
 	}
-#endif
 	
 	void HandlePrintCommand (object sender, EventArgs e)
 	{
-#if !GTK_2_10
-		new FSpot.PrintDialog (SelectedPhotos ());
-#else
 		FSpot.PrintOperation print = new FSpot.PrintOperation (SelectedPhotos ());
 		print.Run (PrintOperationAction.PrintDialog, null);
-#endif
-	}
-
-	private Gtk.Dialog info_display_window;
-	public void HandleInfoDisplayDestroy (object sender, EventArgs args)
-	{
-		info_display_window = null;
 	}
 
 	public void HandlePreferences (object sender, EventArgs args)
 	{
-		PreferenceDialog.Show ();
+		var pref = new PreferenceDialog (GetToplevel (sender));
+		pref.Run ();
+		pref.Destroy ();
 	}
 
 	public void HandleManageExtensions (object sender, EventArgs args)
 	{
 		Mono.Addins.Gui.AddinManagerWindow.Run (main_window);
-	}
-	
-	void HandleViewDirectory (object sender, EventArgs args)
-	{
-		Gtk.Window win = new Gtk.Window ("Directory View");
-		FSpot.Widgets.IconView view = new FSpot.Widgets.IconView (new FSpot.DirectoryCollection (System.IO.Directory.GetCurrentDirectory ()));
-		new FSpot.PreviewPopup (view);
-
-		view.DisplayTags = false;
-
-		Gtk.ScrolledWindow scrolled = new ScrolledWindow ();
-		win.Add (scrolled);
-		scrolled.Add (view);
-		win.ShowAll ();
-	}
-
-	void HandleViewSelection (object sender, EventArgs args)
-	{
-		Gtk.Window win = new Gtk.Window ("This is a window");
-		Gtk.ScrolledWindow scroll = new Gtk.ScrolledWindow ();
-	
-		win.Add (scroll);
-		scroll.Add (new TrayView (icon_view.Selection));
-		win.ShowAll ();
 	}
 
 	private void TestDisplay ()
@@ -1788,12 +1568,12 @@ public class MainWindow {
 	void HandleSendMailCommand (object sender, EventArgs args)
 	{
 		//TestDisplay ();
-		new FSpot.SendEmail (new FSpot.PhotoArray (SelectedPhotos ()));
+		new FSpot.SendEmail (new FSpot.PhotoArray (SelectedPhotos ()), Window);
 	}
 
 	public static void HandleHelp (object sender, EventArgs args)
 	{
-		GnomeUtil.ShowHelp ("f-spot.xml", null, FSpot.Global.HelpDirectory, Toplevel.Window.Screen);
+		GtkBeans.Global.ShowUri (Toplevel.Window.Screen, "ghelp:f-spot");
 	}
 
 	public static void HandleAbout (object sender, EventArgs args)
@@ -1803,7 +1583,7 @@ public class MainWindow {
 
 	void HandleTagSizeChange (object sender, EventArgs args)
 	{
-		RadioMenuItem choice = sender as RadioMenuItem;
+		RadioAction choice = sender as RadioAction;
 	
 		//Get this callback twice. Once for the active going menuitem,
 		//once for the inactive leaving one. Ignore the inactive.
@@ -1830,47 +1610,25 @@ public class MainWindow {
 		}
 	}
 
-	public void HandleArrangeByTime (object sender, EventArgs args)
+	public void HandleFilmstripHorizontal (object sender, EventArgs args)
 	{
-		if (group_selector.Adaptor is TimeAdaptor)
+		if (photo_view.FilmstripOrientation == Orientation.Horizontal)
 			return;
-
-		group_selector.Adaptor.GlassSet -= HandleAdaptorGlassSet;
-		group_selector.Adaptor.Changed -= HandleAdaptorChanged;
-		group_selector.Adaptor = new FSpot.TimeAdaptor (query, reverse_order.Active);
-
-		group_selector.Mode = FSpot.GroupSelector.RangeType.Min;
-		group_selector.Adaptor.GlassSet += HandleAdaptorGlassSet;
-		group_selector.Adaptor.Changed += HandleAdaptorChanged;
-
-		if (sender != month)
-			month.Active = true;
-
-		//update the selection in the Timeline
-		if (query.Range != null)
-			group_selector.SetLimitsToDates(query.Range.Start, query.Range.End);
+		(sender as Gtk.CheckMenuItem).Active = false;
+		photo_view.PlaceFilmstrip (Orientation.Horizontal);
 	}
 
-	public void HandleArrangeByDirectory (object sender, EventArgs args)
+	public void HandleFilmstripVertical (object sender, EventArgs args)
 	{
-		if (group_selector.Adaptor is DirectoryAdaptor)
+		if (photo_view.FilmstripOrientation == Orientation.Vertical)
 			return;
-
-		group_selector.Adaptor.GlassSet -= HandleAdaptorGlassSet;
-		group_selector.Adaptor.Changed -= HandleAdaptorChanged;
-		group_selector.Adaptor = new FSpot.DirectoryAdaptor (query, reverse_order.Active); 	
-
-		group_selector.Mode = FSpot.GroupSelector.RangeType.Min;
-		group_selector.Adaptor.GlassSet += HandleAdaptorGlassSet;
-		group_selector.Adaptor.Changed += HandleAdaptorChanged;
-
-		if (sender != directory)
-			directory.Active = true;
+		(sender as Gtk.CheckMenuItem).Active = false;
+		photo_view.PlaceFilmstrip (Orientation.Vertical);
 	}
-	
+
 	public void HandleReverseOrder (object sender, EventArgs args)
 	{
-		Gtk.CheckMenuItem item = sender as Gtk.CheckMenuItem;
+		ToggleAction item = sender as ToggleAction;
 
 		if (group_selector.Adaptor.OrderAscending == item.Active)
 			return;
@@ -1926,8 +1684,6 @@ public class MainWindow {
 		Preferences.Set (Preferences.SHOW_DATES,		icon_view.DisplayDates);
 		Preferences.Set (Preferences.SHOW_RATINGS,		icon_view.DisplayRatings);
 
-		Preferences.Set (Preferences.GROUP_ADAPTOR,		(group_selector.Adaptor is DirectoryAdaptor) ? 1 : 0);
-		Preferences.Set (Preferences.GROUP_ADAPTOR_ORDER_ASC,   group_selector.Adaptor.OrderAscending);
 		Preferences.Set (Preferences.GLASS_POSITION,		group_selector.GlassPosition);
 		
 		Preferences.Set (Preferences.SIDEBAR_POSITION,		main_hpaned.Position);
@@ -2044,8 +1800,22 @@ public class MainWindow {
 		if (tag == null)
 			return;
 		
-		TagCommands.Edit command = new TagCommands.Edit (db, main_window);
-		command.Execute (tag);
+		EditTagDialog dialog = new EditTagDialog (db, tag, main_window);
+		if ((ResponseType)dialog.Run () == ResponseType.Ok) {
+			bool name_changed = false;
+			try {
+				if (tag.Name != dialog.TagName) {
+					tag.Name = dialog.TagName;
+					name_changed = true;
+				}
+				tag.Category = dialog.TagCategory;
+				db.Tags.Commit (tag, name_changed);
+			} catch (Exception ex) {
+				Log.Exception (ex);
+			}
+		}
+
+		dialog.Destroy ();
 	}
 
 	public void HandleMergeTagsCommand (object obj, EventArgs args)
@@ -2061,7 +1831,7 @@ public class MainWindow {
 
 		// If a tag with children tags is selected for merging, we
 		// should also merge its children..
-		ArrayList all_tags = new ArrayList (tags.Length);
+		List<Tag> all_tags = new List<Tag> (tags.Length);
 		foreach (Tag tag in tags) {
 			if (! all_tags.Contains (tag))
 				all_tags.Add (tag);
@@ -2075,7 +1845,7 @@ public class MainWindow {
 		}
 
 		// debug..
-		tags = (Tag []) all_tags.ToArray (typeof (Tag));
+		tags = all_tags.ToArray ();
 		System.Array.Sort (tags, new TagRemoveComparer ());
 
 		foreach (Tag tag in tags) {
@@ -2120,7 +1890,7 @@ public class MainWindow {
 	{
 		PhotoList list = new PhotoList (Selection.Items);
 		list.Sort (new Photo.CompareDateName ());
-		new TimeDialog (db, list);
+		(new AdjustTimeDialog (db, list)).Run ();
 	}
 
 	public void HideLoupe ()
@@ -2410,6 +2180,12 @@ public class MainWindow {
 
 	public void HandleDeleteCommand (object sender, EventArgs args)
 	{
+		// Don't steal characters from any text entries
+		if (Window.Focus is Gtk.Entry && Gtk.Global.CurrentEvent is Gdk.EventKey) {
+			Window.Focus.ProcessEvent (Gtk.Global.CurrentEvent);
+			return;
+		}
+		
    		Photo[] photos = SelectedPhotos();
    		string header = Catalog.GetPluralString ("Delete the selected photo permanently?", 
 								    "Delete the {0} selected photos permanently?", 
@@ -2444,6 +2220,12 @@ public class MainWindow {
 
 	public void HandleRemoveCommand (object sender, EventArgs args)
 	{
+		// Don't steal characters from any text entries
+		if (Window.Focus is Gtk.Entry && Gtk.Global.CurrentEvent is Gdk.EventKey) {
+			Window.Focus.ProcessEvent (Gtk.Global.CurrentEvent);
+			return;
+		}
+
    		Photo[] photos = SelectedPhotos();
 		if (photos.Length == 0) 
 			return;
@@ -2489,8 +2271,8 @@ public class MainWindow {
 		case Gdk.Key.space:
 		case Gdk.Key.Return:
 		case Gdk.Key.KP_Enter:
-            ShowQueryWidget ();
-            query_widget.Include (tag_selection_widget.TagHighlight);
+			ShowQueryWidget ();
+			query_widget.Include (tag_selection_widget.TagHighlight);
 			break;
 
 		case Gdk.Key.F2:
@@ -2566,15 +2348,7 @@ public class MainWindow {
 
 		int [] selected_ids = SelectedIds ();
 		if (command.Execute (SelectedPhotos (selected_ids)))
-#if MONO_1_9_0
 			query.MarkChanged (selected_ids, new PhotoChanges {DataChanged = true});
-#else
-		{
-			PhotoChanges changes = new PhotoChanges ();
-			changes.DataChanged = true;
-			query.MarkChanged (selected_ids, changes);
-		}
-#endif
 	}
 
 	public void HandleRotate90Command (object sender, EventArgs args)
@@ -2624,19 +2398,20 @@ public class MainWindow {
 
 	void HandleSetAsBackgroundCommand (object sender, EventArgs args)
 	{
-#if !NOGCONF
 		Photo current = CurrentPhoto;
 
 		if (current == null)
 			return;
 
-		GnomeUtil.SetBackgroundImage (current.DefaultVersionUri.LocalPath);
-#endif
+		Desktop.SetBackgroundImage (current.DefaultVersionUri.LocalPath);
 	}
 
 	void HandleSetDateRange (object sender, EventArgs args) {
-		DateCommands.Set set_command = new DateCommands.Set (query, main_window);
-		set_command.Execute ();
+		var date_range_dialog = new DateRangeDialog (query.Range, main_window);
+		if ((ResponseType)date_range_dialog.Run () == ResponseType.Ok)
+			query.Range = date_range_dialog.Range;
+		date_range_dialog.Destroy ();
+
 		//update the TimeLine
 		if (group_selector.Adaptor is TimeAdaptor && query.Range != null) 
 			group_selector.SetLimitsToDates(query.Range.Start, query.Range.End);
@@ -2662,8 +2437,7 @@ public class MainWindow {
 	}
 
 	void HandleSetRatingFilter (object sender, EventArgs args) {
-		RatingFilter.Set set_command = new RatingFilter.Set (query, main_window);
-		set_command.Execute ();
+		new RatingFilterDialog (query, main_window);
 	}
 
 	public void HandleClearRatingFilter (object sender, EventArgs args) {
@@ -2700,8 +2474,10 @@ public class MainWindow {
 		
 		case Preferences.MAIN_WINDOW_WIDTH:
 		case Preferences.MAIN_WINDOW_HEIGHT:
-			main_window.Resize(Preferences.Get<int> (Preferences.MAIN_WINDOW_WIDTH),
-					   Preferences.Get<int> (Preferences.MAIN_WINDOW_HEIGHT));
+			if (Preferences.Get<int> (Preferences.MAIN_WINDOW_WIDTH) > 0 &&
+						  Preferences.Get<int> (Preferences.MAIN_WINDOW_HEIGHT) > 0)
+				main_window.Resize(Preferences.Get<int> (Preferences.MAIN_WINDOW_WIDTH),
+						   Preferences.Get<int> (Preferences.MAIN_WINDOW_HEIGHT));
 
 			break;
 		
@@ -2721,8 +2497,9 @@ public class MainWindow {
 			break;
 		
 		case Preferences.SHOW_FILMSTRIP:
-			if (display_filmstrip.Active != Preferences.Get<bool> (key))
+			if (display_filmstrip.Active != Preferences.Get<bool> (key)) {
 				display_filmstrip.Active = Preferences.Get<bool> (key);
+			}
 			break;
 		
 		case Preferences.SHOW_TAGS:
@@ -2739,11 +2516,6 @@ public class MainWindow {
 		case Preferences.SHOW_RATINGS:
 			if (display_ratings_menu_item.Active != Preferences.Get<bool> (key))
 				display_ratings_menu_item.Active = Preferences.Get<bool> (key);
-			break;
-		
-		case Preferences.GROUP_ADAPTOR:
-			if (Preferences.Get<int> (key) == 1)
-				directory.Active = true;
 			break;
 
 		case Preferences.GROUP_ADAPTOR_ORDER_ASC:
@@ -2763,6 +2535,8 @@ public class MainWindow {
 						JumpTo (query.IndexOf (photo));
 				} catch (Exception) {}
 			}
+
+			icon_view.GrabFocus ();
 			break;
 		case Preferences.SIDEBAR_POSITION:
 			if (main_hpaned.Position !=Preferences.Get<int> (key) )
@@ -2785,12 +2559,6 @@ public class MainWindow {
 		case Preferences.METADATA_EMBED_IN_IMAGE:
 			write_metadata =Preferences.Get<bool> (key) ;
 			break;
-		case Preferences.COLOR_MANAGEMENT_ENABLED:
-			FSpot.ColorManagement.IsEnabled = Preferences.Get<bool> (key);
-			break;
-		case Preferences.COLOR_MANAGEMENT_USE_X_PROFILE:
-			FSpot.ColorManagement.UseXProfile = Preferences.Get<bool> (key);
-			break;
 		case Preferences.GNOME_MAILTO_ENABLED:
 			send_mail.Visible = Preferences.Get<bool> (key);
 			break;
@@ -2809,7 +2577,7 @@ public class MainWindow {
 
 	public void UpdateQuery ()
 	{
-		main_window.GdkWindow.Cursor = new Gdk.Cursor (Gdk.CursorType.Watch);
+		main_window.GdkWindow.Cursor = watch;
 		main_window.GdkWindow.Display.Sync ();
 		query.RequestReload ();
 		main_window.GdkWindow.Cursor = null;
@@ -2862,6 +2630,7 @@ public class MainWindow {
 	
 	void HandleFindAddTagWith (object sender, EventArgs args)
 	{
+		MenuItem find_add_tag_with = uimanager.GetWidget ("/ui/menubar1/find/find_add_tag_with") as MenuItem;
 		if (find_add_tag_with.Submenu != null)
 			find_add_tag_with.Submenu.Dispose ();
 		
@@ -2915,6 +2684,7 @@ public class MainWindow {
 		bool tag_sensitive = tags_selected > 0;
 		bool active_selection = selection.Count > 0;
 		bool single_active = CurrentPhoto != null;
+		MenuItem version_menu_item = uimanager.GetWidget ("/ui/menubar1/file1/version_menu_item") as MenuItem;
 		
 		if (!single_active) {
 			version_menu_item.Sensitive = false;
@@ -2976,8 +2746,9 @@ public class MainWindow {
 	
 		export.Sensitive = active_selection;
 
+		MenuItem toolsmenu = uimanager.GetWidget ("/ui/menubar1/tools") as MenuItem;
 		try {
-			tools.Visible = (tools.Submenu as Menu).Children.Length > 0;
+			tools.Visible = (toolsmenu.Submenu as Menu).Children.Length > 0;
 		} catch {
 			tools.Visible = false;
 		}
@@ -3009,6 +2780,9 @@ public class MainWindow {
 		}
 
 		//if (last_tags_selected_count != tags_selected) {
+		MenuItem find_add_tag = uimanager.GetWidget ("/ui/menubar1/find/find_add_tag") as MenuItem;
+		MenuItem find_add_tag_with = uimanager.GetWidget ("/ui/menubar1/find/find_add_tag_with") as MenuItem;
+
 		((Gtk.Label)find_add_tag.Child).TextWithMnemonic = String.Format (
 			Catalog.GetPluralString ("Find _Selected Tag", "Find _Selected Tags", tags_selected), tags_selected
 		);
@@ -3026,27 +2800,30 @@ public class MainWindow {
 
 	void PopulateExtendableMenus (object o, EventArgs args)
 	{
+		MenuItem exportmenu = uimanager.GetWidget ("/ui/menubar1/file1/export") as MenuItem;
+		MenuItem toolsmenu = uimanager.GetWidget ("/ui/menubar1/tools") as MenuItem;
 		try {
-			if (export.Submenu != null)
-				export.Submenu.Dispose ();
-			if (tools.Submenu != null)
-				tools.RemoveSubmenu ();
+			if (exportmenu.Submenu != null)
+				exportmenu.Submenu.Dispose ();
+			if (toolsmenu.Submenu != null)
+				toolsmenu.RemoveSubmenu ();
 
-			export.Submenu = (Mono.Addins.AddinManager.GetExtensionNode ("/FSpot/Menus/Exports") as FSpot.Extensions.SubmenuNode).GetSubmenu ();
-			export.Submenu.ShowAll ();
+			exportmenu.Submenu = (Mono.Addins.AddinManager.GetExtensionNode ("/FSpot/Menus/Exports") as FSpot.Extensions.SubmenuNode).GetSubmenu ();
+			exportmenu.Submenu.ShowAll ();
 
-			tools.Submenu = (Mono.Addins.AddinManager.GetExtensionNode ("/FSpot/Menus/Tools") as FSpot.Extensions.SubmenuNode).GetSubmenu ();
-			tools.Submenu.ShowAll ();
+			toolsmenu.Submenu = (Mono.Addins.AddinManager.GetExtensionNode ("/FSpot/Menus/Tools") as FSpot.Extensions.SubmenuNode).GetSubmenu ();
+			toolsmenu.Submenu.ShowAll ();
 
-			tools.Visible = (tools.Submenu as Menu).Children.Length > 0;
+			tools.Visible = (toolsmenu.Submenu as Menu).Children.Length > 0;
 		} catch {
-			Console.WriteLine ("There's (maybe) something wrong with some of the installed extensions. You can try removing the directory addin-db-000 from ~/.gnome2/f-spot/");
-			tools.Visible = false;
+			Log.Warning ("There's (maybe) something wrong with some of the installed extensions. You can try removing the directory addin-db-000 from ~/.config/f-spot/");
+			toolsmenu.Visible = false;
 		}
 	}
 
-	public void HandleOpenWith (object sender, Gnome.Vfs.MimeApplication mime_application)
+	public void HandleOpenWith (object sender, ApplicationActivatedEventArgs e)
 	{
+		GLib.AppInfo application = e.AppInfo;
 		Photo[] selected = SelectedPhotos ();
 
 		if (selected == null || selected.Length < 1)
@@ -3056,7 +2833,7 @@ public class MainWindow {
 		string msg = String.Format (Catalog.GetPluralString (
 				"Before launching {1}, should F-Spot create a new version of the selected photo to preserve the original?",
 				"Before launching {1}, should F-Spot create new versions of the selected photos to preserve the originals?", selected.Length),
-				selected.Length, mime_application.Name);
+				selected.Length, application.Name);
 
 		// FIXME add cancel button? add help button?
 		HigMessageDialog hmd = new HigMessageDialog(GetToplevel (sender), DialogFlags.DestroyWithParent, 
@@ -3067,6 +2844,24 @@ public class MainWindow {
 		//hmd.AddButton (Gtk.Stock.Cancel, Gtk.ResponseType.Cancel, false);
 		hmd.AddButton (Gtk.Stock.Yes, Gtk.ResponseType.Yes, true);
 
+		bool support_xcf = false;;
+		if (application.Id == "gimp.desktop") 
+			foreach (Gdk.PixbufFormat format in Gdk.Pixbuf.Formats)
+				if (format.Name == "xcf")
+					support_xcf = true;
+
+		//This allows creating a version with a .xcf extension.
+		//There's no need to convert the file to xcf file format, gimp will take care of this
+		if (support_xcf) {	
+			CheckButton cb = new CheckButton (Catalog.GetString ("XCF version"));
+			cb.Active = Preferences.Get<bool> (Preferences.EDIT_CREATE_XCF_VERSION);
+			hmd.VBox.Add (cb);
+			cb.Toggled += delegate (object s, EventArgs ea) {
+				Preferences.Set (Preferences.EDIT_CREATE_XCF_VERSION, (s as CheckButton).Active);
+			};
+			cb.Show ();
+		}
+
 		Gtk.ResponseType response = Gtk.ResponseType.Cancel;
 
 		try {
@@ -3074,6 +2869,12 @@ public class MainWindow {
 		} finally {
 			hmd.Destroy ();
 		}
+		
+		bool create_xcf = false;
+		if (support_xcf)
+			create_xcf = Preferences.Get<bool> (Preferences.EDIT_CREATE_XCF_VERSION);
+
+		Console.WriteLine ("XCF ? {0}", create_xcf);
 
 		if (response == Gtk.ResponseType.Cancel)
 			return;
@@ -3085,11 +2886,11 @@ public class MainWindow {
 		foreach (Photo photo in selected) {
 			try {
 				if (create_new_versions) {
-					uint version = photo.CreateNamedVersion (mime_application.Name, photo.DefaultVersionId, true);
+					uint version = photo.CreateNamedVersion (application.Name, create_xcf ? ".xcf" : null, photo.DefaultVersionId, true);
 					photo.DefaultVersionId = version;
 				}
-			} catch (Exception e) {
-				errors.Add (new EditException (photo, e));
+			} catch (Exception ex) {
+				errors.Add (new EditException (photo, ex));
 			}
 
 			uri_list.Append (photo.DefaultVersionUri.ToString ());
@@ -3105,7 +2906,11 @@ public class MainWindow {
 		if (create_new_versions)
 			db.Photos.Commit (selected);
 
-		mime_application.Launch (uri_list);
+		try {
+			application.LaunchUris (uri_list, null);
+		} catch (System.Exception) {
+			Log.Error ("Failed to lauch {0}", application.Name);
+		}
 	}
 
 	public void GetWidgetPosition(Widget widget, out int x, out int y)
@@ -3182,7 +2987,7 @@ public class MainWindow {
 		foreach (string tagname in new_tags) {
 			Tag t = db.Tags.GetTagByName (tagname);
 			if (t == null) {
-				t = db.Tags.CreateCategory (default_category, tagname) as Tag;
+				t = db.Tags.CreateCategory (default_category, tagname, true) as Tag;
 				db.Tags.Commit (t);
 			}
 			tags [i++] = t;
@@ -3237,21 +3042,27 @@ public class MainWindow {
 		}
 	}
 
-	public string [] SelectedMimeTypes ()
+	public List<string> SelectedMimeTypes ()
 	{
-		ArrayList mimes = new ArrayList ();
+		List<string> contents = new List<string> ();
 
 		foreach (Photo p in SelectedPhotos ()) {
-			string mime = Gnome.Vfs.MimeType.GetMimeTypeForUri (p.DefaultVersionUri.ToString ());
+			string content;
+			try {
+				content = GLib.FileFactory.NewForUri (p.DefaultVersionUri).QueryInfo ("standard::content-type", GLib.FileQueryInfoFlags.None, null).ContentType;
+			} catch (GLib.GException) {
+				content = null;
+			}
 
-			if (! mimes.Contains (mime))
-				mimes.Add (mime);
+			if (! contents.Contains (content))
+				contents.Add (content);
 		}
 
-		return mimes.ToArray (typeof (string)) as string [];
+		return contents;
 	}
 
-	private void ShowQueryWidget () {
+	private void ShowQueryWidget ()
+	{
 		if (find_bar.Visible) {
 			find_bar.Entry.Text = String.Empty;
 			find_bar.Hide ();

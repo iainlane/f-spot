@@ -6,6 +6,8 @@ using Gtk;
 using Gdk;
 
 using FSpot.Utils;
+using FSpot.Query;
+
 namespace FSpot
 {
 	public class LiteralPopup
@@ -206,7 +208,6 @@ namespace FSpot
 
 	public class LogicWidget : HBox {
 		private PhotoQuery query;
-		private TagSelectionWidget tag_selection_widget;
 
 		private static Tooltips tips = new Tooltips ();
 
@@ -234,16 +235,16 @@ namespace FSpot
 		}
 
 		// Drag and Drop
-		private static TargetEntry [] tag_dest_target_table = new TargetEntry [] {
-					new TargetEntry ("application/x-fspot-tags", 0, (uint) MainWindow.TargetType.TagList),
-					new TargetEntry ("application/x-fspot-tag-query-item", 0, (uint) MainWindow.TargetType.TagQueryItem),
-				};
+		private static TargetEntry [] tag_dest_target_table =
+			new TargetEntry [] {
+				DragDropTargets.TagListEntry,
+				DragDropTargets.TagQueryEntry
+			};
 
-		public LogicWidget (PhotoQuery query, TagStore tag_store, TagSelectionWidget selector) : base ()
+		public LogicWidget (PhotoQuery query, TagStore tag_store) : base ()
 		{
 			//SetFlag (WidgetFlags.NoWindow);
 			this.query = query;
-			this.tag_selection_widget = selector;
 
 			CanFocus = true;
 			Sensitive = true;
@@ -313,19 +314,19 @@ namespace FSpot
 
 		// When the user edits a tag (it's icon, name, etc) we get called
 		// and update the images/text in the query as needed to reflect the changes.
-		private void HandleTagChanged (object sender, DbItemEventArgs args)
+		private void HandleTagChanged (object sender, DbItemEventArgs<Tag> args)
 		{
-			foreach (DbItem item in args.Items)
-			foreach (Literal term in rootTerm.FindByTag (item as Tag))
-			term.Update ();
+			foreach (Tag t in args.Items)
+                foreach (Literal term in rootTerm.FindByTag (t))
+                    term.Update ();
 		}
 
 		// If the user deletes a tag that is in use in the query, remove it from the query too.
-		private void HandleTagDeleted (object sender, DbItemEventArgs args)
+		private void HandleTagDeleted (object sender, DbItemEventArgs<Tag> args)
 		{
-			foreach (DbItem item in args.Items)
-			foreach (Literal term in rootTerm.FindByTag (item as Tag))
-			term.RemoveSelf ();
+			foreach (Tag t in args.Items)
+                foreach (Literal term in rootTerm.FindByTag (t))
+                    term.RemoveSelf ();
 		}
 
 		private void HandleDragMotion (object o, DragMotionArgs args)
@@ -368,9 +369,9 @@ namespace FSpot
 			UpdateQuery ();
 		}
 
-		private void HandleTermAdded (Term parent, Literal after)
+		private void HandleTagsAdded (Tag[] tags, Term parent, Literal after)
 		{
-			InsertTerm (parent, after);
+			InsertTerm (tags, parent, after);
 		}
 
 		private void HandleAttachTag (Tag tag, Term parent, Literal after)
@@ -427,9 +428,24 @@ namespace FSpot
 
 		private void HandleDragDataReceived (object o, DragDataReceivedArgs args)
 		{
-			InsertTerm (rootTerm, null);
-
 			args.RetVal = true;
+			
+			if (args.Info == DragDropTargets.TagListEntry.Info) {
+
+				InsertTerm (args.SelectionData.GetTagsData (), rootTerm, null);
+				return;
+			}
+			
+			if (args.Info == DragDropTargets.TagQueryEntry.Info) {
+
+				// FIXME: use drag data
+				HandleLiteralsMoved (Literal.FocusedLiterals, rootTerm, null);
+
+				// Prevent them from being removed again
+				Literal.FocusedLiterals = null;
+				
+				return;
+			}
 		}
 
 		/** Helper Functions **/
@@ -594,18 +610,6 @@ namespace FSpot
 			UpdateQuery ();
 		}
 
-		private void InsertTerm (Term parent, Literal after)
-		{
-			if (Literal.FocusedLiterals.Count != 0) {
-				HandleLiteralsMoved (Literal.FocusedLiterals, parent, after);
-
-				// Prevent them from being removed again
-				Literal.FocusedLiterals = null;
-			}
-			else
-				InsertTerm (tag_selection_widget.TagHighlight, parent, after);
-		}
-
 		public ArrayList InsertTerm (Tag [] tags, Term parent, Literal after)
 		{
 			int position;
@@ -642,7 +646,7 @@ namespace FSpot
 				}
 
 				Literal term  = new Literal (parent, tag, after);
-				term.TermAdded  += HandleTermAdded;
+				term.TagsAdded  += HandleTagsAdded;
 				term.LiteralsMoved += HandleLiteralsMoved;
 				term.AttachTag  += HandleAttachTag;
 				term.NegatedToggled += HandleNegated;
@@ -673,11 +677,10 @@ namespace FSpot
 
 			if (rootTerm.Count == 0) {
 				help.Show ();
-				query.ExtraCondition = null;
+				query.TagTerm = null;
 			} else {
 				help.Hide ();
-				query.ExtraCondition = rootTerm.SqlCondition ();
-				//Console.WriteLine ("extra_condition = {0}", query.ExtraCondition);
+				query.TagTerm = new TagConditionWrapper (rootTerm.SqlCondition ());
 			}
 
 			EventHandler handler = Changed;

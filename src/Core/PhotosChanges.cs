@@ -17,7 +17,6 @@ namespace FSpot
 	{
 		[Flags ()]
 		enum Changes {
-			None 			= 0x0,
 			DefaultVersionId 	= 0x1,
 			Time			= 0x2,
 			Uri			= 0x4,
@@ -28,10 +27,10 @@ namespace FSpot
 			MD5Sum			= 0x80
 		}
 
-		Changes changes = Changes.None;
+		Changes changes = 0;
 
 		public bool MetadataChanged {
-			get { return (changes & ~Changes.Data) != Changes.None || TagsChanged || VersionsChanged; }
+			get { return (changes & ~Changes.Data) != 0 || TagsChanged || VersionsChanged; }
 		}
 
 		public bool DataChanged {
@@ -90,7 +89,7 @@ namespace FSpot
 			}
 		}
 		bool tags_changed = false;
-		public bool TagsChanged {
+		public virtual bool TagsChanged {
 			get { return tags_changed; }
 			private set { tags_changed = value; }
 		}
@@ -122,6 +121,11 @@ namespace FSpot
 
 		public static PhotosChanges operator | (PhotosChanges c1, PhotosChanges c2)
 		{
+			if (c1 == null)
+				throw new ArgumentNullException ("c1");
+			if (c2 == null)
+				throw new ArgumentNullException ("c2");
+
 			PhotosChanges changes = new PhotosChanges ();
 			changes.changes = c1.changes | c2.changes;
 			changes.VersionsChanged = c1.VersionsChanged || c2.VersionsChanged;

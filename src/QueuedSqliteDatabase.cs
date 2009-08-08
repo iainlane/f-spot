@@ -110,7 +110,7 @@ namespace Banshee.Database
 
         ~QueuedSqliteDatabase ()
         {
-            Log.DebugFormat ("Finalizer called on {0}. Should be Disposed", GetType ());
+            Log.Debug ("Finalizer called on {0}. Should be Disposed", GetType ());
             Dispose (false);
         }
         
@@ -420,7 +420,7 @@ namespace Banshee.Database
             get { return insert_id; }
         }
         
-        public new CommandType CommandType {
+        public CommandType CommandType {
             get { return command_type; }
             set { command_type = value; }
         }

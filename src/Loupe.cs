@@ -1,3 +1,13 @@
+//
+// FSpot.Widgets.Loupe.cs
+//
+// Author(s):
+//	Larry Ewing  <lewing@novell.com:
+//
+// Copyright (c) 2005-2009 Novell, Inc.
+//
+// This is free software. See COPYING for details.
+//
 using Cairo;
 
 using Gtk;
@@ -5,133 +15,9 @@ using Gdk;
 using System;
 using System.Runtime.InteropServices;
 using Mono.Unix;
-using FSpot.Widgets;
-using FSpot.UI.Dialog;
+using FSpot.Utils;
 
-namespace FSpot {
-	public class Sharpener : Loupe {
-		Gtk.SpinButton amount_spin = new Gtk.SpinButton (0.5, 100.0, .01);
-		Gtk.SpinButton radius_spin = new Gtk.SpinButton (5.0, 50.0, .01);
-		Gtk.SpinButton threshold_spin = new Gtk.SpinButton (0.0, 50.0, .01);
-		Gtk.Dialog dialog;
-		
-		public Sharpener (PhotoImageView view) : base (view)
-		{	
-		}
-
-		protected override void UpdateSample ()
-		{
-			base.UpdateSample ();
-
-			if (overlay != null)
-				overlay.Dispose ();
-
-			overlay = null;
-			if (source != null)
-				overlay = PixbufUtils.UnsharpMask (source, 
-								   radius_spin.Value, 
-								   amount_spin.Value, 
-								   threshold_spin.Value);
-		}
-
-		private void HandleSettingsChanged (object sender, EventArgs args)
-		{
-			UpdateSample ();
-		}
-		
-		private void HandleOkClicked (object sender, EventArgs args)
-		{
-			Photo photo = view.Item.Current as Photo;
-
-			if (photo == null)
-				return;
-			
-			try {
-				Gdk.Pixbuf orig = view.Pixbuf;
-				Gdk.Pixbuf final = PixbufUtils.UnsharpMask (orig,
-									    radius_spin.Value,
-									    amount_spin.Value,
-									    threshold_spin.Value);
-				
-				bool create_version = photo.DefaultVersion.IsProtected;
-
-				photo.SaveVersion (final, create_version);
-			} catch (System.Exception e) {
-				string msg = Catalog.GetString ("Error saving sharpened photo");
-				string desc = String.Format (Catalog.GetString ("Received exception \"{0}\". Unable to save photo {1}"),
-							     e.Message, photo.Name);
-				
-				HigMessageDialog md = new HigMessageDialog (this, DialogFlags.DestroyWithParent, 
-									    Gtk.MessageType.Error,
-									    ButtonsType.Ok, 
-									    msg,
-									    desc);
-				md.Run ();
-				md.Destroy ();
-			}
-			
-			Destroy ();
-		}
-
-		public void HandleCancelClicked (object sender, EventArgs args)
-		{
-			Destroy ();
-		}
-
-		public void HandleLoupeDestroyed (object sender, EventArgs args)
-		{
-			dialog.Destroy ();
-		}
-		
-		protected override void BuildUI ()
-		{
-			base.BuildUI ();
-
-			string title = Catalog.GetString ("Sharpen");
-			dialog = new Gtk.Dialog (title, (Gtk.Window) this,
-						 DialogFlags.DestroyWithParent, new object [0]);
-			dialog.BorderWidth = 12;
-			dialog.VBox.Spacing = 6;
-			
-			Gtk.Table table = new Gtk.Table (3, 2, false);
-			table.ColumnSpacing = 6;
-			table.RowSpacing = 6;
-			
-			table.Attach (SetFancyStyle (new Gtk.Label (Catalog.GetString ("Amount:"))), 0, 1, 0, 1);
-			table.Attach (SetFancyStyle (new Gtk.Label (Catalog.GetString ("Radius:"))), 0, 1, 1, 2);
-			table.Attach (SetFancyStyle (new Gtk.Label (Catalog.GetString ("Threshold:"))), 0, 1, 2, 3);
-			
-			SetFancyStyle (amount_spin = new Gtk.SpinButton (0.00, 100.0, .01));
-			SetFancyStyle (radius_spin = new Gtk.SpinButton (1.0, 50.0, .01));
-			SetFancyStyle (threshold_spin = new Gtk.SpinButton (0.0, 50.0, .01));
-			amount_spin.Value = .5;
-			radius_spin.Value = 5;
-			threshold_spin.Value = 0.0;
-
-			amount_spin.ValueChanged += HandleSettingsChanged;
-			radius_spin.ValueChanged += HandleSettingsChanged;
-			threshold_spin.ValueChanged += HandleSettingsChanged;
-
-			table.Attach (amount_spin, 1, 2, 0, 1);
-			table.Attach (radius_spin, 1, 2, 1, 2);
-			table.Attach (threshold_spin, 1, 2, 2, 3);
-			
-			Gtk.Button cancel_button = new Gtk.Button (Gtk.Stock.Cancel);
-			cancel_button.Clicked += HandleCancelClicked;
-			dialog.AddActionWidget (cancel_button, Gtk.ResponseType.Cancel);
-			
-			Gtk.Button ok_button = new Gtk.Button (Gtk.Stock.Ok);
-			ok_button.Clicked += HandleOkClicked;
-			dialog.AddActionWidget (ok_button, Gtk.ResponseType.Cancel);
-
-			Destroyed += HandleLoupeDestroyed;
-			
-			table.ShowAll ();
-			dialog.VBox.PackStart (table);
-			dialog.ShowAll ();
-		}
-	}
-
+namespace FSpot.Widgets {
 	public class Loupe : Gtk.Window {
 		protected PhotoImageView view;
 		protected Gdk.Rectangle region;
@@ -242,7 +128,7 @@ namespace FSpot {
 			ShapeWindow ();
 		}
 
-		public void SetSamplePoint (Gdk.Point p)
+		void SetSamplePoint (Gdk.Point p)
 		{
 			region.X = p.X;
 			region.Y = p.Y;
@@ -250,12 +136,10 @@ namespace FSpot {
 			region.Height = 2 * radius;
 			
 			if (view.Pixbuf != null) {
-				Gdk.Pixbuf pixbuf = view.Pixbuf;
-				
-				region.Offset (- Math.Min (region.X, Math.Max (region.Right - pixbuf.Width, radius)), 
-					       - Math.Min (region.Y, Math.Max (region.Bottom - pixbuf.Height, radius)));
+				region.Offset (- Math.Min (region.X, Math.Max (region.Right - view.Pixbuf.Width, radius)), 
+					       - Math.Min (region.Y, Math.Max (region.Bottom - view.Pixbuf.Height, radius)));
 
-				region.Intersect (new Gdk.Rectangle (0, 0, pixbuf.Width, pixbuf.Height));
+				region.Intersect (new Gdk.Rectangle (0, 0, view.Pixbuf.Width, view.Pixbuf.Height));
 			}
 			UpdateSample ();
 		}
@@ -276,9 +160,11 @@ namespace FSpot {
 				QueueResize ();
 			}
 
-			source = new Gdk.Pixbuf (view.Pixbuf,
+			Pixbuf tmp = new Gdk.Pixbuf (view.Pixbuf,
 						 region.X, region.Y,
 						 region.Width, region.Height);
+			using (tmp)
+				source = FSpot.Utils.PixbufUtils.TransformOrientation (tmp, view.PixbufOrientation);
 			
 			//FIXME sometimes that ctor returns results with a null
 			//handle this case ourselves
@@ -359,11 +245,7 @@ namespace FSpot {
 			int cy = Center.Y;
 		
 			g.Operator = Operator.Source;
-#if MONO_1_2_5
 			g.Source = new SolidPattern (new Cairo.Color (0,0,0,0));
-#else
-			g.Source = new SolidPattern (new Cairo.Color (0,0,0,0), true);
-#endif
 			g.Rectangle (0, 0, width, height);
 			g.Paint ();
 
@@ -371,22 +253,14 @@ namespace FSpot {
 			g.Translate (cx, cy);
 			g.Rotate (angle);
 
-#if MONO_1_2_5
 			g.Source = new SolidPattern (new Cairo.Color (0.2, 0.2, 0.2, .6));
-#else
-			g.Source = new SolidPattern (new Cairo.Color (0.2, 0.2, 0.2, .6), true);
-#endif
 			g.Operator = Operator.Over;
 			g.Rectangle (0, - (border + inner), inner_x, 2 * (border + inner));
 			g.Arc (inner_x, 0, inner + border, 0, 2 * Math.PI);
 			g.Arc (0, 0, radius + border, 0, 2 * Math.PI);
 			g.Fill ();
 
-#if MONO_1_2_5
 			g.Source = new SolidPattern (new Cairo.Color (0, 0, 0, 1.0));
-#else
-			g.Source = new SolidPattern (new Cairo.Color (0, 0, 0, 1.0), true);
-#endif
 			g.Operator = Operator.DestOut;
 			g.Arc (inner_x, 0, inner, 0, 2 * Math.PI);
 #if true			
@@ -426,11 +300,7 @@ namespace FSpot {
 				g.Arc (0, 0, radius, angle, angle + Math.PI);
 				g.ClosePath ();
 				g.FillPreserve ();
-#if MONO_1_2_5
 				g.Source = new SolidPattern (new Cairo.Color (1.0, 1.0, 1.0, 1.0));
-#else
-				g.Source = new SolidPattern (new Cairo.Color (1.0, 1.0, 1.0, 1.0), true);
-#endif
 				g.Stroke ();
 			}
 		}
@@ -446,7 +316,7 @@ namespace FSpot {
 	        static void SetSourcePixbuf (Context ctx, Gdk.Pixbuf pixbuf, double x, double y) 	 
 	        { 	 
 	                gdk_cairo_set_source_pixbuf (ctx.Handle, pixbuf.Handle, x, y); 	 
-	        } 	 
+	        }	 
 #endif				
 
 		protected override bool OnExposeEvent (Gdk.EventExpose args)
@@ -463,15 +333,6 @@ namespace FSpot {
 			return false;
 
 		}
-		
-//                [DllImport ("libcairo-2.dll")]
-//                static extern void cairo_user_to_device (IntPtr cr, ref double x, ref double y);
-//
-//		private static void UserToDevice (Context ctx, ref double x, ref double y)
-//		{
-//			cairo_user_to_device (ctx.Handle, ref x, ref y);
-//		}
-
 		
 		bool dragging = false;
 		bool rotate = false;
@@ -549,7 +410,7 @@ namespace FSpot {
 			return false;
 		}
 
-		private void HandleItemChanged (BrowsablePointer pointer, BrowsablePointerChangedArgs args)
+		private void HandleItemChanged (object sender, BrowsablePointerChangedEventArgs args)
 		{
 			UpdateSample ();
 		}

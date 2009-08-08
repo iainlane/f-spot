@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using FSpot.Utils;
 using Mono.Unix;
+using Gdk;
 
 namespace FSpot {
 	public class ImageFormatException : ApplicationException {
@@ -27,14 +28,10 @@ namespace FSpot {
 		
 		protected Stream Open ()
 		{
-			//Gnome.Vfs.Uri vfs = new Gnome.Vfs.Uri (uri.ToString ());
-			// FIXME, this seems like the sane thing to do, but vfs streams seem to 
-			// actually be faster and they need more testing.
-			//if (vfs.IsLocal)
-			//	return File.OpenRead (uri.LocalPath);
-
-			Log.DebugFormat ("open uri = {0}", uri.ToString ());
-			return new Gnome.Vfs.VfsStream (uri.ToString (), FileMode.Open);
+			Log.Debug ("open uri = {0}", uri.ToString ());
+//			if (uri.IsFile)
+//				return new FileStream (uri.LocalPath, FileMode.Open);
+			return new GLib.GioStream (GLib.FileFactory.NewForUri (uri).Read (null));
 		}
 
 		public virtual Stream PixbufStream ()
@@ -67,6 +64,15 @@ namespace FSpot {
 			name_table [".mrw"] = typeof (FSpot.Mrw.MrwFile);
 			name_table [".raf"] = typeof (FSpot.Raf.RafFile);
 			name_table [".x3f"] = typeof (FSpot.X3f.X3fFile);
+
+			//as xcf pixbufloader is not part of gdk-pixbuf, check if it's there,
+			//and enable it if needed.
+			foreach (Gdk.PixbufFormat format in Gdk.Pixbuf.Formats)
+				if (format.Name == "xcf") {
+					if (format.IsDisabled)
+						format.SetDisabled (false);
+					name_table [".xcf"] = typeof (ImageFile);
+				}
 		}
 
 		public Uri Uri {
@@ -92,14 +98,14 @@ namespace FSpot {
 			if (orig == null)
 				return null;
 
-			Gdk.Pixbuf rotated = PixbufUtils.TransformOrientation (orig, this.Orientation, true);
-			//ValidateThumbnail (photo, rotated);
-			if (rotated != orig)
-				orig.Dispose ();
+			Gdk.Pixbuf rotated = FSpot.Utils.PixbufUtils.TransformOrientation (orig, this.Orientation);
+
+			orig.Dispose ();
 			
 			return rotated;
 		}
 		
+		[Obsolete ("Use an Async way to load the pixbuf")]
 		public virtual Gdk.Pixbuf Load ()
 		{
 			using (Stream stream = PixbufStream ()) {
@@ -108,6 +114,7 @@ namespace FSpot {
 			}
 		}
 		
+		[Obsolete ("Use an Async way to load the pixbuf")]
 		public virtual Gdk.Pixbuf Load (int max_width, int max_height)
 		{
 			System.IO.Stream stream = PixbufStream ();
@@ -210,7 +217,7 @@ namespace FSpot {
 		public void Dispose ()
 		{
 			Close ();
-			GC.SuppressFinalize (this);
+			System.GC.SuppressFinalize (this);
 		}
 
 		protected virtual void Close ()
@@ -229,6 +236,7 @@ namespace FSpot {
 				".orf", 
 				".pef", 
 				".raw",
+				".raf"
 			};
 			foreach (string ext in raw_extensions)
 				if (ext == System.IO.Path.GetExtension (name).ToLower ())

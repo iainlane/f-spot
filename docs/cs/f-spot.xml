@@ -1,0 +1,1140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML 4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book id="f-spot" lang="cs">
+	<bookinfo>
+		<title>Příručka programu F-Spot</title>
+		<abstract role="description">
+			<para>Toto je příručka programu F-Spot, osobního správce fotografií.</para>
+		</abstract>
+		<subtitle>Toto je příručka programu F-Spot, osobního správce fotografií.</subtitle>
+		<copyright>
+			<year>2007-2009</year>
+			<holder>Aaron Bockover, Gabriel Burt, Miguel de Icaza, Bengt Thuree</holder>
+		</copyright>
+		<publisher>
+			<publishername>Dokumentační projekt GNOME</publishername>
+		</publisher>
+		<authorgroup>
+			<author>
+				<firstname>Miguel</firstname>
+				<surname>de Icaza</surname>
+			</author>
+			<author>
+				<firstname>Aaron</firstname>
+				<surname>Bockover</surname>
+			</author>
+			<author>
+				<firstname>Bengt</firstname>
+				<surname>Thuree</surname>
+			</author>
+			<author>
+				<firstname>Gabriel</firstname>
+				<surname>Burt</surname>
+			</author>
+			<author>
+				<firstname>Alexandre</firstname>
+				<surname>Prokoudine</surname>
+			</author>
+			<author role="maintainer">
+				<firstname>Stephane</firstname>
+				<surname>Delcroix</surname>
+			</author>
+		</authorgroup>
+		<!--<include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>-->
+		<revhistory>
+			<revision>
+				<revnumber>0.5</revnumber>
+				<date>2008-09-25</date>
+			</revision>
+			<revision>
+				<revnumber>0.4</revnumber>
+				<date>2008-09-12</date>
+			</revision>
+			<revision>
+				<revnumber>0.3</revnumber>
+				<date>2007-07-26</date>
+			</revision>
+		 </revhistory>
+	</bookinfo>
+
+	<chapter id="organizing">
+		<title>Organizace vašich fotografií</title>
+		
+		<sect1 id="import">
+			<title>Import</title>
+
+			<para>Fotografie můžete importovat z vašeho pevného disku nebo fotoaparátu. Pokud importujete fotografie z fotoaparátu, F-Spot vždy vytvoří pouze jejich kopii a vyčištění paměti fotoaparátu nechá na vás. F-Spot standardně vytváří kopie fotografií importovaných z pevného disku. Pokud nechcete fotografie kopírovat, odškrtněte volbu <guilabel>Kopírovat</guilabel> v dialogu importu, nebo držte klávesu <keycap>Shift</keycap> při přesouvání fotografií do programu F-Spot.</para>
+			
+			<para>F-Spot standardně kopíruje vaše fotografie do adresáře <filename class="directory">~/Photos</filename>. Adresář, který F-Spot používá můžete změnit v dialogu <guilabel>Nastavení</guilabel> (<menuchoice><guimenu>Upravit</guimenu><guimenuitem>Nastavení</guimenuitem></menuchoice>). Odškrtnutím volby <guilabel>Kopírovat soubory do složky Photos</guilabel> také můžete zakázat fyzické kopírování obrázků do tohoto adresáře. F-Spot v tomto případě vytvoří pouze odkaz na existující soubory.</para>
+			<para>Pokud existuje byť jen malá možnost, že ze zvoleného zdroje byly už některé fotografie dříve importovány, můžete použít volbu <guilabel>Detect duplicates</guilabel>. V tomto případě se F-Spot pokusí zjistit, zda už je daný obrázek v databázi a nová kopie by tudíž neměla být importována.</para>
+			<para>Mají-li všechny fotografie, které současně importujete, něco společného (např. pocházejí ze stejné akce, nebo mají nějakou společnou charakteristiku), můžete pro ně vytvořit štítek pomocí kterého je v budoucnu snáze najdete. Při tvorbě nového štítku postupujte dle instrukcí, které popisuje <xref linkend="tag"/>. Ve chvíli, kdy importujete fotografie, zaškrtněte <guilabel>Připojit štítky</guilabel> a zvolte štítek, který jste vytvořili.</para>
+			
+			<tip>
+				<para>
+					F-Spot uses a database stored at 
+					<filename>~/.config/f-spot/photos.db</filename>. Note, to access it, use 
+					the sqlite3 command. You can also manually specify path to a database by 
+					running F-Spot with <option>-b</option> option.
+				</para>
+			</tip>
+			
+			<para>Po ukončení importu F-Spot zobrazí všechny obrázky, které byly součástí posledního importovaného filmu. <xref linkend="enjoying-search"/> vám dá více informací o zacházení s importovanými filmy.</para>
+			<para>Importovat můžete také přímo aplikací Mozilla <ulink url="http://www.mozilla.com/en-US/firefox/">Firefox</ulink> nebo <ulink url="http://www.mozilla.com/en-US/thunderbird/">Thunderbird</ulink> s využitím rozšíření <ulink url="https://addons.mozilla.org/en-US/firefox/addon/7091">Firefox</ulink> and <ulink url="https://addons.mozilla.org/en-US/thunderbird/addon/7011">Thunderbird</ulink> F-Spot importer, která vytvořil <ulink url="http://personalpages.tds.net/~cdovel/">Pizzach</ulink>.</para>
+		</sect1>
+		
+		<sect1 id="edit">
+			<title>Úpravy</title>
+			
+			<para>Dvojklikem nebo stlačením klávesy Enter na obrázku přejdete do módu úprav. V tomto režimu můžete přizpůsobit jas a barvy obrázku, odstranit červené oči, nebo fotografii oříznout.</para>
+			
+			<sect2 id="edit-versions">
+				<title>Verze</title>
+				
+				<para>
+					When you edit your photos, a new copy (called a version) is created, 
+					so your original is never altered. After your first edit to a photo, subsequent 
+					edits will modify the same version. If you want to create multiple versions 
+					of your photo, perhaps with different cropping or coloring, you can do so 
+					via the <menuchoice><guimenu>File</guimenu>
+					<guimenuitem>Create new version</guimenuitem></menuchoice> option.
+				</para>
+			</sect2>
+
+			<sect2 id="edit-crop">
+				<title>Ořez</title>
+				
+				<para>
+					Cropping an image is a great way to improve the quality of a photograph by 
+					change how it is framed. You crop a photo by selecting the part of the photo 
+					you want to keep. If you want your photo to be the exact dimensions necessary 
+					for a certain print size, you can constrain the kind of selection F-Spot will allow 
+					you to draw by choosing the appropriate size from the constraint drop down. 
+					See the <xref linkend="edit-remove-red-eye"/> below for details on making 
+					a selection on your photo.
+				</para>
+				<figure>
+					<title>Nástroj Ořez</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-crop.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<para>Poté co jste označili oblast ořezu, musíte kliknout na tlačítko ořez pod obrázkem a tím provést vlastní oříznutí. Pokud pracujete s originálem, ořez vytvoří novou verzi fotografie.</para>
+			</sect2>
+			
+			<sect2 id="edit-straighten">
+				<title>Narovnání</title>
+				
+				<para>Efekt Narovnání je nástroj k vyrovnání fotografie, který je velmi užitečný pokud fotografujete krajinu bez stativu a nepodařilo se vám udržet horizont v rovině. Nástroj otáčí obrázek pod zadaným úhlem a automaticky provádí ořez tak, že výsledkem je vždy perfektní pravoúhelník.</para>
+				<figure>
+					<title>Nástroj Narovnání</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-straighten.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+
+			<sect2 id="edit-adjust-colors">
+				<title>Úprava barev</title>
+				
+				<para>Chcete-li upravit jas, kontrast a barvy fotografie, musíte nejprve kliknout na ikonu <guibutton>Upravit barvy fotografie</guibutton> aby se otevřelo dialogové okno úprav. Poté můžete měnit nastavení a uložit je tlačítkem <guibutton>Budiž</guibutton>.</para>
+				<figure>
+					<title>Nástroj Úprava barev</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-adjust-colors.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+			
+			<sect2 id="edit-auto-color">
+				<title>Automatické barvy</title>
+				
+				<para>Tento efekt automaticky přizpůsobí úrovně barev a vytvoří rozumně barevně vyvážený snímek. Nejlépe poslouží u fotografií pořízených s automatickým vyvážením bílé u nichž fotoaparát neodvedl dobrou práci.</para>
+				<figure>
+					<title>Automatické barvy</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-autocolor.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+
+			<sect2 id="edit-desaturate">
+				<title>Odbarvení</title>
+				
+				<para>Chcete-li z barevné fotografie vytvořit černobílou, otevřete vybranou fotografii a stiskněte tlačítko <guibutton>Odbarvení</guibutton>.</para>
+				<figure>
+					<title>Nástroj Odbarvení</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-desaturate.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+
+			<sect2 id="edit-sepia">
+				<title>Sépie</title>
+				
+				<para>Chcete-li vytvořit zdání staré fotografie, otevřete zvolený obrázek a stiskněte tlačítko <guibutton>Sépie</guibutton>.</para>
+				<figure>
+					<title>Nástroj Odbarvení</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-sepia.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+
+			<sect2 id="edit-remove-red-eye">
+				<title>Odstranění červených očí</title>
+				
+				<para>
+					To remove redeye from a photo, you need to select a zone containing 
+					the eyes. You may want to zoom in on the image to accurately select 
+					the eyes in the photo. You should be able to correct both eyes on the 
+					same person in one shot, or even the eyes from multiple people at once. 
+					If this doesn't work for you, or the selected zone contains some vivid 
+					red parts (lips, ...) you'll probably have to correct one red eye at a time.
+				</para>
+				<para>
+					To make your selection, click one corner of the rectangle that will be your 
+					selection, and drag your mouse to the diagonal corner and release it. You 
+					can resize your selection by dragging its edges, and you can move it by 
+					clicking in the middle of it and dragging it to where you want it.
+				</para>
+				<para>
+					Once you have selected a zone, you can remove the red from it by 
+					clicking the red-eye button beneath the photo.
+				</para>
+				<figure>
+					<title>Nástroj Červené oči</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-red-eye.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<tip>
+					<para>
+						You can change the threshold for redeyes detection by changing 
+						the gconf key 
+						<filename class="directory">/apps/f-spot/edit/redeye_threshold</filename>.
+					</para>
+				</tip>
+			</sect2>
+			
+			<sect2 id="edit-soft-focus">
+				<title>Doostření</title>
+				
+				<para>
+					In photography sharpening one region of a picture, while blurring 
+					all the rest, is a way to make an emphasis and grab attention. 
+					It is achieved by using a lens that allows shooting with a short 
+					distance in front of and beyond the subject that appears to be in 
+					focus. Soft focus effect is a way to emulate such a lens.
+				</para>
+				<figure>
+					<title>Nástroj Doostření</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-soft-focus.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<para>
+					Click to choose central point of the area you want to be in focus 
+					and adjust amount of blurring, then click <guibutton>OK</guibutton>.
+				</para>
+			</sect2>
+
+			<sect2 id="edit-sharpen">
+				<title>Zaostření</title>
+				
+				<para>
+					Out-of-focus photographs and most digitized images often need a 
+					sharpness correction. The Unsharp Mask effect sharpens edges of 
+					the elements without increasing noise or blemish. To sharpen a 
+					photo choose <menuchoice><guimenu>Edit</guimenu>
+					<guimenuitem>Sharpen...</guimenuitem></menuchoice> and specify the 
+					following values:
+				</para>
+				
+				<itemizedlist>
+					<listitem>
+						<para>
+							<parameter class="option">Amount</parameter> — strength of sharpening.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<parameter class="option">Radius</parameter> — how many pixels on either 
+							side of an edge will be affected by sharpening. High resolution images 
+							allow higher radius.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<parameter class="option">Threshold</parameter> — the minimum difference 
+							in pixel values that indicates an edge where sharpen must be applied. 
+							This helps avoiding creation of blemishes in face, sky or water surface.
+						</para>
+					</listitem>
+				</itemizedlist>
+			</sect2>
+			
+			<sect2 id="edit-describe">
+				<title>Popis</title>
+				
+				<para>Po kliknutí na textové pole pod obrázkem, můžete také vložit popis fotografie.</para>
+				<para>Poté co jste označili oblast ořezu, musíte kliknout na tlačítko ořez pod obrázkem a tím provést vlastní oříznutí. Pokud pracujete s originálem, ořez vytvoří novou verzi fotografie.</para>
+			</sect2>
+
+			<sect2 id="edit-adjust-time">
+				<title>Úprava času</title>
+				
+				<para>
+					In both 'browse' or 'edit' modes, you can adjust the time of one 
+					or multiple pictures (<menuchoice><guimenu>Edit</guimenu>
+					<guimenuitem>Adjust Time</guimenuitem></menuchoice>). Adjusting 
+					the time of multiple pictures at once helps you shift all an import 
+					roll if, e.g. the time on your camera is badly set or if you forgot 
+					to change it according to DST.
+				</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="tag">
+			<title>Štítek</title>
+			<para>
+				F-Spot enables you to organize and enjoy your photos by associating them 
+				with various user-customizable tags. A tag is a merely a label. F-Spot comes 
+				with default tags to get you started; you are free to change them and 
+				add new ones. For example, if you want to create a tag for specific event, you 
+				can create a new tag named after that event under the Events tag.
+			</para>
+			<para>K označení fotografie štítkem vede mnoho cest:</para>
+			<itemizedlist>
+				<listitem>
+					<para>přetažením fotografie na štítek</para>
+				</listitem>
+				<listitem>
+					<para>přetažením štítku na fotografii</para>
+				</listitem>
+				<listitem>
+					<para>prostřednictvím kontextové nabídky fotografie</para>
+				</listitem>
+				<listitem>
+					<para>prostřednictvím nabídky Štítky a Upravit</para>
+				</listitem>
+				<listitem>
+					<para>
+						by typing them in. Press <keycap>t</keycap> to pop up the tag
+						entry bar. Here you can enter the tags, separated by commas.
+					</para>
+					<para>
+						You can also use auto-completion in this entry bar: After
+						entering the beginning of a tag name, press
+						<keycap>Tab</keycap> to see the first possible completion. You can
+						cycle between other possible completions by pressing
+						<keycap>Tab</keycap> again, and backwards with
+						<keycombo action="simul"><keycap>Shift</keycap><keycap>Tab</keycap></keycombo>.
+						To confirm the suggested completion and enter a new tag, press
+						<keycap>,</keycap>. By pressing <keycap>Enter</keycap> you
+						leave the tag entry bar, possibly confirming the current
+						completion. To abort the auto completion, just keep on typing.
+					</para>
+				</listitem>
+			</itemizedlist>
+			<para>
+				The first photo you associate with a tag will be used for that tag's icon. 
+				You can always edit a tag's name, parent tag, and icon by right clicking 
+				on it and choosing <guilabel>Edit tag</guilabel>.
+			</para>
+			<para>
+				You can change a tag's parent by dragging and dropping it where you like. 
+				Also, you can edit the name of a tag by selecting it and pressing 
+				<keycap>F2</keycap>. Lastly, if you have the tag tree widget focused 
+				(e.g. you just clicked on a tag), you can start typing the name of a tag, and 
+				all the expanded tags in the list will be searched and you'll jump to any 
+				matching ones. 
+			</para>
+			
+			<para>
+				You can also change size of tag icons in the sidebar or even make tag 
+				icons invisible by selecting preferred option from <menuchoice>
+				<guimenu>View</guimenu><guimenuitem>Tag Icons</guimenuitem></menuchoice> 
+				menu.
+			</para>
+			
+			<tip>
+				<para>
+					F-Spot can write tags as metadata fields into JPEG files. Tags for 
+					various RAW files, PNG, TIFF, and others are written to F-Spot's 
+					database. You will have to re-tag these files if you re-import your 
+					collection.
+				</para>
+			</tip>
+		</sect1>
+	</chapter>
+
+	<chapter id="enjoying">
+		<title>Požitek z fotografií</title>
+		<sect1 id="enjoying-browse">
+			<title>Procházení</title>
+			<para>
+				You can use the slider widget to browse your photos by month or by 
+				directory. To change this setting, go to <menuchoice>
+				<guimenu>View</guimenu><guimenuitem>Arranged By</guimenuitem>
+				</menuchoice>.
+			</para>
+		</sect1>
+		<sect1 id="enjoying-search">
+			<title>Vyhledávání</title>
+			
+			<para>
+				F-Spot uses search filters to help you better define search criteria.
+			</para>
+			
+			<sect2 id="enjoying-search-tags">
+				<title>Štítky</title>
+				
+				<para>
+					You can start a search by double clicking or activating a tag from 
+					the tag list. Alternatively, you can show the find bar with <menuchoice>
+					<guimenu>Find</guimenu><guimenuitem>Show Find Bar</guimenuitem></menuchoice>. 
+					With the find bar shown, you can drag tags from the tag view to the find bar.
+				</para>
+				<para>
+					To find photos that are tagged with both of two tags, activate the first in 
+					the tag view or drag it onto the find bar, then drag the second tag and drop 
+					it on top of the first. You can also right click on the second tag in the tag 
+					view, or use the <guimenu>Find</guimenu> menu, and choose <guimenuitem>Find 
+					With...</guimenuitem> and select the first tag (or group of tags).
+				</para>
+				<para>
+					You can drag a tag icon around on the find bar to change from finding it and 
+					another tag to finding it or another tag.
+				</para>
+				<para>
+					You can search for photos that do not have a particular tag by double-clicking 
+					on a tag in the find bar. Alternatively, you can right-click a tag in the find 
+					bar and select <guimenuitem>Exclude</guimenuitem>.
+				</para>
+				<para>
+					To remove a tag from the search, drag it away from the find bar, or right click 
+					and select <guimenuitem>Remove</guimenuitem>.
+				</para>
+				<para>
+					By default, photos tagged <emphasis>Hidden</emphasis> will not be shown. You must 
+					explicitly include the <emphasis>Hidden</emphasis> tag in your search to show 
+					such photos.
+				</para>
+			</sect2>
+
+			<sect2 id="enjoying-search-import-rolls">
+				<title>Importované filmy</title>
+				<para>
+					F-Spot remembers what pictures were imported every now and then. Use 
+					<menuchoice><guimenu>Find</guimenu><guisubmenu>Import Roll</guisubmenu>
+					<guimenuitem>Last import roll</guimenuitem></menuchoice> to limit search 
+					to last importing session or use <menuchoice><guimenu>Find</guimenu>
+					<guisubmenu>Import Roll</guisubmenu><guimenuitem>Select Import Rolls...</guimenuitem>
+					</menuchoice> to make a finer selection of imported photos:
+				</para>
+				<itemizedlist>
+					<listitem>
+						<para><parameter class="option">V</parameter> — vybrat fotografie z konkrétní importní relace</para>
+					</listitem>
+					<listitem>
+						<para>
+							<parameter class="option">After</parameter> — to select all photos imported begining with a particular importing session
+						</para>
+					</listitem>
+					<listitem>
+						<para><parameter class="option">Mezi</parameter> — vybrat všechny fotografieto importované mezi konkrétními importními relacemi</para>
+					</listitem>
+				</itemizedlist>
+				<para>
+					Every time you change settings of the filter, the amount of selected photos 
+					will appear in the bottom part of the dialog.
+				</para>
+				<para>
+					When you apply Import Roll filter, in the Find bar you will see 
+					<guilabel>Find: Import Roll</guilabel>. Now you can add some other 
+					filter to finetune your selection.
+				</para>
+				<para>
+					If you don't need the Import Roll filter anymore, choose <menuchoice>
+					<guimenu>Find</guimenu><guisubmenu>Import Roll</guisubmenu>
+					<guimenuitem>Clear roll filter</guimenuitem></menuchoice> to remove 
+					Import Roll from search criteria. You can also click the close button 
+					(<guibutton>X</guibutton>) of the search bar to discard all the current 
+					search options.
+				</para>
+				<tip>
+					<para>
+						The number of displayed rolls in the dialog is defined by the gconf key 
+						<filename class="directory">/apps/f-spot/import/gui_roll_history</filename>. 
+						Default value is 10.
+					</para>
+				</tip>
+			</sect2>
+			
+			<sect2 id="enjoying-search-type-to-find">
+				<title>Type-to-find</title>
+				<para>
+					There is also a type-to-find entry. Press <keycap>/</keycap> to open it. It cannot 
+					be used at the same time as the find bar. You can type queries such as "TagA and 
+					(TagB or (TagC and TagD))". At any point, if F-Spot recognizes what you've typed as 
+					a valid query, it will update your search. The <emphasis>not</emphasis> operator 
+					is not yet supported. 
+				</para>
+				
+				<para>
+					This function will also search for the typed text into photos comments and filename.
+				</para>
+			</sect2>
+		</sect1>
+		
+		<sect1 id="enjoying-fullscreen-mode-and-slideshows">
+			<title>Celoobrazovkový režim a prezentace</title>
+			<para>
+				For fewer distractions and larger display, you can view your photos in full 
+				screen mode. You control when to show the next photo or to return to the 
+				previous. Enter fullscreen mode by pressing <keycap>F11</keycap> at 
+				any time or by pressing the button in the toolbar.
+			</para>
+			<figure>
+				<title>Celá obrazovka</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="figures/f-spot-fullscreen.png"/>
+					</imageobject>
+				</mediaobject>
+			</figure>
+			<para>V režimu prezentace můžete sedět a prohlížet si své obrázky, které jsou automaticky zobrazovány. Prezentace začne po stisknutí tlačítka na panelu nástrojů.</para>
+			<figure>
+				<title>Prezentace</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="figures/f-spot-slideshow.png"/>
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</sect1>
+	</chapter>
+	
+	<chapter id="sharing">
+		<title>Sdílení vašich fotografií</title>
+		
+		<abstract>
+			<para>
+				There are many ways to share your photos using F-Spot. All of the following 
+				methods will only share the photos you have selected when you run them.
+			</para>
+		</abstract>
+		
+		<sect1 id="sharing-e-mail">
+			<title>E-mail</title>
+			<para>Pomocí volby <menuchoice><guimenu>Soubor</guimenu><guimenuitem>Poslat e-mailem...</guimenuitem></menuchoice> v nabídce můžete odeslat fotografii elektronickou poštou přímo z aplikace F-Spot.</para>
+			<note>
+				<title>Poznámka 1</title>
+				<para>Emailový program, který bude použit, je definován na úrovni GNOME. Výchozí aplikaci můžete změnit nástrojem <application>Preferované aplikace</application> zvolením <menuchoice><guimenu>Systém</guimenu><guisubmenu>Nastavení</guisubmenu></menuchoice> z nabídky GNOME.</para>
+			</note>
+			<note>
+				<title>Poznámka 2</title>
+				<para>
+					If some of the photos you'd like to send by email are in a format 
+					that F-Spot can't write (e.g. RAW images), the size selection dialog 
+					will become insensitive and the originals will be sent.
+				</para>
+			</note>
+			<tip>
+				<para>
+					If you're sending resized pictures, F-Spot will keep the modified versions 
+					somewhere in the <filename class="directory">/tmp</filename> directory for 
+					30 seconds. It's not an issue with evolution, which makes it's own local 
+					copy of the attachments, but could be a bit shorter if you're using Thunderbird. 
+					You can change the delay by editing the gconf key 
+					<filename class="directory">/apps/f-spot/export/email/delete_timeout_seconds</filename>.
+				</para>
+			</tip>
+		</sect1>
+
+		<sect1 id="sharing-print">
+			<title>Tisk</title>
+			<para>Své fotografie vytisknete použitím volby <menuchoice><guimenu>Soubor</guimenu><guimenuitem>Tisk</guimenuitem></menuchoice> z hlavní nabídky.</para>
+		</sect1>
+
+		<sect1 id="sharing-burn-to-cd">
+			<title>Vypálení na CD</title>
+			<para>Své fotografie vypálíte na CD nebo DVD použitím volby <menuchoice><guimenu>Soubor</guimenu><guisubmenu>Exportovat do</guisubmenu><guimenuitem>CD</guimenuitem></menuchoice> v hlavní nabídce.</para>
+		</sect1>
+
+		<sect1 id="website-gallery-folder">
+			<title>Vytvoření webové galerie nebo adresáře</title>
+			<para>
+				The 
+				<menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem>
+				<guimenuitem>Export to Folder</guimenuitem></menuchoice> feature 
+				gives you three ways to export your images.
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						<guilabel>Use Original</guilabel> exports your photos ready for use with 
+						Jakub Steiner's free <ulink url="http://jimmac.musichall.cz/original.php">
+						Original Photo Gallery</ulink> software. If you are unsure about this option, 
+						it is probably not the right one for you.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<guilabel>Use static HTML files</guilabel> exports your photos to an 
+						interactive website, ready for you to upload.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<guilabel>Plain Files</guilabel> exports your images as files within directories, 
+						without putting them into a gallery. 
+					</para>
+				</listitem>
+			</itemizedlist>
+		</sect1>
+
+		<sect1 id="sharing-flickr-or-php-gallery">
+			<title>Odeslání do vašich online galerií</title>
+			<para>
+				If you use Flickr, SmugMug, 23hq, Tabblo, Facebook, Zooomr or Picasa Web Album, you can post your files 
+				directly from F-Spot with the <menuchoice><guimenu>File</guimenu>
+				<guisubmenu>Export</guisubmenu></menuchoice> menu, choosing corresponding submenu item.
+			</para>
+			<para>
+				If you use the PHP software known as <ulink url="http://gallery.sourceforge.net/">
+				Gallery</ulink>, you can post your photos to your existing album with the 
+				<menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem>
+				<guimenuitem>Export to Web Gallery</guimenuitem></menuchoice> menu. 
+				You must first enable the Remote module within your Gallery installation.
+			</para>
+			<note>
+				<title>Poznámka pro uživatele Gallery 2.2</title>
+				<para>
+					The Remote plugin for Gallery should be 1.0.8 or newer.
+				</para>
+			</note>
+			<para>
+				<ulink url="http://pennave.sourceforge.net">PennAve</ulink> is a Python 
+				web-application that directly uses F-Spot's database to present a dynamic 
+				gallery of your photos and tags.
+			</para>
+			<para>
+				<ulink url="http://www.conduit-project.org">Conduit</ulink> is an application 
+				that can sync photos that have a particular tag with your Flickr or Picasa 
+				Web Album web storage.
+			</para>
+		</sect1>
+	</chapter>
+
+	<chapter id="cms">
+		<title>Správa barev</title>
+
+		<sect1 id="cms-what-is-cms">
+			<title>Co je správa barev</title>
+			
+			<para>
+				When you capture a photo and look at it on a display, it looks different than 
+				on a camera's preview display or on any other display. It will also look 
+				different when you print it. This is because every device has unique color 
+				reproduction capabilities.
+			</para>
+
+			<para>
+				Color management system (CMS) is a tool to achieve reliable color reproduction 
+				for both display and output (e.g. a printer). A CMS relies on color profiles 
+				to map original colors to the color that a device can reproduce so that colors 
+				will appear the same way everywhere — on a computer LCD monitor, on a print 
+				from your local photolab etc.
+			</para>
+		</sect1>
+
+		<sect1 id="cms-what-is-icc-profile">
+			<title>Co je barevný profil</title>
+			
+			<para>Barevný profil je soubor s koncovkou .icc ( proto je často zmiňován spíše jako ICC profil) nebo .icm který popisuje, jak odpovídají barvy používané zařízením univerzálnímu popisu barev.</para>
+
+			<para>Existuje několik typů profilu:</para>
+
+			<itemizedlist>
+				<listitem>
+					<para>Profil vstupního zařízení. To je profil fotoaparátu nebo profil, který připojují aplikace jako XSane ke skenovanému obrázku.</para>
+				</listitem>
+				<listitem>
+					<para>Profil pracovního prostoru. To je profil, který popisuje barevný prostor, ve kterém jsou prováděny operace v rámci aplikace. Většinou jsou k tomu používány profily jako AdobeRGB1998 nebo ProPhotoRGB, které mají velmi široký gamut.</para>				
+				</listitem>
+				<listitem>
+					<para>Profil zobrazení. To je profil vašeho monitoru.</para>				
+				</listitem>
+				<listitem>
+					<para>Výstupní profil. Jedná se obvykle o profil vaší tiskárny.</para>				
+				</listitem>
+			</itemizedlist>					
+
+			<para>V tuto chvíli je v programu F-Spot možné nastavit pouze profil zobrazení a výstupní profil. Všechny operace s barvami jsou prováděny v barevném prostoru sRGB.</para>
+		</sect1>
+
+		<sect1 id="cms-how-to-get-icc-profile">
+			<title>Jak získat profil monitoru/tiskárny</title>
+
+			<para>Je několik cest jak získat barevný profil.</para>
+			
+			<sect2 id="cms-icc-from-cd-or-internet">
+				<title>Z CD nebo z Internetu</title>
+
+				<para>
+					Many hardware manufacturers put color profiles into CD in the bundle. 
+					If you have one (from monitor or printer), you can use it. Or you can 
+					download it from the Internet (usually, from support section of the 
+					manufacturer's web site). Some camera manufacturers (Nikon, Canon) 
+					also provide ICC profiles.
+				</para>
+			</sect2>
+
+			<sect2 id="cms-icc-from-calibrating-and-profiling">
+				<title>Kalibrace a profilování</title>
+
+				<para>
+					Best results can be achieved by calibrating and profiling devices with 
+					a measurement device. It is not so difficult, but it means that you need 
+					a spectrophotometer to do all measurements and create an ICC profile.
+				</para>
+
+				<para>
+					If you are on Windows or Mac OS X, you can use manufacturer's software 
+					coming with a spectrophotometer. On Linux you will have to use either 
+					<ulink url="http://www.argyllcms.com">Argyll</ulink>, which is a set of 
+					versatile command line tools, or 
+					<ulink url="http://lprof.sourceforge.net/">LProf</ulink>, which has a 
+					graphical user interface. 
+				</para>
+				<para>
+					Please refer to documentation of third party hardware and software 
+					vendors for details.
+				</para>
+			</sect2>
+
+			<sect2 id="cms-icc-from-embedding">
+				<title>Vkládání</title>
+
+				<para>Některé formáty obrázků (jako TIFF, JPEG, PNG ...) mohou obsahovat vložený barevný profil. Pokud je v F-Spot povolena správa barev, je barevný profil, nalezený v obrázku, brán v potaz.</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="cms-how-to-use">
+			<title>Jak používat správu barev v F-Spot</title>
+			
+			<para>Správa barev v aplikaci F-Spot umí v tuto chvíli používat pouze RGB profily (a jiné profily v F-Spot nemůžete vidět).</para>
+
+			<itemizedlist>
+				<listitem>
+					<para>Nahrajte své profily do složky <filename class="directory">/usr/share/color/icc</filename> nebo <filename class="directory">/usr/local/share/color/icc</filename></para>
+				</listitem>
+				<listitem>
+					<para>Správu barev povolíte v nastavení dostupném v nabídce <menuchoice><guimenu>Upravit</guimenu><guimenuitem>Nastavení</guimenuitem></menuchoice>.</para>				
+				</listitem>
+				<listitem>
+					<para>Vyberte profil pro režimy <guilabel>Zobrazovat</guilabel> a <guilabel>Výstup</guilabel>.</para>				
+				</listitem>
+			</itemizedlist>					
+
+			<tip>
+				<para>Pro nahrání ICC profilu monitoru můžete také použít program <ulink url="http://burtonini.com/blog/computers/xicc">xicc</ulink>. Nahraný profil můžete zaškrtnutím položky <guilabel>Zkusit použít systémový profil obrazovky</guilabel> použít s F-Spot.</para>
+			</tip>
+		</sect1>
+	</chapter>
+	
+	<chapter id="extend">
+		<title>Rozšíření funkcí</title>
+		
+		<sect1 id="extend-what-extensions-are">
+			<title>Co jsou rozšíření</title>
+
+			<para>Rozšíření jsou vytvářena s cílem přidat do aplikace F-Spot nové funkce. F-Spot podporuje dva druhy rozšíření: exportéři (které umožní export fotografií na webové stránky nebo do datových úložišť) a nástroje (které přístupňují nové cesty v korekci barev, nalezení duplicitních fotografií, apod.). Rozšíření jsou dodávána ve formě rozšiřujících modulů.</para>
+			<para>Aby nebylo stále znovu vymýšleno kolo, mohou rozšíření používat funkce dalších rozšiřujících modulů. To znamená, že rozšíření nebude pracovat, pokud další modul není nainstalován. Tento koncept závislostí znamená že,</para>
+			<itemizedlist>
+				<listitem>
+					<para>nemůžete instalovat rozšíření, pokud závisí na jiném, které ale není instalováno v systému</para>
+				</listitem>
+				<listitem>
+					<para>nemůžete odstranit rozšíření, na němž závisí jiný modul</para>
+				</listitem>
+			</itemizedlist>
+		</sect1>
+		
+		<sect1 id="extend-managing-extensions">
+			<title>Správa rozšíření</title>
+			
+			<para>Správa rozšíření je dostupná po zvolení <menuchoice><guimenu>Upravit</guimenu><guimenuitem>Spravovat rozšíření</guimenuitem></menuchoice> z nabídky.</para>
+
+			<sect2 id="extend-managing-extensions-managing-extension-repositories">
+				<title>Správa repozitářů rozšíření</title>
+
+				<para>Zjednodušeně řečeno, repozitáře jsou úložiště rozšíření. Mohou být jak síťového tak i lokálního charakteru. Potřebujete-li přidat nový repozitář, klikněte na tlačítko Repozitáře, vyberte typ repozitáře, který chcete přidat, a vyplňte adresu URL nebo cestu. Pokud zadaná adresa URL nebo cesta neobsahují soubor s popisem (index) rozšíření, aplikace na tuto skutečnost upozorní varovným hlášením.</para>
+				<para>Potřebujete-li repozitář odebrat, klikněte znovu na tlačítko <guibutton>Repozitáře</guibutton> a vybrerte repozitář který má být odstraněn. Operaci dokončíte kliknutím na tlačítko <guibutton>Odstranit</guibutton>.</para>
+			</sect2>
+			
+			<sect2 id="extend-managing-extensions-installing-and-updating-extensions">
+				<title>Instalace a aktualizace rozšíření</title>
+
+				<para>Do instalace rozšíření se přepnete tlačítkem <guibutton>Instalovat rozšíření...</guibutton>. V novém okně poté</para>
+				<orderedlist>
+					<listitem>
+						<para>Vyberte mód instalace. Rozšíření budou vybírána ze všech známých nebo pouze z dostupných repozitářů.</para>
+					</listitem>
+					<listitem>
+						<para>Vyberte rozšiřující moduly, které chcete vidět: Všechny, Pouze nové, Pouze aktualizace.</para>
+					</listitem>
+					<listitem>
+						<para>Aktualizaci seznamu dostupných rozšíření, dle nastavených kriterií, spustíte kliknutím na tlačítko <guibutton>Aktualizovat</guibutton>.</para>
+					</listitem>
+					<listitem>
+						<para>Vyberte rozšíření, která chcete instalovat/aktualizovat. Pokud chcete vidět shrnutí zvoleného balíčku, klikněte na tlačítko <guibutton>Informace</guibutton>.</para>
+					</listitem>
+					<listitem>
+						<para>Instalaci spustíte kliknutím na tlačítko <guibutton>Vpřed</guibutton></para>
+					</listitem>
+				</orderedlist>
+			</sect2>
+			
+			<sect2 id="extend-managing-extensions-enabling-and-disabling-extensions">
+				<title>Aktivace a deaktivace rozšíření</title>
+
+				<para>Kterýkoli rozšiřující modul může být dočasně povolen nebo zakázán, pokud například není dostatečně stabilní při zpracovávání většího množství fotografií nebo pokud modul naruší nabídku aplikace.</para>
+				<para>
+					In the <guilabel>Manage Extensions</guilabel> dialog select the extension 
+					package and click <guibutton>Enable</guibutton> or <guibutton>Disable</guibutton>. 
+				</para>
+			</sect2>
+			
+			<sect2 id="extend-managing-extensions-removing-extensions">
+				<title>Odstranění rozšíření</title>
+
+				<para>Rozšíření, které nepotřebujete, může být úplně odebráno ze systému. V okně <guilabel>Spravovat rozšíření</guilabel> vyberte rozšiřující modul, který chcete odebrat a klikněte na tlačítko <guibutton>Odebrat</guibutton>.</para>
+			</sect2>
+			
+			<sect2 id="extend-managing-extensions-reading-summary-of-extensions">
+				<title>Zobrazení shrnutí rozšíření</title>
+
+				<para>Každý rozšiřující modul obsahuje metadata, která poskytují o daném rozšíření tyto informace:</para>
+
+				<orderedlist>
+					<listitem>
+						<para>Popis, který obvykle pokrývá smysl rozšíření</para>
+					</listitem>
+					<listitem>
+						<para>Verze</para>
+					</listitem>
+					<listitem>
+						<para>Autor</para>
+					</listitem>
+					<listitem>
+						<para>Závislosti</para>
+					</listitem>
+				</orderedlist>
+				
+				<para>V okně <guilabel>Spravovat rozšíření</guilabel> vyberte rozšiřující modul, jehož shrnutí vás zajímá, a klikněte na tlačítko <guibutton>Informace</guibutton>.</para>
+			</sect2>
+		</sect1>
+		
+		<sect1 id="extend-developing-extensions">
+			<title>Vývoj rozšíření</title>
+
+			<para>Informace o vývoji vašich vlastních rozšíření pro F-Spot naleznete v dokumentu <ulink url="http://f-spot.org/Extend_F-Spot">Extend F-Spot</ulink>.</para>
+		</sect1>
+	</chapter>
+	
+	<chapter id="shortcuts">
+		<title>Klávesové zkratky</title>
+		
+		<sect1 id="Global-Shortcuts">
+			<title>Globální zkratky</title>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<thead>
+						<row>
+							<entry>Klávesa</entry>
+							<entry>Činnost</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<keycap>[</keycap>
+							</entry>
+							<entry>Otočit označené fotografie doleva (proti směru hodinových ručiček)</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>]</keycap>
+							</entry>
+							<entry>Otočit označené fotografie doprava (po směru hodinových ručiček)</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>Del</keycap>
+							</entry>
+							<entry>Odstranit označené fotografie z katalogu programu</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Shift</keycap><keycap>Del</keycap></keycombo>
+							</entry>
+							<entry>
+								Delete selected photos permanently from the drive. If possible, they will moved to trash.
+							</entry>
+						</row>
+ 
+						<row>
+							<entry>
+								<keycap>t</keycap>
+							</entry>
+							<entry>Zobrazit nebo upravit štítky označených fotografií</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>F11</keycap>
+							</entry>
+							<entry>Zobrazit na celou obrazovku</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo>
+							</entry>
+							<entry>Zobrazí informace o fotografii</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>= </keycap></keycombo>
+							</entry>
+							<entry>Oddálit</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>Mínus</keycap></keycombo>
+							</entry>
+							<entry>Přiblížit</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo>
+							</entry>
+							<entry>Importovat fotografie</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Alt</keycap><keycap>0-5</keycap></keycombo>
+							</entry>
+							<entry>Alt plus číslo od 0 do 5 - hodnocení označených obrázků</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</sect1>
+		
+		<sect1 id="shortcuts-browse-mode">
+			<title>Režim procházení</title>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<thead>
+						<row>
+							<entry>Klávesa</entry>
+							<entry>Činnost</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>A</keycap></keycombo>
+							</entry>
+							<entry>Označit vše</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap>
+								<keycap>A</keycap></keycombo>
+							</entry>
+							<entry>Zrušit označení</entry>
+						</row>
+						<row>
+							<entry>Šipky nebo <keycap>H</keycap>, <keycap>J</keycap>, <keycap>K</keycap>, <keycap>L</keycap></entry>
+							<entry>Posunout střed</entry>
+						</row>
+						<row>
+							<entry><keycap>Ctrl</keycap>-šipka</entry>
+							<entry>Posunout střed bez změny výběru</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>Mezerník</keycap>
+							</entry>
+							<entry>Vybrat nebo zrušit výběr fotografii ve středu</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Shift</keycap>
+								<keycap>Šipka</keycap></keycombo>
+							</entry>
+							<entry>Změna označení fotografií</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap>
+								<keycap>Pravá nebo levá šipka</keycap></keycombo>
+							</entry>
+							<entry>Přidat/odebrat všechny fotografie v řádku ve směru šipky do/z výběru</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>V</keycap>
+							</entry>
+							<entry>Otevřít větší náhled obrázku označeného myší</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Shift</keycap><keycap>V</keycap></keycombo>
+							</entry>
+							<entry>Otevřít větší náhled a histogram obrázku označeného myší</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</sect1>
+		
+		<sect1 id="shortcuts-tag">
+			<title>Štítkování</title>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<thead>
+						<row>
+							<entry>Klávesa</entry>
+							<entry>Činnost</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<keycap>F2</keycap>
+							</entry>
+							<entry>Přejmenovat zvolený štítek</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>T</keycap></keycombo>
+							</entry>
+							<entry>Připojit štítek k výběru</entry>
+						</row>
+						<row>
+							<entry>n/a</entry>
+							<entry>Tažením štítky přemístíte</entry>
+						</row>
+						<row>
+							<entry>n/a</entry>
+							<entry>Psaním názvu na klávesnici se na štítek přemístíte (funguje pouze pokud je štítek viditelný/rozbalený)</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</sect1>
+
+		<sect1 id="shortcuts-edit-mode">
+			<title>Edit Mode Shortcuts</title>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<thead>
+						<row>
+							<entry>Klávesa</entry>
+							<entry>Činnost</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry><keycap>Page Up</keycap>, <keycap>Backspace</keycap>, <keycap>B</keycap></entry>
+							<entry>Přejít na předcházející fotografii</entry>
+						</row>
+						<row>
+							<entry><keycap>Page Down</keycap>, <keycap>Mezerník</keycap>, <keycap>N</keycap></entry>
+							<entry>Přejít na následující fotografii</entry>
+						</row>
+						<row>
+							<entry>Šipky nebo <keycap>H</keycap>, <keycap>J</keycap>, <keycap>K</keycap>, <keycap>L</keycap></entry>
+							<entry>Přejít na předchozí/následující fotografii nebo pohyb po zvětšené fotografii</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>R</keycap>
+							</entry>
+							<entry>
+								Go to a random photo
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>f</keycap>
+							</entry>
+							<entry>Zobrazit na celou obrazovku</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>0</keycap>
+							</entry>
+							<entry>Přizpůsobit obrázek velikosti obrazovky</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>1</keycap>
+							</entry>
+							<entry>Faktor zvětšení 1.0 (1 obrazový bod na bod obrázku)</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>2</keycap>
+							</entry>
+							<entry>Faktor zvětšení 2.0 (4 obrazové body na bod obrázku)</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>Escape</keycap>
+							</entry>
+							<entry>Návrat do režimu procházení</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>V</keycap>
+							</entry>
+							<entry>Prohlížet fotografii zvětšovacím sklem (lupa). Deaktivuje se dvojklikem na tlačítko Lupa nebo opětovným stisknutím <keycap>V</keycap>.</entry>
+						</row>
+						<row>
+							<entry><keycap>Shift</keycap>-kolečko myši</entry>
+							<entry>Rychlejší pohyb filmového pásu</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>i</keycap>
+							</entry>
+							<entry>Přepínání viditelnosti informačního okna ''(pouze v celoobrazovkovém režimu)''</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</sect1>
+	</chapter>
+
+</book>

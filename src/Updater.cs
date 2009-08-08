@@ -4,6 +4,8 @@ using Gtk;
 using System;
 using System.Collections;
 using Banshee.Database;
+using FSpot.Utils;
+using FSpot.UI.Dialog;
 
 namespace FSpot.Database {
 	public static class Updater {
@@ -65,7 +67,7 @@ namespace FSpot.Database {
 					"NOT IN (SELECT id FROM tags))",
 					id));
 
-				System.Console.WriteLine ("Other tag restored.  Sorry about that!");
+				Log.Debug ("Other tag restored.  Sorry about that!");
 			});
 			
 			// Update from version 2 to 3: ensure that Hidden is the only tag left which is a real tag (not category)
@@ -86,7 +88,7 @@ namespace FSpot.Database {
 			//Version 5.0, add a roll_id field to photos, rename table 'imports' to 'rolls' 
 			//and fix bgo 324425.
 			AddUpdate (new Version (5, 0), delegate () {
-				System.Console.WriteLine ("Will add a roll_id field to photos!");
+				Log.Debug ("Will add a roll_id field to photos!");
 				string tmp_photos = MoveTableToTemp ("photos");
 				ExecuteNonQuery (
 					"CREATE TABLE photos (                                     " +
@@ -100,7 +102,7 @@ namespace FSpot.Database {
 					")");
 				ExecuteScalar (String.Format("INSERT INTO photos SELECT id, time, directory_path, name, description, 0, default_version_id FROM {0}", tmp_photos));
 
-				System.Console.WriteLine ("Will rename imports to rolls!");
+				Log.Debug ("Will rename imports to rolls!");
 				string tmp_rolls = MoveTableToTemp ("imports");
 				ExecuteNonQuery (
 					"CREATE TABLE rolls (                                     " +
@@ -109,7 +111,7 @@ namespace FSpot.Database {
 					")");
 				ExecuteScalar (String.Format("INSERT INTO rolls SELECT id, time FROM {0}", tmp_rolls));
 
-				System.Console.WriteLine ("Cleaning weird descriptions, fixes bug #324425.");
+				Log.Debug ("Cleaning weird descriptions, fixes bug #324425.");
 				ExecuteNonQuery ("UPDATE photos SET description = \"\" WHERE description LIKE \"Invalid size of entry%\"");
 			});				
 
@@ -302,8 +304,6 @@ namespace FSpot.Database {
 
 				 string temp_versions_table = MoveTableToTemp ("photo_versions");
 
-				 Console.WriteLine("{0} - {1}", temp_table, temp_versions_table);
-
 				 Execute ("CREATE TABLE photo_versions (    	" +
 					  "      photo_id        INTEGER,  	" +
 					  "      version_id      INTEGER,  	" +
@@ -313,12 +313,14 @@ namespace FSpot.Database {
 					  "	protected	BOOLEAN		" +
 					  ")");
 
-				 Execute (string.Format ("INSERT INTO photo_versions (photo_id, version_id, name, uri, md5_sum, protected) " + 
+				 Execute (String.Format ("INSERT INTO photo_versions (photo_id, version_id, name, uri, md5_sum, protected) " + 
 							 "SELECT photo_id, version_id, name, uri, '', protected " +
 							 "FROM   {0} ", 
 							 temp_versions_table
 							)
 				 );
+
+				 JobStore.CreateTable (db.Database);
 
 				 // This is kind of hacky but should be a lot faster on
 				 // large photo databases
@@ -347,11 +349,239 @@ namespace FSpot.Database {
 				Execute (String.Format ("DELETE FROM jobs WHERE job_type = '{0}'", typeof(Jobs.CalculateHashJob).ToString ()));
 			}, false);
 
+			// Update to version 16.4
+			AddUpdate (new Version (16,4), delegate () { //fix the tables schema EOL
+				string temp_table = MoveTableToTemp ("exports");
+			 	Execute (
+					"CREATE TABLE exports (\n" +
+					"	id			INTEGER PRIMARY KEY NOT NULL, \n" +
+					"	image_id		INTEGER NOT NULL, \n" +
+					"	image_version_id	INTEGER NOT NULL, \n" +
+					"	export_type		TEXT NOT NULL, \n" +
+					"	export_token		TEXT NOT NULL\n" +
+					")");
+				Execute (String.Format (
+					"INSERT INTO exports (id, image_id, image_version_id, export_type, export_token) " + 
+					"SELECT id, image_id, image_version_id, export_type, export_token " +
+					"FROM {0}", temp_table));
 
-			 // Update to version 17.0
-			//AddUpdate (new Version (14,0),delegate () {
+				temp_table = MoveTableToTemp ("jobs");
+				Execute (
+					"CREATE TABLE jobs (\n" +
+					"	id		INTEGER PRIMARY KEY NOT NULL, \n" +
+					"	job_type	TEXT NOT NULL, \n" +
+					"	job_options	TEXT NOT NULL, \n" +
+					"	run_at		INTEGER, \n" +
+					"	job_priority	INTEGER NOT NULL\n" +
+					")");
+				Execute (String.Format (
+					"INSERT INTO jobs (id, job_type, job_options, run_at, job_priority) " +
+					"SELECT id, job_type, job_options, run_at, job_priority " +
+					"FROM {0}", temp_table));
+
+				temp_table = MoveTableToTemp ("meta");
+				Execute (
+					"CREATE TABLE meta (\n" +
+					"	id	INTEGER PRIMARY KEY NOT NULL, \n" +
+					"	name	TEXT UNIQUE NOT NULL, \n" +
+					"	data	TEXT\n" +
+					")");
+				Execute (String.Format (
+					"INSERT INTO meta (id, name, data) " +
+					"SELECT id, name, data " +
+					"FROM {0}", temp_table));
+
+				temp_table = MoveTableToTemp ("photos");
+				Execute ( 
+					"CREATE TABLE photos (\n" +
+					"	id			INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \n" +
+					"	time			INTEGER NOT NULL, \n" +
+					"	uri			STRING NOT NULL, \n" +
+					"	description		TEXT NOT NULL, \n" +
+					"	roll_id			INTEGER NOT NULL, \n" +
+					"	default_version_id	INTEGER NOT NULL, \n" +
+					"	rating			INTEGER NULL, \n" +
+					"	md5_sum			TEXT NULL\n" +
+					")");
+				Execute (String.Format (
+					"INSERT INTO photos (id, time, uri, description, roll_id, default_version_id, rating, md5_sum) " +
+					"SELECT id, time, uri, description, roll_id, default_version_id, rating, md5_sum " +
+					"FROM {0}", temp_table));
+
+				temp_table = MoveTableToTemp ("photo_tags");
+				Execute(
+					"CREATE TABLE photo_tags (\n" +
+					"	photo_id	INTEGER, \n" +
+					"       tag_id		INTEGER, \n" +
+					"       UNIQUE (photo_id, tag_id)\n" +
+					")");
+				Execute (String.Format (
+					"INSERT OR IGNORE INTO photo_tags (photo_id, tag_id) " +
+					"SELECT photo_id, tag_id " +
+					"FROM {0}", temp_table));
+
+				temp_table = MoveTableToTemp ("photo_versions");
+				Execute (
+					"CREATE TABLE photo_versions (\n"+
+					"	photo_id	INTEGER, \n" +
+					"	version_id	INTEGER, \n" +
+					"	name		STRING, \n" +
+					"	uri		STRING NOT NULL, \n" +
+					"	md5_sum		STRING NOT NULL, \n" +
+					"	protected	BOOLEAN, \n" +
+					"	UNIQUE (photo_id, version_id)\n" +
+					")");
+				Execute (String.Format (
+					"INSERT OR IGNORE INTO photo_versions (photo_id, version_id, name, uri, md5_sum, protected) " +
+					"SELECT photo_id, version_id, name, uri, md5_sum, protected " +
+					"FROM {0}", temp_table));
+
+				Execute ("CREATE INDEX idx_photo_versions_id ON photo_versions(photo_id)");
+				Execute ("CREATE INDEX idx_photos_roll_id ON photos(roll_id)");
+
+				temp_table = MoveTableToTemp ("rolls");
+				Execute (
+					"CREATE TABLE rolls (\n" +
+					"	id	INTEGER PRIMARY KEY NOT NULL, \n" +
+					"       time	INTEGER NOT NULL\n" +
+					")");
+				Execute (String.Format (
+					"INSERT INTO rolls (id, time) " +
+					"SELECT id, time " +
+					"FROM {0}", temp_table));
+
+				temp_table = MoveTableToTemp ("tags");
+				Execute (
+					"CREATE TABLE tags (\n" +
+					"	id		INTEGER PRIMARY KEY NOT NULL, \n" +
+					"	name		TEXT UNIQUE, \n" +
+					"	category_id	INTEGER, \n" +
+					"	is_category	BOOLEAN, \n" +
+					"	sort_priority	INTEGER, \n" +
+					"	icon		TEXT\n" +
+					")");
+				Execute (String.Format (
+					"INSERT INTO tags (id, name, category_id, is_category, sort_priority, icon) " +
+					"SELECT id, name, category_id, is_category, sort_priority, icon " +
+					"FROM {0}", temp_table));
+			});
+
+			// Update to version 16.5
+			AddUpdate (new Version (16,5), delegate () { //fix md5 null in photos and photo_versions table
+				string temp_table = MoveTableToTemp ("photo_versions");
+				Execute (
+					"CREATE TABLE photo_versions (\n"+
+					"	photo_id	INTEGER, \n" +
+					"	version_id	INTEGER, \n" +
+					"	name		STRING, \n" +
+					"	uri		STRING NOT NULL, \n" +
+					"	md5_sum		TEXT NULL, \n" +
+					"	protected	BOOLEAN, \n" +
+					"	UNIQUE (photo_id, version_id)\n" +
+					")");
+				Execute (String.Format (
+					"INSERT OR IGNORE INTO photo_versions (photo_id, version_id, name, uri, md5_sum, protected) " +
+					"SELECT photo_id, version_id, name, uri, md5_sum, protected " +
+					"FROM {0}", temp_table));
+
+				Execute ("CREATE INDEX idx_photo_versions_id ON photo_versions(photo_id)");
+
+				Execute ("UPDATE photos SET md5_sum = NULL WHERE md5_sum = ''");
+				Execute ("UPDATE photo_versions SET md5_sum = NULL WHERE md5_sum = ''");
+			});
+
+			// Update to version 17.0
+			//AddUpdate (new Version (14,0), delegate () {
 			//	do update here
 			//});
+			
+			// Update to version 17.0, split uri and filename
+			AddUpdate (new Version (17,0),delegate () {
+				string tmp_photos = MoveTableToTemp ("photos");
+				string tmp_versions = MoveTableToTemp ("photo_versions");
+				
+				Execute (
+					"CREATE TABLE photos (\n" +
+					"	id			INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \n" +
+					"	time			INTEGER NOT NULL, \n" +
+					"	base_uri		STRING NOT NULL, \n" +
+					"	filename		STRING NOT NULL, \n" +
+					"	description		TEXT NOT NULL, \n" +
+					"	roll_id			INTEGER NOT NULL, \n" +
+					"	default_version_id	INTEGER NOT NULL, \n" +
+					"	rating			INTEGER NULL, \n" +
+					"	md5_sum			TEXT NULL\n" +
+					")");
+				
+				Execute (
+					"CREATE TABLE photo_versions (\n"+
+					"	photo_id	INTEGER, \n" +
+					"	version_id	INTEGER, \n" +
+					"	name		STRING, \n" +
+					"	base_uri		STRING NOT NULL, \n" +
+					"	filename		STRING NOT NULL, \n" +
+					"	md5_sum		TEXT NULL, \n" +
+					"	protected	BOOLEAN, \n" +
+					"	UNIQUE (photo_id, version_id)\n" +
+					")");
+				
+				SqliteDataReader reader = ExecuteReader (String.Format (
+					"SELECT id, time, uri, description, roll_id, default_version_id, rating, md5_sum " +
+					"FROM {0} ", tmp_photos));
+		
+				while (reader.Read ()) {
+					System.Uri photo_uri = new System.Uri (reader ["uri"] as string);
+					
+					string filename = photo_uri.GetFilename ();
+					Uri base_uri = photo_uri.GetDirectoryUri ();
+
+					string md5 = reader["md5_sum"] != null ? reader ["md5_sum"].ToString () : null;
+					
+					Execute (new DbCommand (
+						"INSERT INTO photos (id, time, base_uri, filename, description, roll_id, default_version_id, rating, md5_sum) "	+
+						"VALUES (:id, :time, :base_uri, :filename, :description, :roll_id, :default_version_id, :rating, :md5_sum)",
+						"id", Convert.ToUInt32 (reader ["id"]),
+						"time", Convert.ToInt32 (reader ["time"]),
+						"base_uri", base_uri.ToString (),
+						"filename", filename,
+						"description", reader["description"].ToString (),
+						"roll_id", Convert.ToUInt32 (reader ["roll_id"]),
+						"default_version_id", Convert.ToUInt32 (reader ["default_version_id"]),
+						"rating", Convert.ToUInt32 (reader ["rating"]),
+						"md5_sum", String.IsNullOrEmpty (md5) ? null : md5));
+				}
+				
+				reader.Close ();
+				
+				reader = ExecuteReader (String.Format (
+						"SELECT photo_id, version_id, name, uri, md5_sum, protected " +
+						"FROM {0} ", tmp_versions));
+				
+				while (reader.Read ()) {
+					System.Uri photo_uri = new System.Uri (reader ["uri"] as string);
+					
+					string filename = photo_uri.GetFilename ();
+					Uri base_uri = photo_uri.GetDirectoryUri ();
+
+					string md5 = reader["md5_sum"] != null ? reader ["md5_sum"].ToString () : null;
+					
+					Execute (new DbCommand (				
+						"INSERT INTO photo_versions (photo_id, version_id, name, base_uri, filename, protected, md5_sum) " +
+						"VALUES (:photo_id, :version_id, :name, :base_uri, :filename, :is_protected, :md5_sum)",
+						"photo_id", Convert.ToUInt32 (reader ["photo_id"]),
+						"version_id", Convert.ToUInt32 (reader ["version_id"]),
+						"name", reader["name"].ToString (),
+						"base_uri", base_uri.ToString (),
+						"filename", filename,
+						"is_protected", Convert.ToBoolean (reader["protected"]),
+						"md5_sum", String.IsNullOrEmpty (md5) ? null : md5));
+				}
+				
+				Execute ("CREATE INDEX idx_photos_roll_id ON photos(roll_id)");
+				Execute ("CREATE INDEX idx_photo_versions_id ON photo_versions(photo_id)");
+				
+
+			}, true);
 		}
 
 		public static void Run (Db database)
@@ -367,11 +597,11 @@ namespace FSpot.Database {
 			if (current_version == LatestVersion)
 				return;
 			else if (current_version > LatestVersion) {
-				Console.WriteLine ("The existing database version is more recent than this version of F-Spot expects.");
+				Log.Information ("The existing database version is more recent than this version of F-Spot expects.");
 				return;
 			}
 
-			Console.WriteLine ("Updating F-Spot Database");
+			uint timer = Log.InformationTimerStart ("Updating F-Spot Database");
 
 			// Only create and show the dialog if one or more of the updates to be done is
 			// marked as being slow
@@ -407,8 +637,8 @@ namespace FSpot.Database {
 				}
 
 				db.CommitTransaction ();
-			} catch (Exception e) {
-				Console.WriteLine ("Rolling back database changes because of Exception");
+			} catch (Exception e) {Log.DebugException (e);
+				Log.Warning ("Rolling back database changes because of Exception");
 				// There was an error, roll back the database
 				db.RollbackTransaction ();
 
@@ -420,7 +650,7 @@ namespace FSpot.Database {
 				dialog.Destroy ();
 			
 			if (new Version(db_version.Value) == LatestVersion)
-				Console.WriteLine ("Database updates completed successfully.");
+				Log.InformationTimerPrint (timer, "Database updates completed successfully (in {0}).");
 		}
 		
 		private static void AddUpdate (Version version, UpdateCode code)
@@ -492,7 +722,7 @@ namespace FSpot.Database {
 			string temp_name = table_name + "_temp";
 			
 			// Get the table definition for the table we are copying
-			string sql = SelectSingleString (String.Format ("SELECT sql FROM sqlite_master WHERE tbl_name = '{0}' ORDER BY type DESC", table_name));
+			string sql = SelectSingleString (String.Format ("SELECT sql FROM sqlite_master WHERE tbl_name = '{0}' AND type = 'table' ORDER BY type DESC", table_name));
 			
 			// Drop temp table if already exists
 			ExecuteNonQuery ("DROP TABLE IF EXISTS " + temp_name);
@@ -533,7 +763,7 @@ namespace FSpot.Database {
 			{
 				code ();
 				
-				Console.WriteLine ("Updated database from version {0} to {1}",
+				Log.Debug ("Updated database from version {0} to {1}",
 						db_version.Value,
 						Version.ToString ());
 

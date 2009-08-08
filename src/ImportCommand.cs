@@ -13,18 +13,16 @@
 
 using GLib;
 using Gdk;
-using Gnome;
 using Gtk;
-using GtkSharp;
 using System.Collections;
 using System.IO;
 using System;
 using Mono.Unix;
 
-using FSpot.Widgets;
 using FSpot;
 using FSpot.Utils;
 using FSpot.UI.Dialog;
+using FSpot.Widgets;
 
 public class ImportCommand : GladeDialog
 {
@@ -188,7 +186,6 @@ public class ImportCommand : GladeDialog
 	}
 
 	internal abstract class ImportSource {
-		public object Backend;
 		public Gdk.Pixbuf Icon;
 		public string Name;
 	}
@@ -344,7 +341,7 @@ public class ImportCommand : GladeDialog
 	PhotoStore store;
 	FSpot.Delay step;
 	
-	FSpot.PhotoImageView photo_view;
+	PhotoImageView photo_view;
 	ImportBackend importer;
 	FSpot.Widgets.IconView tray;
 
@@ -538,24 +535,26 @@ public class ImportCommand : GladeDialog
 	{
 		string path = null;
 
-		CompatFileChooserDialog file_selector =
-			new CompatFileChooserDialog ("Import", this.Dialog,
-						     CompatFileChooserDialog.Action.SelectFolder);
+		FileChooserDialog file_chooser =
+			new FileChooserDialog (Catalog.GetString ("Import"), this.Dialog,
+					FileChooserAction.SelectFolder,
+					Stock.Cancel, ResponseType.Cancel,
+					Stock.Open, ResponseType.Ok);
 
-		file_selector.SelectMultiple = false;
+		file_chooser.SelectMultiple = false;
 
 		if (ImportPath != null)
-			file_selector.Filename = ImportPath;
+			file_chooser.SetFilename (ImportPath);
 		else
-			file_selector.Filename = FSpot.Global.HomeDirectory;
+			file_chooser.SetFilename (FSpot.Global.HomeDirectory);
 
-		int response = file_selector.Run ();
+		int response = file_chooser.Run ();
 
 		if ((ResponseType) response == ResponseType.Ok) {
-			path = file_selector.Filename;
+			path = file_chooser.Filename;
 		}
 
-		file_selector.Destroy ();
+		file_chooser.Destroy ();
 		return path;
 	}
 
@@ -615,7 +614,7 @@ public class ImportCommand : GladeDialog
 		tray.DisplayTags = false;
 		tray.Show ();
 
-		photo_view = new FSpot.PhotoImageView (collection);
+		photo_view = new PhotoImageView (collection);
 		photo_scrolled.Add (photo_view);
 		photo_scrolled.SetSizeRequest (200, 200);
 		photo_view.Show ();
@@ -624,8 +623,8 @@ public class ImportCommand : GladeDialog
 		GtkUtil.ModifyColors (photo_scrolled);
 		GtkUtil.ModifyColors (photo_view);
 
-		photo_view.Pixbuf = GtkUtil.TryLoadIcon (FSpot.Global.IconTheme, "f-spot", 48, (Gtk.IconLookupFlags)0);
-		photo_view.Fit = true;
+		photo_view.Pixbuf = GtkUtil.TryLoadIcon (FSpot.Global.IconTheme, "f-spot", 128, (Gtk.IconLookupFlags)0);
+		photo_view.ZoomFit (false);
 			
 		tag_entry = new FSpot.Widgets.TagEntry (MainWindow.Toplevel.Database.Tags, false);
 		tag_entry.UpdateFromTagNames (new string []{});
@@ -723,10 +722,10 @@ public class ImportCommand : GladeDialog
 				// Note for translators: 'Import Tags' is no command, it means 'Tags used in Import'
 				Category default_category = db.Tags.GetTagByName (Catalog.GetString ("Import Tags")) as Category;
 				if (default_category == null) {
-					default_category = db.Tags.CreateCategory (null, Catalog.GetString ("Import Tags"));
-					default_category.ThemeIconName = "f-spot-imported-xmp-tags.png"; 
+					default_category = db.Tags.CreateCategory (null, Catalog.GetString ("Import Tags"), false);
+					default_category.ThemeIconName = "gtk-new"; 
 				}
-				t = db.Tags.CreateCategory (default_category, tagname) as Tag;
+				t = db.Tags.CreateCategory (default_category, tagname, false) as Tag;
 				db.Tags.Commit (t);
 			}
 

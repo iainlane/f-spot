@@ -6,18 +6,22 @@
  *
  * This is free software. See COPYING for details.
  */
+using System;
 
 namespace FSpot
 {
-	public delegate void ItemChangedHandler (BrowsablePointer pointer, BrowsablePointerChangedArgs old);
+
 	public class BrowsablePointer {
 		IBrowsableCollection collection;
 		IBrowsableItem item;
 		int index;
-		public event ItemChangedHandler Changed;
+		public event EventHandler<BrowsablePointerChangedEventArgs> Changed;
 
 		public BrowsablePointer (IBrowsableCollection collection, int index)
 		{
+			if (collection == null)
+				throw new ArgumentNullException ("collection");
+
 			this.collection = collection;
 			this.Index = index;
 			item = Current;
@@ -106,9 +110,7 @@ namespace FSpot
 
 		private void SetIndex (int value, IBrowsableItemChanges changes)
 		{
-			BrowsablePointerChangedArgs args;
-			
-			args = new BrowsablePointerChangedArgs (Current, index, changes);
+			BrowsablePointerChangedEventArgs args = new BrowsablePointerChangedEventArgs (Current, index, changes);
 			
 			index = value;
 			item = Current;
@@ -127,6 +129,8 @@ namespace FSpot
 		
 		protected void HandleCollectionChanged (IBrowsableCollection collection)
 		{
+			if (collection == null)
+				throw new ArgumentNullException ("collection");
 			int old_location = Index;
 			int next_location = collection.IndexOf (item);
 			

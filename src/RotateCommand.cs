@@ -18,6 +18,8 @@ using FSpot;
 using FSpot.Png;
 using FSpot.UI.Dialog;
 
+using FSpot.Utils;
+
 using Mono.Unix;
 
 namespace FSpot {
@@ -42,7 +44,7 @@ namespace FSpot {
 		Counterclockwise,
 	}
 
-	public class RotateOperation : Operation {
+	public class RotateOperation : IOperation {
 		IBrowsableItem item;
 		RotateDirection direction;
 		bool done;
@@ -70,8 +72,8 @@ namespace FSpot {
 				if (img is JpegFile) {
 					FSpot.JpegFile jimg = img as FSpot.JpegFile;
 					PixbufOrientation orientation = direction == RotateDirection.Clockwise
-						? PixbufUtils.Rotate90 (img.Orientation)
-						: PixbufUtils.Rotate270 (img.Orientation);
+						? FSpot.Utils.PixbufUtils.Rotate90 (img.Orientation)
+						: FSpot.Utils.PixbufUtils.Rotate270 (img.Orientation);
 				
 					jimg.SetOrientation (orientation);
 					jimg.SaveMetaData (original_path);
@@ -98,7 +100,7 @@ namespace FSpot {
 					using (Stream stream = File.Open (backup, FileMode.Truncate, FileAccess.Write)) {
 						using (Pixbuf pixbuf = img.Load ()) {
 							PixbufOrientation fake = (direction == RotateDirection.Clockwise) ? PixbufOrientation.RightTop : PixbufOrientation.LeftBottom;
-							using (Pixbuf rotated = PixbufUtils.TransformOrientation (pixbuf, fake)) {
+							using (Pixbuf rotated = FSpot.Utils.PixbufUtils.TransformOrientation (pixbuf, fake)) {
 								img.Save (rotated, stream);
 							}
 						}
@@ -116,7 +118,7 @@ namespace FSpot {
 			RotateOrientation (original_path, dir);
 		}
 		
-		public override bool Step () {
+		public bool Step () {
 			string original_path;
 
 			if (done)
@@ -131,7 +133,7 @@ namespace FSpot {
 
 			Rotate (original_path, direction);
 
-			Gdk.Pixbuf thumb = FSpot.ThumbnailGenerator.Create (original_path);
+			Gdk.Pixbuf thumb = FSpot.ThumbnailGenerator.Create (UriUtils.PathToFileUri (original_path));
 			if (thumb != null)
 				thumb.Dispose ();
 		
@@ -139,7 +141,7 @@ namespace FSpot {
 		}
 	}
 
-	public class RotateMultiple : Operation {
+	public class RotateMultiple : IOperation {
 		RotateDirection direction;
 		IBrowsableItem [] items;
 		int index;
@@ -160,7 +162,7 @@ namespace FSpot {
 			index = 0;
 		}
 		
-		public override bool Step ()
+		public bool Step ()
 		{
 			if (index >= items.Length)  
 				return false;
@@ -214,7 +216,7 @@ public class RotateCommand {
 					RunGenericError (re, re.Path, re.Message);
 				else
 					readonly_count++;
-			} catch (Gnome.Vfs.VfsException) {
+			} catch (GLib.GException) {
 				readonly_count++;
 			} catch (DirectoryNotFoundException e) {
 				RunGenericError (e, op.Items [op.Index].DefaultVersionUri.LocalPath, Catalog.GetString ("Directory not found"));

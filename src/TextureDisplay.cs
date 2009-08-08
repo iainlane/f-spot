@@ -164,7 +164,9 @@ namespace FSpot {
 			try {
 				using (ImageFile img = ImageFile.Create (item.Current.DefaultVersionUri)) {
 					using (Gdk.Pixbuf pixbuf = img.Load ()) {
-						FSpot.ColorManagement.ApplyScreenProfile (pixbuf, img.GetProfile ());
+						Cms.Profile screen_profile;
+						if (FSpot.ColorManagement.Profiles.TryGetValue (Preferences.Get<string> (Preferences.COLOR_MANAGEMENT_DISPLAY_PROFILE), out screen_profile)) 
+							FSpot.ColorManagement.ApplyProfile (pixbuf, img.GetProfile (), screen_profile);
 						tex = new Texture (pixbuf);
 					}
 				}
@@ -175,7 +177,7 @@ namespace FSpot {
 		}
 
 		Animator animator;
-		private void HandleItemChanged (BrowsablePointer p, BrowsablePointerChangedArgs args)
+		private void HandleItemChanged (object sender, BrowsablePointerChangedEventArgs args)
 		{
 			Animator = new Animator (3000, 20, HandleTick);
 

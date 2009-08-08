@@ -9,6 +9,8 @@
  */
 
 using System;
+using GLib;
+using FSpot.Widgets;
 
 namespace FSpot.Extensions 
 {
@@ -54,13 +56,12 @@ namespace FSpot.Extensions
 
 	public class OpenWith : IMenuGenerator
 	{
-		private OpenWithMenu owm;
+		private Widgets.OpenWithMenu owm;
 
 		public Gtk.Menu GetMenu ()
 		{
-			owm = new OpenWithMenu (MainWindow.Toplevel.SelectedMimeTypes);
-			owm.IgnoreApp = "f-spot";
-			owm.ApplicationActivated += delegate (Gnome.Vfs.MimeApplication app) { MainWindow.Toplevel.HandleOpenWith (this, app); };
+			owm = new Widgets.OpenWithMenu (MainWindow.Toplevel.SelectedMimeTypes, "f-spot");
+			owm.ApplicationActivated += MainWindow.Toplevel.HandleOpenWith;
 			return (Gtk.Menu) owm;
 		}
 

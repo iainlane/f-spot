@@ -31,38 +31,29 @@ namespace FSpot.Widgets {
 	// Decides which sidebar page should be shown for each context. Implemented
 	// using the Strategy pattern, to make it swappable easily, in case the 
 	// default MRUSidebarContextSwitchStrategy is not sufficiently usable.
-	public abstract class SidebarContextSwitchStrategy {
-		private readonly Sidebar Sidebar;
+	public interface ISidebarContextSwitchStrategy {
+		string PageForContext (ViewContext context);
 
-		public SidebarContextSwitchStrategy (Sidebar sidebar) {
-			Sidebar = sidebar;
-		}
-
-		public abstract string PageForContext (ViewContext context);
-
-		public abstract void SwitchedToPage (ViewContext context, string name);
+		void SwitchedToPage (ViewContext context, string name);
 	}
 
 	// Implements a Most Recently Used switching strategy. The last page you used
 	// for a given context is used.
-	public class MRUSidebarContextSwitchStrategy : SidebarContextSwitchStrategy {
+	public class MRUSidebarContextSwitchStrategy : ISidebarContextSwitchStrategy {
 		public const string PREF_PREFIX = Preferences.APP_FSPOT + "ui/sidebar";
-
-		public MRUSidebarContextSwitchStrategy (Sidebar sidebar) : base (sidebar) {
-		}
 
 		private string PrefKeyForContext (ViewContext context) {
 			return String.Format ("{0}/{1}", PREF_PREFIX, context);
 		}
 
-		public override string PageForContext (ViewContext context) {
+		public string PageForContext (ViewContext context) {
 			string name = Preferences.Get<string> (PrefKeyForContext (context));
 			if (name == null) 
 				name = DefaultForContext (context);
 			return name;
 		}
 
-		public override void SwitchedToPage (ViewContext context, string name) {
+		public void SwitchedToPage (ViewContext context, string name) {
 			Preferences.Set (PrefKeyForContext (context), name);
 		}
 
@@ -134,7 +125,7 @@ namespace FSpot.Widgets {
 	public class Sidebar : VBox  {
 		
 		private HBox button_box;
-		private Notebook notebook;
+		public Notebook Notebook { get; private set; }
 		private MenuButton choose_button;
 		private EventBox eventBox;
 		private Menu choose_menu;
@@ -168,20 +159,20 @@ namespace FSpot.Widgets {
 			}
 		}
 
-		private readonly SidebarContextSwitchStrategy ContextSwitchStrategy;
+		private readonly ISidebarContextSwitchStrategy ContextSwitchStrategy;
 
 		public Sidebar () : base ()
 		{
-			ContextSwitchStrategy = new MRUSidebarContextSwitchStrategy (this);
+			ContextSwitchStrategy = new MRUSidebarContextSwitchStrategy ();
 			ContextChanged += HandleContextChanged;
 
 			button_box = new HBox ();
 			PackStart (button_box, false, false, 0);
 			
-			notebook = new Notebook ();
-			notebook.ShowTabs = false;
-			notebook.ShowBorder = false;
-			PackStart (notebook, true, true, 0);
+			Notebook = new Notebook ();
+			Notebook.ShowTabs = false;
+			Notebook.ShowBorder = false;
+			PackStart (Notebook, true, true, 0);
 			
 			Button button = new Button ();
 			button.Image = new Image ("gtk-close", IconSize.Button);
@@ -221,7 +212,7 @@ namespace FSpot.Widgets {
 
 		private void HandleCanSelectChanged (object sender, EventArgs args)
 		{
-			//Log.DebugFormat ("Can select changed for {0} to {1}", sender, (sender as SidebarPage).CanSelect);
+			//Log.Debug ("Can select changed for {0} to {1}", sender, (sender as SidebarPage).CanSelect);
 		}
 
 		public void AppendPage (Widget widget, string label, string icon_name)
@@ -238,7 +229,7 @@ namespace FSpot.Widgets {
 			string label = page.Label;
 			string icon_name = page.IconName;
 
-			notebook.AppendPage (page.SidebarWidget, new Label (label));
+			Notebook.AppendPage (page.SidebarWidget, new Label (label));
 			page.SidebarWidget.Show ();
 			
 			MenuItem item; 
@@ -254,7 +245,7 @@ namespace FSpot.Widgets {
 			choose_menu.Append (item);
 			item.Show ();
 			
-			if (notebook.Children.Length == 1) {
+			if (Notebook.Children.Length == 1) {
 				choose_button.Label = label;
 				choose_button.Image.IconName = icon_name;
 			}
@@ -286,18 +277,18 @@ namespace FSpot.Widgets {
 		
 		public void SwitchTo (int n)
 		{
-			if (n >= notebook.Children.Length) {
+			if (n >= Notebook.Children.Length) {
 				n = 0;
 			}
 
-			notebook.CurrentPage = n;
+			Notebook.CurrentPage = n;
 			choose_button.Label = menu_list [n];
 			choose_button.Image.IconName = image_list [n];
 		}
 
 		public int CurrentPage
 		{
-			get { return notebook.CurrentPage; }
+			get { return Notebook.CurrentPage; }
 		}
 
 		public void SwitchTo (string name)
@@ -308,7 +299,7 @@ namespace FSpot.Widgets {
 		
 		public bool IsActive (SidebarPage page)
 		{
-			return (notebook.GetNthPage (notebook.CurrentPage) == page.SidebarWidget);
+			return (Notebook.GetNthPage (Notebook.CurrentPage) == page.SidebarWidget);
 		}
 
 		public void HandleSelectionChanged (IBrowsableCollection collection) {
