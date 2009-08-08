@@ -1,43 +1,12 @@
 SUBDIRS = 		\
-	$(subdirs)	\
-	$(DIR_DBUS)	\
-	$(DIR_DBUS_GLIB)\
-	semweb		\
+	lib 		\
 	docs		\
-	glitz-sharp	\
-	gnome-keyring-sharp \
 	icons		\
-	libeog		\
-	libjpegtran	\
-	libfspot	\
-	libgphoto2-sharp \
-	Tao		\
-	mono-addins	\
 	tools		\
-	po		\
-	src		\
-	extensions
-
-DIST_SUBDIRS = 		\
-	gio-sharp	\
-	semweb		\
-	dbus-sharp	\
-	dbus-sharp-glib	\
-	dpap-sharp	\
-	docs		\
-	glitz-sharp	\
-	gnome-keyring-sharp \
-	icons		\
-	libeog		\
-	libjpegtran	\
-	libfspot	\
-	libgphoto2-sharp \
-	Tao		\
-	mono-addins	\
-	tools		\
-	po		\
-	src		\
-	extensions
+	po			\
+	src			\
+	extensions	\
+	tests
 
 desktop_in_files=	\
 	f-spot.desktop.in	\
@@ -89,13 +58,13 @@ UPDATE_DESKTOP = \
 
 install-data-hook: 
 	$(UPDATE_DESKTOP)
-	if [ "x$(DIR_GIO)" != "x" ] ; then \
-		$(install_sh_DATA) $(top_builddir)/gio-sharp/gio/gio-sharp.dll $(DESTDIR)$(libdir)/f-spot/; \
-		$(install_sh_DATA) $(top_builddir)/gio-sharp/gio/gio-sharp.dll.config $(DESTDIR)$(libdir)/f-spot/; \
-	fi
 
 uninstall-hook: 
 	$(UPDATE_DESKTOP)
-	if [ "x$(DIR_GIO)" != "x" ] ; then \
-		rm -f $(DESTDIR)$(libdir)/f-spot/gio-sharp.dll $(DESTDIR)$(libdir)/f-spot/gio-sharp.dll.config; \
-	fi
+
+if ENABLE_TESTS
+test:
+	@pushd tests/src/; \
+	make test; \
+	popd;
+endif

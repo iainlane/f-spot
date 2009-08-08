@@ -8,6 +8,8 @@
  * This is free software. See COPYING for details.
  */
 
+using System;
+
 namespace FSpot
 {
 	public class DbItem {
@@ -21,21 +23,21 @@ namespace FSpot
 		}
 	}
 
-	public class DbItemEventArgs {
-		private DbItem [] items;
+	public class DbItemEventArgs<T> : EventArgs where T : DbItem {
+		private T [] items;
 
-		public DbItem [] Items {
+		public T [] Items {
 			get { return items; }
 		}
 
-		public DbItemEventArgs (DbItem [] items)
+		public DbItemEventArgs (T [] items) : base ()
 		{
 			this.items = items;
 		}
 
-		public DbItemEventArgs (DbItem item)
+		public DbItemEventArgs (T item) : base ()
 		{
-			this.items = new DbItem [] { item };
+			this.items = new T [] { item };
 		}
 	}
 }

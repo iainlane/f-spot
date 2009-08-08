@@ -62,7 +62,7 @@ namespace FSpot.Query
 
 		~TagTerm ()
 		{
-			Log.DebugFormat ("Finalizer called on {0}. Should be Disposed", GetType ());
+			Log.Debug ("Finalizer called on {0}. Should be Disposed", GetType ());
 			if (tag != null)
 				tag.Dispose ();
 		}
@@ -190,7 +190,7 @@ namespace FSpot.Query
 				foreach (LogicalTerm t in (term as AndTerm).terms)
 					Add (t);
 			else
-				terms.Add (term);			
+				terms.Add (term);
 		}
 
 		public override string SqlClause ()

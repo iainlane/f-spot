@@ -7,7 +7,6 @@
  * This is free software. See COPYING for details.
  */
 
-#if GTK_2_10
 using Cairo;
 using System;
 using System.Runtime.InteropServices;
@@ -24,6 +23,7 @@ namespace FSpot
 		int photos_per_page = 1;
 		CustomPrintWidget.FitMode fit = CustomPrintWidget.FitMode.Scaled;
 		bool repeat, white_borders, crop_marks;
+		string print_label_format;
 		string comment;
 
 		public PrintOperation (IBrowsableItem [] selected_photos) : base ()
@@ -58,6 +58,7 @@ namespace FSpot
 			fit = cpw.Fitmode;
 			white_borders = cpw.WhiteBorders;
 			crop_marks = cpw.CropMarks;
+			print_label_format = cpw.PrintLabelFormat;
 			comment = cpw.CustomText;
 		}
 
@@ -89,12 +90,18 @@ namespace FSpot
 			case 2: ppx = 1; ppy = 2; break;
 			case 4: ppx = ppy = 2; break;
 			case 9: ppx = ppy = 3; break;
+			case 12: ppx = 3; ppy = 4; break;
+			case 20: ppx = 4; ppy = 5; break;
+			case 30: ppx = 5; ppy = 6; break;
 			}
 
 			//FIXME: if paper is landscape, swap ppx with ppy
 
 			double w = context.Width / ppx;
 			double h = context.Height / ppy;
+
+			// compute picture size using 4800DPI
+			double mx=(w / 25.4) * 4800, my=(h / 25.4) * 4800;
 
 			for (int x = 0; x <= ppx; x++) {
 				for (int y = 0; y <= ppy; y++) {
@@ -107,8 +114,10 @@ namespace FSpot
 					{
 						Gdk.Pixbuf pixbuf;
 						try {
-							pixbuf = img.Load ();
-							FSpot.ColorManagement.ApplyPrinterProfile (pixbuf, img.GetProfile ());
+							pixbuf = img.Load ((int) mx, (int) my);
+							Cms.Profile printer_profile;
+							if (FSpot.ColorManagement.Profiles.TryGetValue (Preferences.Get<string> (Preferences.COLOR_MANAGEMENT_OUTPUT_PROFILE), out printer_profile)) 
+								FSpot.ColorManagement.ApplyProfile (pixbuf, img.GetProfile (), printer_profile);
 						} catch (Exception e) {
 							Log.Exception ("Unable to load image " + selected_photos[p_index].DefaultVersionUri + "\n", e);
 							// If the image is not found load error pixbuf
@@ -126,7 +135,21 @@ namespace FSpot
 						}
 
 						DrawImage (cr, pixbuf, x * w, y * h, w, h);
-						DrawComment (context, (x + 1) * w, (rotated ? y : y + 1) * h, (rotated ? w : h) * .025, comment, rotated);
+
+						string tag_string = "";
+						foreach (Tag t in selected_photos[p_index].Tags)
+							tag_string = String.Concat (tag_string, t.Name);
+
+						string label = String.Format (print_label_format,
+									      comment,
+									      selected_photos[p_index].Name,
+									      selected_photos[p_index].Time.ToLocalTime ().ToShortDateString (),
+									      selected_photos[p_index].Time.ToLocalTime ().ToShortTimeString (),
+									      tag_string,
+									      selected_photos[p_index].Description);
+
+						DrawComment (context, (x + 1) * w, (rotated ? y : y + 1) * h, (rotated ? w : h) * .025, label, rotated);
+
 						pixbuf.Dispose ();
 					}
 				}
@@ -236,4 +259,3 @@ namespace FSpot
 		}
 	}
 }
-#endif

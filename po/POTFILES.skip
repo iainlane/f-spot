@@ -27,6 +27,8 @@ extensions/DevelopInUFraw/DevelopInUFRaw.cs
 extensions/RetroactiveRoll/RetroactiveRoll.addin.xml
 extensions/Editors/FlipEditor/FlipEditor.cs
 extensions/Editors/ResizeEditor/ResizeEditor.cs
+extensions/Editors/BlackoutEditor/BlackoutEditor.cs
+extensions/Editors/PixelateEditor/PixelateEditor.cs
 extensions/Misc/LightTable/LightTable.addin.xml
 extensions/Tools/ChangePhotoPath/ChangePhotoPath.addin.xml
 extensions/Tools/ChangePhotoPath/ChangePhotoPath.glade
@@ -43,3 +45,10 @@ extensions/Tools/RawPlusJpeg/RawPlusJpeg.addin.xml
 extensions/Tools/RetroactiveRoll/RetroactiveRoll.addin.xml
 extensions/Tools/SyncCatalog/SyncCatalog.addin.xml
 extensions/Tools/SyncCatalog/SyncCatalog.cs
+gtk-sharp-beans/gtk_generated/Builder.cs
+lib/libfspotraw/LibRaw/dcraw/dcraw.c
+lib/libfspotraw/LibRaw/internal/dcraw_common.cpp
+lib/libfspotraw/LibRaw/internal/dcraw_fileio.cpp
+lib/libfspotraw/LibRaw/internal/foveon.cpp
+lib/gtk-sharp-beans/gtk_generated/Builder.cs
+

@@ -9,7 +9,7 @@
  */
 
 using Gtk;
-using Gnome;
+using GLib;
 using System;
 
 using FSpot.Widgets;
@@ -21,8 +21,8 @@ using Mono.Unix;
 
 namespace FSpot {
 	public class SendEmail : GladeDialog {
+		Window parent_window;
 		PhotoQuery query;
-		Gtk.Window parent_window;
 
 		[Glade.Widget] private ScrolledWindow   tray_scrolled;
 		[Glade.Widget] private Button 		ok_button;
@@ -31,7 +31,6 @@ namespace FSpot {
 							large_size, x_large_size, original_size;
 		[Glade.Widget] private CheckButton 	rotate_check;
 
-		int photo_index;
 		bool clean;
 		long Orig_Photo_Size 	= 0;
 		double scale_percentage = 0.3;
@@ -52,13 +51,14 @@ namespace FSpot {
 		System.Threading.Thread command_thread;
 		IBrowsableCollection selection;
 
-		public SendEmail (IBrowsableCollection selection) : base ("mail_dialog")
+		public SendEmail (IBrowsableCollection selection, Window parent_window) : base ("mail_dialog")
 		{
 			this.selection = selection;
+			this.parent_window = parent_window;
 
 			for (int i = 0; i < selection.Count; i++) {
 				Photo p = selection[i] as Photo;
-				if (Gnome.Vfs.MimeType.GetMimeTypeForUri (p.DefaultVersionUri.ToString ()) != "image/jpeg")
+				if (FileFactory.NewForUri (p.DefaultVersionUri).QueryInfo ("standard::content-type", FileQueryInfoFlags.None, null).ContentType != "image/jpeg")
 					force_original = true;
 			}
 
@@ -91,7 +91,7 @@ namespace FSpot {
 			for (int i = 0; i < selection.Count; i++) {
 				Photo photo = selection[i] as Photo;
 				try {
-					Orig_Photo_Size += (new Gnome.Vfs.FileInfo (photo.DefaultVersionUri.ToString ())).Size;
+					Orig_Photo_Size += FileFactory.NewForUri (photo.DefaultVersionUri).QueryInfo ("standard::size", FileQueryInfoFlags.None, null).Size;
 				} catch {
 				}
 			}
@@ -105,14 +105,14 @@ namespace FSpot {
 			if (scalephoto != null && !force_original) {
 				
 				// Get first photos file size
-				long orig_size = (new Gnome.Vfs.FileInfo (scalephoto.DefaultVersionUri.ToString ())).Size;
+				long orig_size = FileFactory.NewForUri (scalephoto.DefaultVersionUri).QueryInfo ("standard::size", FileQueryInfoFlags.None, null).Size;
 				
 				FilterSet filters = new FilterSet ();
 				filters.Add (new ResizeFilter ((uint)(sizes [3])));
 				long new_size;
 				using (FilterRequest request = new FilterRequest (scalephoto.DefaultVersionUri)) {
 					filters.Convert (request);
-					new_size = (new Gnome.Vfs.FileInfo (request.Current.ToString ())).Size;
+					new_size = FileFactory.NewForUri (request.Current).QueryInfo ("standard::size", FileQueryInfoFlags.None, null).Size;
 				}
 				
 				if (orig_size > 0) {
@@ -137,7 +137,7 @@ namespace FSpot {
 			}
 
 			NumberOfPictures.Text 	= selection.Count.ToString();
-			TotalOriginalSize.Text 	= SizeUtil.ToHumanReadable (Orig_Photo_Size);
+			TotalOriginalSize.Text 	= GLib.Format.SizeForDisplay (Orig_Photo_Size);
 			
 			UpdateEstimatedSize();
 
@@ -189,7 +189,7 @@ namespace FSpot {
 				else
 					new_approx_total_size = System.Convert.ToInt64(Orig_Photo_Size * avg_scale [new_size_index]);
 
-				approxresult = SizeUtil.ToHumanReadable (new_approx_total_size);
+				approxresult = GLib.Format.SizeForDisplay (new_approx_total_size);
 				ApproxNewSize.Text 	= approxresult;	
 
 		}
@@ -306,13 +306,13 @@ namespace FSpot {
 						// Mark the path for deletion
 						tmp_paths.Add (request.Current.LocalPath);
 					} catch (Exception e) {
-						Console.WriteLine("Error preparing {0}: {1}", selection[photo_index].Name, e.Message);
+						Console.WriteLine("Error preparing {0}: {1}", selection[i].Name, e.Message);
 						HigMessageDialog md = new HigMessageDialog (parent_window, 
 											    DialogFlags.DestroyWithParent,
 											    MessageType.Error,
 											    ButtonsType.Close,
 											    Catalog.GetString("Error processing image"), 
-											    String.Format(Catalog.GetString("An error occured while processing \"{0}\": {1}"), selection[photo_index].Name, e.Message));
+											    String.Format(Catalog.GetString("An error occured while processing \"{0}\": {1}"), selection[i].Name, e.Message));
 						md.Run();
 						md.Destroy();
 						UserCancelled = true;
@@ -346,7 +346,7 @@ namespace FSpot {
 						System.Diagnostics.Process.Start("kmail", "  --composer --subject \"" + mail_subject + "\"" + mail_attach);
 					break;
 					default: 
-						GnomeUtil.UrlShow ("mailto:?subject=" + System.Web.HttpUtility.UrlEncode(mail_subject) + mail_attach);
+						GtkBeans.Global.ShowUri (Dialog.Screen, "mailto:?subject=" + System.Web.HttpUtility.UrlEncode(mail_subject) + mail_attach);
 					break;
 				}
 				                

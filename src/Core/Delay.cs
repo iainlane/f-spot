@@ -16,26 +16,27 @@ namespace FSpot
 {
 	public class Delay
 	{
+		object syncHandle = new object ();
+
 		public Delay (uint interval, GLib.IdleHandler op)
 		{
-			this.op += op;
+			this.op = op;
 			this.interval = interval;
 		}
 
 		public Delay (GLib.IdleHandler op) 
 		{
-			this.op += op;
-			this.interval = 0;
+			this.op = op;
 		}
 
 		uint source;
 		uint interval;
 
-		private event GLib.IdleHandler op;
+		private GLib.IdleHandler op;
 
 		private bool HandleOperation ()
 		{
-			lock (this) {
+			lock (syncHandle) {
 				bool runagain = op ();
 				if (!runagain)
 					source = 0;
@@ -45,7 +46,7 @@ namespace FSpot
 		}
 		
 		public void Start () {
-			lock (this) {
+			lock (syncHandle) {
 				if (this.IsPending)
 					return;
 
@@ -64,6 +65,8 @@ namespace FSpot
 
 		public void Connect (Gtk.Object obj)
 		{
+			if (obj == null)
+				throw new ArgumentNullException ("obj");
 			obj.Destroyed += HandleDestroy; 
 		}	     
 		
@@ -74,7 +77,7 @@ namespace FSpot
 		
 		public void Stop () 
 		{
-			lock (this) {
+			lock (syncHandle) {
 				if (this.IsPending) {
 					GLib.Source.Remove (source);
 					source = 0;

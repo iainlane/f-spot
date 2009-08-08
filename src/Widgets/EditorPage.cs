@@ -171,18 +171,13 @@ namespace FSpot.Widgets {
 		private bool SetupEditor (Editor editor) {
 			EditorState state = editor.CreateState ();
 
-			EditorSelection selection = new EditorSelection ();
 			PhotoImageView photo_view = MainWindow.Toplevel.PhotoView.View;
 
 			if (Page.InPhotoView && photo_view != null) {
-				if (photo_view.GetSelection (out selection.x, out selection.y,
-							out selection.width, out selection.height))
-					state.Selection = selection;
-				else
-					state.Selection = null;
+				state.Selection = photo_view.Selection;
 				state.PhotoImageView = photo_view;
 			} else {
-				state.Selection = null;
+				state.Selection = Gdk.Rectangle.Zero;
 				state.PhotoImageView = null;
 			}
 			if (Page.Sidebar.Selection == null)
@@ -216,6 +211,7 @@ namespace FSpot.Widgets {
 			try {
 				editor.Apply ();
 			} catch (Exception e) {
+				Log.DebugException (e);
 				string msg = Catalog.GetPluralString ("Error saving adjusted photo", "Error saving adjusted photos", 
 									editor.State.Items.Length);
 				string desc = String.Format (Catalog.GetString ("Received exception \"{0}\". Note that you have to develop RAW files into JPEG before you can edit them."),

@@ -24,6 +24,7 @@ using FSpot;
 using FSpot.Filters;
 using FSpot.Widgets;
 using FSpot.Utils;
+using FSpot.UI.Dialog;
 
 using Gnome.Keyring;
 using SmugMugNet;
@@ -42,7 +43,7 @@ namespace FSpotSmugMugExport {
 
 		public SmugMugApi Connect ()
 		{
-			System.Console.WriteLine ("SmugMug.Connect() {0}", username);
+			Log.Debug ("SmugMug.Connect() " + username);
 			SmugMugApi proxy = new SmugMugApi (username, password);
 			ServicePointManager.CertificatePolicy = new NoCheckCertificatePolicy ();
 			proxy.Login ();
@@ -159,7 +160,7 @@ namespace FSpotSmugMugExport {
 					Ring.DeleteItem(keyring, result.ItemID);
 				}
 			} catch (Exception e) {
-				Console.WriteLine(e);
+				Log.Exception (e);
 			}
 			accounts.Remove (account);
 			MarkChanged ();
@@ -200,7 +201,7 @@ namespace FSpotSmugMugExport {
 
 				}
 			} catch (Exception e) {
-				Console.Error.WriteLine(e);
+				Log.Exception (e);
 			}
 
 			MarkChanged ();
@@ -454,7 +455,7 @@ namespace FSpotSmugMugExport {
 
 		IBrowsableItem [] items;
 		int photo_index;
-		FSpot.ThreadProgressDialog progress_dialog;
+		ThreadProgressDialog progress_dialog;
 
 		ArrayList accounts;
 		private SmugMugAccount account;
@@ -520,7 +521,7 @@ namespace FSpotSmugMugExport {
 				command_thread = new System.Threading.Thread (new System.Threading.ThreadStart (this.Upload));
 				command_thread.Name = Mono.Unix.Catalog.GetString ("Uploading Pictures");
 
-				progress_dialog = new FSpot.ThreadProgressDialog (command_thread, items.Length);
+				progress_dialog = new ThreadProgressDialog (command_thread, items.Length);
 				progress_dialog.Start ();
 
 				// Save these settings for next time
@@ -543,7 +544,7 @@ namespace FSpotSmugMugExport {
 
 			System.Uri album_uri = null;
 
-			System.Console.WriteLine ("Starting Upload to Smugmug, album {0} - {1}", album.Title, album.AlbumID);
+			Log.Debug ("Starting Upload to Smugmug, album " + album.Title + " - " + album.AlbumID);
 
 			FilterSet filters = new FilterSet ();
 			filters.Add (new JpegFilter ());
@@ -559,7 +560,7 @@ namespace FSpotSmugMugExport {
 					IBrowsableItem item = items[photo_index];
 
 					FileInfo file_info;
-					Console.WriteLine ("uploading {0}", photo_index);
+					Log.Debug ("uploading " + photo_index);
 
 					progress_dialog.Message = String.Format (Catalog.GetString ("Uploading picture \"{0}\" ({1} of {2})"),
 										 item.Name, photo_index+1, items.Length);
@@ -593,7 +594,7 @@ namespace FSpotSmugMugExport {
 					progress_dialog.Message = String.Format (Mono.Unix.Catalog.GetString ("Error Uploading To Gallery: {0}"),
 										 e.Message);
 					progress_dialog.ProgressText = Mono.Unix.Catalog.GetString ("Error");
-					System.Console.WriteLine (e);
+					Log.DebugException (e);
 
 					if (progress_dialog.PerformRetrySkip ()) {
 						photo_index--;
@@ -609,7 +610,7 @@ namespace FSpotSmugMugExport {
 			progress_dialog.ButtonLabel = Gtk.Stock.Ok;
 
 			if (browser && album_uri != null) {
-				GnomeUtil.UrlShow (album_uri.ToString ());
+				GtkBeans.Global.ShowUri (Dialog.Screen, album_uri.ToString ());
 			}
 		}
 
@@ -674,7 +675,7 @@ namespace FSpotSmugMugExport {
 					PopulateAlbumOptionMenu (account.SmugMug);
 				}
 			} catch (System.Exception) {
-				System.Console.WriteLine ("Can not connect to SmugMug. Bad username ? password ? network connection ?");
+				Log.Warning ("Can not connect to SmugMug. Bad username? Password? Network connection?");
 				//System.Console.WriteLine ("{0}",ex);
 				if (selected != null)
 					account = selected;
@@ -712,7 +713,7 @@ namespace FSpotSmugMugExport {
 				try {
 					albums = smugmug.GetAlbums();
 				} catch (Exception) {
-					Console.WriteLine("Can't get the albums");
+					Log.Debug ("Can't get the albums");
 					smugmug = null;
 				}
 			}
@@ -771,33 +772,26 @@ namespace FSpotSmugMugExport {
 
 		void LoadPreference (string key)
 		{
-			object val = Preferences.Get (key);
-
-			if (val == null)
-				return;
-
-			//System.Console.WriteLine ("Setting {0} to {1}", key, val);
-
 			switch (key) {
 			case SCALE_KEY:
-				if (scale_check.Active != (bool) val) {
-					scale_check.Active = (bool) val;
-					rotate_check.Sensitive = !(bool) val;
+				if (scale_check.Active != Preferences.Get<bool> (key)) {
+					scale_check.Active = Preferences.Get<bool> (key);
+					rotate_check.Sensitive = !Preferences.Get<bool> (key);
 				}
 				break;
 
 			case SIZE_KEY:
-				size_spin.Value = (double) (int) val;
+				size_spin.Value = (double) Preferences.Get<int> (key);
 				break;
 
 			case BROWSER_KEY:
-				if (browser_check.Active != (bool) val)
-					browser_check.Active = (bool) val;
+				if (browser_check.Active != Preferences.Get<bool> (key))
+					browser_check.Active = Preferences.Get<bool> (key);
 				break;
 
 			case ROTATE_KEY:
-				if (rotate_check.Active != (bool) val)
-					rotate_check.Active = (bool) val;
+				if (rotate_check.Active != Preferences.Get<bool> (key))
+					rotate_check.Active = Preferences.Get<bool> (key);
 				break;
 			}
 		}

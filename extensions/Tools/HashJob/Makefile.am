@@ -15,7 +15,11 @@ REFS =					\
 	-r:$(top_builddir)/src/FSpot.Core.dll	\
 	-r:$(top_builddir)/src/FSpot.Utils.dll	\
 	-r:$(top_builddir)/src/FSpot.Query.dll	\
-	-r:Mono.Data.SqliteClient
+	-r:Mono.Data.SqliteClient				\
+	$(LINK_SEMWEB)				\
+	$(LINK_MONO_ADDINS)			\
+	$(LINK_GIOSHARP)			\
+	$(LINK_GPHOTO2)
 
 PKGS =					\
 	-pkg:gtk-sharp-2.0

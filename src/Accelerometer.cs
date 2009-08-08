@@ -5,14 +5,14 @@
 using System;
 using System.IO;
 
-namespace FSpot {
+using FSpot.Utils;
 
-	public delegate void OrientationChangedHandler (object sender);
+namespace FSpot {
 
 	public class Accelerometer {
 		public const string SYSFS_FILE = "/sys/devices/platform/hdaps/position";
 
-		public static event OrientationChangedHandler OrientationChanged;
+		public static event EventHandler OrientationChanged;
 
 		public enum Orient {
 			Normal,
@@ -38,10 +38,10 @@ namespace FSpot {
 				SetupAccelerometer ();
 				
 			if (current_orientation == Orient.TiltCounterclockwise)
-				return PixbufUtils.Rotate90 (po);
+				return FSpot.Utils.PixbufUtils.Rotate90 (po);
 
 			if (current_orientation == Orient.TiltClockwise)
-				return PixbufUtils.Rotate270 (po);
+				return FSpot.Utils.PixbufUtils.Rotate270 (po);
 
 			return po;
 		}
@@ -73,8 +73,9 @@ namespace FSpot {
 			if (new_orient != current_orientation) {
 				current_orientation = new_orient;
 
-				if (OrientationChanged != null)
-					OrientationChanged (null);
+				EventHandler eh = OrientationChanged;
+				if (eh != null)
+					eh (null, EventArgs.Empty);
 
 				Console.WriteLine ("Laptop orientation changed...");
 			}

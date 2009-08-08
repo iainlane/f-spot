@@ -11,6 +11,7 @@
 using Gtk;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using FSpot.Xmp;
@@ -22,9 +23,9 @@ using FSpot.Utils;
 namespace FSpot.Xmp {
         internal class XmpTagsImporter {
 		private TagStore tag_store;
-		private Stack tags_created;
+		private Stack<Tag> tags_created;
 
-		static private string LastImportIcon = "f-spot-imported-xmp-tags.png";
+		static private string LastImportIcon = "gtk-new";
 		static private string PlacesIcon = "emblem-places";
 
 	        const string UserComment = MetadataStore.ExifNS + "UserComment";
@@ -83,7 +84,7 @@ namespace FSpot.Xmp {
 		public XmpTagsImporter (PhotoStore photo_store, TagStore tag_store)
 		{
 			this.tag_store = tag_store;
-			tags_created = new Stack ();
+			tags_created = new Stack<Tag> ();
 			
 			li_root_tag = new TagInfo (Catalog.GetString ("Import Tags"), LastImportIcon);
 			taginfo_table [(Entity)Location] = new TagInfo (Catalog.GetString ("Location"), PlacesIcon);
@@ -100,7 +101,8 @@ namespace FSpot.Xmp {
 				return tag;
 			
 			tag = tag_store.CreateCategory (parent,
-							info.TagName);
+							info.TagName,
+							false);
 			
 			if (info.HasIcon) {
 				tag.ThemeIconName = info.IconName;
@@ -198,7 +200,7 @@ namespace FSpot.Xmp {
 							tmp_ui = System.Convert.ToUInt32 (l.Value);
 						} catch {
 							// Set rating to 0, and continue
-							Log.DebugFormat ("Found illegal rating >{0}< in predicate {1}. Rating cleared",
+							Log.Debug ("Found illegal rating >{0}< in predicate {1}. Rating cleared",
 										 l.Value, stmt.Predicate.Uri);
 							tmp_ui = 0;
 						}
@@ -313,7 +315,7 @@ namespace FSpot.Xmp {
 			// User have cancelled the import.
 			// Remove all created tags
 			while (tags_created.Count > 0) 
-				tag_store.Remove ((DbItem) tags_created.Pop());
+				tag_store.Remove (tags_created.Pop());
 			
 			// Clear the tags_created array
 			tags_created.Clear();

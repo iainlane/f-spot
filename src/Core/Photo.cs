@@ -15,9 +15,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Mono.Unix;
-using Gnome.Vfs;
 
 using FSpot.Utils;
+using FSpot.Platform;
 
 namespace FSpot
 {
@@ -139,7 +139,7 @@ namespace FSpot
 		}
 	
 		public string Name {
-			get { return System.IO.Path.GetFileName (VersionUri (OriginalVersionId).AbsolutePath); }
+			get { return Uri.UnescapeDataString (System.IO.Path.GetFileName (VersionUri (OriginalVersionId).AbsolutePath)); }
 		}
 	
 		//This property no longer keeps a 'directory' path, but the logical container for the image, like:
@@ -297,13 +297,8 @@ namespace FSpot
 		{
 			string name_without_extension = System.IO.Path.GetFileNameWithoutExtension (Name);
 	
-#if MONO_2_0
 			return new System.Uri (System.IO.Path.Combine (DirectoryPath,  name_without_extension 
-						       + " (" + UriUtils.EscapeString (version_name, false, true, true) + ")" + extension));
-#else
-			return new System.Uri (System.IO.Path.Combine (DirectoryPath,  name_without_extension 
-						       + " (" + UriUtils.EscapeString (version_name, false, true, true) + ")" + extension), true);
-#endif
+						       + " (" + UriUtils.EscapeString (version_name, true, true, true) + ")" + extension));
 		}
 	
 		public bool VersionNameExists (string version_name)
@@ -354,12 +349,13 @@ namespace FSpot
 					version = CreateDefaultModifiedVersion (DefaultVersionId, false);
 	
 				try {
-					string version_path = VersionUri (version).LocalPath;
-				
-					using (Stream stream = System.IO.File.OpenWrite (version_path)) {
+					Uri versionUri = VersionUri (version);
+
+					using (Stream stream = System.IO.File.OpenWrite (versionUri.LocalPath)) {
 						img.Save (buffer, stream);
 					}
-					FSpot.ThumbnailGenerator.Create (version_path).Dispose ();
+					(GetVersion (version) as PhotoVersion).MD5Sum = GenerateMD5 (VersionUri (version));
+					FSpot.ThumbnailGenerator.Create (versionUri).Dispose ();
 					DefaultVersionId = version;
 				} catch (System.Exception e) {
 					System.Console.WriteLine (e);
@@ -391,18 +387,19 @@ namespace FSpot
 			System.Uri uri =  VersionUri (version_id);
 	
 			if (!keep_file) {
-				if ((new Gnome.Vfs.Uri (uri.ToString ())).Exists) {
-					if ((new Gnome.Vfs.Uri (uri.ToString ()).Unlink()) != Result.Ok)
-						throw new System.UnauthorizedAccessException();
-				}
-	
+				GLib.File file = GLib.FileFactory.NewForUri (uri);
+				if (file.Exists) 
+					try {
+						file.Trash (null);
+					} catch (GLib.GException) {
+						Log.Debug ("Unable to Trash, trying to Delete");
+						file.Delete ();
+					}	
 				try {
-					string thumb_path = ThumbnailGenerator.ThumbnailPath (uri);
-					System.IO.File.Delete (thumb_path);
-				} catch (System.Exception) {
+					ThumbnailFactory.DeleteThumbnail (uri);
+				} catch {
 					//ignore an error here we don't really care.
 				}
-				PhotoStore.DeleteThumbnail (uri);
 			}
 			Versions.Remove (version_id);
 
@@ -416,19 +413,26 @@ namespace FSpot
 				}
 			} while (version_id > OriginalVersionId);
 		}
+
 		public uint CreateProtectedVersion (string name, uint base_version_id, bool create)
 		{
-			return CreateVersion (name, base_version_id, create, true);
+			return CreateVersion (name, null, base_version_id, create, true);
 		}
 	
 		public uint CreateVersion (string name, uint base_version_id, bool create)
 		{
-			return CreateVersion (name, base_version_id, create, false);
+			return CreateVersion (name, null, base_version_id, create, false);
+		}
+
+		public uint CreateVersion (string name, string extension, uint base_version_id, bool create)
+		{
+			return CreateVersion (name, extension, base_version_id, create, false);
 		}
 	
-		private uint CreateVersion (string name, uint base_version_id, bool create, bool is_protected)
+		private uint CreateVersion (string name, string extension, uint base_version_id, bool create, bool is_protected)
 		{
-			System.Uri new_uri = GetUriForVersionName (name, System.IO.Path.GetExtension (VersionUri (base_version_id).AbsolutePath));
+			extension = extension ?? System.IO.Path.GetExtension (VersionUri (base_version_id).AbsolutePath);
+			System.Uri new_uri = GetUriForVersionName (name, extension);
 			System.Uri original_uri = VersionUri (base_version_id);
 			string md5_sum = MD5Sum;
 	
@@ -436,28 +440,15 @@ namespace FSpot
 				throw new Exception ("This version name already exists");
 	
 			if (create) {
-				if ((new Gnome.Vfs.Uri (new_uri.ToString ())).Exists)
+				GLib.File destination = GLib.FileFactory.NewForUri (new_uri);
+				if (destination.Exists)
 					throw new Exception (String.Format ("An object at this uri {0} already exists", new_uri.ToString ()));
 	
-				Xfer.XferUri (
-					new Gnome.Vfs.Uri (original_uri.ToString ()), 
-					new Gnome.Vfs.Uri (new_uri.ToString ()),
-					XferOptions.Default, XferErrorMode.Abort, 
-					XferOverwriteMode.Abort, 
-					delegate (Gnome.Vfs.XferProgressInfo info) {return 1;});
+		//FIXME. or better, fix the copy api !
+				GLib.File source = GLib.FileFactory.NewForUri (original_uri);
+				source.Copy (destination, GLib.FileCopyFlags.None, null, null);
 	
-	//			Mono.Unix.Native.Stat stat;
-	//			int stat_err = Mono.Unix.Native.Syscall.stat (original_path, out stat);
-	//			File.Copy (original_path, new_path);
 				FSpot.ThumbnailGenerator.Create (new_uri).Dispose ();
-	//			
-	//			if (stat_err == 0) 
-	//				try {
-	//					Mono.Unix.Native.Syscall.chown(new_path, Mono.Unix.Native.Syscall.getuid (), stat.st_gid);
-	//				} catch (Exception) {}
-	//
-			} else {
-				md5_sum = Photo.GenerateMD5 (new_uri);
 			}
 			highest_version_id ++;
 
@@ -510,7 +501,12 @@ namespace FSpot
 			}
 		}
 	
-		public uint CreateNamedVersion (string name, uint base_version_id, bool create_file)
+		public uint CreateNamedVersion (string name, uint baseVersionId, bool createFile)
+		{
+			return CreateNamedVersion (name, baseVersionId, createFile);
+		}
+
+		public uint CreateNamedVersion (string name, string extension, uint base_version_id, bool create_file)
 		{
 			int num = 1;
 			
@@ -520,11 +516,8 @@ namespace FSpot
 						(num == 1) ? Catalog.GetString ("Modified in {1}") : Catalog.GetString ("Modified in {1} ({0})"),
 						num, name);
 	
-				if (num > 1)
-					final_name = name + String.Format(" ({0})", num);
-	
 				if (! VersionNameExists (final_name))
-					return CreateVersion (final_name, base_version_id, create_file);
+					return CreateVersion (final_name, extension, base_version_id, create_file);
 	
 				num ++;
 			}
@@ -596,7 +589,7 @@ namespace FSpot
 				RemoveTag (tag);
 		}	
 	
-		public void RemoveCategory (Tag []taglist)
+		public void RemoveCategory (IList<Tag> taglist)
 		{
 			foreach (Tag tag in taglist) {
 				Category cat = tag as Category;
@@ -645,7 +638,7 @@ namespace FSpot
 
 				using (Gdk.Pixbuf pixbuf = ThumbnailGenerator.Create (uri))
 				{
-					byte[] serialized = PixbufSerializer.Serialize (pixbuf);
+					byte[] serialized = GdkUtils.Serialize (pixbuf);
 					byte[] md5 = MD5Generator.ComputeHash (serialized);
 					string md5_string = Convert.ToBase64String (md5);
 
@@ -653,7 +646,7 @@ namespace FSpot
 					return md5_string;
 				}
 			} catch (Exception e) {
-			 	Log.DebugFormat("Failed to create MD5Sum for Uri {0}; {1}", uri, e.Message);
+			 	Log.DebugException (String.Format ("Failed to create MD5Sum for Uri: {0}\n", uri), e);
 			}
 
 			return string.Empty; 

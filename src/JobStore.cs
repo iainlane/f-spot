@@ -84,28 +84,32 @@ public abstract class Job : DbItem, IJob
 	protected abstract bool Execute ();
 }
 
-public class JobStore : DbStore {
+public class JobStore : DbStore<Job> {
 	
-	private void CreateTable ()
+	internal static void CreateTable (QueuedSqliteDatabase database)
 	{
-		Database.ExecuteNonQuery (
-			@"CREATE TABLE jobs (
-				id		 INTEGER PRIMARY KEY NOT NULL,
-				job_type         TEXT NOT NULL,
-                                job_options      TEXT NOT NULL,
-                                run_at           INTEGER,
-				job_priority     INTEGER NOT NULL
-			)");
+		if (database.TableExists ("jobs")) {
+			return;
+		}
+
+		database.ExecuteNonQuery (
+			"CREATE TABLE jobs (\n" +
+			"	id		INTEGER PRIMARY KEY NOT NULL, \n" +
+			"	job_type	TEXT NOT NULL, \n" +
+			"	job_options	TEXT NOT NULL, \n" +
+			"	run_at		INTEGER, \n" +
+			"	job_priority	INTEGER NOT NULL\n" +
+			")");
 	}
 
 	private Job LoadItem (SqliteDataReader reader)
 	{
 		return (Job) Activator.CreateInstance (
-				Type.GetType (reader [1].ToString ()), 
-				Convert.ToUInt32 (reader[0]), 
-				reader[2].ToString (), 
-				Convert.ToInt32 (reader[3]), 
-				(JobPriority) Convert.ToInt32 (reader[4]),
+				Type.GetType (reader ["job_type"].ToString ()), 
+				Convert.ToUInt32 (reader["id"]), 
+				reader["job_options"].ToString (), 
+				Convert.ToInt32 (reader["run_at"]), 
+				(JobPriority) Convert.ToInt32 (reader["job_priority"]),
 				true);
 	}
 	
@@ -156,10 +160,8 @@ public class JobStore : DbStore {
 		return job;
 	}
 	
-	public override void Commit (DbItem dbitem)
+	public override void Commit (Job item)
 	{
-		Job item = dbitem as Job;
-
 		if (item.Persistent)
 			Database.ExecuteNonQuery(new DbCommand("UPDATE jobs " 					+
 									"SET job_type = :job_type "		+
@@ -175,13 +177,13 @@ public class JobStore : DbStore {
 		EmitChanged (item);
 	}
 	
-	public override DbItem Get (uint id)
+	public override Job Get (uint id)
 	{
             // we never use this
             return null;
 	}
 
-	public override void Remove (DbItem item)
+	public override void Remove (Job item)
 	{
 		RemoveFromCache (item);
 
@@ -191,15 +193,15 @@ public class JobStore : DbStore {
 		EmitRemoved (item);
 	}
 
-	public void HandleRemoveJob (object o, EventArgs e)
+	public void HandleRemoveJob (Object o, EventArgs e)
 	{
-		Remove (o as DbItem);
+		Remove (o as Job);
 	}
 
 	public JobStore (QueuedSqliteDatabase database, bool is_new) : base (database, true)
 	{
 		if (is_new || !Database.TableExists ("jobs")) {
-			CreateTable ();
+			CreateTable (database);
 		} else {
 			LoadAllItems ();
                 }

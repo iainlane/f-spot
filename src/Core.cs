@@ -1,5 +1,7 @@
-using System.IO;
+using Gtk;
 using System;
+using System.IO;
+using System.Collections.Generic;
 using Mono.Unix;
 using NDesk.DBus;
 using org.freedesktop.DBus;
@@ -25,18 +27,13 @@ namespace FSpot {
 	{
 		MainWindow organizer;
 		private static Db db;
-		System.Collections.ArrayList toplevels;
+		List<Window> toplevels;
 		const string ServicePath = "org.gnome.FSpot";
 		static ObjectPath CorePath = new ObjectPath ("/org/gnome/FSpot/Core");
 
-		public Core () : this (false)
+		public Core ()
 		{
-		}
-
-		public Core (bool nodb)
-		{
-			toplevels = new System.Collections.ArrayList ();
-			
+			toplevels = new List<Window> ();
 		}
 
 		public static Db Database {
@@ -99,7 +96,10 @@ namespace FSpot {
 			{
 				if (path != null && path.StartsWith ("gphoto2:"))
 					main.ImportCamera (path);
-				else
+				else if (path != null && path.StartsWith ("file:")) {
+					Uri uri = new Uri (path);
+					main.ImportFile (Uri.UnescapeDataString (uri.AbsolutePath));
+				} else
 					main.ImportFile (path);
 				
 				return false;
@@ -256,7 +256,7 @@ namespace FSpot {
 			}
 		}
 
-		public void Register (Gtk.Window window)
+		public void Register (Window window)
 		{
 			toplevels.Add (window);
 			window.Destroyed += HandleDestroyed;
@@ -269,11 +269,11 @@ namespace FSpot {
 		public void HandleDestroyed (object sender, System.EventArgs args)
 		{
 			Log.Information ("Exiting");
-			toplevels.Remove (sender);
+			toplevels.Remove (sender as Window);
 			if (toplevels.Count == 0) {
 				Banshee.Kernel.Scheduler.Dispose ();
 				Core.Database.Dispose ();
-				PixbufLoader.Cleanup ();
+				ImageLoaderThread.Cleanup ();
 				Gtk.Application.Quit ();
 				System.Environment.Exit (0);
 			}

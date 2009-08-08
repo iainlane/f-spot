@@ -1,5 +1,4 @@
 using Gdk;
-using Gnome;
 using Gtk;
 using Mono.Data.SqliteClient;
 using System.Collections;
@@ -33,7 +32,7 @@ public class MetaItem : DbItem {
 	}
 }
 
-public class MetaStore : DbStore {
+public class MetaStore : DbStore<MetaItem> {
 	private const string version = "F-Spot Version";
 	private const string db_version = "F-Spot Database Version";
 	private const string hidden = "Hidden Tag Id";
@@ -62,13 +61,12 @@ public class MetaStore : DbStore {
 
 	private void CreateTable ()
 	{
-		Database.ExecuteNonQuery(     
-			"CREATE TABLE meta (					" +
-			"	id		INTEGER PRIMARY KEY NOT NULL,	" +
-			"	name		TEXT UNIQUE NOT NULL,		" +
-			"	data		TEXT				" +
+		Database.ExecuteNonQuery ( 
+			"CREATE TABLE meta (\n" +
+			"	id	INTEGER PRIMARY KEY NOT NULL, \n" +
+			"	name	TEXT UNIQUE NOT NULL, \n" +
+			"	data	TEXT\n" +
 			")");
-
 	}
 
 	private void CreateDefaultItems (bool is_new)
@@ -88,13 +86,13 @@ public class MetaStore : DbStore {
 		SqliteDataReader reader = Database.Query("SELECT id, name, data FROM meta");
 
 		while (reader.Read ()) {
-			uint id = Convert.ToUInt32 (reader [0]);
+			uint id = Convert.ToUInt32 (reader ["id"]);
 
-			string name = reader [1].ToString ();
+			string name = reader ["name"].ToString ();
 
 			string data = null;
-			if (reader [2] != null)
-				data = reader [2].ToString ();
+			if (reader ["data"] != null)
+				data = reader ["data"].ToString ();
 
 			MetaItem item = new MetaItem (id, name, data);
 
@@ -128,21 +126,19 @@ public class MetaStore : DbStore {
 		return item;
 	}
 	
-	public override void Commit (DbItem dbitem)
+	public override void Commit (MetaItem item)
 	{
-		MetaItem item = dbitem as MetaItem;
-
 		Database.ExecuteNonQuery(new DbCommand("UPDATE meta SET data = :data WHERE name = :name", "name", item.Name, "data", item.Value));
 		
 		EmitChanged (item);
 	}
 	
-	public override DbItem Get (uint id)
+	public override MetaItem Get (uint id)
 	{
 		return LookupInCache (id);
 	}
 	
-	public override void Remove (DbItem item)
+	public override void Remove (MetaItem item)
 	{
 		RemoveFromCache (item);
 		

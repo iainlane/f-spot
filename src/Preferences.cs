@@ -2,6 +2,7 @@ using System.Net;
 using System;
 using System.Collections.Generic;
 using Mono.Unix;
+using FSpot.Platform;
 
 namespace FSpot
 {
@@ -11,107 +12,91 @@ namespace FSpot
 		public const string APP_FSPOT_EXPORT = APP_FSPOT + "export/";
 		public const string APP_FSPOT_EXPORT_TOKENS = APP_FSPOT_EXPORT + "tokens/";
 
-		public const string GTK_RC = "/apps/f-spot/ui/gtkrc";
+		public const string GTK_RC = APP_FSPOT + "ui/gtkrc";
 
-		public const string MAIN_WINDOW_MAXIMIZED = "/apps/f-spot/ui/maximized";
-		public const string MAIN_WINDOW_X = "/apps/f-spot/ui/main_window_x";
-		public const string MAIN_WINDOW_Y = "/apps/f-spot/ui/main_window_y";
-		public const string MAIN_WINDOW_WIDTH = "/apps/f-spot/ui/main_window_width";
-		public const string MAIN_WINDOW_HEIGHT = "/apps/f-spot/ui/main_window_height";
+		public const string MAIN_WINDOW_MAXIMIZED = APP_FSPOT + "ui/maximized";
+		public const string MAIN_WINDOW_X = APP_FSPOT + "ui/main_window_x";
+		public const string MAIN_WINDOW_Y = APP_FSPOT + "ui/main_window_y";
+		public const string MAIN_WINDOW_WIDTH = APP_FSPOT + "ui/main_window_width";
+		public const string MAIN_WINDOW_HEIGHT = APP_FSPOT + "ui/main_window_height";
 
- 		public const string IMPORT_WINDOW_WIDTH = "/apps/f-spot/ui/import_window_width";
- 		public const string IMPORT_WINDOW_HEIGHT = "/apps/f-spot/ui/import_window_height";
- 		public const string IMPORT_WINDOW_PANE_POSITION = "/apps/f-spot/ui/import_window_pane_position";
+		public const string IMPORT_WINDOW_WIDTH = APP_FSPOT + "ui/import_window_width";
+		public const string IMPORT_WINDOW_HEIGHT = APP_FSPOT + "ui/import_window_height";
+		public const string IMPORT_WINDOW_PANE_POSITION = APP_FSPOT + "ui/import_window_pane_position";
 		
-		public const string VIEWER_WIDTH = "/apps/f-spot/ui/viewer_width";
-		public const string VIEWER_HEIGHT = "/apps/f-spot/ui/viewer_height";
-		public const string VIEWER_MAXIMIZED = "/apps/f-spot/ui/viewer_maximized";
-		public const string VIEWER_SHOW_TOOLBAR = "/apps/f-spot/ui/viewer_show_toolbar";
-		public const string VIEWER_SHOW_FILENAMES = "/apps/f-spot/ui/viewer_show_filenames";
-		public const string VIEWER_INTERPOLATION = "/apps/f-spot/viewer/interpolation";
-		public const string VIEWER_TRANS_COLOR = "/apps/f-spot/viewer/trans_color";
-		public const string VIEWER_TRANSPARENCY = "/apps/f-spot/viewer/transparency";
-		public const string CUSTOM_CROP_RATIOS = "/apps/f-spot/viewer/custom_crop_ratios";
+		public const string VIEWER_WIDTH = APP_FSPOT + "ui/viewer_width";
+		public const string VIEWER_HEIGHT = APP_FSPOT + "ui/viewer_height";
+		public const string VIEWER_MAXIMIZED = APP_FSPOT + "ui/viewer_maximized";
+		public const string VIEWER_SHOW_TOOLBAR = APP_FSPOT + "ui/viewer_show_toolbar";
+		public const string VIEWER_SHOW_FILENAMES = APP_FSPOT + "ui/viewer_show_filenames";
+		public const string VIEWER_INTERPOLATION = APP_FSPOT + "viewer/interpolation";
+		public const string VIEWER_TRANS_COLOR = APP_FSPOT + "viewer/trans_color";
+		public const string VIEWER_TRANSPARENCY = APP_FSPOT + "viewer/transparency";
+		public const string CUSTOM_CROP_RATIOS = APP_FSPOT + "viewer/custom_crop_ratios";
 		
-		public const string COLOR_MANAGEMENT_ENABLED = "/apps/f-spot/ui/color_management_enabled";
-		public const string COLOR_MANAGEMENT_USE_X_PROFILE = "/apps/f-spot/ui/color_management_use_x_profile";
-		public const string COLOR_MANAGEMENT_DISPLAY_PROFILE = "/apps/f-spot/ui/color_management_display_profile";
-		public const string COLOR_MANAGEMENT_OUTPUT_PROFILE = "/apps/f-spot/ui/color_management_output_profile";
+		public const string COLOR_MANAGEMENT_DISPLAY_PROFILE = APP_FSPOT + "ui/color_management_display_profile";
+		public const string COLOR_MANAGEMENT_OUTPUT_PROFILE = APP_FSPOT + "ui/color_management_output_profile";
 		
-		public const string SHOW_TOOLBAR = "/apps/f-spot/ui/show_toolbar";
-		public const string SHOW_SIDEBAR = "/apps/f-spot/ui/show_sidebar";
-		public const string SHOW_TIMELINE = "/apps/f-spot/ui/show_timeline";
-		public const string SHOW_FILMSTRIP = "/apps/f-spot/ui/show_filmstrip";
-		public const string SHOW_TAGS = "/apps/f-spot/ui/show_tags";
-		public const string SHOW_DATES = "/apps/f-spot/ui/show_dates";
-		public const string EXPANDED_TAGS = "/apps/f-spot/ui/expanded_tags";
-		public const string SHOW_RATINGS = "/apps/f-spot/ui/show_ratings";
-		public const string TAG_ICON_SIZE = "/apps/f-spot/ui/tag_icon_size";
+		public const string SHOW_TOOLBAR = APP_FSPOT + "ui/show_toolbar";
+		public const string SHOW_SIDEBAR = APP_FSPOT + "ui/show_sidebar";
+		public const string SHOW_TIMELINE = APP_FSPOT + "ui/show_timeline";
+		public const string SHOW_FILMSTRIP = APP_FSPOT + "ui/show_filmstrip";
+		public const string FILMSTRIP_ORIENTATION = APP_FSPOT + "ui/filmstrip_orientation";
+		public const string SHOW_TAGS = APP_FSPOT + "ui/show_tags";
+		public const string SHOW_DATES = APP_FSPOT + "ui/show_dates";
+		public const string EXPANDED_TAGS = APP_FSPOT + "ui/expanded_tags";
+		public const string SHOW_RATINGS = APP_FSPOT + "ui/show_ratings";
+		public const string TAG_ICON_SIZE = APP_FSPOT + "ui/tag_icon_size";
+		public const string TAG_ICON_AUTOMATIC = APP_FSPOT + "ui/tag_icon_automatic";
 		
-		public const string GLASS_POSITION = "/apps/f-spot/ui/glass_position";
-		public const string GROUP_ADAPTOR = "/apps/f-spot/ui/group_adaptor";
-		public const string GROUP_ADAPTOR_ORDER_ASC = "/apps/f-spot/ui/group_adaptor_sort_asc";
+		public const string GLASS_POSITION = APP_FSPOT + "ui/glass_position";
+		public const string GROUP_ADAPTOR_ORDER_ASC = APP_FSPOT + "ui/group_adaptor_sort_asc";
 		
-		public const string SIDEBAR_POSITION = "/apps/f-spot/ui/sidebar_size";
-		public const string ZOOM = "/apps/f-spot/ui/zoom";
+		public const string SIDEBAR_POSITION = APP_FSPOT + "ui/sidebar_size";
+		public const string ZOOM = APP_FSPOT + "ui/zoom";
 
-		public const string EXPORT_EMAIL_SIZE = "/apps/f-spot/export/email/size";
-		public const string EXPORT_EMAIL_ROTATE = "/apps/f-spot/export/email/auto_rotate";
-		public const string EXPORT_EMAIL_DELETE_TIMEOUT_SEC = "/apps/f-spot/export/email/delete_timeout_seconds";
+		public const string EXPORT_EMAIL_SIZE = APP_FSPOT + "export/email/size";
+		public const string EXPORT_EMAIL_ROTATE = APP_FSPOT + "export/email/auto_rotate";
+		public const string EXPORT_EMAIL_DELETE_TIMEOUT_SEC = APP_FSPOT + "export/email/delete_timeout_seconds";
 
-		public const string IMPORT_GUI_ROLL_HISTORY = "/apps/f-spot/import/gui_roll_history";
+		public const string IMPORT_GUI_ROLL_HISTORY = APP_FSPOT + "import/gui_roll_history";
 
-		public const string SCREENSAVER_TAG = "/apps/f-spot/screensaver/tag_id";
+		public const string SCREENSAVER_TAG = APP_FSPOT + "screensaver/tag_id";
 
-		public const string STORAGE_PATH = "/apps/f-spot/import/storage_path";
+		public const string STORAGE_PATH = APP_FSPOT + "import/storage_path";
 
-		public const string METADATA_EMBED_IN_IMAGE = "/apps/f-spot/metadata/embed_in_image";
+		public const string METADATA_EMBED_IN_IMAGE = APP_FSPOT + "metadata/embed_in_image";
 
-		public const string EDIT_REDEYE_THRESHOLD = "/apps/f-spot/edit/redeye_threshold";
+		public const string EDIT_REDEYE_THRESHOLD = APP_FSPOT + "edit/redeye_threshold";
+		public const string EDIT_CREATE_XCF_VERSION = APP_FSPOT + "edit/create_xcf";
 
 		public const string GNOME_SCREENSAVER_THEME = "/apps/gnome-screensaver/themes";
 		public const string GNOME_SCREENSAVER_MODE = "/apps/gnome-screensaver/mode";
 
-		public const string GNOME_MAILTO_COMMAND = "/desktop/gnome/url-handlers/mailto/command";
-		public const string GNOME_MAILTO_ENABLED = "/desktop/gnome/url-handlers/mailto/enabled";
-
-		public const string PROXY_USE_PROXY = "/system/http_proxy/use_http_proxy";
-		public const string PROXY_HOST = "/system/http_proxy/host";
-		public const string PROXY_PORT = "/system/http_proxy/port";
-		public const string PROXY_USER = "/system/http_proxy/authentication_user";
-		public const string PROXY_PASSWORD = "/system/http_proxy/authentication_password";
-		public const string PROXY_BYPASS_LIST = "/system/http_proxy/ignore_hosts";
+		public const string GNOME_MAILTO = "/desktop/gnome/url-handlers/mailto/";
+		public const string GNOME_MAILTO_COMMAND = GNOME_MAILTO + "command";
+		public const string GNOME_MAILTO_ENABLED = GNOME_MAILTO + "enabled";
 
 		public const string GSD_THUMBS_MAX_AGE = "/desktop/gnome/thumbnail_cache/maximum_age";
 		public const string GSD_THUMBS_MAX_SIZE = "/desktop/gnome/thumbnail_cache/maximum_size";
 
 
-		private static IPreferenceBackend backend;
-		private static NotifyChangedHandler changed_handler;
-		private static IPreferenceBackend Backend {
+		private static PreferenceBackend backend;
+		private static EventHandler<NotifyEventArgs> changed_handler;
+		private static PreferenceBackend Backend {
 			get {
 				if (backend == null) {
-#if !NOGCONF
-					try {
-						backend = new GConfPreferenceBackend ();
-					} catch (Exception ex) {
-						Console.WriteLine ("Couldn't load Gconf. Check that gconf-daemon is running.{0}{1}",
-							Environment.NewLine, ex);
-						backend = new NullPreferenceBackend ();
-					}
-#else
-					backend = new NullPreferenceBackend ();
-#endif
-					changed_handler = new NotifyChangedHandler (OnSettingChanged);
-					backend.AddNotify ("/apps/f-spot", changed_handler);
-					backend.AddNotify ("/apps/gnome-screensaver/themes", changed_handler);
-					backend.AddNotify ("/apps/gnome-screensaver/mode", changed_handler);
-					backend.AddNotify ("/desktop/gnome/url-handlers/mailto", changed_handler);
-					backend.AddNotify ("/system/http_proxy", changed_handler);
+					backend = new PreferenceBackend ();
+					changed_handler = new EventHandler<NotifyEventArgs> (OnSettingChanged);
+					backend.AddNotify (APP_FSPOT, changed_handler);
+					backend.AddNotify (GNOME_SCREENSAVER_THEME, changed_handler);
+					backend.AddNotify (GNOME_SCREENSAVER_MODE, changed_handler);
+					backend.AddNotify (GNOME_MAILTO, changed_handler);
 				}
 				return backend;
 			}
 		}
+
 		private static Dictionary<string, object> cache = new Dictionary<string, object>();
 
 		static object GetDefault (string key)
@@ -124,6 +109,7 @@ namespace FSpot
 			case IMPORT_WINDOW_HEIGHT:
 			case IMPORT_WINDOW_WIDTH:
 			case IMPORT_WINDOW_PANE_POSITION:
+			case FILMSTRIP_ORIENTATION:
 				return 0;
 					
 			case METADATA_EMBED_IN_IMAGE:
@@ -131,7 +117,6 @@ namespace FSpot
 			case GROUP_ADAPTOR_ORDER_ASC:
 				return false;
 
-			case GROUP_ADAPTOR:
 			case GLASS_POSITION:
 				return null;
 
@@ -147,8 +132,12 @@ namespace FSpot
 			
 			case TAG_ICON_SIZE:
 				return (int) Tag.IconSize.Medium;
+
+			case TAG_ICON_AUTOMATIC:
+				return true;
 		
 			case SIDEBAR_POSITION:
+				return 130;
 			case ZOOM:
 				return null;
 
@@ -173,38 +162,15 @@ namespace FSpot
 			case EDIT_REDEYE_THRESHOLD:
 				return -15;
 
-			case PROXY_USE_PROXY:
-				return false;
-			case PROXY_PORT:
-				return 0;
-			case PROXY_USER:
-			case PROXY_PASSWORD:
 			case GTK_RC:
+			case COLOR_MANAGEMENT_DISPLAY_PROFILE:
+			case COLOR_MANAGEMENT_OUTPUT_PROFILE:
 				return String.Empty;
 			default:
 				return null;
 			}
 		}
 		
-		[Obsolete ("use Get<T> (string key) instead")]
-		public static object Get (string key)
-		{
-			lock (cache) {
-				object val = null;
-				if (cache.TryGetValue (key, out val)) 
-					return val;
-
-				try {
-					val = Backend.Get (key);
-				} catch (NoSuchKeyException) {
-					val = GetDefault (key);
-				}
-				
-				cache.Add (key, val);
-				return val;
-			}
-		}
-
 		//return true if the key exists in the backend
 		public static bool TryGet<T> (string key, out T value)
 		{
@@ -252,7 +218,7 @@ namespace FSpot
 			}
 		}
 
-		public static event NotifyChangedHandler SettingChanged;
+		public static event EventHandler<NotifyEventArgs> SettingChanged;
 
 		static void OnSettingChanged (object sender, NotifyEventArgs args)
 		{
@@ -262,45 +228,9 @@ namespace FSpot
 				}
 			}
 
-			if (SettingChanged != null) {
+			if (SettingChanged != null)
 				SettingChanged (sender, args);
-			}
 		}
 
-		public static WebProxy GetProxy () 
-		{
-			WebProxy proxy = null;
-			
-			if (Preferences.Get<bool> (PROXY_USE_PROXY))
-				return null;
-
-			try {
-				string host;
-				int    port;
-				
-				host = Preferences.Get<string> (PROXY_HOST);
-				port = Preferences.Get<int> (PROXY_PORT);
-				
-				string uri = "http://" + host + ":" + port.ToString ();
-				proxy = new WebProxy (uri);
-
-				string [] bypass_list = Preferences.Get<string[]> (PROXY_BYPASS_LIST);
-				if (bypass_list != null) {
-					for (int i = 0; i < bypass_list.Length; i++) {
-						bypass_list [i] = "http://" + bypass_list [i];
-					}
-					proxy.BypassList = bypass_list;
-				}
-
-				string username = Preferences.Get<string> (PROXY_USER);
-				string password = Preferences.Get<string> (PROXY_PASSWORD);
-
-				proxy.Credentials = new NetworkCredential (username, password);
-			} catch (Exception) {
-				proxy = null;
-			}
-
-			return proxy;
-		}
 	}
 }

@@ -35,7 +35,7 @@ namespace BeagleService {
 			return true;
 		}
 
-		private void HandleDbItemsChanged (object sender, DbItemEventArgs args)
+		private void HandleDbItemsChanged (object sender, DbItemEventArgs<Photo> args)
 		{
 #if ENABLE_BEAGLE
 			Log.Debug ("Notifying beagle");
@@ -44,7 +44,7 @@ namespace BeagleService {
 					try {
 						BeagleNotifier.SendUpdate (item as Photo);
 					} catch (Exception e) {
-						Log.DebugFormat ("BeagleNotifier.SendUpdate failed with {0}", e.Message);
+						Log.Debug ("BeagleNotifier.SendUpdate failed with {0}", e.Message);
 					}
 			}
 #endif

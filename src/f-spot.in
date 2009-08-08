@@ -28,6 +28,9 @@ fi
 [ -n "$FSPOT_PROFILE" ] && FSPOT_PROFILE="--profile=$FSPOT_PROFILE"
 run_mdb=false
 run_gdb=false
+run_valgrind=false
+run_strace=false
+basedir_set=false
 for arg in "$@"; do
     case "x$arg" in
     	x--debug)
@@ -39,8 +42,17 @@ for arg in "$@"; do
 	x--gdb)
 	    run_gdb=true
 	    ;;
-    	x--trace=*)
+	x-b) basedir_set=true;;
+	x-basedir) basedir_set=true;;
+	x--basedir) basedir_set=true;;
+	x--valgrind)
+	    run_valgrind=true
+	    ;;
+	x--trace=*)
 	    FSPOT_TRACE="$arg"
+	    ;;
+	x--strace)
+	    run_strace=true
 	    ;;
 	x--profile=*)
 	    FSPOT_PROFILE="$arg"
@@ -48,10 +60,26 @@ for arg in "$@"; do
 	x--uninstalled)
 	    echo "*** Running uninstalled f-spot ***"
 	    EXE_TO_RUN="./f-spot.exe"
-	    export MONO_PATH=@PATH_DBUS@@PATH_GIO@../Tao/Tao.OpenGl:../Tao/Tao.OpenGl.Glu:../Tao/Tao.OpenGl.ExtensionLoader:../google-sharp:../gnome-keyring-sharp:../FlickrNet:../SmugMugNet:../libgphoto2-sharp:../semweb:../glitz-sharp/src/:../mono-addins/Mono.Addins:../mono-addins/Mono.Addins.Setup:../mono-addins/Mono.Addins.Gui:$MONO_PATH
+	    export MONO_PATH=@PATH_DBUS@../lib/Tao/Tao.OpenGl:../lib/Tao/Tao.OpenGl.Glu:../lib/Tao/Tao.OpenGl.ExtensionLoader:../lib/gnome-keyring-sharp:../lib/libgphoto2-sharp:../lib/semweb:../lib/glitz-sharp/src/:../lib/mono-addins/Mono.Addins:../lib/mono-addins/Mono.Addins.Setup:../lib/mono-addins/Mono.Addins.Gui:../lib/gio-sharp/gio:../lib/gtk-sharp-beans:$MONO_PATH
 	    ;;
     esac
 done
+
+if [ "$basedir_set" != "true" ]; then
+    if [ ! -n "$XDG_CONFIG_HOME" ]; then
+        XDG_CONFIG_HOME="$HOME/.config"
+    fi
+    if [ -e "$HOME/.gnome2/f-spot" ] && [ -e "$XDG_CONFIG_HOME/f-spot" ]; then
+        echo "It looks like you have 2 settings directories for f-spot ($HOME/.gnome2/f-spot and $XDG_CONFIG_HOME/f-spot). Remove one or run f-spot with --basedir option"
+        zenity --error --text="It looks like you have 2 settings directories for f-spot ($HOME/.gnome2/f-spot and $XDG_CONFIG_HOME/f-spot). Remove one or run f-spot with --basedir option"
+	exit -1
+    elif [ -e "$HOME/.gnome2/f-spot" ]; then
+        mkdir -p $XDG_CONFIG_HOME/
+	echo "Moving $HOME/.gnome2/f-spot to $XDG_CONFIG_HOME/"
+        mv $HOME/.gnome2/f-spot $XDG_CONFIG_HOME/
+	rm -rf $XDG_CONFIG_HOME/addin*
+    fi
+fi
 
 if [ -n "$FSPOT_DEBUG" ]; then
     echo "** Running f-spot in Debug Mode **"
@@ -66,6 +94,10 @@ if $run_mdb; then
 	mdb $EXE_TO_RUN -args "$@"
 elif $run_gdb; then
 	gdb --eval-command=run --args mono $MONO_OPTIONS $EXE_TO_RUN "$@"
+elif $run_valgrind; then
+	valgrind --tool=memcheck --leak-check=full --show-reachable=yes --log-file=valgrind --smc-check=all --suppressions=/home/sde/Mono/mono/data/mono.supp mono $MONO_OPTIONS $EXE_TO_RUN "$@"
+elif $run_strace; then
+	strace -ttt -f -o /tmp/f-spot.strace mono $MONO_OPTIONS $EXE_TO_RUN "$@"
 else
 	exec -a @PACKAGE@ $DBUSLAUNCH mono $MONO_OPTIONS $EXE_TO_RUN "$@"
 fi

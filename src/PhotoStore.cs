@@ -9,8 +9,6 @@
  * This is free software. See COPYING for details.
  */
 
-using Gnome;
-using Gnome.Vfs;
 using Gdk;
 using Gtk;
 
@@ -26,29 +24,28 @@ using System;
 using FSpot;
 using FSpot.Query;
 using FSpot.Utils;
+using FSpot.Platform;
 
 using Banshee.Database;
 
 
-public class PhotoStore : DbStore {
+public class PhotoStore : DbStore<Photo> {
 	public int TotalPhotos {
 		get {
-			SqliteDataReader reader = Database.Query("SELECT COUNT(*) FROM photos");
+			SqliteDataReader reader = Database.Query("SELECT COUNT(*) AS photo_count FROM photos");
 			reader.Read ();
-			int total = Convert.ToInt32 (reader [0]);
+			int total = Convert.ToInt32 (reader ["photo_count"]);
 			reader.Close ();
 			return total;
 		}
 	}
-
-	public static ThumbnailFactory ThumbnailFactory = new ThumbnailFactory (ThumbnailSize.Large);
 
 	// FIXME this is a hack.  Since we don't have Gnome.ThumbnailFactory.SaveThumbnail() in
 	// GTK#, and generate them by ourselves directly with Gdk.Pixbuf, we have to make sure here
 	// that the "large" thumbnail directory exists.
 	private static void EnsureThumbnailDirectory ()
 	{
-		string large_thumbnail_file_name_template = Thumbnail.PathForUri ("file:///boo", ThumbnailSize.Large);
+		string large_thumbnail_file_name_template = Gnome.Thumbnail.PathForUri ("file:///boo", Gnome.ThumbnailSize.Large);
 		string large_thumbnail_directory_path = System.IO.Path.GetDirectoryName (large_thumbnail_file_name_template);
 
 		if (! System.IO.File.Exists (large_thumbnail_directory_path))
@@ -59,14 +56,14 @@ public class PhotoStore : DbStore {
 	// Generates the thumbnail, returns the Pixbuf, and also stores it as a side effect
 	//
 
-	public static Pixbuf GenerateThumbnail (System.Uri uri)
+	private static Pixbuf GenerateThumbnail (System.Uri uri)
 	{
 		using (FSpot.ImageFile img = FSpot.ImageFile.Create (uri)) {
 			return GenerateThumbnail (uri, img);
 		}
 	}
 
-	public static Pixbuf GenerateThumbnail (System.Uri uri, ImageFile img)
+	private static Pixbuf GenerateThumbnail (System.Uri uri, ImageFile img)
 	{
 		Pixbuf thumbnail = null;
 
@@ -74,33 +71,18 @@ public class PhotoStore : DbStore {
 			try {
 				thumbnail = ((FSpot.IThumbnailContainer)img).GetEmbeddedThumbnail ();
 			} catch (Exception e) {
-				Log.DebugFormat ("Exception while loading embedded thumbail {0}", e.ToString ());
+				Log.Debug ("Exception while loading embedded thumbail {0}", e.ToString ());
 			}
 		}
 
 		// Save embedded thumbnails in a silightly invalid way so that we know to regnerate them later.
-		if (thumbnail != null) {
-			PixbufUtils.SaveAtomic (thumbnail, FSpot.ThumbnailGenerator.ThumbnailPath (uri), 
-						"png", new string [] { null} , new string [] { null});
+		if (thumbnail != null)
 			//FIXME with gio, set it to uri time minus a few sec
-			System.IO.File.SetLastWriteTime (FSpot.ThumbnailGenerator.ThumbnailPath (uri), new DateTime (1980, 1, 1));
-		} else 
+			ThumbnailFactory.SaveThumbnail (thumbnail, uri, new DateTime (1980, 1, 1));
+		 else
 			thumbnail = FSpot.ThumbnailGenerator.Create (uri);
 		
 		return thumbnail;
-	}
-
-	public static void DeleteThumbnail (System.Uri uri)
-	{
-		string path = Thumbnail.PathForUri (uri.ToString (), ThumbnailSize.Large);
-		if (System.IO.File.Exists (path))
-			System.IO.File.Delete (path);
-	}
-
-	public static void MoveThumbnail (string old_path, string new_path)
-	{
-		System.IO.File.Move (ThumbnailGenerator.ThumbnailPath (UriUtils.PathToFileUri (old_path)),
-			   ThumbnailGenerator.ThumbnailPath(UriUtils.PathToFileUri (new_path)));
 	}
 
 	// Constructor
@@ -114,37 +96,35 @@ public class PhotoStore : DbStore {
 			return;
 		
 		Database.ExecuteNonQuery ( 
-			//WARNING: if you change this schema, reflect your changes 
-			//to Updater.cs, at revision 7.0
-			"CREATE TABLE photos (                                     " +
-			"	id                 INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,   " +
-			"	time               INTEGER NOT NULL,	   	   " +
-			"	uri		   STRING NOT NULL,		   " +
-			"	description        TEXT NOT NULL,	           " +
-			"	roll_id            INTEGER NOT NULL,		   " +
-			"	default_version_id INTEGER NOT NULL,		   " +
-			"	rating		   INTEGER NULL,		   " +
-			"	md5_sum		   TEXT NULL  			   " +
+			"CREATE TABLE photos (\n" +
+			"	id			INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \n" +
+			"	time			INTEGER NOT NULL, \n" +
+			"	base_uri		STRING NOT NULL, \n" +
+		    "	filename		STRING NOT NULL, \n" +
+			"	description		TEXT NOT NULL, \n" +
+			"	roll_id			INTEGER NOT NULL, \n" +
+			"	default_version_id	INTEGER NOT NULL, \n" +
+			"	rating			INTEGER NULL, \n" +
+			"	md5_sum			TEXT NULL\n" +
 			")");
 
-
 		Database.ExecuteNonQuery (
-			"CREATE TABLE photo_tags (        " +
-			"	photo_id      INTEGER,    " +
-			"       tag_id        INTEGER,    " +
-			"       UNIQUE (photo_id, tag_id) " +
+			"CREATE TABLE photo_tags (\n" +
+			"	photo_id	INTEGER, \n" +
+			"       tag_id		INTEGER, \n" +
+			"       UNIQUE (photo_id, tag_id)\n" +
 			")");
 
-
 		Database.ExecuteNonQuery (
-			"CREATE TABLE photo_versions (		"+
-			"	photo_id	INTEGER,	" +
-			"	version_id	INTEGER,	" +
-			"	name		STRING,		" +
-			"	uri		STRING NOT NULL," +
-			"	md5_sum		STRING NOT NULL," +
-			"	protected	BOOLEAN,	" +
-			"	UNIQUE (photo_id, version_id)	" +
+			"CREATE TABLE photo_versions (\n"+
+			"	photo_id	INTEGER, \n" +
+			"	version_id	INTEGER, \n" +
+			"	name		STRING, \n" +
+			"	base_uri		STRING NOT NULL, \n" +
+		    "	filename		STRING NOT NULL, \n" +
+			"	md5_sum		TEXT NULL, \n" +
+			"	protected	BOOLEAN, \n" +
+			"	UNIQUE (photo_id, version_id)\n" +
 			")");
 
 		Database.ExecuteNonQuery ("CREATE INDEX idx_photo_versions_id ON photo_versions(photo_id)");
@@ -160,13 +140,13 @@ public class PhotoStore : DbStore {
 		 	return found;
 
 		string md5 = Photo.GenerateMD5 (uri);			
-		Gnome.Vfs.FileInfo info = new Gnome.Vfs.FileInfo (uri.ToString (), FileInfoOptions.GetMimeType);
+		Gnome.Vfs.FileInfo info = new Gnome.Vfs.FileInfo (uri.ToString (), Gnome.Vfs.FileInfoOptions.GetMimeType);
 
 		Photo[] md5_matches = GetByMD5 (md5);
 
 		foreach (Photo match in md5_matches)
 		{
-		 	Gnome.Vfs.FileInfo match_info = new Gnome.Vfs.FileInfo (match.DefaultVersionUri.ToString (), FileInfoOptions.GetMimeType);
+			Gnome.Vfs.FileInfo match_info = new Gnome.Vfs.FileInfo (match.DefaultVersionUri.ToString (), Gnome.Vfs.FileInfoOptions.GetMimeType);
 
 			// same mimetype?
 			if (info.MimeType != match_info.MimeType)
@@ -180,18 +160,6 @@ public class PhotoStore : DbStore {
 		}
 
 		return null;
-	}
-
-	[Obsolete ("Use Create (Uri, uint, out Pixbuf) instead")]
-	public Photo Create (string path, uint roll_id, out Pixbuf thumbnail)
-	{
-		return Create (path, path, roll_id, out thumbnail);
-	}
-
-	[Obsolete ("Use Create (Uri, Uri, uint, out Pixbuf) instead")]
-	public Photo Create (string new_path, string orig_path, uint roll_id, out Pixbuf thumbnail)
-	{
-		return Create (UriUtils.PathToFileUri (new_path), UriUtils.PathToFileUri (orig_path), roll_id, out thumbnail);
 	}
 
 	public Photo Create (System.Uri uri, uint roll_id, out Pixbuf thumbnail)
@@ -209,15 +177,16 @@ public class PhotoStore : DbStore {
 
 	 		uint id = (uint) Database.Execute (
 				new DbCommand (
-					"INSERT INTO photos (time, uri, description, roll_id, default_version_id, rating, md5_sum) "	+
-	 				"VALUES (:time, :uri, :description, :roll_id, :default_version_id, :rating, :md5_sum)",
+					"INSERT INTO photos (time, base_uri, filename, description, roll_id, default_version_id, rating, md5_sum) "	+
+					"VALUES (:time, :base_uri, :filename, :description, :roll_id, :default_version_id, :rating, :md5_sum)",
 	 				"time", unix_time,
-					"uri", new_uri.OriginalString,
+					"base_uri", new_uri.GetDirectoryUri ().ToString (),
+					"filename", new_uri.GetFilename (),
 	 				"description", description,
 					"roll_id", roll_id,
 	 				"default_version_id", Photo.OriginalVersionId,
 					"rating", "0",
-					"md5_sum", md5_sum
+					"md5_sum", (md5_sum != String.Empty ? md5_sum : null)
 				)
 			);
 	
@@ -235,7 +204,7 @@ public class PhotoStore : DbStore {
 	private void GetVersions (Photo photo)
 	{
 		SqliteDataReader reader = Database.Query(
-			new DbCommand("SELECT version_id, name, uri, md5_sum, protected " + 
+			new DbCommand("SELECT version_id, name, base_uri, filename, md5_sum, protected " + 
 				      "FROM photo_versions " + 
 				      "WHERE photo_id = :id", 
 				      "id", photo.Id
@@ -243,15 +212,12 @@ public class PhotoStore : DbStore {
 		);
 
 		while (reader.Read ()) {
-			uint version_id = Convert.ToUInt32 (reader [0]);
-			string name = reader[1].ToString ();
-#if MONO_2_0
-			System.Uri uri = new System.Uri (reader[2].ToString ());
-#else
-			System.Uri uri = new System.Uri (reader[2].ToString (), true);
-#endif
-			string md5_sum = reader[3].ToString ();
-			bool is_protected = Convert.ToBoolean (reader[4]);
+			uint version_id = Convert.ToUInt32 (reader ["version_id"]);
+			string name = reader["name"].ToString ();
+			System.Uri uri = new Uri (new Uri (reader ["base_uri"].ToString ()), reader ["filename"].ToString ());
+			string md5_sum = reader["md5_sum"] != null ? reader ["md5_sum"].ToString () : null;
+			bool is_protected = Convert.ToBoolean (reader["protected"]);
+			                              
 			photo.AddVersionUnsafely (version_id, uri, md5_sum, name, is_protected);
 		}
 		reader.Close();
@@ -262,7 +228,7 @@ public class PhotoStore : DbStore {
 		SqliteDataReader reader = Database.Query(new DbCommand("SELECT tag_id FROM photo_tags WHERE photo_id = :id", "id", photo.Id));
 
 		while (reader.Read ()) {
-			uint tag_id = Convert.ToUInt32 (reader [0]);
+			uint tag_id = Convert.ToUInt32 (reader ["tag_id"]);
 			Tag tag = Core.Database.Tags.Get (tag_id) as Tag;
 			photo.AddTagUnsafely (tag);
 		}
@@ -270,11 +236,11 @@ public class PhotoStore : DbStore {
 	}		
 	
 	private void GetAllVersions  () {
-		SqliteDataReader reader = Database.Query("SELECT photo_id, version_id, name, uri, md5_sum, protected FROM photo_versions");
+		SqliteDataReader reader = Database.Query("SELECT photo_id, version_id, name, base_uri, filename, md5_sum, protected FROM photo_versions");
 		
 		while (reader.Read ()) {
-			uint id = Convert.ToUInt32 (reader [0]);
-			Photo photo = LookupInCache (id) as Photo;
+			uint id = Convert.ToUInt32 (reader ["photo_id"]);
+			Photo photo = LookupInCache (id);
 				
 			if (photo == null) {
 				//Console.WriteLine ("Photo {0} not found", id);
@@ -286,16 +252,13 @@ public class PhotoStore : DbStore {
 				continue;
 			}
 
-			if (reader [1] != null) {
-				uint version_id = Convert.ToUInt32 (reader [1]);
-				string name = reader[2].ToString ();
-#if MONO_2_0
-				System.Uri uri = new System.Uri (reader[3].ToString ());
-#else
-				System.Uri uri = new System.Uri (reader[3].ToString (), true);
-#endif
-				string md5_sum = reader[4].ToString ();
-				bool is_protected = Convert.ToBoolean (reader[5]);	
+			if (reader ["version_id"] != null) {
+				uint version_id = Convert.ToUInt32 (reader ["version_id"]);
+				string name = reader["name"].ToString ();
+				System.Uri uri = new Uri (new Uri (reader ["base_uri"].ToString ()), reader ["filename"].ToString ());
+				string md5_sum = reader["md5_sum"] != null ? reader ["md5_sum"].ToString () : null;
+				bool is_protected = Convert.ToBoolean (reader["protected"]);
+				
 				photo.AddVersionUnsafely (version_id, uri, md5_sum, name, is_protected);
 			}
 
@@ -313,8 +276,8 @@ public class PhotoStore : DbStore {
 		SqliteDataReader reader = Database.Query("SELECT photo_id, tag_id FROM photo_tags");
 
 		while (reader.Read ()) {
-			uint id = Convert.ToUInt32 (reader [0]);
-			Photo photo = LookupInCache (id) as Photo;
+			uint id = Convert.ToUInt32 (reader ["photo_id"]);
+			Photo photo = LookupInCache (id);
 				
 			if (photo == null) {
 				//Console.WriteLine ("Photo {0} not found", id);
@@ -327,7 +290,7 @@ public class PhotoStore : DbStore {
 			}
 
 		        if (reader [1] != null) {
-				uint tag_id = Convert.ToUInt32 (reader [1]);
+				uint tag_id = Convert.ToUInt32 (reader ["tag_id"]);
 				Tag tag = Core.Database.Tags.Get (tag_id) as Tag;
 				photo.AddTagUnsafely (tag);
 			}
@@ -335,14 +298,14 @@ public class PhotoStore : DbStore {
 		reader.Close();
 	}
 
-	public override DbItem Get (uint id)
+	public override Photo Get (uint id)
 	{
-		Photo photo = LookupInCache (id) as Photo;
+		Photo photo = LookupInCache (id);
 		if (photo != null)
 			return photo;
-
+		
 		SqliteDataReader reader = Database.Query(
-			new DbCommand("SELECT time, uri, description, roll_id, default_version_id, rating, md5_sum " + 
+			new DbCommand("SELECT time, base_uri, filename, description, roll_id, default_version_id, rating, md5_sum " + 
 				      "FROM photos " + 
 				      "WHERE id = :id", "id", id
 				     )
@@ -350,19 +313,15 @@ public class PhotoStore : DbStore {
 
 		if (reader.Read ()) {
 			photo = new Photo (id,
-				Convert.ToInt64 (reader [0]),
-#if MONO_2_0
-				new System.Uri (reader [1].ToString ()),
-#else
-				new System.Uri (reader [1].ToString (), true),
-#endif
-				reader[6] != null ? reader[6].ToString () : null
+				Convert.ToInt64 (reader ["time"]),
+			    new Uri (new Uri (reader ["base_uri"].ToString ()), reader ["filename"].ToString ()),
+				reader["md5_sum"] != null ? reader["md5_sum"].ToString () : null
 			);
 
-			photo.Description = reader[2].ToString ();
-			photo.RollId = Convert.ToUInt32 (reader[3]);
-			photo.DefaultVersionId = Convert.ToUInt32 (reader[4]);
-			photo.Rating = Convert.ToUInt32 (reader [5]);
+			photo.Description = reader["description"].ToString ();
+			photo.RollId = Convert.ToUInt32 (reader["roll_id"]);
+			photo.DefaultVersionId = Convert.ToUInt32 (reader["default_version_id"]);
+			photo.Rating = Convert.ToUInt32 (reader ["rating"]);
 			AddToCache (photo);
 		}
 		reader.Close();
@@ -376,41 +335,40 @@ public class PhotoStore : DbStore {
 		return photo;
 	}
 
-	[Obsolete ("Use GetByUri instead")]
-	public Photo GetByPath (string path)
-	{
-		return GetByUri (UriUtils.PathToFileUri (path));
-	}
-
 	public Photo GetByUri (System.Uri uri)
 	{
 		Photo photo = null;
 
 		uint timer = Log.DebugTimerStart ();
 
-		SqliteDataReader reader = Database.Query (new DbCommand ("SELECT id, time, description, roll_id, default_version_id, rating, photos.md5_sum AS md5_sum " +
-									 " FROM photos " +
-									 " LEFT JOIN photo_versions AS pv ON photos.id = pv.photo_id" +
-							                 " WHERE photos.uri = :uri OR pv.uri = :uri", "uri", uri.ToString ()));
+		SqliteDataReader reader =
+			Database.Query (new DbCommand ("SELECT id, time, description, roll_id, default_version_id, rating, photos.md5_sum AS md5_sum " +
+			                               " FROM photos " +
+			                               " LEFT JOIN photo_versions AS pv ON photos.id = pv.photo_id" +
+			                               " WHERE (photos.base_uri = :base_uri AND photos.filename = :filename)" +
+			                               " OR (pv.base_uri = :base_uri AND pv.filename = :filename)",
+			                               "base_uri", uri.GetDirectoryUri ().ToString (),
+			                               "filename", uri.GetFilename ()));
 
 		if (reader.Read ()) {
-			photo = new Photo (Convert.ToUInt32 (reader [0]),
-					   Convert.ToInt64 (reader [1]),
+			photo = new Photo (Convert.ToUInt32 (reader ["id"]),
+					   Convert.ToInt64 (reader ["time"]),
 					   uri,
-					   reader[6] != null ? reader[6].ToString () : null);
+					   reader["md5_sum"] != null ? reader["md5_sum"].ToString () : null);
 
-			photo.Description = reader[2].ToString ();
-			photo.RollId = Convert.ToUInt32 (reader[3]);
-			photo.DefaultVersionId = Convert.ToUInt32 (reader[4]);
-			photo.Rating = Convert.ToUInt32 (reader [5]);
+			photo.Description = reader["description"].ToString ();
+			photo.RollId = Convert.ToUInt32 (reader["roll_id"]);
+			photo.DefaultVersionId = Convert.ToUInt32 (reader["default_version_id"]);
+			photo.Rating = Convert.ToUInt32 (reader ["rating"]);
 		}
-	        reader.Close();
+		
+		reader.Close();
 		Log.DebugTimerPrint (timer, "GetByUri query took {0}");
 
 		if (photo == null)
 			return null;
 
-		Photo cached = LookupInCache (photo.Id) as Photo;
+		Photo cached = LookupInCache (photo.Id);
 
 		if (cached != null)
 			return cached;
@@ -429,7 +387,7 @@ public class PhotoStore : DbStore {
 		
 		SqliteDataReader reader = Database.Query (
 			new DbCommand ("SELECT DISTINCT " + 
-				       "id, time, photos.uri AS uri, description, roll_id, default_version_id, rating " + 
+				       "id, time, photos.base_uri AS base_uri, photos.filename AS filename, description, roll_id, default_version_id, rating " + 
 				       "FROM photos " + 
 				       "LEFT JOIN photo_versions " + 
 				       "ON   photos.id = photo_versions.photo_id " +
@@ -440,24 +398,20 @@ public class PhotoStore : DbStore {
 		);
 
 		while (reader.Read ()) {
-			Photo photo = new Photo (Convert.ToUInt32 (reader [0]),
-				Convert.ToInt64 (reader [1]),
-#if MONO_2_0
-				new System.Uri (reader [2].ToString ()),
-#else
-				new System.Uri (reader [2].ToString (), true),
-#endif
-				md5_sum
-			);
+			Photo photo =
+				new Photo (Convert.ToUInt32 (reader ["id"]),
+				           Convert.ToInt64 (reader ["time"]),
+				           new Uri (new Uri (reader ["base_uri"].ToString ()), reader ["filename"].ToString ()),
+				           md5_sum);
 
-			photo.Description = reader[3].ToString ();
-			photo.RollId = Convert.ToUInt32 (reader[4]);
-			photo.DefaultVersionId = Convert.ToUInt32 (reader[5]);
-			photo.Rating = Convert.ToUInt32 (reader [6]);
+			photo.Description = reader["description"].ToString ();
+			photo.RollId = Convert.ToUInt32 (reader["roll_id"]);
+			photo.DefaultVersionId = Convert.ToUInt32 (reader["default_version_id"]);
+			photo.Rating = Convert.ToUInt32 (reader ["rating"]);
 			photo.MD5Sum = md5_sum;
 
 			// get cached if possible
-			Photo cached = LookupInCache (photo.Id) as Photo;
+			Photo cached = LookupInCache (photo.Id);
 
 			if (cached != null)
 			{
@@ -510,14 +464,14 @@ public class PhotoStore : DbStore {
 
 	}
 
-	public override void Remove (DbItem item)
+	public override void Remove (Photo item)
 	{
 		Remove (new Photo [] { (Photo)item });
 	}
 
-	public override void Commit (DbItem item)
+	public override void Commit (Photo item)
 	{
-		Commit (new Photo [] {item as Photo});
+		Commit (new Photo [] {item});
 	}
 
 	public void Commit (Photo [] items)
@@ -550,16 +504,18 @@ public class PhotoStore : DbStore {
 					"SET description = :description, " + 
 					"    default_version_id = :default_version_id, " + 
 					"    time = :time, " + 
-					"    uri = :uri, " +
+					"    base_uri = :base_uri, " +
+					"    filename = :filename, " +       
 					"    rating = :rating, " +
 					"    md5_sum = :md5_sum	" +
 					"WHERE id = :id ",
 					"description", photo.Description,
 					"default_version_id", photo.DefaultVersionId,
 					"time", DbUtils.UnixTimeFromDateTime (photo.Time),
-					"uri", photo.VersionUri (Photo.OriginalVersionId).OriginalString,
+					"base_uri", photo.VersionUri (Photo.OriginalVersionId).GetDirectoryUri ().ToString (),
+					"filename", photo.VersionUri (Photo.OriginalVersionId).GetFilename (),
 					"rating", String.Format ("{0}", photo.Rating),
-					"md5_sum", photo.MD5Sum,
+					"md5_sum", (photo.MD5Sum != String.Empty ? photo.MD5Sum : null),
 					"id", photo.Id
 				)
 			);
@@ -592,27 +548,29 @@ public class PhotoStore : DbStore {
 			foreach (uint version_id in changes.VersionsAdded) {
 				PhotoVersion version = photo.GetVersion (version_id) as PhotoVersion;
 				Database.ExecuteNonQuery (new DbCommand (
-					"INSERT OR IGNORE INTO photo_versions (photo_id, version_id, name, uri, protected, md5_sum) " +
-					"VALUES (:photo_id, :version_id, :name, :uri, :is_protected, :md5_sum)",
+					"INSERT OR IGNORE INTO photo_versions (photo_id, version_id, name, base_uri, filename, protected, md5_sum) " +
+					"VALUES (:photo_id, :version_id, :name, :base_uri, :filename, :is_protected, :md5_sum)",
 					"photo_id", photo.Id,
 					"version_id", version_id,
 					"name", version.Name,
-					"uri", version.Uri.ToString (),
+			        "base_uri", version.Uri.GetDirectoryUri ().ToString (),
+					"filename", version.Uri.GetFilename (),
 					"is_protected", version.IsProtected,
-					"md5_sum", version.MD5Sum));
+					"md5_sum", (version.MD5Sum != String.Empty ? version.MD5Sum : null)));
 			}
 		if (changes.VersionsModified != null)
 			foreach (uint version_id in changes.VersionsModified) {
 				PhotoVersion version = photo.GetVersion (version_id) as PhotoVersion;
 				Database.ExecuteNonQuery (new DbCommand (
 					"UPDATE photo_versions SET name = :name, " +
-					"uri = :uri, protected = :protected, md5_sum = :md5_sum " +
+					"base_uri = :base_uri, filename = :filename, protected = :protected, md5_sum = :md5_sum " +
 					"WHERE photo_id = :photo_id AND version_id = :version_id",
 					"name", version.Name,
-					"uri", version.Uri.ToString (),
+					"base_uri", version.Uri.GetDirectoryUri ().ToString (),
+					"filename", version.Uri.GetFilename (),
 					"protected", version.IsProtected,
 					"photo_id", photo.Id,
-					"md5_sum", version.MD5Sum,
+					"md5_sum", (version.MD5Sum != String.Empty ? version.MD5Sum : null),
 					"version_id", version_id));
 			}
 		photo.Changes = null;
@@ -628,7 +586,7 @@ public class PhotoStore : DbStore {
 				"UPDATE photos " +
 				"SET    md5_sum = :md5_sum " +
 				"WHERE  ID = :id",
-				"md5_sum", md5_sum,
+				"md5_sum", (md5_sum != String.Empty ? md5_sum : null),
 				"id", photo.Id
 			)
 		);
@@ -652,11 +610,11 @@ public class PhotoStore : DbStore {
 	}
 	
 	// Dbus
-	public event ItemsAddedHandler ItemsAddedOverDBus;
-	public event ItemsRemovedHandler ItemsRemovedOverDBus;
+	public event EventHandler<DbItemEventArgs<Photo>> ItemsAddedOverDBus;
+	public event EventHandler<DbItemEventArgs<Photo>> ItemsRemovedOverDBus;
 
 	public Photo CreateOverDBus (string new_path, string orig_path, uint roll_id, out Gdk.Pixbuf pixbuf)  {
-		Photo photo = Create (new_path, orig_path, roll_id, out pixbuf);
+		Photo photo = Create (UriUtils.PathToFileUri (new_path), UriUtils.PathToFileUri (orig_path), roll_id, out pixbuf);
 		EmitAddedOverDBus (photo);
 
 		return photo;
@@ -674,7 +632,7 @@ public class PhotoStore : DbStore {
 
 	protected void EmitAddedOverDBus (Photo [] photos) {
 	 	if (ItemsAddedOverDBus != null)
-		 	ItemsAddedOverDBus (this, new DbItemEventArgs (photos));
+		 	ItemsAddedOverDBus (this, new DbItemEventArgs<Photo> (photos));
 	}
 
 	protected void EmitRemovedOverDBus (Photo photo) {
@@ -683,12 +641,12 @@ public class PhotoStore : DbStore {
 
 	protected void EmitRemovedOverDBus (Photo [] photos) {
 		if (ItemsRemovedOverDBus != null)
-		 	ItemsRemovedOverDBus (this, new DbItemEventArgs (photos)); 
+		 	ItemsRemovedOverDBus (this, new DbItemEventArgs<Photo> (photos)); 
 	}
 
 	public int Count (string table_name, params IQueryCondition [] conditions)
 	{
-		StringBuilder query_builder = new StringBuilder ("SELECT COUNT(*) FROM " + table_name + " ");
+		StringBuilder query_builder = new StringBuilder ("SELECT COUNT(*) AS count FROM " + table_name + " ");
 		bool where_added = false;
 		foreach (IQueryCondition condition in conditions) {
 			if (condition == null)
@@ -702,14 +660,14 @@ public class PhotoStore : DbStore {
 
 		SqliteDataReader reader = Database.Query (query_builder.ToString());
 		reader.Read ();
-		int count = Convert.ToInt32 (reader [0]);
+		int count = Convert.ToInt32 (reader ["count"]);
 		reader.Close();
 		return count;
 	}
 
 	public int [] IndicesOf (string table_name, uint [] items)
 	{
-		StringBuilder query_builder = new StringBuilder ("SELECT ROWID FROM ");
+		StringBuilder query_builder = new StringBuilder ("SELECT ROWID AS row_id FROM ");
 		query_builder.Append (table_name);
 		query_builder.Append (" WHERE id IN (");
 		for (int i = 0; i < items.Length; i++) {
@@ -721,13 +679,13 @@ public class PhotoStore : DbStore {
 
 	public int IndexOf (string table_name, Photo photo)
 	{
-		string query = String.Format ("SELECT ROWID FROM {0} WHERE id = {1}", table_name, photo.Id);
+		string query = String.Format ("SELECT ROWID AS row_id FROM {0} WHERE id = {1}", table_name, photo.Id);
 		return IndexOf (query);
 	}
 
 	public int IndexOf (string table_name, DateTime time, bool asc)
 	{
-		string query = String.Format ("SELECT ROWID FROM {0} WHERE time {2} {1} ORDER BY time {3} LIMIT 1",
+		string query = String.Format ("SELECT ROWID AS row_id FROM {0} WHERE time {2} {1} ORDER BY time {3} LIMIT 1",
 				table_name,
 				DbUtils.UnixTimeFromDateTime (time),
 				asc ? ">=" : "<=",
@@ -741,19 +699,20 @@ public class PhotoStore : DbStore {
 		SqliteDataReader reader = Database.Query (query);
 		int index = - 1;
 		if (reader.Read ())
-			index = Convert.ToInt32 (reader [0]);
+			index = Convert.ToInt32 (reader ["row_id"]);
 		reader.Close();
 		Log.DebugTimerPrint (timer, "IndexOf took {0} : " + query);
 		return index - 1; //ROWID starts counting at 1
 	}
 
-	private int [] IndicesOf (string query)
+	int [] IndicesOf (string query)
 	{
 		uint timer = Log.DebugTimerStart ();
 		List<int> list = new List<int> ();
 		SqliteDataReader reader = Database.Query (query);
 		while (reader.Read ())
-			list.Add (Convert.ToInt32 (reader [0]) - 1);
+			list.Add (Convert.ToInt32 (reader ["row_id"]) - 1);
+		reader.Close ();
 		Log.DebugTimerPrint (timer, "IndicesOf took {0} : " + query);
 		return list.ToArray ();
 	}
@@ -781,10 +740,10 @@ public class PhotoStore : DbStore {
 		int minyear = Int32.MaxValue;
 		int maxyear = Int32.MinValue;
 
-		SqliteDataReader reader = Database.Query ("SELECT COUNT (*), month from population GROUP BY month");
+		SqliteDataReader reader = Database.Query ("SELECT COUNT (*) as count, month from population GROUP BY month");
 		while (reader.Read ()) {
-			string yyyymm = reader [1].ToString ();
-			int count = Convert.ToInt32 (reader [0]);
+			string yyyymm = reader ["month"].ToString ();
+			int count = Convert.ToInt32 (reader ["count"]);
 			int year = Convert.ToInt32 (yyyymm.Substring (0,4));
 			maxyear = Math.Max (year, maxyear);
 			minyear = Math.Min (year, minyear);
@@ -809,66 +768,77 @@ public class PhotoStore : DbStore {
 	public Photo [] Query (Tag [] tags) {
 		return Query (tags, null, null, null, null);
 	}
-
-	public Photo [] Query (params IQueryCondition [] conditions)
+	
+	private string BuildQuery (params IQueryCondition [] conditions)
 	{
 		StringBuilder query_builder = new StringBuilder ("SELECT * FROM photos ");
-		
+
 		bool where_added = false;
+		bool hidden_contained = false;
 		foreach (IQueryCondition condition in conditions) {
+			
 			if (condition == null)
 				continue;
+			
+			if (condition is HiddenTag)
+				hidden_contained = true;
+			
 			if (condition is IOrderCondition)
 				continue;
+			
+			string sql_clause = condition.SqlClause ();
+			
+			if (sql_clause == null || sql_clause.Trim () == String.Empty)
+				continue;
 			query_builder.Append (where_added ? " AND " : " WHERE ");
-			query_builder.Append (condition.SqlClause ());
+			query_builder.Append (sql_clause);
 			where_added = true;
+		}
+		
+		/* if a HiddenTag condition is not explicitly given, we add one */
+		if ( ! hidden_contained) {
+			string sql_clause = HiddenTag.HideHiddenTag.SqlClause ();
+			
+			if (sql_clause != null && sql_clause.Trim () != String.Empty) {
+				query_builder.Append (where_added ? " AND " : " WHERE ");
+				query_builder.Append (sql_clause);
+			}
 		}
 
 		bool order_added = false;
 		foreach (IQueryCondition condition in conditions) {
 			if (condition == null)
 				continue;
+			
 			if (!(condition is IOrderCondition))
 				continue;
+			
+			string sql_clause = condition.SqlClause ();
+			
+			if (sql_clause == null || sql_clause.Trim () == String.Empty)
+				continue;
 			query_builder.Append (order_added ? " , " : "ORDER BY ");
-			query_builder.Append (condition.SqlClause ());
+			query_builder.Append (sql_clause);
 			order_added = true;
 		}
-		return Query (query_builder.ToString ());
+		
+		return query_builder.ToString ();
+	}
+
+	public Photo [] Query (params IQueryCondition [] conditions)
+	{
+		return Query (BuildQuery (conditions));
 	}
 
 	public void QueryToTemp (string temp_table, params IQueryCondition [] conditions)
 	{
-		StringBuilder query_builder = new StringBuilder ("SELECT * FROM photos ");
-
-		bool where_added = false;
-		foreach (IQueryCondition condition in conditions) {
-			if (condition == null)
-				continue;
-			if (condition is IOrderCondition)
-				continue;
-			query_builder.Append (where_added ? " AND " : " WHERE ");
-			query_builder.Append (condition.SqlClause ());
-			where_added = true;
-		}
-
-		bool order_added = false;
-		foreach (IQueryCondition condition in conditions) {
-			if (condition == null)
-				continue;
-			if (!(condition is IOrderCondition))
-				continue;
-			query_builder.Append (order_added ? " , " : "ORDER BY ");
-			query_builder.Append (condition.SqlClause ());
-			order_added = true;
-		}
-		QueryToTemp (temp_table, query_builder.ToString ());
+		QueryToTemp (temp_table, BuildQuery (conditions));
 	}
 
 	public void QueryToTemp(string temp_table, string query)
 	{
 		uint timer = Log.DebugTimerStart ();
+		Log.Debug ("Query Started : {0}", query);
 		Database.BeginTransaction ();
 		Database.ExecuteNonQuery (String.Format ("DROP TABLE IF EXISTS {0}", temp_table));
 		//Database.ExecuteNonQuery (String.Format ("CREATE TEMPORARY TABLE {0} AS {1}", temp_table, query));
@@ -900,23 +870,20 @@ public class PhotoStore : DbStore {
 		List<Photo> new_photos = new List<Photo> ();
 		List<Photo> query_result = new List<Photo> ();
 		while (reader.Read ()) {
-			uint id = Convert.ToUInt32 (reader [0]);
-			Photo photo = LookupInCache (id) as Photo;
+			uint id = Convert.ToUInt32 (reader ["id"]);
+			Photo photo = LookupInCache (id);
 
 			if (photo == null) {
-				photo = new Photo (id,
-						   Convert.ToInt64 (reader [1]),
-#if MONO_2_0
-						   new System.Uri (reader [2].ToString ()),
-#else
-						   new System.Uri (reader [2].ToString (), true),
-#endif
-						   reader[7] != null ? reader [7].ToString () : null
+				photo =
+					new Photo (id,
+					           Convert.ToInt64 (reader ["time"]),
+					           new Uri (new Uri (reader ["base_uri"].ToString ()), reader ["filename"].ToString ()),
+					           reader["md5_sum"] != null ? reader ["md5_sum"].ToString () : null
 				);
-				photo.Description = reader[3].ToString ();
-				photo.RollId = Convert.ToUInt32 (reader[4]);
-				photo.DefaultVersionId = Convert.ToUInt32 (reader[5]);
-				photo.Rating = Convert.ToUInt32 (reader [6]);
+				photo.Description = reader["description"].ToString ();
+				photo.RollId = Convert.ToUInt32 (reader["roll_id"]);
+				photo.DefaultVersionId = Convert.ToUInt32 (reader["default_version_id"]);
+				photo.Rating = Convert.ToUInt32 (reader ["rating"]);
 				new_photos.Add (photo);
 			}
 
@@ -945,40 +912,45 @@ public class PhotoStore : DbStore {
 		return query_result.ToArray ();
 	}
 
-//	[Obsolete ("No longer make any sense with uris...")]
-//	public Photo [] Query (System.IO.DirectoryInfo dir)
-//	{
-//		return Query (new DbCommand (
-//			"SELECT photos.id, "			+
-//				"photos.time, "			+
-//				"photos.uri, "			+
-//				"photos.description, "		+
-//				"photos.roll_id, "		+
-//				"photos.default_version_id, "	+
-//				"photos.rating "		+
-//			"FROM photos " 				+
-//			"WHERE uri LIKE \"file://:dir%\" "	+
-//			"AND uri NOT LIKE \"file://:dir/%/%\"",
-//			"dir", dir.FullName ));
-//	}
-
 	public Photo [] Query (System.Uri uri)
 	{
-		Log.DebugFormat ("Query Uri {0}", uri);
-		return Query (new DbCommand (
+		string filename = uri.GetFilename ();
+		
+		/* query by file */
+		if ( ! String.IsNullOrEmpty (filename)) {
+			return Query (new DbCommand (
 			"SELECT id, "			+
 				"time, "			+
-				"uri, "			+
+				"base_uri, "		+
+				"filename, "		+
 				"description, "		+
 				"roll_id, "		+
 				"default_version_id, "	+
 				"rating, "		+
 				"md5_sum "		+
 			"FROM photos " 				+
-			"WHERE uri LIKE :uri "		+
-			"AND uri NOT LIKE :uri_",
-			"uri", uri.ToString () + "%",
-			"uri_", uri.ToString () + "/%/%"));
+			"WHERE base_uri LIKE :base_uri "		+
+			"AND filename LIKE :filename",
+			"base_uri", uri.GetDirectoryUri ().ToString (),
+			"filename", filename));
+		}
+		
+		/* query by directory */
+		return Query (new DbCommand (
+			"SELECT id, "			+
+				"time, "			+
+				"base_uri, "		+
+				"filename, "		+
+				"description, "		+
+				"roll_id, "		+
+				"default_version_id, "	+
+				"rating, "		+
+				"md5_sum "		+
+			"FROM photos " 				+
+			"WHERE base_uri LIKE :base_uri "		+
+			"AND base_uri NOT LIKE :base_uri_",
+			"base_uri", uri.ToString () + "%",
+			"base_uri_", uri.ToString () + "/%/%"));
 	}
 
 	[Obsolete ("drop this, use IQueryCondition correctly instead")]
@@ -988,86 +960,9 @@ public class PhotoStore : DbStore {
 	}
 
 	[Obsolete ("drop this, use IQueryCondition correctly instead")]
-	public void QueryToTemp (string temp_table, Tag [] tags, string extra_condition, DateRange range, RollSet importidrange, RatingRange ratingrange, OrderByTime orderbytime)
-	{
-		QueryToTemp (temp_table, FSpot.OrTerm.FromTags(tags), extra_condition, range, importidrange, ratingrange, orderbytime);
-	}
-
-	[Obsolete ("drop this, use IQueryCondition correctly instead")]
 	public Photo [] Query (Tag [] tags, string extra_condition, DateRange range, RollSet importidrange, RatingRange ratingrange)
 	{
 		return Query (FSpot.OrTerm.FromTags(tags), extra_condition, range, importidrange, ratingrange);
-	}
-
-	[Obsolete ("drop this, use IQueryCondition correctly instead")]
-	public void QueryToTemp (string temp_table, Term searchexpression, string extra_condition, DateRange range, RollSet importidrange, RatingRange ratingrange, OrderByTime orderbytime)
-	{
-		bool hide = (extra_condition == null);
-
-		// The SQL query that we want to construct is:
-		//
-		// SELECT photos.id
-		//        photos.time
-		//        photos.uri,
-		//        photos.description,
-		//	  photos.roll_id,
-		//        photos.default_version_id
-		//        photos.rating
-		//                  FROM photos, photo_tags
-		//		    WHERE photos.time >= time1 AND photos.time <= time2
-		//				AND photos.rating >= rat1 AND photos.rating <= rat2
-		//				AND photos.id NOT IN (select photo_id FROM photo_tags WHERE tag_id = HIDDEN)
-		//				AND photos.id IN (select photo_id FROM photo_tags where tag_id IN (tag1, tag2..)
-		//				AND extra_condition_string
-		//                  GROUP BY photos.id
-
-		StringBuilder query_builder = new StringBuilder ();
-		ArrayList where_clauses = new ArrayList ();
-		query_builder.Append ("SELECT id, " 			+
-					     "time, "			+
-					     "uri, "			+
-					     "description, "		+
-					     "roll_id, "   		+
-					     "default_version_id, "	+
-					     "rating, "			+
-					     "md5_sum "			+
-				      "FROM photos ");
-
-		if (range != null) {
-			where_clauses.Add (String.Format ("time >= {0} AND time <= {1}",
-							  DbUtils.UnixTimeFromDateTime (range.Start),
-							  DbUtils.UnixTimeFromDateTime (range.End)));
-
-		}
-
-		if (ratingrange != null) {
-			where_clauses.Add (ratingrange.SqlClause ());
-		}
-
-		if (importidrange != null) {
-			where_clauses.Add (importidrange.SqlClause ());
-		}
-
-		if (hide && Core.Database.Tags.Hidden != null) {
-			where_clauses.Add (String.Format ("id NOT IN (SELECT photo_id FROM photo_tags WHERE tag_id = {0})",
-							  FSpot.Core.Database.Tags.Hidden.Id));
-		}
-
-		if (searchexpression != null) {
-			where_clauses.Add (searchexpression.SqlCondition ());
-		}
-
-		if (extra_condition != null && extra_condition.Trim () != String.Empty) {
-			where_clauses.Add (extra_condition);
-		}
-
-		if (where_clauses.Count > 0) {
-			query_builder.Append (" WHERE ");
-			query_builder.Append (String.Join (" AND ", ((String []) where_clauses.ToArray (typeof(String)))));
-		}
-		query_builder.Append (" ORDER BY ");
-		query_builder.Append (orderbytime.SqlClause ());
-		QueryToTemp (temp_table, query_builder.ToString ());
 	}
 
 	[Obsolete ("drop this, use IQueryCondition correctly instead")]
@@ -1096,7 +991,8 @@ public class PhotoStore : DbStore {
 		ArrayList where_clauses = new ArrayList ();
 		query_builder.Append ("SELECT id, " 			+
 					     "time, "			+
-					     "uri, "			+
+					     "base_uri, "			+
+					     "filename, "			+
 					     "description, "		+
 				      	     "roll_id, "   		+
 					     "default_version_id, "	+

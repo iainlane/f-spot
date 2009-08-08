@@ -1,5 +1,4 @@
 using Gdk;
-using Gnome;
 using Gtk;
 using Mono.Data.SqliteClient;
 using System.Collections;
@@ -43,7 +42,7 @@ public class ExportItem : DbItem {
     }
 }
 
-public class ExportStore : DbStore {
+public class ExportStore : DbStore<ExportItem> {
 	
 	public const string FlickrExportType = "fspot:Flickr";
 	public const string OldFolderExportType = "fspot:Folder"; //This is obsolete and meant to be remove once db reach rev4
@@ -55,21 +54,22 @@ public class ExportStore : DbStore {
 	private void CreateTable ()
 	{
  		Database.ExecuteNonQuery (
-			"CREATE TABLE exports ("					+
-				"id		 INTEGER PRIMARY KEY NOT NULL, "	+
-                                "image_id         INTEGER NOT NULL, "			+
-                                "image_version_id INTEGER NOT NULL, "			+
-                                "export_type      TEXT NOT NULL, "			+
-                                "export_token     TEXT NOT NULL)");
+			"CREATE TABLE exports (\n" +
+			"	id			INTEGER PRIMARY KEY NOT NULL, \n" +
+			"	image_id		INTEGER NOT NULL, \n" +
+			"	image_version_id	INTEGER NOT NULL, \n" +
+			"	export_type		TEXT NOT NULL, \n" +
+			"	export_token		TEXT NOT NULL\n" +
+			")");
 	}
 
 	private ExportItem LoadItem (SqliteDataReader reader)
 	{
-		return new ExportItem (Convert.ToUInt32 (reader[0]), 
-				       Convert.ToUInt32 (reader[1]),
-				       Convert.ToUInt32 (reader[2]), 
-				       reader[3].ToString (), 
-				       reader[4].ToString ());
+		return new ExportItem (Convert.ToUInt32 (reader["id"]), 
+				       Convert.ToUInt32 (reader["image_id"]),
+				       Convert.ToUInt32 (reader["image_version_id"]), 
+				       reader["export_type"].ToString (), 
+				       reader["export_token"].ToString ());
 	}
 	
 	private void LoadAllItems ()
@@ -96,17 +96,15 @@ public class ExportStore : DbStore {
 		return item;
 	}
 	
-	public override void Commit (DbItem dbitem)
+	public override void Commit (ExportItem item)
 	{
-		ExportItem item = dbitem as ExportItem;
-
 		Database.ExecuteNonQuery(new DbCommand("UPDATE exports SET image_id = :image_id, image_version_id = :image_version_id, export_type = :export_type SET export_token = :export_token WHERE id = :item_id", 
                     "item_id", item.Id, "image_id", item.ImageId, "image_version_id", item.ImageVersionId, "export_type", item.ExportType, "export_token", item.ExportToken));
 		
 		EmitChanged (item);
 	}
 	
-	public override DbItem Get (uint id)
+	public override ExportItem Get (uint id)
 	{
             // we never use this
             return null;
@@ -126,7 +124,7 @@ public class ExportStore : DbStore {
 		return list;
 	}
 	
-	public override void Remove (DbItem item)
+	public override void Remove (ExportItem item)
 	{
 		RemoveFromCache (item);
 

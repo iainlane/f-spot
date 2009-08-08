@@ -14,7 +14,7 @@ using System.IO;
 namespace FSpot.Utils
 {
 	public static class UriUtils
-	{
+	{		
 		public static string UriToStringEscaped (Uri uri)
 		{
 			return EscapeString (uri.ToString (), false, true, false);
@@ -42,11 +42,7 @@ namespace FSpot.Utils
 			}
 			builder.Append (path);
 	
-#if MONO_2_0
 			return new Uri (builder.ToString ());
-#else
-			return new Uri (builder.ToString (), true);
-#endif
 		}
 
 		static char[] CharsToQuote = { ';', '?', ':', '@', '&', '=', '$', ',', '#' };

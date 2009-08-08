@@ -11,12 +11,11 @@
 
 using Gtk;
 using Gdk;
-using Gnome;
-using GtkSharp;
 using System;
 using System.Reflection;
 using System.Collections;
 using System.IO;
+using FSpot.Platform;
 
 namespace FSpot.Widgets
 {
@@ -194,11 +193,8 @@ namespace FSpot.Widgets
 		private int click_count;
 
 		// Public events.
-		public delegate void DoubleClickedHandler (Widget widget, BrowsableEventArgs args);
-		public event DoubleClickedHandler DoubleClicked;
-
-		public delegate void ZoomChangedHandler (object sender, System.EventArgs args);
-		public event ZoomChangedHandler ZoomChanged;
+		public event EventHandler<BrowsableEventArgs> DoubleClicked;
+		public event EventHandler ZoomChanged;
 
 		// Public API.
 		public IconView (IntPtr raw) : base (raw) {}
@@ -566,8 +562,7 @@ namespace FSpot.Widgets
 		public void UpdateThumbnail (int thumbnail_num)
 		{
 			FSpot.IBrowsableItem photo = collection [thumbnail_num];
-			string thumbnail_path = FSpot.ThumbnailGenerator.ThumbnailPath (photo.DefaultVersionUri);
-			cache.Remove (thumbnail_path);
+			cache.Remove (photo.DefaultVersionUri);
 			InvalidateCell (thumbnail_num);
 		}
 
@@ -774,11 +769,10 @@ namespace FSpot.Widgets
 				return;
 
 			FSpot.IBrowsableItem photo = collection [thumbnail_num];
-			string thumbnail_path = FSpot.ThumbnailGenerator.ThumbnailPath (photo.DefaultVersionUri);
 
-			FSpot.PixbufCache.CacheEntry entry = cache.Lookup (thumbnail_path);
+			FSpot.PixbufCache.CacheEntry entry = cache.Lookup (photo.DefaultVersionUri);
 			if (entry == null)
-				cache.Request (thumbnail_path, thumbnail_num, ThumbnailWidth, ThumbnailHeight);
+				cache.Request (photo.DefaultVersionUri, thumbnail_num, ThumbnailWidth, ThumbnailHeight);
 			else
 				entry.Data = thumbnail_num;
 
@@ -849,7 +843,7 @@ namespace FSpot.Widgets
 								InterpType.Bilinear);
 					}
 
-					PixbufUtils.CopyThumbnailOptions (thumbnail, temp_thumbnail);
+					FSpot.Utils.PixbufUtils.CopyThumbnailOptions (thumbnail, temp_thumbnail);
 				} else
 					temp_thumbnail = thumbnail;
 
@@ -869,10 +863,12 @@ namespace FSpot.Widgets
 						draw.Width, draw.Height);
 
 				if (region.Intersect (area, out draw)) {
-					//FIXME
-					if (FSpot.ColorManagement.IsEnabled) {
-						temp_thumbnail = temp_thumbnail.Copy();
-						FSpot.ColorManagement.ApplyScreenProfile (temp_thumbnail);
+					Cms.Profile screen_profile;
+					if (FSpot.ColorManagement.Profiles.TryGetValue (Preferences.Get<string> (Preferences.COLOR_MANAGEMENT_DISPLAY_PROFILE), out screen_profile)) {
+						Pixbuf t = temp_thumbnail.Copy ();
+						temp_thumbnail.Dispose ();
+						temp_thumbnail = t;
+						FSpot.ColorManagement.ApplyProfile (temp_thumbnail, screen_profile);
 					}
 					temp_thumbnail.RenderToDrawable (BinWindow, Style.WhiteGC,
 							draw.X - region.X,
@@ -994,7 +990,9 @@ namespace FSpot.Widgets
 									InterpType.Bilinear);
 						}
 						
-						FSpot.ColorManagement.ApplyScreenProfile (scaled_icon);
+						Cms.Profile screen_profile;
+						if (FSpot.ColorManagement.Profiles.TryGetValue (Preferences.Get<string> (Preferences.COLOR_MANAGEMENT_DISPLAY_PROFILE), out screen_profile))
+							FSpot.ColorManagement.ApplyProfile (scaled_icon, screen_profile);
 
 						scaled_icon.RenderToDrawable (BinWindow, Style.WhiteGC,
 								region.X - tag_bounds.X,
@@ -1039,7 +1037,7 @@ namespace FSpot.Widgets
 			i ++) {
 				int cell_x = start_cell_x;
 
-				//Log.DebugFormat ("Drawing row {0}", start_cell_row + i);
+				//Log.Debug ("Drawing row {0}", start_cell_row + i);
 				for (int j = 0; j < num_cols && cell_num + j < collection.Count; j ++) {
 					DrawCell (cell_num + j, area);
 					cell_x += cell_width;
@@ -1088,7 +1086,7 @@ namespace FSpot.Widgets
 
 			Gdk.Region offscreen = new Gdk.Region ();
 			/*
-			Log.DebugFormat ("step ({0}, {1}) allocation ({2},{3},{4},{5})",
+			Log.Debug ("step ({0}, {1}) allocation ({2},{3},{4},{5})",
 					xstep, ystep, Hadjustment.Value, Vadjustment.Value,
 					Allocation.Width, Allocation.Height);
 			*/
@@ -1159,7 +1157,6 @@ namespace FSpot.Widgets
 
 			FSpot.IBrowsableItem photo;
 			FSpot.PixbufCache.CacheEntry entry;
-			string thumbnail_path;
 
 			// Preload the cache with images aroud the expose area
 			// FIXME the preload need to be tuned to the Cache size but this is a resonable start
@@ -1181,19 +1178,17 @@ namespace FSpot.Widgets
 				int cell = back ? ecell - i - 1 : scell + mid + i;
 
 				photo = collection [cell];
-				thumbnail_path = FSpot.ThumbnailGenerator.ThumbnailPath (photo.DefaultVersionUri);
 
-				entry = cache.Lookup (thumbnail_path);
+				entry = cache.Lookup (photo.DefaultVersionUri);
 				if (entry == null)
-					cache.Request (thumbnail_path, cell, ThumbnailWidth, ThumbnailHeight);
+					cache.Request (photo.DefaultVersionUri, cell, ThumbnailWidth, ThumbnailHeight);
 
 				cell = back ? scell + i : scell + mid - i - 1;
 				photo = collection [cell];
-				thumbnail_path = FSpot.ThumbnailGenerator.ThumbnailPath (photo.DefaultVersionUri);
 
-				entry = cache.Lookup (thumbnail_path);
+				entry = cache.Lookup (photo.DefaultVersionUri);
 				if (entry == null)
-					cache.Request (thumbnail_path, cell, ThumbnailWidth, ThumbnailHeight);
+					cache.Request (photo.DefaultVersionUri, cell, ThumbnailWidth, ThumbnailHeight);
 			}
 		}
 
@@ -1287,13 +1282,13 @@ namespace FSpot.Widgets
 			if (order >= 0 && order < collection.Count) {
 				System.Uri uri = collection [order].DefaultVersionUri;
 
-				if (result == null && !System.IO.File.Exists (FSpot.ThumbnailGenerator.ThumbnailPath (uri)))
+				if (result == null && !ThumbnailFactory.ThumbnailExists (uri))
 					FSpot.ThumbnailGenerator.Default.Request (uri, 0, 256, 256);
 
 				if (result == null)
 					return;
 
-				if (!FSpot.PhotoLoader.ThumbnailIsValid (uri, result))
+				if (!ThumbnailFactory.ThumbnailIsValid (result, uri))
 					FSpot.ThumbnailGenerator.Default.Request (uri, 0, 256, 256);
 			}
 
@@ -1546,6 +1541,10 @@ namespace FSpot.Widgets
 			case Gdk.Key.End:
 				FocusCell = collection.Count - 1;
 				break;
+			case Gdk.Key.R:
+			case Gdk.Key.r:
+                                FocusCell = new Random().Next(0, collection.Count - 1);
+                                break;
 			case Gdk.Key.space:
 				ToggleCell (FocusCell);
 				break;
@@ -1554,11 +1553,6 @@ namespace FSpot.Widgets
 					DoubleClicked (this, new BrowsableEventArgs (FocusCell, null));
 				break;
 			default:
-				args.RetVal = false;
-				return;
-			}
-
-			if (FocusCell == focus_old) {
 				args.RetVal = false;
 				return;
 			}

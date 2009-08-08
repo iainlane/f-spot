@@ -4,6 +4,7 @@
  * This is free software. See COPYING for details
  *
  */
+using System;
 
 namespace FSpot {
 	public static class Global {
@@ -11,7 +12,9 @@ namespace FSpot {
 			get { return System.IO.Path.Combine (System.Environment.GetEnvironmentVariable ("HOME"), System.String.Empty); }
 		}
 		
-		private static string base_dir = System.IO.Path.Combine (HomeDirectory,  System.IO.Path.Combine (".gnome2", "f-spot"));
+		//$XDG_CONFIG_HOME/f-spot or $HOME/.config/f-spot
+		private static string xdg_config_home = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
+		private static string base_dir = System.IO.Path.Combine (xdg_config_home, "f-spot");
 		public static string BaseDirectory {
 			get { return base_dir; }
 			set { base_dir = value; }
@@ -42,7 +45,7 @@ namespace FSpot {
 			get { return destination_profile; }
 		}
 
-		private static Gtk.IconTheme icon_theme = null;
+		private static Gtk.IconTheme icon_theme;
 		public static Gtk.IconTheme IconTheme {
 			get {
 				if (icon_theme == null) {
@@ -53,8 +56,7 @@ namespace FSpot {
 			}
 		}
 
-#if GTK_2_12_2
-		private static string [] default_rc_files = null;
+		private static string [] default_rc_files;
 		public static string [] DefaultRcFiles {
 			get {
 				if (default_rc_files == null)
@@ -63,14 +65,11 @@ namespace FSpot {
 			}
 			set { default_rc_files = value; }
 		}
-#endif
 
-#if GTK_2_10
-		private static Gtk.PageSetup page_setup = null;
+		private static Gtk.PageSetup page_setup;
 		public static Gtk.PageSetup PageSetup {
 			get { return page_setup; }
 			set { page_setup = value; }
 		}
-#endif
 	}
 }

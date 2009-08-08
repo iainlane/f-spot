@@ -16,11 +16,15 @@ REFS =					\
 	$(LINK_SEMWEB)			\
 	-r:google-sharp/Mono.Google.dll	\
 	$(LINK_KEYRING)			\
+	$(LINK_MONO_ADDINS)		\
+	$(LINK_GIOSHARP)			\
+	$(LINK_GPHOTO2)			\
 	-r:System.Web			\
 	-r:Mono.Posix
 
 PKGS =					\
 	-pkg:gnome-vfs-sharp-2.0	\
+	$(LINK_GTKSHARPBEANS)		\	
 	-pkg:gtk-sharp-2.0		\
 	-pkg:glade-sharp-2.0
 

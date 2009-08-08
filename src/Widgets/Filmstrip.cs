@@ -18,6 +18,8 @@ using Gtk;
 using Gdk;
 
 using FSpot.Utils;
+using FSpot.Platform;
+using FSpot.Bling;
 
 namespace FSpot.Widgets
 {
@@ -26,6 +28,8 @@ namespace FSpot.Widgets
 
 //		public event OrientationChangedHandler OrientationChanged;
 		public event EventHandler PositionChanged;
+
+		DoubleAnimation animation;
 
 		bool extendable = true;
 		public bool Extendable {
@@ -40,11 +44,12 @@ namespace FSpot.Widgets
 				if (orientation == value)
 					return;
 
-				throw new NotImplementedException ();
+				BackgroundPixbuf = null;
+				orientation = value;
 //				if (OrientationChanged != null) {
 //					OrientationChangedArgs args = new OrientationChangedArgs ();
-//					//args.Orientation = value;
-//					//OrientationChanged (this, args);
+//					args.Orientation = value;
+//					OrientationChanged (this, args);
 //				}
 			}
 		}
@@ -194,10 +199,12 @@ namespace FSpot.Widgets
 		public Pixbuf BackgroundTile {
 			get {
 				if (background_tile == null)
-					if (orientation == Orientation.Horizontal)
-						background_tile = new Pixbuf(film_100_xpm);
-					else
-						throw new NotImplementedException ("doesn't support Vertical orientation yet");
+					background_tile = new Pixbuf(film_100_xpm);
+
+				if (Orientation == Orientation.Horizontal && background_tile.Height < background_tile.Width) 
+					background_tile = background_tile.RotateSimple (PixbufRotation.Counterclockwise); 
+				else if (Orientation == Orientation.Vertical && background_tile.Width < background_tile.Height) 
+					background_tile = background_tile.RotateSimple (PixbufRotation.Clockwise); 
 				return background_tile;
 			}
 			set { 
@@ -247,33 +254,6 @@ namespace FSpot.Widgets
 			}
 		}
 
-		IAnimator animator;
-		IAnimator Animator {
-			get {
-				if (animator == null)
-					animator = new AcceleratedAnimator (this, OnPositionChanged);
-				return animator;
-			}
-		}
-
-		public int AnimatorOrder {
-			set {
-				switch (value) {
-				case 0:
-					animator = new DirectAnimator (OnPositionChanged);
-					break;
-				case 1:
-					animator = new ConstantSpeedAnimator (this, OnPositionChanged);
-					break;
-				case 2:
-					animator = new AcceleratedAnimator (this, OnPositionChanged);
-					break;
-				default:
-					throw new ArgumentException ("No animator of that order defined");
-				}
-			}
-		}
-
 		public int ActiveItem {
 			get { return selection.Index; }
 			set {
@@ -288,10 +268,9 @@ namespace FSpot.Widgets
 			}
 		}
 
-		float position;
-		public float Position {
+		double position;
+		public double Position {
 			get { 
-				position = Math.Min (position, selection.Collection.Count - 1);
 				return position; 
 			}
 			set {
@@ -302,14 +281,17 @@ namespace FSpot.Widgets
 				if (value > selection.Collection.Count - 1)
 					value = selection.Collection.Count - 1;
 
-				Animator.MoveTo (value);
+				animation.From = position;
+				animation.To = value;
+				animation.Restart ();
+
 				if (PositionChanged != null)
 					PositionChanged (this, EventArgs.Empty);
 			}
 		}
 
 		FSpot.BrowsablePointer selection;
-		DisposableCache<string, Pixbuf> thumb_cache;
+		DisposableCache<Uri, Pixbuf> thumb_cache;
 
 		public Filmstrip (FSpot.BrowsablePointer selection) : this (selection, true)
 		{
@@ -323,36 +305,70 @@ namespace FSpot.Widgets
 			this.selection.Collection.Changed += HandleCollectionChanged;
 			this.selection.Collection.ItemsChanged += HandleCollectionItemsChanged;
 			this.squared_thumbs = squared_thumbs;
-			thumb_cache = new DisposableCache<string, Pixbuf> (30);
+			thumb_cache = new DisposableCache<Uri, Pixbuf> (30);
 			ThumbnailGenerator.Default.OnPixbufLoaded += HandlePixbufLoaded;
+
+			animation = new DoubleAnimation (0, 0, TimeSpan.FromSeconds (4), SetPositionCore, new CubicEase (EasingMode.EaseOut));
 		}
 	
 		int min_length = 400;
+		int min_height = 200;
 		protected override void OnSizeRequested (ref Gtk.Requisition requisition)
 		{
-			requisition.Width = min_length + 2 * x_offset;
-			if (min_length % BackgroundTile.Width != 0)
-				requisition.Width += BackgroundTile.Width - min_length % BackgroundTile.Width;	
-
-			requisition.Height = BackgroundTile.Height + (2 * y_offset);
+			base.OnSizeRequested (ref requisition);
+			requisition.Width = (Orientation == Orientation.Horizontal ? min_length : BackgroundTile.Width) + 2 * x_offset;
+			requisition.Height = (Orientation == Orientation.Vertical ? min_height : BackgroundTile.Height) + 2 * y_offset;
+			switch (Orientation) {
+			case Orientation.Horizontal:
+				if (min_length % BackgroundTile.Width != 0)
+					requisition.Width += BackgroundTile.Width - min_length % BackgroundTile.Width;
+				break;
+			case Orientation.Vertical:
+				if (min_height % BackgroundTile.Height != 0)
+					requisition.Height += BackgroundTile.Height - min_height % BackgroundTile.Height;
+				break;
+			}
 		}
 
 		Pixbuf background_pixbuf;
 		protected Pixbuf BackgroundPixbuf {
 			get {
 				if (background_pixbuf == null) {
-					int length;
-					if (Allocation.Width < min_length || !extendable)
-						length = min_length;
-					else
-						length = Allocation.Width;
+					int length = BackgroundTile.Width;
+					int height = BackgroundTile.Height;
+					switch (Orientation) {
+					case Orientation.Horizontal:
+						if (Allocation.Width < min_length || !extendable)
+							length = min_length;
+						else
+							length = Allocation.Width;
 
-					length = length - length % BackgroundTile.Width;
+						length = length - length % BackgroundTile.Width;
+						break;
+					case Orientation.Vertical:
+						if (Allocation.Height < min_height || !extendable)
+							height = min_height;
+						else
+							height = Allocation.Height;
 
-					background_pixbuf = new Pixbuf (Gdk.Colorspace.Rgb, true, 8, length, BackgroundTile.Height);
-					for (int i = 0; i < length; i += BackgroundTile.Width) {
-						BackgroundTile.CopyArea (0, 0, BackgroundTile.Width, BackgroundTile.Height, 
-								background_pixbuf, i, 0);
+						height = height - height % BackgroundTile.Height;
+						break;
+					}
+
+					background_pixbuf = new Pixbuf (Gdk.Colorspace.Rgb, true, 8, length, height);
+					switch (Orientation) {
+					case Orientation.Horizontal:
+						for (int i = 0; i < length; i += BackgroundTile.Width) {
+							BackgroundTile.CopyArea (0, 0, BackgroundTile.Width, BackgroundTile.Height, 
+									background_pixbuf, i, 0);
+						}
+						break;
+					case Orientation.Vertical:
+						for (int i = 0; i < height; i += BackgroundTile.Height) {
+							BackgroundTile.CopyArea (0, 0, BackgroundTile.Width, BackgroundTile.Height, 
+									background_pixbuf, 0, i);
+						}
+						break;
 					}
 				}
 				return background_pixbuf;
@@ -366,16 +382,22 @@ namespace FSpot.Widgets
 		}
 
 		Hashtable start_indexes;
+		int filmstrip_start_pos;
 		int filmstrip_end_pos;
 		protected override bool OnExposeEvent (EventExpose evnt)
 		{
 			if (evnt.Window != GdkWindow)
 				return true;
 
-			if (extendable && Allocation.Width >= BackgroundPixbuf.Width + (2 * x_offset) + BackgroundTile.Width)
+			if (selection.Collection.Count == 0)
+				return true;
+
+			if (Orientation == Orientation.Horizontal && (extendable && Allocation.Width >= BackgroundPixbuf.Width + (2 * x_offset) + BackgroundTile.Width) ||
+				Orientation == Orientation.Vertical && (extendable && Allocation.Height >= BackgroundPixbuf.Height + (2 * y_offset) + BackgroundTile.Height) )
 				BackgroundPixbuf = null;
 
-			if (extendable && Allocation.Width < BackgroundPixbuf.Width + (2 * x_offset))
+			if ( Orientation == Orientation.Horizontal && (extendable && Allocation.Width < BackgroundPixbuf.Width + (2 * x_offset) ) || 
+				Orientation == Orientation.Vertical && ( extendable && Allocation.Height < BackgroundPixbuf.Height + (2 * y_offset) ))
 				BackgroundPixbuf = null;
 
 			int xpad = 0, ypad = 0;
@@ -392,32 +414,56 @@ namespace FSpot.Widgets
 			//drawing the icons...
 			start_indexes = new Hashtable ();
 
-			Pixbuf icon_pixbuf = new Pixbuf (Gdk.Colorspace.Rgb, true, 8, BackgroundPixbuf.Width, thumb_size);
+			Pixbuf icon_pixbuf = null;
+			if (Orientation == Orientation.Horizontal)
+				icon_pixbuf = new Pixbuf (Gdk.Colorspace.Rgb, true, 8, BackgroundPixbuf.Width, thumb_size);
+			else if (Orientation == Orientation.Vertical)
+				icon_pixbuf = new Pixbuf (Gdk.Colorspace.Rgb, true, 8, thumb_size, BackgroundPixbuf.Height);
 			icon_pixbuf.Fill (0x00000000);
 
 			Pixbuf current = GetPixbuf ((int) Math.Round (Position));
 			int ref_x = (int)(icon_pixbuf.Width / 2.0 - current.Width * (Position + 0.5f - Math.Round (Position))); //xpos of the reference icon
+			int ref_y = (int)(icon_pixbuf.Height / 2.0 - current.Height * (Position + 0.5f - Math.Round (Position))); 
 
-			int start_x = ref_x;
+			int start_x = Orientation == Orientation.Horizontal ? ref_x : 0;
+			int start_y = Orientation == Orientation.Vertical ? ref_y : 0;
 			for (int i = (int) Math.Round (Position); i < selection.Collection.Count; i++) {
 				current = GetPixbuf (i, ActiveItem == i);
-				current.CopyArea (0, 0, Math.Min (current.Width, icon_pixbuf.Width - start_x) , current.Height, icon_pixbuf, start_x, 0);
-				start_indexes [start_x] = i; 
-				start_x += current.Width + spacing;
-				if (start_x > icon_pixbuf.Width)
-					break;
+				if (Orientation == Orientation.Horizontal) {
+					current.CopyArea (0, 0, Math.Min (current.Width, icon_pixbuf.Width - start_x) , current.Height, icon_pixbuf, start_x, start_y);	
+					start_indexes [start_x] = i; 
+					start_x += current.Width + spacing;
+					if (start_x > icon_pixbuf.Width)
+						break;
+				} else if (Orientation == Orientation.Vertical) {
+					current.CopyArea (0, 0, current.Width, Math.Min (current.Height, icon_pixbuf.Height - start_y), icon_pixbuf, start_x, start_y);	
+					start_indexes [start_y] = i; 
+					start_y += current.Height + spacing;
+					if (start_y > icon_pixbuf.Height)
+						break;
+				}
 			}
-			filmstrip_end_pos = start_x;
+			filmstrip_end_pos = (Orientation == Orientation.Horizontal ? start_x : start_y);
 
-			start_x = ref_x;
+			start_x = Orientation == Orientation.Horizontal ? ref_x : 0;
+			start_y = Orientation == Orientation.Vertical ? ref_y : 0;
 			for (int i = (int) Math.Round (Position) - 1; i >= 0; i--) {
 				current = GetPixbuf (i, ActiveItem == i);
-				start_x -= (current.Width + spacing);
-				current.CopyArea (Math.Max (0, -start_x), 0, Math.Min (current.Width, current.Width + start_x), current.Height, icon_pixbuf, Math.Max (start_x, 0), 0);
-				start_indexes [Math.Max (0, start_x)] = i; 
-				if (start_x < 0)
-					break;
+				if (Orientation == Orientation.Horizontal) {
+					start_x -= (current.Width + spacing);
+					current.CopyArea (Math.Max (0, -start_x), 0, Math.Min (current.Width, current.Width + start_x), current.Height, icon_pixbuf, Math.Max (start_x, 0), 0);
+					start_indexes [Math.Max (0, start_x)] = i; 
+					if (start_x < 0)
+						break;
+				} else if (Orientation == Orientation.Vertical) {
+					start_y -= (current.Height + spacing);
+					current.CopyArea (0, Math.Max (0, -start_y), current.Width, Math.Min (current.Height, current.Height + start_y), icon_pixbuf, 0, Math.Max (start_y, 0));
+					start_indexes [Math.Max (0, start_y)] = i; 
+					if (start_y < 0)
+						break;
+				}
 			}
+			filmstrip_start_pos = Orientation == Orientation.Horizontal ? start_x : start_y;
 			
 			GdkWindow.DrawPixbuf (Style.BackgroundGC (StateType.Normal), icon_pixbuf,
 					0, 0, x_offset + xpad, y_offset + ypad + thumb_offset,
@@ -430,18 +476,18 @@ namespace FSpot.Widgets
 
 		protected override bool OnScrollEvent (EventScroll args)
 		{
-			float shift = 1.0f;
+			float shift = 1f;
 			if ((args.State & Gdk.ModifierType.ShiftMask) > 0)
 				shift = 6f;
 
 			switch (args.Direction) {
 			case ScrollDirection.Up:
 			case ScrollDirection.Right:
-				Position -= shift;
+				Position = animation.To - shift;
 				return true;
 			case Gdk.ScrollDirection.Down:
 			case Gdk.ScrollDirection.Left:
-				Position += shift;
+				Position = animation.To + shift;
 				return true;
 			}
 			return false;
@@ -465,22 +511,28 @@ namespace FSpot.Widgets
 			return false;
 		}
 
-		public delegate void PositionChangedHandler (float position);
-
-		protected virtual void OnPositionChanged (float position)
+		protected virtual void SetPositionCore (double position)
 		{
+			if (this.position == position)
+				return;
+			if (position < 0)
+				position = 0;
+			if (position > selection.Collection.Count - 1)
+				position = selection.Collection.Count - 1;
+
+
 			this.position = position;
 			QueueDraw ();
 		}
 
-		void HandlePointerChanged (BrowsablePointer pointer, BrowsablePointerChangedArgs old)
+		void HandlePointerChanged (object sender, BrowsablePointerChangedEventArgs args)
 		{
 			Position = ActiveItem;
 		}
 
 		void HandleCollectionChanged (IBrowsableCollection coll)
 		{
-			Position = ActiveItem;
+			this.position = ActiveItem;
 			QueueDraw ();
 		}
 
@@ -489,14 +541,14 @@ namespace FSpot.Widgets
 			if (!args.Changes.DataChanged)
 				return;
 			foreach (int item in args.Items)
-				thumb_cache.TryRemove (FSpot.ThumbnailGenerator.ThumbnailPath ((selection.Collection [item]).DefaultVersionUri));
+				thumb_cache.TryRemove ((selection.Collection [item]).DefaultVersionUri);
 
 			//FIXME call QueueDrawArea
 			QueueDraw ();
 		}
 
-		void HandlePixbufLoaded (PixbufLoader pl, Uri uri, int order, Pixbuf p) {
-			if (!thumb_cache.Contains (FSpot.ThumbnailGenerator.ThumbnailPath (uri))) {
+		void HandlePixbufLoaded (ImageLoaderThread pl, Uri uri, int order, Pixbuf p) {
+			if (!thumb_cache.Contains (uri)) {
 				return;
 			}
 			
@@ -506,22 +558,50 @@ namespace FSpot.Widgets
 			
 
 		}
+		
+		protected override bool OnPopupMenu ()
+		{
+			DrawOrientationMenu (null);
+			return true;
+		}
+
+		private bool DrawOrientationMenu (Gdk.EventButton args)
+		{
+			Gtk.Menu placement_menu = new Gtk.Menu ();
+			GtkUtil.MakeCheckMenuItem (placement_menu, 
+							Mono.Unix.Catalog.GetString ("_Horizontal"), 
+							MainWindow.Toplevel.HandleFilmstripHorizontal, 
+							true, Orientation == Orientation.Horizontal, true);
+			GtkUtil.MakeCheckMenuItem (placement_menu, 
+							Mono.Unix.Catalog.GetString ("_Vertical"), 
+							MainWindow.Toplevel.HandleFilmstripVertical, 
+							true, Orientation == Orientation.Vertical, true);
+
+			if (args != null)
+				placement_menu.Popup (null, null, null, args.Button, args.Time);
+			else
+				placement_menu.Popup (null, null, null, 0, Gtk.Global.CurrentEventTime);
+			
+			return true;
+		}
 
 		protected override bool OnButtonPressEvent (EventButton evnt)
 		{
-			if(evnt.Button != 1 || evnt.X > filmstrip_end_pos) 
+			if (evnt.Button == 3)
+				return DrawOrientationMenu (evnt); 
+
+			if (evnt.Button != 1 || (
+				(Orientation == Orientation.Horizontal && (evnt.X > filmstrip_end_pos || evnt.X < filmstrip_start_pos)) || 
+				(Orientation == Orientation.Vertical && (evnt.Y > filmstrip_end_pos || evnt.Y < filmstrip_start_pos)) 
+				))
 				return false;
 			HasFocus = true;
 			int pos = -1;
 			foreach (int key in start_indexes.Keys)
-				if (key <= evnt.X && key > pos)
+				if (key <= (Orientation == Orientation.Horizontal ? evnt.X : evnt.Y) && key > pos)
 					pos = key;
-			try {
-				ActiveItem = (int)start_indexes [pos];
-				return true;
-			} catch {
-				return true;
-			}
+			ActiveItem = (int)start_indexes [pos];
+			return true;
 		}
  
  		protected Pixbuf GetPixbuf (int i)
@@ -531,13 +611,11 @@ namespace FSpot.Widgets
 
  		protected virtual Pixbuf GetPixbuf (int i, bool highlighted)
 		{
-			string thumb_path;
 			Pixbuf current;
+			Uri uri = (selection.Collection [i]).DefaultVersionUri;
 			try {
-				thumb_path = FSpot.ThumbnailGenerator.ThumbnailPath ((selection.Collection [i]).DefaultVersionUri);
-				current = PixbufUtils.ShallowCopy (thumb_cache.Get (thumb_path));
+				current = PixbufUtils.ShallowCopy (thumb_cache.Get (uri));
 			} catch (IndexOutOfRangeException) {
-				thumb_path = null;
 				current = null;
 			}
 
@@ -546,26 +624,29 @@ namespace FSpot.Widgets
 					ThumbnailGenerator.Default.Request ((selection.Collection [i]).DefaultVersionUri, 0, 256, 256);
 
 					if (SquaredThumbs) {
-						current = new Pixbuf (thumb_path);
-						current = PixbufUtils.IconFromPixbuf (current, ThumbSize);
+						using (Pixbuf p = ThumbnailFactory.LoadThumbnail (uri)) {
+							current = PixbufUtils.IconFromPixbuf (p, ThumbSize);
+						}
 					} else 
-						current = new Pixbuf (thumb_path, -1, ThumbSize);
-					thumb_cache.Add (thumb_path, current);
+						current = ThumbnailFactory.LoadThumbnail (uri, -1, ThumbSize);
+					thumb_cache.Add (uri, current);
 				} catch {
 					try {
 						current = FSpot.Global.IconTheme.LoadIcon ("gtk-missing-image", ThumbSize, (Gtk.IconLookupFlags)0);
 					} catch {
 						current = null;
 					}
-					thumb_cache.Add (thumb_path, null);
+					thumb_cache.Add (uri, null);
 				}
 
 			}
 			
-			//FIXME
-			if (FSpot.ColorManagement.IsEnabled) {
-				current = current.Copy ();
-				FSpot.ColorManagement.ApplyScreenProfile (current);
+			//FIXME: we might end up leaking a pixbuf here
+			Cms.Profile screen_profile;
+			if (FSpot.ColorManagement.Profiles.TryGetValue (Preferences.Get<string> (Preferences.COLOR_MANAGEMENT_DISPLAY_PROFILE), out screen_profile)) { 
+				Pixbuf t = current.Copy ();
+				current = t;
+				FSpot.ColorManagement.ApplyProfile (current, screen_profile);
 			}
 			
 			if (!highlighted)
@@ -581,7 +662,7 @@ namespace FSpot.Widgets
 
 		~Filmstrip ()
 		{
-			Log.DebugFormat ("Finalizer called on {0}. Should be Disposed", GetType ());		
+			Log.Debug ("Finalizer called on {0}. Should be Disposed", GetType ());		
 			Dispose (false);
 		}
 			
@@ -611,120 +692,6 @@ namespace FSpot.Widgets
 			//Free unmanaged resources
 
 			is_disposed = true;
-		}
-
-		public interface IAnimator
-		{
-			void MoveTo (float target);
-		}
-
-		public class DirectAnimator : IAnimator
-		{
-			PositionChangedHandler handler;
-
-			public DirectAnimator (PositionChangedHandler handler)
-			{
-				this.handler = handler;
-			}
-
-			public void MoveTo (float target)
-			{
-				handler (target);
-			}
-		}
-
-		public class ConstantSpeedAnimator : IAnimator
-		{
-			PositionChangedHandler handler;
-			float speed = 20f; // images/second
-			uint interval = 40;
-			float target;
-			Filmstrip filmstrip;
-
-			public ConstantSpeedAnimator (Filmstrip filmstrip, PositionChangedHandler handler)
-			{
-				this.handler = handler;
-				this.filmstrip = filmstrip;
-			}
-
-			public void MoveTo (float target)
-			{
-				this.target = target;
-				GLib.Timeout.Add (interval, new GLib.TimeoutHandler (Step)); 
-			}
-
-			bool Step ()
-			{
-				float increment = speed * interval / 1000f;
-				if (Math.Abs (filmstrip.Position - target) < increment) {
-					handler (target);
-					return false;
-				}
-				if (target > filmstrip.Position)
-					handler (filmstrip.Position + increment);
-				else
-					handler (filmstrip.Position - increment);
-
-				return true;
-			}
-		}
-
-		public class AcceleratedAnimator : IAnimator
-		{
-			PositionChangedHandler handler;
-			Filmstrip filmstrip;
-			uint interval = 50;
-			float target;
-			float speed;
-			float acc = 50f; //images/second^2
-
-			public AcceleratedAnimator (Filmstrip filmstrip, PositionChangedHandler handler)
-			{
-				this.handler = handler;
-				this.filmstrip = filmstrip;
-			}
-
-			public void MoveTo (float target)
-			{
-				this.target = target;
-				GLib.Timeout.Add (interval, new GLib.TimeoutHandler (Step));
-			}
-
-			bool Step ()
-			{
-				float dv = acc * interval / 1000f;
-				float halfway_distance = 0.5f * (speed + dv) * (speed + dv) / acc;
-				float distance = Math.Abs (filmstrip.Position - target);
-				if (distance == 0) {
-					return false;
-				}
-
-				if (Math.Abs (speed) > 30 && distance > halfway_distance) { //HYPERSPACE JUMP
-					handler (target + (float)Math.Sign (filmstrip.Position - target) * halfway_distance);
-					speed -= dv;
-					return true;
-				}
-
-				if ( distance <= halfway_distance )	//SLOW DOWN!
-					speed -= dv;
-
-				else	//SPEED UP
-					speed += dv;
-
-				float increment = speed * interval / 1000f;
-
-				if (Math.Abs (distance - increment) < 0.4) {
-					handler (target);
-					return false;
-				}
-
-				if (target > filmstrip.Position)
-					handler (filmstrip.Position + increment);
-				else
-					handler (filmstrip.Position - increment);
-
-				return true;
-			}
 		}
 	}
 }

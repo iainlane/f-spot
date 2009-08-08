@@ -13,8 +13,9 @@ REFS =					\
 	-r:$(top_builddir)/src/f-spot.exe		\
 	-r:$(top_builddir)/src/FSpot.Core.dll	\
 	-r:$(top_builddir)/src/FSpot.Utils.dll	\
-	$(LINK_SEMWEB)			\
-	$(LINK_MONO_ADDINS)		\
+	$(LINK_SEMWEB)				\
+	$(LINK_MONO_ADDINS)			\
+	$(LINK_GPHOTO2)				\
 	-r:System.Web			\
 	-r:ICSharpCode.SharpZipLib	\
 	-r:Mono.Posix
@@ -22,6 +23,7 @@ REFS =					\
 PKGS =					\
 	-pkg:gnome-vfs-sharp-2.0	\
 	-pkg:gtk-sharp-2.0		\
+	$(LINK_GIOSHARP)		\
 	-pkg:glade-sharp-2.0
 
 RESOURCES =				\

@@ -1,6 +1,7 @@
 # please keep this list sorted alphabetically
 #
 ar
+as
 be@latin
 bg
 ca
@@ -18,19 +19,23 @@ fa
 fi
 fr
 gl
+gu
 he
 hi
 hu
 it
 ja
 ka
+kn
 ko
 lt
 lv
 mk
+mr
 nb
 nl
 oc
+or
 pa
 pl
 pt
@@ -40,7 +45,8 @@ rw
 sk
 sr
 sr@latin
-sv 
+sv
+ta 
 th
 uk
 vi

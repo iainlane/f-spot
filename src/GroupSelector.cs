@@ -56,9 +56,6 @@ namespace FSpot {
 				if (adaptor is TimeAdaptor) {
 					MainWindow.ToolTips.SetTip (left, Catalog.GetString ("More dates"), null);
 					MainWindow.ToolTips.SetTip (right, Catalog.GetString ("More dates"), null);
-				} else if (adaptor is DirectoryAdaptor) {
-					MainWindow.ToolTips.SetTip (left, Catalog.GetString ("More directories"), null);
-					MainWindow.ToolTips.SetTip (right, Catalog.GetString ("More directories"), null);
 				} else {
 					MainWindow.ToolTips.SetTip (left, Catalog.GetString ("More"), null);
 					MainWindow.ToolTips.SetTip (right, Catalog.GetString ("More"), null);
@@ -512,23 +509,10 @@ namespace FSpot {
 		{
 			Gtk.Menu order_menu = new Gtk.Menu();
 			
-			GtkUtil.MakeCheckMenuItem (order_menu, Catalog.GetString ("Arrange by _Month"),
-					      MainWindow.Toplevel.HandleArrangeByTime, true, (adaptor is TimeAdaptor), true);
-			
-			GtkUtil.MakeCheckMenuItem (order_menu, Catalog.GetString ("Arrange by _Folder"),
-					      MainWindow.Toplevel.HandleArrangeByDirectory, true, (adaptor is DirectoryAdaptor), true);
+			order_menu.Append (MainWindow.Toplevel.ReverseOrderAction.CreateMenuItem ());
 
-			GtkUtil.MakeMenuSeparator (order_menu);
-
-			GtkUtil.MakeCheckMenuItem (order_menu, Catalog.GetString ("_Reverse Order"),
-					      MainWindow.Toplevel.HandleReverseOrder, true, adaptor.OrderAscending, false);
-
-			if (adaptor is TimeAdaptor && adaptor.Query.Range != null) {
-				GtkUtil.MakeMenuSeparator (order_menu);
-
-				GtkUtil.MakeMenuItem (order_menu, Catalog.GetString ("_Clear Date Range"), 
+			GtkUtil.MakeMenuItem (order_menu, Catalog.GetString ("_Clear Date Range"), 
 						MainWindow.Toplevel.HandleClearDateRange);
-			}
 			
 			if (args != null)
 				order_menu.Popup (null, null, null, args.Button, args.Time);
@@ -931,13 +915,8 @@ namespace FSpot {
 					active.X = min_x;
 					active.Width = max_x - min_x;
 					
-#if GTK_2_10_3 && !GTK_2_12_2 //workaround for buggy code
-					active.Intersect (area);
-					GdkWindow.DrawRectangle (Style.BaseGC (State), true, active);
-#else
 					if (active.Intersect (area, out active))
 						GdkWindow.DrawRectangle (Style.BaseGC (State), true, active);
-#endif
 					
 					int i;
 					BoxXHit (area.X, out i);

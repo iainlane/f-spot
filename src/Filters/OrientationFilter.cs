@@ -8,9 +8,8 @@
  * This is free software, see COPYING fro details
  *
  */
-#if ENABLE_NUNIT
-using NUnit.Framework;
-#endif
+
+using FSpot.Utils;
 
 namespace FSpot.Filters {
 	public class OrientationFilter : IFilter {
@@ -20,7 +19,7 @@ namespace FSpot.Filters {
 			System.Uri dest_uri = req.TempUri (System.IO.Path.GetExtension (source));
 			string dest = dest_uri.LocalPath;
 
-			using (ImageFile img = ImageFile.Create (source)) {
+			using (ImageFile img = ImageFile.Create (req.Current)) {
 				bool changed = false;
 				
 				if (img.Orientation != PixbufOrientation.TopLeft && img is JpegFile) {
@@ -45,19 +44,19 @@ namespace FSpot.Filters {
 					
 					int width, height;
 	
-					jimg = ImageFile.Create (dest) as JpegFile;
-					
-					PixbufUtils.GetSize (dest, out width, out height);
-	
-					jimg.SetOrientation (PixbufOrientation.TopLeft);
-					jimg.SetDimensions (width, height);
-	
-					Gdk.Pixbuf pixbuf = new Gdk.Pixbuf (dest, 160, 120, true);
-					jimg.SetThumbnail (pixbuf);
-					pixbuf.Dispose ();
-	
-					jimg.SaveMetaData (dest);
-					jimg.Dispose ();
+					using (jimg = ImageFile.Create (dest_uri) as JpegFile) {
+						PixbufUtils.GetSize (dest, out width, out height);
+
+						jimg.SetOrientation (PixbufOrientation.TopLeft);
+						jimg.SetDimensions (width, height);
+
+						using (Gdk.Pixbuf pixbuf = new Gdk.Pixbuf (dest, 160, 120, true)) {
+							jimg.SetThumbnail (pixbuf);
+						}
+
+						jimg.SaveMetaData (dest);
+						jimg.Dispose ();
+					}
 				}
 	
 				if (changed)
@@ -67,18 +66,5 @@ namespace FSpot.Filters {
 			}
 		}
 		
-#if ENABLE_NUNIT
-		[TestFixture]
-		public class Tests : ImageTest {
-			[Test]
-			public void TestNoop ()
-			{
-				string path = CreateFile ("test.jpg", 50);
-				FilterRequest req = new FilterRequest (path);
-				IFilter filter = new OrientationFilter ();
-				Assert.IsFalse (filter.Convert (req), "Orientation Filter changed a normal file");
-			}
-		}
-#endif
 	}
 }

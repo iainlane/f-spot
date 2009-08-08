@@ -109,7 +109,7 @@ namespace MergeDbExtension
 
 		public static void Merge (string path, Db to_db)
 		{
-			Log.WarningFormat ("Will merge db {0} into main f-spot db {1}", path, FSpot.Global.BaseDirectory + "/photos.db" );
+			Log.Warning ("Will merge db {0} into main f-spot db {1}", path, FSpot.Global.BaseDirectory + "/photos.db" );
 			Db from_db = new Db ();
 			from_db.Init (path, true);
 			//MergeDb mdb = new MergeDb (from_db, to_db);
@@ -143,7 +143,7 @@ namespace MergeDbExtension
 					Category parent = (tag_to_merge.Category == from_store.RootCategory) ?
 							to_store.RootCategory :
 							to_store.GetTagByName (tag_to_merge.Category.Name) as Category;
-					dest_tag = to_store.CreateTag (parent, tag_to_merge.Name);
+					dest_tag = to_store.CreateTag (parent, tag_to_merge.Name, false);
 					//FIXME: copy the tag icon and commit
 				}
 				tag_map [tag_to_merge.Id] = dest_tag;
@@ -187,7 +187,7 @@ namespace MergeDbExtension
 
 		void ImportPhoto (Photo photo, bool copy)
 		{
-			Log.WarningFormat ("Importing {0}", photo.Name);
+			Log.Warning ("Importing {0}", photo.Name);
 			PhotoStore from_store = from_db.Photos;
 			PhotoStore to_store = to_db.Photos;
 
@@ -198,7 +198,7 @@ namespace MergeDbExtension
 				foreach (string key in PathMap.Keys) {
 					string path = photo_path;
 					path = path.Replace (key, PathMap [key]);
-					Log.DebugFormat ("Replaced path {0}", path);
+					Log.Debug ("Replaced path {0}", path);
 					if (System.IO.File.Exists (path)) {
 						photo_path = path;
 						break;;
@@ -218,7 +218,7 @@ namespace MergeDbExtension
 					pfd.Dialog.Destroy ();
 					if (new_folder == null) //Skip
 						return;
-					Log.DebugFormat ("{0} maps to {1}", folder, new_folder);
+					Log.Debug ("{0} maps to {1}", folder, new_folder);
 
 					PathMap[folder] = new_folder;
 
@@ -239,11 +239,11 @@ namespace MergeDbExtension
 
 			// Don't copy if we are already home
 			if (photo_path == destination)
-				newp = to_store.Create (destination, roll_map [photo.RollId], out pixbuf);
+				newp = to_store.Create (UriUtils.PathToFileUri (destination), roll_map [photo.RollId], out pixbuf);
 			else {
 				System.IO.File.Copy (photo_path, destination);
 
-				newp = to_store.Create (destination, photo_path, roll_map [photo.RollId], out pixbuf);
+				newp = to_store.Create (UriUtils.PathToFileUri (destination), UriUtils.PathToFileUri (photo_path), roll_map [photo.RollId], out pixbuf);
 				try {
 					File.SetAttributes (destination, File.GetAttributes (destination) & ~FileAttributes.ReadOnly);
 					DateTime create = File.GetCreationTime (photo_path);
@@ -259,7 +259,7 @@ namespace MergeDbExtension
 				return;
 
 			foreach (Tag t in photo.Tags) {
-				Log.WarningFormat ("Tagging with {0}", t.Name);
+				Log.Warning ("Tagging with {0}", t.Name);
 				newp.AddTag (tag_map [t.Id]);
 			}
 

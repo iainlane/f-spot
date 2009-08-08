@@ -90,7 +90,7 @@ namespace Cms {
 			get {
 				unsafe {
 					if (handle.Handle == (IntPtr)0)
-						throw new Exception ();
+						throw new CmsException ();
 					
 					if (index < 0 || index >= Count)
 						throw new ArgumentOutOfRangeException (String.Format ("index {0} outside of count {1} for {2}", index, Count, handle.Handle));
@@ -102,7 +102,7 @@ namespace Cms {
 			set {
 				unsafe {
 					if (handle.Handle == (IntPtr)0)
-						throw new Exception ();
+						throw new CmsException ();
 					
 					if (index < 0 || index >= Count)
 						throw new ArgumentOutOfRangeException (String.Format ("index {0} outside of count {1} for handle {2}", index, Count, handle.Handle));
@@ -117,6 +117,9 @@ namespace Cms {
 		public GammaTable (ushort [] values, int start_offset, int length)
 		{
 #if true
+			if (values == null)
+				throw new ArgumentNullException ("values");
+
 			handle = new HandleRef (this, NativeMethods.FCmsGammaTableNew (values, start_offset, length));
 			//System.Console.WriteLine ("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXhandle = {0}", handle.Handle);
 #else

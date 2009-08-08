@@ -1,5 +1,4 @@
 using Gdk;
-using Gnome;
 using Gtk;
 using Mono.Unix;
 using Mono.Data.SqliteClient;
@@ -12,43 +11,6 @@ using FSpot;
 using FSpot.Jobs;
 using FSpot.Query;
 using FSpot.Utils;
-
-// FIXME: This is to workaround the currently busted GTK# bindings.
-using System.Runtime.InteropServices;
-
-public class PixbufSerializer {
-	[DllImport("libgdk_pixbuf-2.0-0.dll")]
-	static extern unsafe bool gdk_pixdata_deserialize(ref Gdk.Pixdata raw, uint stream_length, byte [] stream, out IntPtr error);
-
-	public static unsafe Pixbuf Deserialize (byte [] data)
-	{
-		Pixdata pixdata = new Pixdata ();
-
-		pixdata.Deserialize ((uint) data.Length, data);
-
-		return Pixbuf.FromPixdata (pixdata, true);
-	}
-
-	[DllImport("libgdk_pixbuf-2.0-0.dll")]
-	static extern IntPtr gdk_pixdata_serialize(ref Gdk.Pixdata raw, out uint stream_length_p);
-
-	public static byte [] Serialize (Pixbuf pixbuf)
-	{
-		Pixdata pixdata = new Pixdata ();
-		IntPtr raw_pixdata = pixdata.FromPixbuf (pixbuf, false); // FIXME GTK# shouldn't this be a constructor or something?
-									//       It's probably because we need the IntPtr to free it afterwards
-
-		uint data_length;
-		IntPtr raw_data = gdk_pixdata_serialize (ref pixdata, out data_length);
-
-		byte [] data = new byte [data_length];
-		Marshal.Copy (raw_data, data, 0, (int) data_length);
-		
-		GLib.Marshaller.Free (new IntPtr[] { raw_data, raw_pixdata });
-		
-		return data;
-	}
-}
 
 public class InvalidTagOperationException : InvalidOperationException {
 	public Tag tag;
@@ -88,7 +50,7 @@ public class TagRemoveComparer : IComparer {
 	}
 }
 
-public class TagStore : DbStore {
+public class TagStore : DbStore<Tag> {
 	Category root_category;
 	public Category RootCategory {
 		get {
@@ -98,14 +60,19 @@ public class TagStore : DbStore {
 
 	private const string STOCK_ICON_DB_PREFIX = "stock_icon:";
 
-	private void SetIconFromString (Tag tag, string icon_string)
+	static void SetIconFromString (Tag tag, string icon_string)
 	{
-		if (icon_string == null || icon_string == String.Empty)
+		if (icon_string == null) {
+			tag.Icon = null;
+			// IconWasCleared automatically set already, override
+			// it in this case since it was NULL in the db.
+			tag.IconWasCleared = false;
+		} else if (icon_string == String.Empty)
 			tag.Icon = null;
 		else if (icon_string.StartsWith (STOCK_ICON_DB_PREFIX))
 			tag.ThemeIconName = icon_string.Substring (STOCK_ICON_DB_PREFIX.Length);
 		else
-			tag.Icon = PixbufSerializer.Deserialize (Convert.FromBase64String (icon_string));
+			tag.Icon = GdkUtils.Deserialize (Convert.FromBase64String (icon_string));
 	}
 
 	private Tag hidden;
@@ -129,7 +96,6 @@ public class TagStore : DbStore {
 		foreach (Tag t in this.item_cache.Values)
 			if (t.Id == id)
 				return t;
-
 		return null;
 	}
 
@@ -161,9 +127,9 @@ public class TagStore : DbStore {
 		SqliteDataReader reader = Database.Query ("SELECT id, name, is_category, sort_priority, icon FROM tags");
 
 		while (reader.Read ()) {
-			uint id = Convert.ToUInt32 (reader [0]);
-			string name = reader [1].ToString ();
-			bool is_category = (Convert.ToUInt32 (reader [2]) != 0);
+			uint id = Convert.ToUInt32 (reader ["id"]);
+			string name = reader ["name"].ToString ();
+			bool is_category = (Convert.ToUInt32 (reader ["is_category"]) != 0);
 
 			Tag tag;
 			if (is_category)
@@ -171,14 +137,14 @@ public class TagStore : DbStore {
 			else
 				tag = new Tag (null, id, name);
 
-			if (reader [4] != null)
+			if (reader ["icon"] != null)
 				try {
-					SetIconFromString (tag, reader [4].ToString ());
+					SetIconFromString (tag, reader ["icon"].ToString ());
 				} catch (Exception ex) {
 					Log.Exception ("Unable to load icon for tag " + name, ex);
 				}
 
-			tag.SortPriority = Convert.ToInt32 (reader[3]);
+			tag.SortPriority = Convert.ToInt32 (reader["sort_priority"]);
 			AddToCache (tag);
 		}
 
@@ -188,8 +154,8 @@ public class TagStore : DbStore {
 		reader = Database.Query ("SELECT id, category_id FROM tags");
 
 		while (reader.Read ()) {
-			uint id = Convert.ToUInt32 (reader [0]);
-			uint category_id = Convert.ToUInt32 (reader [1]);
+			uint id = Convert.ToUInt32 (reader ["id"]);
+			uint category_id = Convert.ToUInt32 (reader ["category_id"]);
 
 			Tag tag = Get (id) as Tag;
 			if (tag == null)
@@ -206,11 +172,11 @@ public class TagStore : DbStore {
 		reader.Close ();
 
 		//Pass 3, set popularity
-		reader = Database.Query ("SELECT tag_id, COUNT (*) as popularity FROM photo_tags GROUP BY tag_id");
+		reader = Database.Query ("SELECT tag_id, COUNT (*) AS popularity FROM photo_tags GROUP BY tag_id");
 		while (reader.Read ()) {
-			Tag t = Get (Convert.ToUInt32 (reader [0])) as Tag;
+			Tag t = Get (Convert.ToUInt32 (reader ["tag_id"])) as Tag;
 			if (t != null)
-				t.Popularity = Convert.ToInt32 (reader [1]);
+				t.Popularity = Convert.ToInt32 (reader ["popularity"]);
 		}
 		reader.Close ();
 
@@ -221,27 +187,25 @@ public class TagStore : DbStore {
 
 	private void CreateTable ()
 	{
-
-		Database.ExecuteNonQuery ("CREATE TABLE tags (                            " +
-				   "	id            INTEGER PRIMARY KEY NOT NULL," +
-				   "       name          TEXT UNIQUE,                 " +
-				   "       category_id   INTEGER,			   " +
-				   "       is_category   BOOLEAN,			   " +
-				   "       sort_priority INTEGER,			   " +
-				   "       icon          TEXT			   " +
-				   ")");
-
+		Database.ExecuteNonQuery (
+			"CREATE TABLE tags (\n" +
+			"	id		INTEGER PRIMARY KEY NOT NULL, \n" +
+			"	name		TEXT UNIQUE, \n" +
+			"	category_id	INTEGER, \n" +
+			"	is_category	BOOLEAN, \n" +
+			"	sort_priority	INTEGER, \n" +
+			"	icon		TEXT\n" +
+			")");
 	}
-
 
 	private void CreateDefaultTags ()
 	{
-		Category favorites_category = CreateCategory (RootCategory, Catalog.GetString ("Favorites"));
+		Category favorites_category = CreateCategory (RootCategory, Catalog.GetString ("Favorites"), false);
 		favorites_category.ThemeIconName = "emblem-favorite";
 		favorites_category.SortPriority = -10;
 		Commit (favorites_category);
 
-		Tag hidden_tag = CreateTag (RootCategory, Catalog.GetString ("Hidden"));
+		Tag hidden_tag = CreateTag (RootCategory, Catalog.GetString ("Hidden"), false);
 		hidden_tag.ThemeIconName = "emblem-readonly";
 		hidden_tag.SortPriority = -9;
 		this.hidden = hidden_tag;
@@ -249,17 +213,17 @@ public class TagStore : DbStore {
 		FSpot.Core.Database.Meta.HiddenTagId.ValueAsInt = (int) hidden_tag.Id;
 		FSpot.Core.Database.Meta.Commit (FSpot.Core.Database.Meta.HiddenTagId);
 
-		Tag people_category = CreateCategory (RootCategory, Catalog.GetString ("People"));
+		Tag people_category = CreateCategory (RootCategory, Catalog.GetString ("People"), false);
 		people_category.ThemeIconName = "emblem-people";
 		people_category.SortPriority = -8;
 		Commit (people_category);
 
-		Tag places_category = CreateCategory (RootCategory, Catalog.GetString ("Places"));
+		Tag places_category = CreateCategory (RootCategory, Catalog.GetString ("Places"), false);
 		places_category.ThemeIconName = "emblem-places";
 		places_category.SortPriority = -8;
 		Commit (places_category);
 
-		Tag events_category = CreateCategory (RootCategory, Catalog.GetString ("Events"));
+		Tag events_category = CreateCategory (RootCategory, Catalog.GetString ("Events"), false);
 		events_category.ThemeIconName = "emblem-event";
 		events_category.SortPriority = -7;
 		Commit (events_category);
@@ -282,29 +246,32 @@ public class TagStore : DbStore {
 		}
 	}
 
-	private uint InsertTagIntoTable (Category parent_category, string name, bool is_category)
+	private uint InsertTagIntoTable (Category parent_category, string name, bool is_category, bool autoicon)
 	{
 
 		uint parent_category_id = parent_category.Id;
+		String default_tag_icon_value = autoicon ? null : String.Empty;
 
-		int id = Database.Execute (new DbCommand ("INSERT INTO tags (name, category_id, is_category, sort_priority)"
-                          + "VALUES (:name, :category_id, :is_category, 0)",
+		int id = Database.Execute (new DbCommand ("INSERT INTO tags (name, category_id, is_category, sort_priority, icon)"
+                          + "VALUES (:name, :category_id, :is_category, 0, :icon)",
 						  "name", name,
 						  "category_id", parent_category_id,
-						  "is_category", is_category ? 1 : 0));
+						  "is_category", is_category ? 1 : 0,
+						  "icon", default_tag_icon_value));
 
 
 		return (uint) id;
 	}
 
-	public Tag CreateTag (Category category, string name)
+	public Tag CreateTag (Category category, string name, bool autoicon)
 	{
 		if (category == null)
 			category = RootCategory;
 
-		uint id = InsertTagIntoTable (category, name, false);
+		uint id = InsertTagIntoTable (category, name, false, autoicon);
 
 		Tag tag = new Tag (category, id, name);
+		tag.IconWasCleared = !autoicon;
 
 		AddToCache (tag);
 		EmitAdded (tag);
@@ -312,14 +279,15 @@ public class TagStore : DbStore {
 		return tag;
 	}
 
-	public Category CreateCategory (Category parent_category, string name)
+	public Category CreateCategory (Category parent_category, string name, bool autoicon)
 	{
 		if (parent_category == null)
 			parent_category = RootCategory;
 
-		uint id = InsertTagIntoTable (parent_category, name, true);
+		uint id = InsertTagIntoTable (parent_category, name, true, autoicon);
 
 		Category new_category = new Category (parent_category, id, name);
+		new_category.IconWasCleared = !autoicon;
 
 		AddToCache (new_category);
 		EmitAdded (new_category);
@@ -327,30 +295,29 @@ public class TagStore : DbStore {
 		return new_category;
 	}
 
-	public override DbItem Get (uint id)
+	public override Tag Get (uint id)
 	{
 		if (id == 0)
 			return RootCategory;
 		else
-			return LookupInCache (id) as Tag;
+			return LookupInCache (id);
 	}
 	
-	public override void Remove (DbItem item)
+	public override void Remove (Tag tag)
 	{
-		Category category = item as Category;
+		Category category = tag as Category;
 		if (category != null && 
 		    category.Children != null && 
-		    category.Children.Length > 0)
+		    category.Children.Count > 0)
 			throw new InvalidTagOperationException (category, "Cannot remove category that contains children");
 
-		RemoveFromCache (item);
+		RemoveFromCache (tag);
 		
-		((Tag)item).Category = null;
-		
+		tag.Category = null;
 
-		Database.ExecuteNonQuery (new DbCommand ("DELETE FROM tags WHERE id = :id", "id", item.Id));
+		Database.ExecuteNonQuery (new DbCommand ("DELETE FROM tags WHERE id = :id", "id", tag.Id));
 
-		EmitRemoved (item);
+		EmitRemoved (tag);
 	}
 
 
@@ -358,46 +325,55 @@ public class TagStore : DbStore {
 	{
 		if (tag.ThemeIconName != null)
 			return STOCK_ICON_DB_PREFIX + tag.ThemeIconName;
-		if (tag.Icon == null)
-			return String.Empty;
+		if (tag.Icon == null) {
+			if (tag.IconWasCleared)
+				return String.Empty;
+			return null;
+		}
 
-		byte [] data = PixbufSerializer.Serialize (tag.Icon);
+		byte [] data = GdkUtils.Serialize (tag.Icon);
 		return Convert.ToBase64String (data);
 	}
 
-	public override void Commit (DbItem item)
+	public override void Commit (Tag tag)
 	{
-		Commit (item, false);	
+		Commit (tag, false);	
 	}
 
-	public void Commit (DbItem item, bool update_xmp)
+	public void Commit (Tag tag, bool update_xmp)
 	{
-		Tag tag = item as Tag;
+		Commit (new Tag[] {tag}, update_xmp);
+	}
+
+	public void Commit (Tag [] tags, bool update_xmp)
+	{
 
 		bool use_transactions = !Database.InTransaction && update_xmp;
 
 		if (use_transactions)
 			Database.BeginTransaction ();
 
-		Database.ExecuteNonQuery (new DbCommand ("UPDATE tags SET name = :name, category_id = :category_id, "
-                    + "is_category = :is_category, sort_priority = :sort_priority, icon = :icon WHERE id = :id",
-						  "name", tag.Name,
-						  "category_id", tag.Category.Id,
-						  "is_category", tag is Category ? 1 : 0,
-						  "sort_priority", tag.SortPriority,
-						  "icon", GetIconString (tag),
-						  "id", tag.Id));
-		
-		if (update_xmp && Preferences.Get<bool> (Preferences.METADATA_EMBED_IN_IMAGE)) {
-			Photo [] photos = Core.Database.Photos.Query (new Tag [] { tag });
-			foreach (Photo p in photos)
-				if (p.HasTag (tag)) // the query returns all the pics of the tag and all its child. this avoids updating child tags
-					SyncMetadataJob.Create (Core.Database.Jobs, p);
+		foreach (Tag tag in tags) {
+			Database.ExecuteNonQuery (new DbCommand ("UPDATE tags SET name = :name, category_id = :category_id, "
+                	    + "is_category = :is_category, sort_priority = :sort_priority, icon = :icon WHERE id = :id",
+							  "name", tag.Name,
+							  "category_id", tag.Category.Id,
+							  "is_category", tag is Category ? 1 : 0,
+							  "sort_priority", tag.SortPriority,
+							  "icon", GetIconString (tag),
+							  "id", tag.Id));
+			
+			if (update_xmp && Preferences.Get<bool> (Preferences.METADATA_EMBED_IN_IMAGE)) {
+				Photo [] photos = Core.Database.Photos.Query (new Tag [] { tag });
+				foreach (Photo p in photos)
+					if (p.HasTag (tag)) // the query returns all the pics of the tag and all its child. this avoids updating child tags
+						SyncMetadataJob.Create (Core.Database.Jobs, p);
+			}
 		}
 
 		if (use_transactions)
 			Database.CommitTransaction ();
 
-		EmitChanged (tag);
+		EmitChanged (tags);
 	}
 }

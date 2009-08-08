@@ -10,9 +10,11 @@ PLUGIN_SOURCES = \
 	$(srcdir)/ApplicationCentricCertificatePolicy.cs \
 	$(srcdir)/AssemblyInfo.cs \
 	$(srcdir)/BlindTrustCertificatePolicy.cs \
+	$(srcdir)/FSpotTraceListener.cs \
 	$(srcdir)/FSpotUploadProgress.cs \
-	$(srcdir)/Preferences.cs \
 	$(srcdir)/TabbloExport.cs \
+	$(srcdir)/TabbloExportModel.cs \
+	$(srcdir)/TabbloExportView.cs \
 	$(srcdir)/UserDecisionCertificatePolicy.cs
 
 
@@ -22,6 +24,11 @@ REFS = \
 	-r:$(top_builddir)/src/FSpot.Utils.dll \
 	-r:Tabblo/Mono.Tabblo.dll \
 	$(LINK_KEYRING)		\
+	$(LINK_MONO_ADDINS)					\
+	$(LINK_SEMWEB)						\
+	$(LINK_GIOSHARP)						\
+	$(LINK_GTKSHARPBEANS)		\	
+	$(LINK_GPHOTO2)						\
 	-r:Mono.Posix.dll
 
 PKGS = \

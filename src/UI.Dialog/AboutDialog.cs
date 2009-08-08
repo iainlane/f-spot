@@ -20,6 +20,7 @@ namespace FSpot.UI.Dialog
 		private AboutDialog () {
 			Artists = new string [] {
 				"Jakub Steiner",	
+				"Matthew Paul Thomas",
 			};
 			Authors = new string [] {
 				"Primary Development",
@@ -27,10 +28,9 @@ namespace FSpot.UI.Dialog
 				"\tStephane Delcroix",
 				"",
 				"Active Contributors to this release",
-				"\tLorenzo Milesi",
-				"\tRuben Vermeersch (Google Summer of Code)",
-				"\tThomas Van Machelen",
-				"\tVasily Kirilichev (Google Summer of Code)",
+				"\tLorenzo Milesi",					//0.5.0
+				"\tMike Gem\x00fcnde",
+				"\tRuben Vermeersch",					//0.5.0, 0.6.0
 				"",
 				"Contributors",
 				"\tAaron Bockover",
@@ -58,7 +58,9 @@ namespace FSpot.UI.Dialog
 				"\tPatanjali Somayaji",
 				"\tPeter Johanson",
 				"\tTambet Ingo",
+				"\tThomas Van Machelen",				//0.5.0
 				"\tTodd Berman",
+				"\tVasily Kirilichev (Google Summer of Code)",		//0.5.0
 				"\tVincent Moreau",
 				"\tVladimir Vukicevic",
 				"\tXavier Bouchoux",
@@ -67,7 +69,7 @@ namespace FSpot.UI.Dialog
 				"\tEttore Perazzoli",
 			};
 			Comments = Catalog.GetString ("Photo management for GNOME");
-			Copyright = Catalog.GetString ("Copyright \x00a9 2003-2008 Novell Inc.");
+			Copyright = Catalog.GetString ("Copyright \x00a9 2003-2009 Novell Inc.");
 			Documenters = new string[] {
 				"Aaron Bockover",
 				"Alexandre Prokoudine",	
@@ -88,10 +90,8 @@ namespace FSpot.UI.Dialog
 				Console.WriteLine (e);
 				License = "GPL v2";
 			}
-			Logo = new Gdk.Pixbuf (System.Reflection.Assembly.GetEntryAssembly (), "f-spot-logo.svg");
-	#if !GTK_2_11
-			Name = "F-Spot";
-	#endif
+			Logo = new Gdk.Pixbuf (System.Reflection.Assembly.GetEntryAssembly (), "f-spot-128.png");
+			ProgramName = "F-Spot";
 			TranslatorCredits = Catalog.GetString ("translator-credits");
                 	if (System.String.Compare (TranslatorCredits, "translator-credits") == 0)
                 		TranslatorCredits = null;
