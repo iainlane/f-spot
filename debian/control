@@ -50,8 +50,8 @@ Build-Depends: debhelper (>= 5.0.0),
  automake1.10
 Standards-Version: 3.8.2.0
 Homepage: http://www.f-spot.org/
-Vcs-Svn: svn://svn.debian.org/svn/pkg-cli-apps/packages/f-spot/trunk/
-Vcs-Browser: http://svn.debian.org/wsvn/pkg-cli-apps/packages/f-spot/trunk/
+Vcs-Git: git://git.debian.org/git/pkg-cli-apps/packages/f-spot.git
+Vcs-Browser: http://git.debian.org/?p=pkg-cli-apps/packages/f-spot.git
 
 Package: f-spot
 Architecture: any
