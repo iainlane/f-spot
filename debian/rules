@@ -36,7 +36,6 @@ override_dh_install:
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.so
 	cp $(CURDIR)/debian/NDesk.Glitz.dll.config \
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/
-	rm $(CURDIR)/debian/f-spot/usr/lib/pkgconfig/gio-sharp-unstable.pc
 	dh_install
 
 # disable tests
