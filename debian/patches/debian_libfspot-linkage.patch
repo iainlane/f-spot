@@ -5,10 +5,9 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad f-spot-0.4.1~/libfspot/Makefile.am f-spot-0.4.1/libfspot/Makefile.am
---- f-spot-0.4.1~/libfspot/Makefile.am	2007-12-10 00:15:27.000000000 +0100
-+++ f-spot-0.4.1/libfspot/Makefile.am	2007-12-10 00:17:55.000000000 +0100
-@@ -30,6 +30,8 @@
+--- a/lib/libfspot/Makefile.am
++++ b/lib/libfspot/Makefile.am
+@@ -31,6 +31,8 @@
  	f-utils.h
  
  libfspot_la_LIBADD = 					\
@@ -16,4 +15,4 @@ diff -urNad f-spot-0.4.1~/libfspot/Makefile.am f-spot-0.4.1/libfspot/Makefile.am
 +	$(F_LIBS)					\
  	$(LCMS_LIBS)					\
  	$(EXIF_LIBS)					\
- 	$(top_builddir)/libjpegtran/libfspotjpegtran.la	\
+ 	$(GIO_LIBS)					\

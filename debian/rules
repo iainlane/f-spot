@@ -1,46 +1,42 @@
 #! /usr/bin/make -f
 
-#export DH_VERBOSE=1
-export MONO_SHARED_DIR=$(CURDIR)
-
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/gnome.mk
-include /usr/share/cdbs/1/rules/dpatch.mk
-# needed to use the dpatch tools (like dpatch-edit-patch)
-include /usr/share/dpatch/dpatch.make
+include /usr/share/cli-common/cli.make
 
 VERSION = $(shell dpkg-parsechangelog | grep ^Vers | cut -d\  -f2)
 UPVERSION = $(shell echo $(VERSION) | sed 's,-.*,,' | sed 's,+dfsg.*,,') 
 
-export DEB_DH_MAKESHLIBS_ARGS="-n"
-
-CFLAGS := -Wall -g
+LDFLAGS += -Wl,-z,defs -Wl,-O1 -Wl,--as-needed
 
 DEB_CONFIGURE_SCRIPT_ENV := LDFLAGS="-Wl,-O1 -Wl,--as-needed"
 DEB_CONFIGURE_USER_FLAGS += MCS=/usr/bin/csc CSC=/usr/bin/csc
 DEB_CONFIGURE_EXTRA_FLAGS := --disable-scrollkeeper
 
-DEB_AUTO_UPDATE_ACLOCAL = 1.10
-DEB_AUTO_UPDATE_LIBTOOL = pre
-DEB_AUTO_UPDATE_AUTOCONF = true
-DEB_AUTO_UPDATE_AUTOMAKE = 1.10
+# robbed from tomboy
+autoreconf: autoreconf-stamp
+autoreconf-stamp:
+	autoreconf -f -i -s
+	# replace ltmain.sh with our patched one that supports --as-needed
+	install --mode=755 $(CURDIR)/debian/ltmain-as-needed.sh $(CURDIR)/ltmain.sh
+	touch $@
 
-common-configure-indep::
-	mkdir -p $(MONO_SHARED_DIR)/.wapi
+override_dh_clean:
+	dh_clean
+	rm -rf autoreconf-stamp configure config.sub config.guess ltmain.sh aclocal.m4 autom4te.cache/
+	find . -name "Makefile.in" -delete
 
-binary-predeb/f-spot::
-	dh_clideps -d 
+override_dh_auto_configure: autoreconf-stamp
+	dh_auto_configure -- \
+		LDFLAGS="$(LDFLAGS)" \
+		MCS=/usr/bin/csc
 
-binary-install/f-spot::
+override_dh_install:
 	rm $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.a \
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.la \
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.so
 	cp $(CURDIR)/debian/NDesk.Glitz.dll.config \
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/
 	rm $(CURDIR)/debian/f-spot/usr/lib/pkgconfig/gio-sharp-unstable.pc
-
-clean::
-	rm -rf $(MONO_SHARED_DIR)/.wapi
+	dh_install
 
 get-orig-source:
 	[ -d ../tarballs ] || mkdir ../tarballs
@@ -49,3 +45,6 @@ get-orig-source:
 		--download-version $(UPVERSION) \
 		--rename \
 		--destdir ../tarballs
+
+%:
+	dh --with quilt $@

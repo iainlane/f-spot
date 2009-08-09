@@ -1,0 +1,57 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## link_system_libs.dpatch by Mirco Bauer <meebey@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Link against system libraries in preference to versions bundled in the
+## DP: f-spot tarball.
+
+--- a/Makefile.include
++++ b/Makefile.include
+@@ -3,9 +3,6 @@
+ 
+ ## Directories
+ 
+-DIR_ADDINS_ADDINS = $(top_builddir)/lib/mono-addins/Mono.Addins
+-DIR_ADDINS_GUI = $(top_builddir)/lib/mono-addins/Mono.Addins.Gui
+-DIR_ADDINS_SETUP = $(top_builddir)/lib/mono-addins/Mono.Addins.Setup
+ DIR_DOCS = $(top_builddir)/docs
+ DIR_EXTENSIONS = $(top_builddir)/extensions
+ DIR_GLITZ = $(top_builddir)/lib/glitz-sharp/src
+@@ -28,10 +25,10 @@
+ LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+-LINK_MONO_ADDINS =					\
+-	-r:$(DIR_ADDINS_ADDINS)/Mono.Addins.dll		\
+-	-r:$(DIR_ADDINS_SETUP)/Mono.Addins.Setup.dll	\
+-	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
++LINK_MONO_ADDINS =			\
++	-pkg:mono-addins		\
++	-pkg:mono-addins-setup		\
++	-pkg:mono-addins-gui
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_TAO = 								\
+ 	-r:$(DIR_TAO_OPENGL)/Tao.OpenGl.dll				\
+--- a/configure.ac
++++ b/configure.ac
+@@ -302,10 +302,6 @@
+ lib/libgphoto2-sharp/Makefile
+ lib/libjpegtran/Makefile
+ lib/Makefile
+-lib/mono-addins/Makefile
+-lib/mono-addins/Mono.Addins.Gui/Makefile
+-lib/mono-addins/Mono.Addins/Makefile
+-lib/mono-addins/Mono.Addins.Setup/Makefile
+ lib/semweb/Makefile
+ lib/Tao/Makefile
+ lib/Tao/Tao.GlPostProcess/Makefile
+--- a/lib/Makefile.am
++++ b/lib/Makefile.am
+@@ -10,7 +10,6 @@
+ 	libjpegtran			\
+ 	libfspot			\
+ 	libgphoto2-sharp	\
+-	mono-addins			\
+ 	semweb				\
+ 	Tao
+ 

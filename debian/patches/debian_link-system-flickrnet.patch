@@ -6,10 +6,9 @@
 ## DP: Link against system flickrnet-2.1.5 rather than bundled f-spot version.
 
 @DPATCH@
-diff -urNad f-spot-0.5.0.2~/configure.in f-spot-0.5.0.2/configure.in
---- f-spot-0.5.0.2~/configure.in	2008-10-06 18:54:39.000000000 +0100
-+++ f-spot-0.5.0.2/configure.in	2008-10-06 18:55:44.000000000 +0100
-@@ -366,7 +366,6 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -323,7 +323,6 @@
  extensions/Exporters/CDExport/Makefile
  extensions/Exporters/DefaultExporters/Makefile
  extensions/Exporters/FlickrExport/Makefile
@@ -17,13 +16,12 @@ diff -urNad f-spot-0.5.0.2~/configure.in f-spot-0.5.0.2/configure.in
  extensions/Exporters/GalleryExport/Makefile
  extensions/Exporters/FacebookExport/Makefile
  extensions/Exporters/FolderExport/Makefile
-diff -urNad f-spot-0.5.0.2~/extensions/Exporters/FlickrExport/Makefile.am f-spot-0.5.0.2/extensions/Exporters/FlickrExport/Makefile.am
---- f-spot-0.5.0.2~/extensions/Exporters/FlickrExport/Makefile.am	2008-09-26 09:27:39.000000000 +0100
-+++ f-spot-0.5.0.2/extensions/Exporters/FlickrExport/Makefile.am	2008-10-06 18:58:12.000000000 +0100
-@@ -15,16 +15,13 @@
- 	-r:$(top_builddir)/src/FSpot.Core.dll	\
- 	-r:$(top_builddir)/src/FSpot.Utils.dll	\
- 	$(LINK_SEMWEB)			\
+--- a/extensions/Exporters/FlickrExport/Makefile.am
++++ b/extensions/Exporters/FlickrExport/Makefile.am
+@@ -19,16 +19,13 @@
+ 	$(LINK_GPHOTO2)				\
+ 	$(LINK_GIOSHARP)				\
+ 	$(LINK_GTKSHARPBEANS)		\
 -	-r:FlickrNet/FlickrNet.dll	\
  	-r:Mono.Posix
  
@@ -38,7 +36,7 @@ diff -urNad f-spot-0.5.0.2~/extensions/Exporters/FlickrExport/Makefile.am f-spot
  RESOURCES =				\
  	-resource:$(srcdir)/$(PLUGIN_MANIFEST)	\
  	-resource:$(srcdir)/$(PLUGIN_NAME).glade
-@@ -35,7 +32,6 @@
+@@ -39,7 +36,6 @@
  	mautil p $(PLUGIN_ASSEMBLY)
  
  $(PLUGIN_ASSEMBLY): $(PLUGIN_SOURCES) $(PLUGIN_MANIFEST)

@@ -1,0 +1,13 @@
+# Patches that haven't been applied upstream yet.
+debian_fix-distclean.patch
+debian_libfspot-linkage.patch
+debian_libfspotjpegtran-linkage.patch
+debian_link-system-mono-addins.patch
+debian_link-system-flickrnet.patch
+debian_link-system-gnome-keyring.patch
+debian_fix_f-spot.exe.config.patch
+
+ubuntu_importer-targetdir-selector.patch
+ubuntu_fname_quote_percent.patch
+ubuntu_fix_export_crash_FlickrRemote.cs.patch
+ubuntu_nofuse_fix_photo_import.patch

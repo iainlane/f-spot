@@ -6,11 +6,10 @@
 ## DP: https://launchpad.net/bugs/258083
 
 @DPATCH@
-diff -urNad f-spot-0.4.4~/src/Utils/UriUtils.cs f-spot-0.4.4/src/Utils/UriUtils.cs
---- f-spot-0.4.4~/src/Utils/UriUtils.cs	2008-05-20 14:56:44.000000000 +0200
-+++ f-spot-0.4.4/src/Utils/UriUtils.cs	2008-09-29 17:18:01.000000000 +0200
-@@ -49,7 +49,7 @@
- #endif
+--- a/src/Utils/UriUtils.cs
++++ b/src/Utils/UriUtils.cs
+@@ -45,7 +45,7 @@
+ 			return new Uri (builder.ToString ());
  		}
  
 -		static char[] CharsToQuote = { ';', '?', ':', '@', '&', '=', '$', ',', '#' };

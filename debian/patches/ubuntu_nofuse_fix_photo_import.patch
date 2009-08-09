@@ -1,0 +1,21 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## ubuntu_nofuse_fix_photo_import.dpatch by Sebastien Bacher <seb128@ubuntu.com>
+##
+## DP: Set X-GIO-NoFuse in the import desktop so gvfs uri are correctly used
+## DP: LP: #338466
+
+@DPATCH@
+--- a/f-spot-import.desktop.in
++++ b/f-spot-import.desktop.in
+@@ -15,3 +15,4 @@
+ X-GNOME-Bugzilla-Component=General
+ X-GNOME-Bugzilla-Version=0.6.0.0
+ X-GNOME-DocPath=f-spot/f-spot.xml
++X-GIO-NoFuse=true
+--- a/f-spot-import.desktop.in.in
++++ b/f-spot-import.desktop.in.in
+@@ -15,3 +15,4 @@
+ X-GNOME-Bugzilla-Component=General
+ X-GNOME-Bugzilla-Version=@VERSION@
+ X-GNOME-DocPath=f-spot/f-spot.xml
++X-GIO-NoFuse=true

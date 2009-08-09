@@ -6,9 +6,8 @@
 ## DP: http://bugzilla.gnome.org/show_bug.cgi?id=553518
 
 @DPATCH@
-diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FlickrExport/FlickrRemote.cs f-spot-0.5.0.3/extensions/Exporters/FlickrExport/FlickrRemote.cs
---- f-spot-0.5.0.3~/extensions/Exporters/FlickrExport/FlickrRemote.cs	2008-09-26 16:27:39.000000000 +0800
-+++ f-spot-0.5.0.3/extensions/Exporters/FlickrExport/FlickrRemote.cs	2009-02-25 20:19:39.901273356 +0800
+--- a/extensions/Exporters/FlickrExport/FlickrRemote.cs
++++ b/extensions/Exporters/FlickrExport/FlickrRemote.cs
 @@ -17,6 +17,7 @@
  using FSpot;
  using FSpot.Utils;
@@ -47,7 +46,7 @@ diff -urNad f-spot-0.5.0.3~/extensions/Exporters/FlickrExport/FlickrRemote.cs f-
  		frob = flickr.AuthGetFrob ();
  		string login_url = flickr.AuthCalcUrl (frob, FlickrNet.AuthLevel.Write);
  
- 		GnomeUtil.UrlShow (login_url);
+ 		GtkBeans.Global.ShowUri (null, login_url);
 +            } catch (Exception e) {
 +                Console.WriteLine("{0} Exception caught.",e);
 +	       HigMessageDialog md = new HigMessageDialog (null,Gtk.DialogFlags.Modal |Gtk.DialogFlags.DestroyWithParent,Gtk.MessageType.Error, Gtk.ButtonsType.Ok,Mono.Unix.Catalog.GetString ("Error reading server response"),String.Format (Mono.Unix.Catalog.GetString("The following error was encountered while attempting to log in: {0}"), e.Message));

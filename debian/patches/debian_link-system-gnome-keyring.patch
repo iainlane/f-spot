@@ -1,0 +1,27 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## debian_link-system-gnome-keyring.dpatch by Mirco Bauer <meebey@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+--- a/Makefile.include
++++ b/Makefile.include
+@@ -22,7 +22,7 @@
+ 
+ ## Links
+ 
+-LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
++LINK_KEYRING = -pkg:gnome-keyring-sharp
+ LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
+ LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
+ LINK_MONO_ADDINS =			\
+--- a/lib/Makefile.am
++++ b/lib/Makefile.am
+@@ -5,7 +5,6 @@
+ 	GKeyFile 			\
+ 	gio-sharp			\
+ 	glitz-sharp			\
+-	gnome-keyring-sharp	\
+ 	gtk-sharp-beans		\
+ 	libjpegtran			\
+ 	libfspot			\

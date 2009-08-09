@@ -1,10 +1,37 @@
-f-spot (0.5.0.3-6) UNRELEASED; urgency=low
+f-spot (0.6.0.0-1) UNRELEASED; urgency=low
 
-  SOON TO BE 0.6!
-
+  Still cracky crack crack
+  * New Upstream Version
+   - no longer depends on libeog
+   - fighting against deprecation, on the path to gnome3
+   - new viewer widget
+   - new widget showing folders organisation
+   - new Preference dialog
+   - db and config moved to .config (or whatever is pointed by xdg config)
+   - tons of bugs fixed (really)
+   - updated translations
   * debian/control: Set Vcs-* to point to new Git locations
+  * debian/control, debian/patches/*: Switch to quilt for patches 
+  * debian/rules, debian/control: Rewrite in DH7 style 
+  * debian/patches/99_ltmain_as-needed.dpatch: Drop, now applied in rules by
+    copying from debian/
+  * debian/patches/debian_unlink_nunit.dpatch: Drop, upstream now handles this
+    case correctly by configure checks
+  * debian/patches/debian_no_dup_app_icons.dpatch: Drop, upstream no longer
+    ships svg icon
+  * debian/patches/debian_link_2.0_profile_cairo.dpatch: Drop, fixed in mono
+  * debian/patches/debian_dont_link_libmono.patch: Drop, ltmain-as-needed
+    achieves this too
+  * debian/patches/f-spot-import-gphoto.dpatch,
+    debian/patches/svn-r4555_fix-crash-on-icon-size-change.dpatch,
+    debian/patches/svn-r4545_locales-import.dpatch,
+    debian/patches/debian_use_csc.dpatch,
+    ubuntu_1024x600_CDExport.cs.dpatch,
+    ubuntu_raw_escape_quote.dpatch,
+    svn-display-sidebar.dpatch,
+    svn-no-versionellipze.patch: Drop, fixed upstream
 
- -- Iain Lane <laney@ubuntu.com>  Sat, 08 Aug 2009 01:08:20 +0100
+ -- Iain Lane <laney@ubuntu.com>  Sun, 09 Aug 2009 16:36:19 +0100
 
 f-spot (0.5.0.3-5) unstable; urgency=low
 
@@ -403,7 +430,7 @@ f-spot (0.3.5-0ubuntu1) feisty; urgency=low
     - More descriptive error when dbus session bus is missing
     - Don't show Hidden photos unless asked
   * Add fix to google-sharp/PicasaWeb.cs from r3011 to fix PicasaWeb export
-	
+    
  -- Andrew Mitchell <ajmitch@ubuntu.com>  Wed, 14 Mar 2007 10:29:37 +1300
 
 f-spot (0.3.4-0ubuntu1) feisty; urgency=low
@@ -421,7 +448,7 @@ f-spot (0.3.3-0ubuntu1) feisty; urgency=low
   * Add libgl1-mesa-dev | libgl-dev to Build-Depends to be able to load 
     libGL.so.1 at run time (LP: #81578)
   * Disable scrollkeeper usage in debian/ules
-	
+    
  -- Andrew Mitchell <ajmitch@ubuntu.com>  Tue,  6 Feb 2007 11:53:45 +1300
 
 f-spot (0.3.2-0ubuntu1) feisty; urgency=low
@@ -486,7 +513,7 @@ f-spot (0.2.1-1.1) unstable; urgency=medium
      into this and preparing a Patch (Closes: #394142)
 
  -- Michael Ablassmeier <abi@debian.org>  Fri, 27 Oct 2006 12:59:23 +0200 
-	
+    
 f-spot (0.2.1-1ubuntu1) edgy; urgency=low
 
   * Apply bug fixes from upstream CVS:
@@ -498,7 +525,7 @@ f-spot (0.2.1-1ubuntu1) edgy; urgency=low
     - #357286: Crash in commandline parsing
     - #354621: Update google-sharp for authenticated connections
   * Fix screensaver exec line in tools/f-spot-screensaver
-	
+    
  -- Andrew Mitchell <ajmitch@ubuntu.com>  Thu, 12 Oct 2006 17:17:16 +1300
 
 f-spot (0.2.1-1) unstable; urgency=low
@@ -540,7 +567,7 @@ f-spot (0.2.0-1) unstable; urgency=low
     - ubuntu.03-sqlite3-when-new: Create sqlite 3 database by default
     - ubuntu.04-screensaver: Set correct screensaver path
   * Add f-spot(1) manpage, thanks to Andrew Burton (Closes: #312566)
-  	
+    
  -- Andrew Mitchell <ajmitch@debian.org>  Fri,  1 Sep 2006 09:16:30 +1200
 
 f-spot (0.1.11-3ubuntu5) edgy; urgency=low
@@ -598,7 +625,7 @@ f-spot (0.1.11-1ubuntu1) dapper; urgency=low
     - Malone #42736  
   * Update 02_f-spot-copy.dpatch from GNOME #326860
     - Malone #38010  
-	
+    
  -- Andrew Mitchell <ajmitch@ubuntu.com>  Tue, 16 May 2006 18:17:23 +1200
 
 f-spot (0.1.11-1) unstable; urgency=low
@@ -648,7 +675,7 @@ f-spot (0.1.9-0ubuntu1) dapper; urgency=low
     - Open With menu.
     - Database upgrade path.
     - Translated default tag names.
-	
+    
  -- Andrew Mitchell <ajmitch@ubuntu.com>  Tue, 14 Feb 2006 11:50:37 +1300
 
 f-spot (0.1.8-1) unstable; urgency=low
