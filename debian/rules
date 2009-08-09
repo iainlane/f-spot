@@ -38,6 +38,9 @@ override_dh_install:
 	rm $(CURDIR)/debian/f-spot/usr/lib/pkgconfig/gio-sharp-unstable.pc
 	dh_install
 
+# disable tests
+override_dh_auto_test:
+
 get-orig-source:
 	[ -d ../tarballs ] || mkdir ../tarballs
 	uscan \
