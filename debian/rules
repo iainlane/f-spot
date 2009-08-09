@@ -26,6 +26,7 @@ override_dh_clean:
 
 override_dh_auto_configure: autoreconf-stamp
 	dh_auto_configure -- \
+		--disable-scrollkeeper \
 		LDFLAGS="$(LDFLAGS)" \
 		MCS=/usr/bin/csc
 
