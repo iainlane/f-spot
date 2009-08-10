@@ -34,8 +34,6 @@ override_dh_install:
 	rm $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.a \
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.la \
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.so
-	cp $(CURDIR)/debian/NDesk.Glitz.dll.config \
-	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/
 	dh_install
 
 # disable tests
