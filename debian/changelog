@@ -1,7 +1,6 @@
 f-spot (0.6.0.0-1) UNRELEASED; urgency=low
 
-  Still cracky crack crack
-  * New Upstream Version
+  * New Upstream Version 0.6.0.0
    - no longer depends on libeog
    - fighting against deprecation, on the path to gnome3
    - new viewer widget
@@ -30,8 +29,15 @@ f-spot (0.6.0.0-1) UNRELEASED; urgency=low
     ubuntu_raw_escape_quote.dpatch,
     svn-display-sidebar.dpatch,
     svn-no-versionellipze.patch: Drop, fixed upstream
+  * debian/control: Bump versions on a load of build-deps to match upstream
+    configure checks. Also drop a load more build-deps that are no longer
+    needed.
+  * debian/{docs,menu,manpages}: Prefix with f-spot
+  * debian/rules, debian/f-spot.install: Move DLLmap installation to
+    f-spot.install instead of cp in rules
+  * debian/gkeyfile-sharp.dll.config: Add, DLLImport was incorrect
 
- -- Iain Lane <laney@ubuntu.com>  Sun, 09 Aug 2009 16:36:19 +0100
+ -- Iain Lane <laney@ubuntu.com>  Mon, 10 Aug 2009 17:42:29 +0100
 
 f-spot (0.5.0.3-5) unstable; urgency=low
 
