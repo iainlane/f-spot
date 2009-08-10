@@ -7,7 +7,7 @@ f-spot (0.6.0.0-1) UNRELEASED; urgency=low
    - new widget showing folders organisation
    - new Preference dialog
    - db and config moved to .config (or whatever is pointed by xdg config)
-   - tons of bugs fixed (really) (Closes: #534566, #498568, #534599, #301151,
+   - tons of bugs fixed (really) (Closes: #534566, #449293, #479176, #305306,
      #537942, #418356) (LP: #77133, #290564, #298283, #379373, #405005, #116796,
      #178303, #355035, #368275)
    - updated translations
