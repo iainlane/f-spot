@@ -41,6 +41,9 @@ override_dh_install:
 # disable tests
 override_dh_auto_test:
 
+# libs aren't ours to ship
+override_dh_makeclilibs:
+
 get-orig-source:
 	[ -d ../tarballs ] || mkdir ../tarballs
 	uscan \
