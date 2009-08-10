@@ -7,11 +7,15 @@ f-spot (0.6.0.0-1) UNRELEASED; urgency=low
    - new widget showing folders organisation
    - new Preference dialog
    - db and config moved to .config (or whatever is pointed by xdg config)
-   - tons of bugs fixed (really)
+   - tons of bugs fixed (really) (Closes: #534566, #498568, #534599, #301151,
+     #537942) (LP: #77133, #290564, #298283, #379373, #405005, #116796,
+     #178303, #355035, #368275)
    - updated translations
   * debian/control: Set Vcs-* to point to new Git locations
-  * debian/control, debian/patches/*: Switch to quilt for patches 
-  * debian/rules, debian/control: Rewrite in DH7 style 
+  * debian/control, debian/patches/*: Switch to quilt for patches, refresh all
+    patches
+  * debian/rules, debian/control: Rewrite in DH7 style (Closes: #531769)
+  * debian/rules: Use ltmain-as-needed, modify LDFLAGS
   * debian/patches/99_ltmain_as-needed.dpatch: Drop, now applied in rules by
     copying from debian/
   * debian/patches/debian_unlink_nunit.dpatch: Drop, upstream now handles this
@@ -26,7 +30,7 @@ f-spot (0.6.0.0-1) UNRELEASED; urgency=low
     debian/patches/svn-r4545_locales-import.dpatch,
     debian/patches/debian_use_csc.dpatch,
     ubuntu_1024x600_CDExport.cs.dpatch,
-    ubuntu_raw_escape_quote.dpatch,
+    ubuntu_raw_escape_quote.dpatch (Closes: #481124),
     svn-display-sidebar.dpatch,
     svn-no-versionellipze.patch: Drop, fixed upstream
   * debian/control: Bump versions on a load of build-deps to match upstream
