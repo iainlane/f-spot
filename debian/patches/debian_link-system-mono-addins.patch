@@ -17,7 +17,7 @@
  DIR_DOCS = $(top_builddir)/docs
  DIR_EXTENSIONS = $(top_builddir)/extensions
  DIR_GLITZ = $(top_builddir)/lib/glitz-sharp/src
-@@ -28,10 +25,10 @@
+@@ -24,10 +21,10 @@
  LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
@@ -30,8 +30,8 @@
 +	-pkg:mono-addins-setup		\
 +	-pkg:mono-addins-gui
  LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
- LINK_TAO = 								\
- 	-r:$(DIR_TAO_OPENGL)/Tao.OpenGl.dll				\
+ LINK_GIOSHARP = -r:$(DIR_GIOSHARP)/gio-sharp.dll
+ LINK_GTKSHARPBEANS = -r:$(DIR_GTKSHARPBEANS)/gtk-sharp-beans.dll
 --- a/configure.ac
 +++ b/configure.ac
 @@ -302,10 +302,6 @@
@@ -43,8 +43,8 @@
 -lib/mono-addins/Mono.Addins/Makefile
 -lib/mono-addins/Mono.Addins.Setup/Makefile
  lib/semweb/Makefile
- lib/Tao/Makefile
- lib/Tao/Tao.GlPostProcess/Makefile
+ docs/Makefile
+ icons/Makefile
 --- a/lib/Makefile.am
 +++ b/lib/Makefile.am
 @@ -10,7 +10,6 @@
@@ -52,6 +52,6 @@
  	libfspot			\
  	libgphoto2-sharp	\
 -	mono-addins			\
- 	semweb				\
- 	Tao
+ 	semweb
  
+ # Depending on whether the packaged ndesk-dbus is used, we might not want to

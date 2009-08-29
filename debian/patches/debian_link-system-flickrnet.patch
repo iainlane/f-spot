@@ -8,7 +8,7 @@
 @DPATCH@
 --- a/configure.ac
 +++ b/configure.ac
-@@ -323,7 +323,6 @@
+@@ -318,7 +318,6 @@
  extensions/Exporters/CDExport/Makefile
  extensions/Exporters/DefaultExporters/Makefile
  extensions/Exporters/FlickrExport/Makefile
@@ -18,15 +18,15 @@
  extensions/Exporters/FolderExport/Makefile
 --- a/extensions/Exporters/FlickrExport/Makefile.am
 +++ b/extensions/Exporters/FlickrExport/Makefile.am
-@@ -19,16 +19,13 @@
- 	$(LINK_GPHOTO2)				\
+@@ -20,16 +20,13 @@
  	$(LINK_GIOSHARP)				\
  	$(LINK_GTKSHARPBEANS)		\
+ 	$(LINK_DBUS)				\
 -	-r:FlickrNet/FlickrNet.dll	\
  	-r:Mono.Posix
  
  PKGS =					\
-+	-pkg:flickrnet-2.1.5		\
++    -pkg:flickrnet-2.1.5    \
  	-pkg:gtk-sharp-2.0		\
  	-pkg:glade-sharp-2.0
  
@@ -36,7 +36,7 @@
  RESOURCES =				\
  	-resource:$(srcdir)/$(PLUGIN_MANIFEST)	\
  	-resource:$(srcdir)/$(PLUGIN_NAME).glade
-@@ -39,7 +36,6 @@
+@@ -40,7 +37,6 @@
  	mautil p $(PLUGIN_ASSEMBLY)
  
  $(PLUGIN_ASSEMBLY): $(PLUGIN_SOURCES) $(PLUGIN_MANIFEST)

@@ -9,7 +9,7 @@
 +++ b/f-spot-import.desktop.in
 @@ -15,3 +15,4 @@
  X-GNOME-Bugzilla-Component=General
- X-GNOME-Bugzilla-Version=0.6.0.0
+ X-GNOME-Bugzilla-Version=0.6.1.1
  X-GNOME-DocPath=f-spot/f-spot.xml
 +X-GIO-NoFuse=true
 --- a/f-spot-import.desktop.in.in
