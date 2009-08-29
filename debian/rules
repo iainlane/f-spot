@@ -7,10 +7,6 @@ UPVERSION = $(shell echo $(VERSION) | sed 's,-.*,,' | sed 's,+dfsg.*,,')
 
 LDFLAGS += -Wl,-z,defs -Wl,-O1 -Wl,--as-needed
 
-DEB_CONFIGURE_SCRIPT_ENV := LDFLAGS="-Wl,-O1 -Wl,--as-needed"
-DEB_CONFIGURE_USER_FLAGS += MCS=/usr/bin/csc CSC=/usr/bin/csc
-DEB_CONFIGURE_EXTRA_FLAGS := --disable-scrollkeeper
-
 # robbed from tomboy
 autoreconf: autoreconf-stamp
 autoreconf-stamp:
@@ -31,9 +27,12 @@ override_dh_auto_configure: autoreconf-stamp
 		MCS=/usr/bin/csc
 
 override_dh_install:
-	rm $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.a \
+	mv $(CURDIR)/debian/f-spot/usr/libexec/gnome-screensaver \
+	   $(CURDIR)/debian/f-spot/usr/lib/xscreensaver
+	rm -rf $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.a \
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.la \
-	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.so
+	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.so \
+	   $(CURDIR)/debian/f-spot/usr/libexec
 	dh_install
 
 # disable tests
