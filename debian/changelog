@@ -26,8 +26,9 @@ f-spot (0.6.1.1-1) karmic; urgency=low
     actually works. Previously it was installed in /usr/libexec and so was not
     found by gnome-screensaver. (Closes: #544204)
   * debian/control: Update flickrnet dependency to new ABI (Closes: #543803) 
+  * debian/control: Increase Standards-Version to 3.8.3, no changes required 
 
- -- Iain Lane <laney@ubuntu.com>  Sat, 29 Aug 2009 20:45:48 +0100
+ -- Iain Lane <laney@ubuntu.com>  Sat, 29 Aug 2009 21:08:28 +0100
 
 f-spot (0.6.0.0-1) unstable; urgency=low
 
