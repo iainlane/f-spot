@@ -745,7 +745,12 @@
 
 			<itemizedlist>
 				<listitem>
-					<para>Nahrajte své profily do složky <filename class="directory">/usr/share/color/icc</filename> nebo <filename class="directory">/usr/local/share/color/icc</filename></para>
+					<para>
+						Copy your color profiles into the 
+						<filename class="directory">/usr/share/color/icc</filename> or 
+						<filename class="directory">/usr/local/share/color/icc</filename> 
+						directory.
+					</para>
 				</listitem>
 				<listitem>
 					<para>Správu barev povolíte v nastavení dostupném v nabídce <menuchoice><guimenu>Upravit</guimenu><guimenuitem>Nastavení</guimenuitem></menuchoice>.</para>				

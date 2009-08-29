@@ -7,6 +7,7 @@
  * 	Miguel de Icaza
  * 	Nat Friedman
  * 	Gabriel Burt
+ * 	Markus Lindqvist <markus.lindqvist@iki.fi>
  *
  * This is free software. See COPYING for details.
  */
@@ -256,7 +257,7 @@ public class ImportCommand : GladeDialog
 				}
 			} else {
 				ImportSource source = new BrowseSource (Catalog.GetString ("(No Cameras Detected)"),
-									"emblem-camera");
+									"camera-photo");
 				item = new SourceItem (source);
 				item.Activated += HandleActivated;
 				item.Sensitive = false;
@@ -523,6 +524,13 @@ public class ImportCommand : GladeDialog
 		importer = null;
 	}
 	
+	void SavePreferences ()
+	{
+		Preferences.Set(Preferences.IMPORT_COPY_FILES, copy_check.Active);
+		Preferences.Set(Preferences.IMPORT_INCLUDE_SUBFOLDERS, recurse_check.Active);
+		Preferences.Set(Preferences.IMPORT_CHECK_DUPLICATES, duplicate_check.Active);
+	}
+	
 	public void HandleImportBrowse (object o, EventArgs args) 
 	{
 		string path = ChoosePath ();
@@ -577,25 +585,32 @@ public class ImportCommand : GladeDialog
 	       
 		idle_start.Start ();
 	}
+	
+	private void LoadPreferences ()
+	{
+		if (FSpot.Preferences.Get<int> (FSpot.Preferences.IMPORT_WINDOW_WIDTH) > 0)
+			this.Dialog.Resize (FSpot.Preferences.Get<int> (FSpot.Preferences.IMPORT_WINDOW_WIDTH), FSpot.Preferences.Get<int> (FSpot.Preferences.IMPORT_WINDOW_HEIGHT));
+
+		if (FSpot.Preferences.Get<int> (FSpot.Preferences.IMPORT_WINDOW_PANE_POSITION) > 0)
+			import_hpaned.Position = FSpot.Preferences.Get<int> (FSpot.Preferences.IMPORT_WINDOW_PANE_POSITION);
+
+		copy_check.Active = Preferences.Get<bool> (Preferences.IMPORT_COPY_FILES);
+		recurse_check.Active = Preferences.Get<bool> (Preferences.IMPORT_INCLUDE_SUBFOLDERS);
+		duplicate_check.Active = Preferences.Get<bool> (Preferences.IMPORT_CHECK_DUPLICATES);
+	}
 
 	public int ImportFromFile (PhotoStore store, string path)
 	{
 		this.store = store;
 		this.CreateDialog ("import_dialog");
-		
 		this.Dialog.TransientFor = main_window;
 		this.Dialog.WindowPosition = Gtk.WindowPosition.CenterOnParent;
 		this.Dialog.Response += HandleDialogResponse;
-
- 		if (FSpot.Preferences.Get<int> (FSpot.Preferences.IMPORT_WINDOW_WIDTH) > 0)
- 			this.Dialog.Resize (FSpot.Preferences.Get<int> (FSpot.Preferences.IMPORT_WINDOW_WIDTH), FSpot.Preferences.Get<int> (FSpot.Preferences.IMPORT_WINDOW_HEIGHT));
-
- 		if (FSpot.Preferences.Get<int> (FSpot.Preferences.IMPORT_WINDOW_PANE_POSITION) > 0)
-			import_hpaned.Position = FSpot.Preferences.Get<int> (FSpot.Preferences.IMPORT_WINDOW_PANE_POSITION);
-
-	        AllowFinish = false;
-		
 		this.Dialog.DefaultResponse = ResponseType.Ok;
+
+		AllowFinish = false;
+		
+		LoadPreferences ();
 		
 		//import_folder_entry.Activated += HandleEntryActivate;
 		duplicate_check.Toggled += HandleRecurseToggled;
@@ -678,6 +693,7 @@ public class ImportCommand : GladeDialog
 
 		if (response == ResponseType.Ok) {
 			this.UpdateTagStore (tag_entry.GetTypedTagNames ());
+			SavePreferences ();
 			this.Finish ();
 
 			if (tags_selected != null && tags_selected.Count > 0) {

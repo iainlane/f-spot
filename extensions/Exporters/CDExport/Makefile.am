@@ -16,12 +16,12 @@ REFS =					\
 	$(LINK_MONO_ADDINS)			\
 	$(LINK_SEMWEB)				\
 	$(LINK_GPHOTO2)				\
-	$(LINK_GTKSHARPBEANS)			\	
+	$(LINK_GTKSHARPBEANS)			\
 	$(LINK_GIOSHARP)			\
+	$(LINK_DBUS)				\
 	-r:Mono.Posix
 
 PKGS =					\
-	-pkg:gnome-vfs-sharp-2.0	\
 	-pkg:gtk-sharp-2.0
 
 RESOURCES =				\

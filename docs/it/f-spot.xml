@@ -524,7 +524,12 @@
 
 			<itemizedlist>
 				<listitem>
-					<para>Copiare i propri profili colore in una delle directory <filename class="directory">/usr/share/color/icc</filename> o <filename class="directory">/usr/local/share/color/icc</filename>.</para>
+					<para>
+						Copy your color profiles into the 
+						<filename class="directory">/usr/share/color/icc</filename> or 
+						<filename class="directory">/usr/local/share/color/icc</filename> 
+						directory.
+					</para>
 				</listitem>
 				<listitem>
 					<para>La stampa delle fotografie si ottiene mediante il menù <menuchoice><guimenu>File</guimenu><guimenuitem>Stampa</guimenuitem></menuchoice>.</para>				

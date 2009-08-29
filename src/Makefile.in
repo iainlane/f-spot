@@ -93,7 +93,7 @@ DIR_DBUS_GLIB = @DIR_DBUS_GLIB@
 DISTCHECK_CONFIGURE_FLAGS = @DISTCHECK_CONFIGURE_FLAGS@
 DOC_USER_FORMATS = @DOC_USER_FORMATS@
 DSYMUTIL = @DSYMUTIL@
-ECHO = @ECHO@
+DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
@@ -102,8 +102,7 @@ EXEEXT = @EXEEXT@
 EXIF_CFLAGS = @EXIF_CFLAGS@
 EXIF_LIBS = @EXIF_LIBS@
 EXIF_SOVERSION = @EXIF_SOVERSION@
-F77 = @F77@
-FFLAGS = @FFLAGS@
+FGREP = @FGREP@
 F_CFLAGS = @F_CFLAGS@
 F_LIBS = @F_LIBS@
 GCONFTOOL = @GCONFTOOL@
@@ -144,6 +143,7 @@ INTLTOOL_PERL = @INTLTOOL_PERL@
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
 LCMS_CFLAGS = @LCMS_CFLAGS@
 LCMS_LIBS = @LCMS_LIBS@
+LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBEXIF_VERSION_CHECK_CFLAGS = @LIBEXIF_VERSION_CHECK_CFLAGS@
 LIBEXIF_VERSION_CHECK_LIBS = @LIBEXIF_VERSION_CHECK_LIBS@
@@ -155,6 +155,7 @@ LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LINK_BEAGLE = @LINK_BEAGLE@
 LINK_DBUS = @LINK_DBUS@
+LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAINT = @MAINT@
@@ -167,12 +168,16 @@ MSGFMT_OPTS = @MSGFMT_OPTS@
 MSGMERGE = @MSGMERGE@
 NDESK_DBUS_CFLAGS = @NDESK_DBUS_CFLAGS@
 NDESK_DBUS_LIBS = @NDESK_DBUS_LIBS@
+NM = @NM@
 NMEDIT = @NMEDIT@
 NUNIT_CFLAGS = @NUNIT_CFLAGS@
 NUNIT_DEFINES = @NUNIT_DEFINES@
 NUNIT_LIBS = @NUNIT_LIBS@
+OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 OMF_DIR = @OMF_DIR@
+OTOOL = @OTOOL@
+OTOOL64 = @OTOOL64@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -194,7 +199,6 @@ STRIP = @STRIP@
 TURTLEDIR = @TURTLEDIR@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
-WARN_CFLAGS = @WARN_CFLAGS@
 XGETTEXT = @XGETTEXT@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
@@ -202,7 +206,7 @@ abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
-ac_ct_F77 = @ac_ct_F77@
+ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
@@ -234,6 +238,7 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
+lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -262,10 +267,6 @@ DIR_KEYRING = $(top_builddir)/lib/gnome-keyring-sharp
 DIR_LIBFSPOT = $(top_builddir)/lib/libfspot
 DIR_SEMWEB = $(top_builddir)/lib/semweb
 DIR_SRC = $(top_builddir)/src
-DIR_TAO_OPENGL = $(top_builddir)/lib/Tao/Tao.OpenGl
-DIR_TAO_GLU = $(top_builddir)/lib/Tao/Tao.OpenGl.Glu
-DIR_TAO_EXTENSIONLOADER = $(top_builddir)/lib/Tao/Tao.OpenGl.ExtensionLoader
-DIR_TAO_GLPOSTPROCESS = $(top_builddir)/lib/Tao/Tao.GlPostProcess
 DIR_GIOSHARP = $(top_builddir)/lib/gio-sharp/gio
 DIR_GTKSHARPBEANS = $(top_builddir)/lib/gtk-sharp-beans
 LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
@@ -277,11 +278,6 @@ LINK_MONO_ADDINS = \
 	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
 
 LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
-LINK_TAO = \
-	-r:$(DIR_TAO_OPENGL)/Tao.OpenGl.dll				\
-	-r:$(DIR_TAO_GLU)/Tao.OpenGl.Glu.dll				\
-	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
-
 LINK_GIOSHARP = -r:$(DIR_GIOSHARP)/gio-sharp.dll
 LINK_GTKSHARPBEANS = -r:$(DIR_GTKSHARPBEANS)/gtk-sharp-beans.dll
 CSC_FLAGS = -debug
@@ -378,6 +374,7 @@ WIDGETS_CSDISTFILES = \
 	$(srcdir)/Widgets/CustomPrintWidget.cs	\
 	$(srcdir)/Widgets/DateEdit.cs		\
 	$(srcdir)/Widgets/DateEditFlags.cs	\
+	$(srcdir)/Widgets/DissolveTransition.cs	\
 	$(srcdir)/Widgets/HighlightedBox.cs	\
 	$(srcdir)/Widgets/ImageView.cs		\
 	$(srcdir)/Widgets/Layout.cs		\
@@ -386,7 +383,10 @@ WIDGETS_CSDISTFILES = \
 	$(srcdir)/Widgets/PointerMode.cs	\
 	$(srcdir)/Widgets/Rating.cs		\
 	$(srcdir)/Widgets/SaneTreeView.cs	\
-	$(srcdir)/Widgets/ScrolledView.cs
+	$(srcdir)/Widgets/ScrolledView.cs	\
+	$(srcdir)/Widgets/PushTransition.cs	\
+	$(srcdir)/Widgets/CairoTransition.cs	\
+	$(srcdir)/Widgets/SlideShowTransition.cs
 
 GNOME_PLATFORM_CSDISTFILES = \
 	$(srcdir)/Platform/Gnome/Desktop.cs		\
@@ -441,6 +441,7 @@ F_SPOT_CSDISTFILES = \
 	$(srcdir)/Extensions/PhotoSelectionCondition.cs	\
 	$(srcdir)/Extensions/PopupCommands.cs	\
 	$(srcdir)/Extensions/ServiceNode.cs	\
+	$(srcdir)/Extensions/TransitionNode.cs	\
 	$(srcdir)/Extensions/ViewModeCondition.cs	\
 	$(srcdir)/Fader.cs			\
 	$(srcdir)/FileImportBackend.cs		\
@@ -459,7 +460,6 @@ F_SPOT_CSDISTFILES = \
 	$(srcdir)/FormClient.cs			\
 	$(srcdir)/FullScreenView.cs		\
 	$(srcdir)/GdkGlx.cs			\
-	$(srcdir)/GlTransition.cs		\
 	$(srcdir)/GroupAdaptor.cs		\
 	$(srcdir)/GroupSelector.cs		\
 	$(srcdir)/Accelerometer.cs		\
@@ -494,7 +494,6 @@ F_SPOT_CSDISTFILES = \
 	$(srcdir)/Imaging/X3fFile.cs		\
 	$(srcdir)/Imaging/XmpFile.cs		\
 	$(srcdir)/Imaging/Tiff.cs		\
-	$(srcdir)/IOperation.cs			\
 	$(srcdir)/JobStore.cs			\
 	$(srcdir)/Jobs/SyncMetadataJob.cs	\
 	$(srcdir)/Jobs/CalculateHashJob.cs	\
@@ -536,8 +535,6 @@ F_SPOT_CSDISTFILES = \
 	$(srcdir)/TagStore.cs			\
 	$(srcdir)/ThumbnailCache.cs		\
 	$(srcdir)/ThumbnailGenerator.cs		\
-	$(srcdir)/Texture.cs			\
-	$(srcdir)/TextureDisplay.cs             \
 	$(srcdir)/Term.cs			\
 	$(srcdir)/TimeAdaptor.cs		\
 	$(srcdir)/TipWindow.cs			\
@@ -569,6 +566,7 @@ F_SPOT_CSDISTFILES = \
 	$(srcdir)/GPhotoCamera.cs		\
 	$(srcdir)/CameraSelectionDialog.cs	\
 	$(srcdir)/CameraFileSelectionDialog.cs	\
+	$(srcdir)/Widgets/SlideShow.cs		\
 	$(srcdir)/Widgets/CompositeUtils.cs	\
 	$(srcdir)/Widgets/Dissolve.cs		\
 	$(srcdir)/Widgets/EditorPage.cs		\
@@ -632,6 +630,8 @@ JOBSCHEDULER_ASSEMBLIES = \
 
 BLING_ASSEMBLIES = \
 	-pkg:gtk-sharp-2.0			\
+	-r:Mono.Cairo				\
+	-r:FSpot.Utils.dll			\
 	$(LINK_GTKSHARPBEANS)
 
 WIDGETS_ASSEMBLIES = \
@@ -665,7 +665,6 @@ F_SPOT_ASSEMBLIES = \
 	$(LINK_FLICKR)				\
 	$(LINK_KEYRING)				\
 	$(LINK_SMUGMUG)				\
-	$(LINK_TAO)				\
 	$(LINK_SEMWEB)				\
 	$(LINK_GTKSHARPBEANS)			\
 	$(LINK_GIOSHARP)			\
@@ -1017,37 +1016,55 @@ uninstall-am: uninstall-binSCRIPTS uninstall-fspotlibDATA
 	uninstall-binSCRIPTS uninstall-fspotlibDATA
 
 
+Cms.dll.mdb: Cms.dll
+
 Cms.dll: $(CMS_CSFILES)
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(UNSAFE) $(CMS_CSFILES) $(CMS_ASSEMBLIES)
+
+FSpot.Core.dll.mdb: FSpot.Core.dll
 
 FSpot.Core.dll: $(CORE_CSFILES) FSpot.Utils.dll Cms.dll
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(CORE_CSFILES) $(CORE_ASSEMBLIES)
 
+FSpot.Query.dll.mdb: FSpot.Query.dll
+
 FSpot.Query.dll: $(QUERY_CSFILES) FSpot.Utils.dll FSpot.Core.dll
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(QUERY_CSFILES) $(QUERY_ASSEMBLIES)
+
+FSpot.Utils.dll.mdb: FSpot.Utils.dll
 
 FSpot.Utils.dll: $(UTILS_CSFILES)
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(UTILS_CSFILES) $(UTILS_ASSEMBLIES)
 
+FSpot.JobScheduler.dll.mdb: FSpot.JobScheduler.dll
+
 FSpot.JobScheduler.dll: $(JOBSCHEDULER_CSFILES) FSpot.Utils.dll
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(JOBSCHEDULER_CSFILES) $(JOBSCHEDULER_ASSEMBLIES)
+
+FSpot.Bling.dll.mdb: FSpot.Bling.dll
 
 FSpot.Bling.dll: $(BLING_CSFILES)
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(BLING_CSFILES) $(BLING_ASSEMBLIES)
 
+FSpot.Widgets.dll.mdb: FSpot.Widgets.dll
+
 FSpot.Widgets.dll: $(WIDGETS_CSFILES) FSpot.Utils.dll FSpot.Core.dll
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(WIDGETS_CSFILES) $(WIDGETS_ASSEMBLIES)
 
+FSpot.Platform.dll.mdb: FSpot.Platform.dll
+
 FSpot.Platform.dll: $(PLATFORM_CSFILES) FSpot.Utils.dll
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(PLATFORM_CSFILES) $(PLATFORM_ASSEMBLIES)
+
+f-spot.exe.mdb: f-spot.exe
 
 f-spot.exe: $(F_SPOT_CSFILES) FSpot.Utils.dll FSpot.Core.dll FSpot.Query.dll FSpot.JobScheduler.dll FSpot.Bling.dll FSpot.Widgets.dll Cms.dll FSpot.Platform.dll $(F_SPOT_RESOURCES)
 	@echo -e "\n*** Compiling $@"

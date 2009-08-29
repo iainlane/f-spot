@@ -23,6 +23,10 @@ namespace FSpot
 		public const string IMPORT_WINDOW_WIDTH = APP_FSPOT + "ui/import_window_width";
 		public const string IMPORT_WINDOW_HEIGHT = APP_FSPOT + "ui/import_window_height";
 		public const string IMPORT_WINDOW_PANE_POSITION = APP_FSPOT + "ui/import_window_pane_position";
+
+		public const string IMPORT_COPY_FILES = "/apps/f-spot/import/copy_files";
+		public const string IMPORT_INCLUDE_SUBFOLDERS = "/apps/f-spot/import/include_subfolders";
+		public const string IMPORT_CHECK_DUPLICATES = "/apps/f-spot/import/check_duplicates";
 		
 		public const string VIEWER_WIDTH = APP_FSPOT + "ui/viewer_width";
 		public const string VIEWER_HEIGHT = APP_FSPOT + "ui/viewer_height";
@@ -70,9 +74,6 @@ namespace FSpot
 		public const string EDIT_REDEYE_THRESHOLD = APP_FSPOT + "edit/redeye_threshold";
 		public const string EDIT_CREATE_XCF_VERSION = APP_FSPOT + "edit/create_xcf";
 
-		public const string GNOME_SCREENSAVER_THEME = "/apps/gnome-screensaver/themes";
-		public const string GNOME_SCREENSAVER_MODE = "/apps/gnome-screensaver/mode";
-
 		public const string GNOME_MAILTO = "/desktop/gnome/url-handlers/mailto/";
 		public const string GNOME_MAILTO_COMMAND = GNOME_MAILTO + "command";
 		public const string GNOME_MAILTO_ENABLED = GNOME_MAILTO + "enabled";
@@ -89,8 +90,6 @@ namespace FSpot
 					backend = new PreferenceBackend ();
 					changed_handler = new EventHandler<NotifyEventArgs> (OnSettingChanged);
 					backend.AddNotify (APP_FSPOT, changed_handler);
-					backend.AddNotify (GNOME_SCREENSAVER_THEME, changed_handler);
-					backend.AddNotify (GNOME_SCREENSAVER_MODE, changed_handler);
 					backend.AddNotify (GNOME_MAILTO, changed_handler);
 				}
 				return backend;
@@ -166,6 +165,10 @@ namespace FSpot
 			case COLOR_MANAGEMENT_DISPLAY_PROFILE:
 			case COLOR_MANAGEMENT_OUTPUT_PROFILE:
 				return String.Empty;
+			case IMPORT_CHECK_DUPLICATES:
+			case IMPORT_COPY_FILES:
+			case IMPORT_INCLUDE_SUBFOLDERS:
+				return true;
 			default:
 				return null;
 			}
