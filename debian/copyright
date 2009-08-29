@@ -4,10 +4,6 @@ Sat,  4 Sep 2004 21:32:52 +0200.
 The copyright and licenses of the complete source code of f-spot 0.4.1 was
 checked by Mirco Bauer <meebey@debian.org> on Wed, 12 Dec 2007 22:48:15 +0200.
 
-The current Debian maintainers are:
-Mirco Bauer <meebey@debian.org>
-Tim Retout <tim@retout.co.uk>
-
 It was downloaded from:
 http://www.f-spot.org/
 
@@ -46,96 +42,75 @@ Copyright (c) 1992 Handmade Software, Inc.
 src/FolderExport.cs:
 Copyright (C) 2005 Alessandro Gervaso <gervystar@gervystar.net>
 
-mono-addins/*:
+lib/mono-addins/*:
 Copyright (C) 2007 Novell, Inc
 
-SmugMugNet/*:
+lib/SmugMugNet/*:
 Copyright (C) 2006 Thomas Van Machelen
 Copyright (C) 2006 Novell, Inc.
 
-Tao/*:
-Copyright ©2003-2006 Tao Framework Team
-
-Tao/Tao.GlPostProcess/GlPostProcess.cs
-Tao/Tao.OpenGl.ExtensionLoader/GlExtensionLoader.cs:
-Copyright (c) 2004  Vladimir Vukicevic  <vladimir@pobox.com>
-
-dbus-sharp/*:
-dbus-sharp-glib/*:
+lib/dbus-sharp/*:
+lib/dbus-sharp-glib/*:
 Copyright 2006-2007 Alp Toker <alp@atoker.com>
 
-gio-sharp/* except gio-sharp/gio/FileFactory.cs:
+lib/gio-sharp/* except lib/gio-sharp/gio/FileFactory.cs:
 Copyright (C) 2008 Novell, Inc.
 
-gio-sharp/gio/FileFactory.cs:
+lib/gio-sharp/gio/FileFactory.cs:
 Copyright (C) 2008 Stephane Delcroix
 
-glitz-sharp/*:
+lib/glitz-sharp/*:
 Copyright 2006 Alp Toker <alp@atoker.com>
 
-gnome-keyring-sharp/*:
+lib/gnome-keyring-sharp/*:
 (C) Copyright 2006 Novell, Inc.
 
-gnome-keyring-sharp/Ring.cs:
+lib/gnome-keyring-sharp/Ring.cs:
 (C) Copyright 2006 Novell, Inc.
 (C) Copyright 2007 Alp Toker
 
-google-sharp/*:
-(C) Copyright 2006 Novell, Inc.
-
-google-sharp/Authentication.cs
-google-sharp/MultipartRequest.cs
-google-sharp/GoogleConnection.cs
-google-sharp/PicasaAlbum.cs
-google-sharp/PicasaPicture.cs
-google-sharp/PicasaWeb.cs
-google-sharp/GoogleService.cs
-google-sharp/XmlUtil.cs:
-(C) Copyright 2006 Novell, Inc
-(C) Copyright 2007 S. Delcroix
-
-semweb/*:
+lib/semweb/*:
 Copyright 2005 Joshua Tauberer
 
-semweb/Util.cs:
+lib/semweb/Util.cs:
 Copyright (C) 2004-2005 Novell, Inc
 
-libeog/*:
+lib/libeog/*:
 Copyright (C) 2000 The Free Software Foundation
 
-libeog/accessible-image-view.[ch]
-libeog/accessible-image-view-factory.[ch]:
+lib/libeog/accessible-image-view.[ch]
+lib/libeog/accessible-image-view-factory.[ch]:
 Copyright 2002 Sun Microsystems Inc.
 
-libfspot/f-image-view.[ch]
-libfspot/f-utils.[ch]:
+lib/libfspot/f-image-view.[ch]
+lib/libfspot/f-utils.[ch]:
 Copyright (C) 2003  Ettore Perazzoli
 
-libfspot/f-pixbuf-utils.[ch]:
+lib/libfspot/f-pixbuf-utils.[ch]:
 Copyright (C) 2001, 2002, 2003 The Free Software Foundation, Inc.
 Copyright (C) 2003 Ettore Perazzoli
 Copyright 2002-2003 by Michael Sweet
 
-libfspot/f-jpeg-utils.[ch]:
+lib/libfspot/f-jpeg-utils.[ch]:
 Copyright (C) 2001 Red Hat Inc.
 Copyright (C) 2001 The Free Software Foundation, Inc.
 Copyright (C) 2003 Ettore Perazzoli
 
-libfspot/f-pixbuf-unsharp.[ch]:
+lib/libfspot/f-pixbuf-unsharp.[ch]:
 Copyright (C) 1999 Winston Chang
 Copyright 2004 Novell, Inc.
 
-libgphoto2-sharp/*:
+lib/libgphoto2-sharp/*:
 Ewen Cheslack-Postava <echeslack@gmail.com>
 Larry Ewing <lewing@novell.com>
 
-libjpegtran/*:
+lib/libjpegtran/*:
 Copyright (C) 2001 Lutz Müller <lutz@users.sourceforge.net>
 
-libjpegtran/transupp.[ch]:
+lib/libjpegtran/transupp.[ch]:
 Copyright (C) 1997, Thomas G. Lane
 
-libjpegtran/jpegtran.[ch]:
+lib/libjpegtran/jpegtran.[ch]:
 Copyright (C) 2001, 2002 The Free Software Foundation, Inc.
 Copyright (C) 1995-1997, Thomas G. Lane
 
@@ -156,17 +131,16 @@ License:
  Boston, MA 02111-1307, USA.
 
 On Debian systems, the complete text of the GPL can be found in
-/usr/share/common-licenses/GPL.
+/usr/share/common-licenses/GPL-2.
 
 -------------------------------------------------------------------------------
 
-mono-addins/*
-tao/*
-dbus-sharp/*
-dbus-sharp-glib/*
-glitz-sharp/*
-gnome-keyring-sharp/*
-google-sharp/*
+lib/mono-addins/*
+lib/tao/*
+lib/dbus-sharp/*
+lib/dbus-sharp-glib/*
+lib/glitz-sharp/*
+lib/gnome-keyring-sharp/*
 
 MIT:
  Permission is hereby granted, free of charge, to any person obtaining
@@ -190,7 +164,7 @@ MIT:
 
 --------------------------------------------------------------------------------
 
-semweb/*
+lib/semweb/*
 
 NOTE: between f-spot 0.1.2 and 0.1.3 semweb/ was added
 
@@ -208,12 +182,11 @@ As CCPL is non-free and non GPL compatible this license has no relevance to
 Debian in the favor of the GPL license.
 
 On Debian systems, the complete text of the GPL can be found in
-/usr/share/common-licenses/GPL.
+/usr/share/common-licenses/GPL-2.
 
 -------------------------------------------------------------------------------
 
-libeog/*
-libfspot/*
+lib/libfspot/*
 
 GPL:
  This program is free software; you can redistribute it and/or
@@ -232,13 +205,13 @@ GPL:
  Boston, MA 02111-1307, USA.
 
 On Debian systems, the complete text of the GPL can be found in
-/usr/share/common-licenses/GPL.
+/usr/share/common-licenses/GPL-2.
 
 -------------------------------------------------------------------------------
 
-gio-sharp/*
-libjpegtran/*
-libgphoto2-sharp/*
+lib/gio-sharp/*
+lib/libjpegtran/*
+lib/libgphoto2-sharp/*
 
 LGPL:
  This library is free software; you can redistribute it and/or
@@ -257,5 +230,5 @@ LGPL:
  Boston, MA 02111-1307, USA.
 
 On Debian systems, the complete text of the LGPL can be found in
-/usr/share/common-licenses/LGPL.
+/usr/share/common-licenses/LGPL-2.
 
