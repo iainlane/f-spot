@@ -31,10 +31,10 @@ f-spot (0.6.1.1-1) UNRELEASED; urgency=low
   * debian/control, debian_link-system-flickrnet.patch: Update flickrnet
     dependency to new ABI (Closes: #543803) 
   * debian/control: Increase Standards-Version to 3.8.3, no changes required 
-  * debian/copyright: Update bundled library locations and point to versioned
-    GPL
+  * debian/copyright: Update bundled library locations, point to versioned GPL
+    and update FSF address
 
- -- Iain Lane <laney@ubuntu.com>  Sun, 30 Aug 2009 00:12:57 +0100
+ -- Iain Lane <laney@ubuntu.com>  Sun, 30 Aug 2009 00:33:32 +0100
 
 f-spot (0.6.0.0-1) unstable; urgency=low
 
