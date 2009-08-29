@@ -1,6 +1,6 @@
 f-spot (0.6.1.1-1) UNRELEASED; urgency=low
 
-  * New Upstream Version 0.6.1.1
+  * New Upstream Version 0.6.1.1 (LP: #418936)
     - some files were missing from the tarball
     - fix SendEmail for thunderbird3beta
   * New Upstream Version 0.6.1.0
