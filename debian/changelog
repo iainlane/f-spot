@@ -15,9 +15,13 @@ f-spot (0.6.1.1-1) karmic; urgency=low
     debian/patches/debian_link-system-gnome-keyring.patch
     debian/patches/debian_link-system-mono-addins.patch
     debian/patches/ubuntu_nofuse_fix_photo_import.patch: Update to apply cleanly
+  * debian/patches/ubuntu_xdg-photo-dir.patch: Add new patch from Andrew
+    Higginson, slightly modified, to default to update the user's default
+    directory to XDG_PICTURES_DIR/Photos (localised) as the location to import
+    pictures. Only applies to new users; existing users will see no change.
+    (LP: #127315)
 
-
- -- Iain Lane <laney@ubuntu.com>  Sat, 29 Aug 2009 14:21:00 +0100
+ -- Iain Lane <laney@ubuntu.com>  Sat, 29 Aug 2009 17:00:02 +0100
 
 f-spot (0.6.0.0-1) unstable; urgency=low
 
