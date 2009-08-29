@@ -1,4 +1,4 @@
-AC_INIT(F-Spot, 0.6.0.0)
+AC_INIT(F-Spot, 0.6.1.1)
 AC_CONFIG_SRCDIR(src/main.cs)
 
 AM_CONFIG_HEADER(config.h)
@@ -137,8 +137,8 @@ PKG_CHECK_MODULES(NDESK_DBUS, ndesk-dbus-1.0 >= $NDESK_DBUS_REQUIRED ndesk-dbus-
 ],
 [
 	LINK_DBUS='-r:$(top_builddir)/lib/dbus-sharp/NDesk.DBus.dll -r:$(top_builddir)/lib/dbus-sharp-glib/NDesk.DBus.GLib.dll'
-	DIR_DBUS="lib/dbus-sharp"
-	DIR_DBUS_GLIB="lib/dbus-sharp-glib"
+	DIR_DBUS="dbus-sharp"
+	DIR_DBUS_GLIB="dbus-sharp-glib"
 	PATH_DBUS='../lib/dbus-sharp:../lib/dbus-sharp-glib:'
 ])
 AC_SUBST(DIR_DBUS)
@@ -307,11 +307,6 @@ lib/mono-addins/Mono.Addins.Gui/Makefile
 lib/mono-addins/Mono.Addins/Makefile
 lib/mono-addins/Mono.Addins.Setup/Makefile
 lib/semweb/Makefile
-lib/Tao/Makefile
-lib/Tao/Tao.GlPostProcess/Makefile
-lib/Tao/Tao.OpenGl.ExtensionLoader/Makefile
-lib/Tao/Tao.OpenGl.Glu/Makefile
-lib/Tao/Tao.OpenGl/Makefile
 docs/Makefile
 icons/Makefile
 tools/Makefile
@@ -347,6 +342,9 @@ extensions/Tools/ChangePhotoPath/Makefile
 extensions/Tools/HashJob/Makefile
 extensions/Tools/DevelopInUFraw/Makefile
 extensions/Tools/MergeDb/Makefile
+extensions/Tools/ScreensaverConfig/Makefile
+extensions/Transitions/Makefile
+extensions/Transitions/CoverTransition/Makefile
 tests/Makefile
 tests/src/Makefile
 f-spot.pc

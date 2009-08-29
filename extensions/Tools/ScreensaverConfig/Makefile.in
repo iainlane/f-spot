@@ -34,7 +34,7 @@ build_triplet = @build@
 host_triplet = @host@
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/Makefile.include
-subdir = lib/Tao/Tao.OpenGl.Glu
+subdir = extensions/Tools/ScreensaverConfig
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.ac
@@ -51,9 +51,9 @@ am__vpath_adj = case $$p in \
     *) f=$$p;; \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(assemblydir)"
-assemblyDATA_INSTALL = $(INSTALL_DATA)
-DATA = $(assembly_DATA)
+am__installdirs = "$(DESTDIR)$(plugindir)"
+pluginDATA_INSTALL = $(INSTALL_DATA)
+DATA = $(plugin_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 ALL_LINGUAS = @ALL_LINGUAS@
@@ -87,7 +87,7 @@ DIR_DBUS_GLIB = @DIR_DBUS_GLIB@
 DISTCHECK_CONFIGURE_FLAGS = @DISTCHECK_CONFIGURE_FLAGS@
 DOC_USER_FORMATS = @DOC_USER_FORMATS@
 DSYMUTIL = @DSYMUTIL@
-ECHO = @ECHO@
+DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
@@ -96,8 +96,7 @@ EXEEXT = @EXEEXT@
 EXIF_CFLAGS = @EXIF_CFLAGS@
 EXIF_LIBS = @EXIF_LIBS@
 EXIF_SOVERSION = @EXIF_SOVERSION@
-F77 = @F77@
-FFLAGS = @FFLAGS@
+FGREP = @FGREP@
 F_CFLAGS = @F_CFLAGS@
 F_LIBS = @F_LIBS@
 GCONFTOOL = @GCONFTOOL@
@@ -138,6 +137,7 @@ INTLTOOL_PERL = @INTLTOOL_PERL@
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
 LCMS_CFLAGS = @LCMS_CFLAGS@
 LCMS_LIBS = @LCMS_LIBS@
+LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBEXIF_VERSION_CHECK_CFLAGS = @LIBEXIF_VERSION_CHECK_CFLAGS@
 LIBEXIF_VERSION_CHECK_LIBS = @LIBEXIF_VERSION_CHECK_LIBS@
@@ -149,6 +149,7 @@ LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LINK_BEAGLE = @LINK_BEAGLE@
 LINK_DBUS = @LINK_DBUS@
+LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAINT = @MAINT@
@@ -161,12 +162,16 @@ MSGFMT_OPTS = @MSGFMT_OPTS@
 MSGMERGE = @MSGMERGE@
 NDESK_DBUS_CFLAGS = @NDESK_DBUS_CFLAGS@
 NDESK_DBUS_LIBS = @NDESK_DBUS_LIBS@
+NM = @NM@
 NMEDIT = @NMEDIT@
 NUNIT_CFLAGS = @NUNIT_CFLAGS@
 NUNIT_DEFINES = @NUNIT_DEFINES@
 NUNIT_LIBS = @NUNIT_LIBS@
+OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 OMF_DIR = @OMF_DIR@
+OTOOL = @OTOOL@
+OTOOL64 = @OTOOL64@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -188,7 +193,6 @@ STRIP = @STRIP@
 TURTLEDIR = @TURTLEDIR@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
-WARN_CFLAGS = @WARN_CFLAGS@
 XGETTEXT = @XGETTEXT@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
@@ -196,7 +200,7 @@ abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
-ac_ct_F77 = @ac_ct_F77@
+ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
@@ -228,6 +232,7 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
+lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -256,10 +261,6 @@ DIR_KEYRING = $(top_builddir)/lib/gnome-keyring-sharp
 DIR_LIBFSPOT = $(top_builddir)/lib/libfspot
 DIR_SEMWEB = $(top_builddir)/lib/semweb
 DIR_SRC = $(top_builddir)/src
-DIR_TAO_OPENGL = $(top_builddir)/lib/Tao/Tao.OpenGl
-DIR_TAO_GLU = $(top_builddir)/lib/Tao/Tao.OpenGl.Glu
-DIR_TAO_EXTENSIONLOADER = $(top_builddir)/lib/Tao/Tao.OpenGl.ExtensionLoader
-DIR_TAO_GLPOSTPROCESS = $(top_builddir)/lib/Tao/Tao.GlPostProcess
 DIR_GIOSHARP = $(top_builddir)/lib/gio-sharp/gio
 DIR_GTKSHARPBEANS = $(top_builddir)/lib/gtk-sharp-beans
 LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
@@ -271,11 +272,6 @@ LINK_MONO_ADDINS = \
 	-r:$(DIR_ADDINS_GUI)/Mono.Addins.Gui.dll
 
 LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
-LINK_TAO = \
-	-r:$(DIR_TAO_OPENGL)/Tao.OpenGl.dll				\
-	-r:$(DIR_TAO_GLU)/Tao.OpenGl.Glu.dll				\
-	-r:$(DIR_TAO_EXTENSIONLOADER)/Tao.OpenGl.ExtensionLoader.dll
-
 LINK_GIOSHARP = -r:$(DIR_GIOSHARP)/gio-sharp.dll
 LINK_GTKSHARPBEANS = -r:$(DIR_GTKSHARPBEANS)/gtk-sharp-beans.dll
 CSC_FLAGS = -debug
@@ -283,30 +279,46 @@ CSC = $(MCS) $(CSC_FLAGS) -target:exe
 CSC_LIB = $(MCS) $(CSC_FLAGS) -target:library
 MONO_DEBUGFLAGS = --debug
 RUNTIME = mono $(MONO_DEBUGFLAGS)
-ASSEMBLY_NAME = Tao.OpenGl.Glu
-ASSEMBLY_SOURCES = \
-	$(srcdir)/AssemblyInfo.cs 	\
-	$(srcdir)/Glu.cs
+PLUGIN_NAME = ScreensaverConfig
+PLUGIN_MANIFEST = $(PLUGIN_NAME).addin.xml
+PLUGIN_ASSEMBLY = $(PLUGIN_NAME).dll
+PLUGIN_SOURCES = \
+	$(srcdir)/ScreensaverConfig.cs
 
 REFS = \
-	-r:$(DIR_TAO_OPENGL)/Tao.OpenGl.dll
+	-r:Mono.Posix					\
+	-r:$(top_builddir)/src/f-spot.exe		\
+	-r:$(top_builddir)/src/FSpot.Core.dll		\
+	-r:$(top_builddir)/src/FSpot.Widgets.dll	\
+	-r:$(top_builddir)/src/FSpot.Utils.dll		\
+	-r:$(top_builddir)/src/FSpot.Query.dll		\
+	$(LINK_GTKSHARPBEANS)				\
+	$(LINK_GIOSHARP)				\
+	$(LINK_SEMWEB)					\
+	$(LINK_MONO_ADDINS)				\
+	$(LINK_DBUS)					\
+	$(LINK_GPHOTO2)
 
-PKGS = 
-ASSEMBLY = $(ASSEMBLY_NAME).dll
-EXTRAFLAGS = -unsafe
-assemblydir = $(pkglibdir)
-assembly_DATA = \
-	$(ASSEMBLY)		\
-	$(ASSEMBLY).config
+PKGS = \
+	-pkg:gtk-sharp-2.0
+
+RESOURCES = \
+	-resource:$(srcdir)/ScreensaverConfigDialog.ui	\
+	-resource:$(srcdir)/$(PLUGIN_MANIFEST)
+
+plugindir = $(pkglibdir)/extensions
+plugin_DATA = \
+	$(PLUGIN_ASSEMBLY)
 
 EXTRA_DIST = \
-	$(ASSEMBLY_SOURCES)		\
-	$(ASSEMBLY_NAME).snk		\
-	$(ASSEMBLY).config
+	$(PLUGIN_SOURCES)	\
+	$(srcdir)/ScreensaverConfigDialog.ui	\
+	$(PLUGIN_MANIFEST)
 
 CLEANFILES = \
-	$(ASSEMBLY)		\
-	$(ASSEMBLY).mdb
+	$(PLUGIN_ASSEMBLY)	\
+	$(PLUGIN_ASSEMBLY).mdb	\
+	*.mpack
 
 all: all-am
 
@@ -320,9 +332,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am $(top_srcdir
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  lib/Tao/Tao.OpenGl.Glu/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  extensions/Tools/ScreensaverConfig/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  lib/Tao/Tao.OpenGl.Glu/Makefile
+	  $(AUTOMAKE) --gnu  extensions/Tools/ScreensaverConfig/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -346,22 +358,22 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-assemblyDATA: $(assembly_DATA)
+install-pluginDATA: $(plugin_DATA)
 	@$(NORMAL_INSTALL)
-	test -z "$(assemblydir)" || $(MKDIR_P) "$(DESTDIR)$(assemblydir)"
-	@list='$(assembly_DATA)'; for p in $$list; do \
+	test -z "$(plugindir)" || $(MKDIR_P) "$(DESTDIR)$(plugindir)"
+	@list='$(plugin_DATA)'; for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  f=$(am__strip_dir) \
-	  echo " $(assemblyDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(assemblydir)/$$f'"; \
-	  $(assemblyDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(assemblydir)/$$f"; \
+	  echo " $(pluginDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(plugindir)/$$f'"; \
+	  $(pluginDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(plugindir)/$$f"; \
 	done
 
-uninstall-assemblyDATA:
+uninstall-pluginDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(assembly_DATA)'; for p in $$list; do \
+	@list='$(plugin_DATA)'; for p in $$list; do \
 	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(assemblydir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(assemblydir)/$$f"; \
+	  echo " rm -f '$(DESTDIR)$(plugindir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(plugindir)/$$f"; \
 	done
 tags: TAGS
 TAGS:
@@ -400,7 +412,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(assemblydir)"; do \
+	for dir in "$(DESTDIR)$(plugindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -446,7 +458,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-assemblyDATA
+install-data-am: install-pluginDATA
 
 install-dvi: install-dvi-am
 
@@ -480,27 +492,30 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-assemblyDATA
+uninstall-am: uninstall-pluginDATA
 
 .MAKE: install-am install-strip
 
 .PHONY: all all-am check check-am clean clean-generic clean-libtool \
 	distclean distclean-generic distclean-libtool distdir dvi \
 	dvi-am html html-am info info-am install install-am \
-	install-assemblyDATA install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
+	install-data install-data-am install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-pluginDATA install-ps install-ps-am \
 	install-strip installcheck installcheck-am installdirs \
 	maintainer-clean maintainer-clean-generic mostlyclean \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	uninstall uninstall-am uninstall-assemblyDATA
+	uninstall uninstall-am uninstall-pluginDATA
 
 
-all: $(ASSEMBLY)
+all: $(PLUGIN_ASSEMBLY)
 
-$(ASSEMBLY): $(ASSEMBLY_SOURCES)
-	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(PKGS) $(REFS) $(ASSEMBLY_SOURCES)
+mpack: $(PLUGIN_ASSEMBLY)
+	mautil p $(PLUGIN_ASSEMBLY)
+
+$(PLUGIN_ASSEMBLY): $(PLUGIN_SOURCES) $(PLUGIN_MANIFEST)
+	$(CSC_LIB) -out:$@ $(PLUGIN_SOURCES) $(REFS) $(PKGS) $(ASSEMBLIES) $(RESOURCES)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

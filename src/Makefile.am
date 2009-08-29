@@ -89,6 +89,7 @@ WIDGETS_CSDISTFILES =				\
 	$(srcdir)/Widgets/CustomPrintWidget.cs	\
 	$(srcdir)/Widgets/DateEdit.cs		\
 	$(srcdir)/Widgets/DateEditFlags.cs	\
+	$(srcdir)/Widgets/DissolveTransition.cs	\
 	$(srcdir)/Widgets/HighlightedBox.cs	\
 	$(srcdir)/Widgets/ImageView.cs		\
 	$(srcdir)/Widgets/Layout.cs		\
@@ -97,7 +98,10 @@ WIDGETS_CSDISTFILES =				\
 	$(srcdir)/Widgets/PointerMode.cs	\
 	$(srcdir)/Widgets/Rating.cs		\
 	$(srcdir)/Widgets/SaneTreeView.cs	\
-	$(srcdir)/Widgets/ScrolledView.cs
+	$(srcdir)/Widgets/ScrolledView.cs	\
+	$(srcdir)/Widgets/PushTransition.cs	\
+	$(srcdir)/Widgets/CairoTransition.cs	\
+	$(srcdir)/Widgets/SlideShowTransition.cs
 
 GNOME_PLATFORM_CSDISTFILES =				\
 	$(srcdir)/Platform/Gnome/Desktop.cs		\
@@ -152,6 +156,7 @@ F_SPOT_CSDISTFILES =				\
 	$(srcdir)/Extensions/PhotoSelectionCondition.cs	\
 	$(srcdir)/Extensions/PopupCommands.cs	\
 	$(srcdir)/Extensions/ServiceNode.cs	\
+	$(srcdir)/Extensions/TransitionNode.cs	\
 	$(srcdir)/Extensions/ViewModeCondition.cs	\
 	$(srcdir)/Fader.cs			\
 	$(srcdir)/FileImportBackend.cs		\
@@ -170,7 +175,6 @@ F_SPOT_CSDISTFILES =				\
 	$(srcdir)/FormClient.cs			\
 	$(srcdir)/FullScreenView.cs		\
 	$(srcdir)/GdkGlx.cs			\
-	$(srcdir)/GlTransition.cs		\
 	$(srcdir)/GroupAdaptor.cs		\
 	$(srcdir)/GroupSelector.cs		\
 	$(srcdir)/Accelerometer.cs		\
@@ -205,7 +209,6 @@ F_SPOT_CSDISTFILES =				\
 	$(srcdir)/Imaging/X3fFile.cs		\
 	$(srcdir)/Imaging/XmpFile.cs		\
 	$(srcdir)/Imaging/Tiff.cs		\
-	$(srcdir)/IOperation.cs			\
 	$(srcdir)/JobStore.cs			\
 	$(srcdir)/Jobs/SyncMetadataJob.cs	\
 	$(srcdir)/Jobs/CalculateHashJob.cs	\
@@ -247,8 +250,6 @@ F_SPOT_CSDISTFILES =				\
 	$(srcdir)/TagStore.cs			\
 	$(srcdir)/ThumbnailCache.cs		\
 	$(srcdir)/ThumbnailGenerator.cs		\
-	$(srcdir)/Texture.cs			\
-	$(srcdir)/TextureDisplay.cs             \
 	$(srcdir)/Term.cs			\
 	$(srcdir)/TimeAdaptor.cs		\
 	$(srcdir)/TipWindow.cs			\
@@ -280,6 +281,7 @@ F_SPOT_CSDISTFILES =				\
 	$(srcdir)/GPhotoCamera.cs		\
 	$(srcdir)/CameraSelectionDialog.cs	\
 	$(srcdir)/CameraFileSelectionDialog.cs	\
+	$(srcdir)/Widgets/SlideShow.cs		\
 	$(srcdir)/Widgets/CompositeUtils.cs	\
 	$(srcdir)/Widgets/Dissolve.cs		\
 	$(srcdir)/Widgets/EditorPage.cs		\
@@ -346,6 +348,8 @@ JOBSCHEDULER_ASSEMBLIES =			\
 
 BLING_ASSEMBLIES =				\
 	-pkg:gtk-sharp-2.0			\
+	-r:Mono.Cairo				\
+	-r:FSpot.Utils.dll			\
 	$(LINK_GTKSHARPBEANS)
 
 WIDGETS_ASSEMBLIES =				\
@@ -379,7 +383,6 @@ F_SPOT_ASSEMBLIES = 				\
 	$(LINK_FLICKR)				\
 	$(LINK_KEYRING)				\
 	$(LINK_SMUGMUG)				\
-	$(LINK_TAO)				\
 	$(LINK_SEMWEB)				\
 	$(LINK_GTKSHARPBEANS)			\
 	$(LINK_GIOSHARP)			\
@@ -474,29 +477,43 @@ NULL_PLATFORM_CSFILES = $(NULL_PLATFROM_CSDISTFILES)
 F_SPOT_CSFILES = $(F_SPOT_CSDISTFILES)	\
 	AssemblyInfo.cs
 
+Cms.dll.mdb: Cms.dll
+
 Cms.dll: $(CMS_CSFILES)
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(UNSAFE) $(CMS_CSFILES) $(CMS_ASSEMBLIES)
+
+FSpot.Core.dll.mdb: FSpot.Core.dll
 
 FSpot.Core.dll: $(CORE_CSFILES) FSpot.Utils.dll Cms.dll
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(CORE_CSFILES) $(CORE_ASSEMBLIES)
 
+FSpot.Query.dll.mdb: FSpot.Query.dll
+
 FSpot.Query.dll: $(QUERY_CSFILES) FSpot.Utils.dll FSpot.Core.dll
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(QUERY_CSFILES) $(QUERY_ASSEMBLIES)
+
+FSpot.Utils.dll.mdb: FSpot.Utils.dll
 
 FSpot.Utils.dll: $(UTILS_CSFILES)
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(UTILS_CSFILES) $(UTILS_ASSEMBLIES)
 
+FSpot.JobScheduler.dll.mdb: FSpot.JobScheduler.dll
+
 FSpot.JobScheduler.dll: $(JOBSCHEDULER_CSFILES) FSpot.Utils.dll
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(JOBSCHEDULER_CSFILES) $(JOBSCHEDULER_ASSEMBLIES)
 
+FSpot.Bling.dll.mdb: FSpot.Bling.dll
+
 FSpot.Bling.dll: $(BLING_CSFILES)
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(BLING_CSFILES) $(BLING_ASSEMBLIES)
+
+FSpot.Widgets.dll.mdb: FSpot.Widgets.dll
 
 FSpot.Widgets.dll: $(WIDGETS_CSFILES) FSpot.Utils.dll FSpot.Core.dll
 	@echo -e "\n*** Compiling $@"
@@ -505,9 +522,13 @@ FSpot.Widgets.dll: $(WIDGETS_CSFILES) FSpot.Utils.dll FSpot.Core.dll
 PLATFORM_CSFILES = $(GNOME_PLATFORM_CSFILES)
 PLATFORM_ASSEMBLIES = $(GNOME_PLATFORM_ASSEMBLIES)
 
+FSpot.Platform.dll.mdb: FSpot.Platform.dll
+
 FSpot.Platform.dll: $(PLATFORM_CSFILES) FSpot.Utils.dll
 	@echo -e "\n*** Compiling $@"
 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(PLATFORM_CSFILES) $(PLATFORM_ASSEMBLIES)
+
+f-spot.exe.mdb: f-spot.exe
 
 f-spot.exe: $(F_SPOT_CSFILES) FSpot.Utils.dll FSpot.Core.dll FSpot.Query.dll FSpot.JobScheduler.dll FSpot.Bling.dll FSpot.Widgets.dll Cms.dll FSpot.Platform.dll $(F_SPOT_RESOURCES)
 	@echo -e "\n*** Compiling $@"
