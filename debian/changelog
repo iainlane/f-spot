@@ -9,8 +9,11 @@ f-spot (0.6.1.1-1) karmic; urgency=low
     - works on gtk+ > 2.17
     - load .pcx files
     - extendable slideshow
-    - ~30 bugs fixed (LP: #387656, #290694, #270238) (Closes: #531301,
-    #492658)
+    - ~30 bugs fixed
+      + screensaver too fast (LP: #387656)
+      + crash with ArgumentNullException when deleting a photo (LP: #290654)
+      + Should remember "copy photos to Photos folder" setting (LP: #270238)
+      + Crash when opening settings dialog (Closes: #531301)
     - updated translations
   * debian/patches/debian_link-system-flickrnet.patch,
     debian/patches/debian_link-system-gnome-keyring.patch
@@ -25,10 +28,11 @@ f-spot (0.6.1.1-1) karmic; urgency=low
   * debian/rules: Move f-spot-screensaver to /usr/lib/xscreensaver so it
     actually works. Previously it was installed in /usr/libexec and so was not
     found by gnome-screensaver. (Closes: #544204)
-  * debian/control: Update flickrnet dependency to new ABI (Closes: #543803) 
+  * debian/control, debian_link-system-flickrnet.patch: Update flickrnet
+    dependency to new ABI (Closes: #543803) 
   * debian/control: Increase Standards-Version to 3.8.3, no changes required 
 
- -- Iain Lane <laney@ubuntu.com>  Sat, 29 Aug 2009 21:08:28 +0100
+ -- Iain Lane <laney@ubuntu.com>  Sat, 29 Aug 2009 23:15:36 +0100
 
 f-spot (0.6.0.0-1) unstable; urgency=low
 
