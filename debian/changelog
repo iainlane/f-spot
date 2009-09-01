@@ -25,16 +25,17 @@ f-spot (0.6.1.1-1) UNRELEASED; urgency=low
     pictures. Only applies to new users; existing users will see no change.
     (LP: #127315)
   * debian/rules: Remove leftover CDBS variables 
-  * debian/rules: Move f-spot-screensaver to /usr/lib/xscreensaver so it
-    actually works. Previously it was installed in /usr/libexec and so was not
-    found by gnome-screensaver. (Closes: #544204)
+  * debian/control: Add gnome-screensaver build dependency; build uses this to
+    work out where to install screensaver. Defatulted to /usr/libexec without
+    this, which caused the screensaver to not work. Thanks to Sebastien Bacher
+    for pointing out the fix. (Closes: #544204)
   * debian/control, debian_link-system-flickrnet.patch: Update flickrnet
     dependency to new ABI (Closes: #543803) 
   * debian/control: Increase Standards-Version to 3.8.3, no changes required 
   * debian/copyright: Update bundled library locations, point to versioned GPL
     and update FSF address
 
- -- Iain Lane <laney@ubuntu.com>  Sun, 30 Aug 2009 00:33:32 +0100
+ -- Iain Lane <laney@ubuntu.com>  Tue, 01 Sep 2009 22:12:30 +0100
 
 f-spot (0.6.0.0-1) unstable; urgency=low
 
