@@ -1,3 +1,15 @@
+f-spot (0.6.1.2-1) UNRELEASED; urgency=low
+
+  * New upstream Version 0.6.1.2
+    - no longer fails to upgrade if you have photos from post 2038 (sic)
+    - use interpolation on drawing
+    - allows to run on gtk2.14
+  * debian/patches/upstream_facebook-label-crash.patch: Backport patch from
+    upstream to fix crash in Facebook exporter plugin due to two labels having
+    the same name.
+
+ -- Iain Lane <laney@ubuntu.com>  Sat, 19 Sep 2009 10:12:06 +0100
+
 f-spot (0.6.1.1-1) unstable; urgency=low
 
   * New Upstream Version 0.6.1.1 (LP: #418936)
