@@ -33,7 +33,6 @@ build_triplet = @build@
 host_triplet = @host@
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/Makefile.include
-SOURCES =
 subdir = tests/src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -183,6 +182,7 @@ STRIP = @STRIP@
 TURTLEDIR = @TURTLEDIR@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
+WARN_CFLAGS = @WARN_CFLAGS@
 XGETTEXT = @XGETTEXT@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
@@ -269,16 +269,16 @@ CSC = $(MCS) $(CSC_FLAGS) -target:exe
 CSC_LIB = $(MCS) $(CSC_FLAGS) -target:library
 MONO_DEBUGFLAGS = --debug
 RUNTIME = mono $(MONO_DEBUGFLAGS)
-@ENABLE_TESTS_TRUE@SOURCES = \
-@ENABLE_TESTS_TRUE@	$(srcdir)/IBrowsableItem.cs		\
-@ENABLE_TESTS_TRUE@	$(srcdir)/ImageTest.cs			\
-@ENABLE_TESTS_TRUE@	$(srcdir)/PhotoStore.cs			\
-@ENABLE_TESTS_TRUE@	$(srcdir)/TagStore.cs			\
-@ENABLE_TESTS_TRUE@	$(srcdir)/ThumbnailGenerator.cs		\
-@ENABLE_TESTS_TRUE@	$(srcdir)/Query/LogicalTerm.cs		\
-@ENABLE_TESTS_TRUE@	$(srcdir)/Cms/Cms.cs			\
-@ENABLE_TESTS_TRUE@	$(srcdir)/Filters/JpegFilter.cs		\
-@ENABLE_TESTS_TRUE@	$(srcdir)/Filters/OrientationFilter.cs
+SOURCES = \
+	$(srcdir)/IBrowsableItem.cs		\
+	$(srcdir)/ImageTest.cs			\
+	$(srcdir)/PhotoStore.cs			\
+	$(srcdir)/TagStore.cs			\
+	$(srcdir)/ThumbnailGenerator.cs		\
+	$(srcdir)/Query/LogicalTerm.cs		\
+	$(srcdir)/Cms/Cms.cs			\
+	$(srcdir)/Filters/JpegFilter.cs		\
+	$(srcdir)/Filters/OrientationFilter.cs
 
 @ENABLE_TESTS_TRUE@PKGS = \
 @ENABLE_TESTS_TRUE@	-pkg:mono-nunit			\
