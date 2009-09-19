@@ -194,6 +194,7 @@ STRIP = @STRIP@
 TURTLEDIR = @TURTLEDIR@
 USE_NLS = @USE_NLS@
 VERSION = @VERSION@
+WARN_CFLAGS = @WARN_CFLAGS@
 XGETTEXT = @XGETTEXT@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
@@ -253,9 +254,9 @@ SUBDIRS = \
 	ChangePhotoPath		\
 	DevelopInUFraw		\
 	HashJob			\
+	MergeDb			\
 	RawPlusJpeg		\
-	ScreensaverConfig	\
-	MergeDb
+	ScreensaverConfig
 
 all: all-recursive
 

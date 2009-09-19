@@ -1,6 +1,6 @@
 Summary:     F-Spot
 Name:        f-spot
-Version:     0.6.1.1
+Version:     0.6.1.2
 Release:     1
 License:     GPL
 Group:       Applications/Imaging
