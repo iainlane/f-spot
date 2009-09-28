@@ -1,7 +1,8 @@
 [Desktop Entry]
 Version=1.0
-_Name=F-Spot Photo Manager
+_Name=F-Spot
 _GenericName=Photo Manager
+_X-GNOME-FullName=F-Spot Photo Manager
 _Comment=Organize, enjoy, and share your photos
 Exec=f-spot
 Icon=f-spot
@@ -12,5 +13,5 @@ Categories=Graphics;Photography;GNOME;GTK;
 X-GNOME-Bugzilla-Bugzilla=GNOME
 X-GNOME-Bugzilla-Product=f-spot
 X-GNOME-Bugzilla-Component=General
-X-GNOME-Bugzilla-Version=0.6.1.2
+X-GNOME-Bugzilla-Version=0.6.1.3
 X-GNOME-DocPath=f-spot/f-spot.xml
