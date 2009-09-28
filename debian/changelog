@@ -17,8 +17,9 @@ f-spot (0.6.1.3-1) UNRELEASED; urgency=low
     - backported translations from master
   * debian_link-system-flickrnet.patch: Part of this chance was incorporated
     upstream (for another reason); remove from patch. 
+  * debian/README.source: Add (thanks Lintian) 
 
- -- Iain Lane <laney@ubuntu.com>  Mon, 28 Sep 2009 21:39:19 +0100
+ -- Iain Lane <laney@ubuntu.com>  Mon, 28 Sep 2009 21:41:57 +0100
 
 f-spot (0.6.1.2-1) unstable; urgency=low
 
