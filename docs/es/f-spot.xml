@@ -479,12 +479,7 @@
 
 			<itemizedlist>
 				<listitem>
-					<para>
-						Copy your color profiles into the 
-						<filename class="directory">/usr/share/color/icc</filename> or 
-						<filename class="directory">/usr/local/share/color/icc</filename> 
-						directory.
-					</para>
+					<para>Copie su perfil de colores en el directorio <filename class="directory">/usr/share/color/icc</filename> o <filename class="directory">/usr/local/share/color/icc</filename>.</para>
 				</listitem>
 				<listitem>
 					<para>Activar la gestión de color con el menú <menuchoice><guimenu>Editar</guimenu><guimenuitem>Preferencias</guimenuitem></menuchoice>.</para>				

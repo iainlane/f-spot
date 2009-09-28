@@ -10,7 +10,7 @@
 		<copyright>
 			<year>2007-2009</year>
 			<holder>Aaron Bockover, Gabriel Burt, Miguel de Icaza, Bengt Thuree</holder>
-		</copyright><copyright><year>2008</year><holder>Arun Persaud (arun@nubati.net)</holder></copyright><copyright><year>2009</year><holder>Stefan Horning (stefan@hornings.de)</holder></copyright>
+		</copyright><copyright><year>2008</year><holder>Arun Persaud (arun@nubati.net)</holder></copyright><copyright><year>2009</year><holder>Stefan Horning (stefan@hornings.de)</holder></copyright><copyright><year>2009</year><holder>Mario Blättermann (mariobl@gnome.org)</holder></copyright>
 		<publisher>
 			<publishername>GNOME-Dokumentationsprojekt</publishername>
 		</publisher>
@@ -66,52 +66,32 @@
 			<para>Sie können Fotos von der Festplatte oder ihrer Kamera importieren. Wenn Sie Fotos von ihrer Kamera in F-Spot importieren, wird immer eine Kopie angelegt, so dass Sie den Speicher ihrer Kamera löschen können. Standardmäßig legt F-Spot auch Kopien der Fotos an, die von der Festplatte importiert werden. Entfernen Sie die Markierung für die <guilabel>Kopie</guilabel>-Option im Importdialog oder halten Sie die <keycap>Umschalttaste</keycap> gedrückt, während Sie Fotos nach F-Spot verschieben, falls Sie nicht wollen, dass eine Kopie angelegt wird.</para>
 			
 			<para>Standardmäßig kopiert F-Spot Ihre Fotos in den Ordner <filename class="directory">~/Fotos</filename>. Sie können den Ordner, den F-Spot benutzen soll, in den <guilabel>Einstellungen</guilabel> (<menuchoice><guimenu>Bearbeiten</guimenu><guimenuitem>Einstellungen</guimenuitem></menuchoice>) ändern. Sie können das physikalische Kopieren Ihrer Bilder in diesen Ordner auch deaktivieren und F-Spot nur vorhandene Dateien anzeigen lassen. Dazu deaktivieren Sie das Ankreuzfeld vor <guilabel>Dateien in den Fotoordner kopieren</guilabel>.</para>
-			<para>Falls die Wahrscheinlichkeit besteht, dass manche Ihrer Fotos bereits von der vorhandenen Quelle importiert wurden, können Sie die Option <guilabel>Duplikate finden</guilabel> verwenden. In diesem Fall wird F-Spot versuchen herauszufinden, ob sich das exakt gleiche Bild schon in der Datenbank befindet. Die neue Kopie wird dann nicht importiert.</para>
-			<para>Falls alle Fotos, die Sie auf einmal importieren vom gleichen Ereignis sind, oder andere Gemeinsamkeiten aufweisen, können Sie eine Markierung für diese Bildergruppe erstellen. Das hilft dabei, die Bilder einfach wieder zu finden. Folgen Sie dazu den Anweisungen in <xref linkend="tag"/>, um eine neue Markierung anzulegen. Beim Importieren aktivieren Sie <guilabel>Markierung hinzufügen</guilabel> und wählen die erstellte Markierung aus.</para>
+			<para>Falls die geringste Wahrscheinlichkeit besteht, dass manche Ihrer Fotos bereits von der vorhandenen Quelle importiert wurden, können Sie die Option <guilabel>Duplikate finden</guilabel> verwenden. In diesem Fall wird F-Spot versuchen herauszufinden, ob sich das exakt gleiche Bild schon in der Datenbank befindet. Die neue Kopie wird dann nicht importiert.</para>
+			<para>Falls alle Fotos, die Sie auf einmal importieren vom gleichen Ereignis sind oder andere Gemeinsamkeiten aufweisen, können Sie eine Markierung für diese Bildergruppe erstellen. Das hilft dabei, die Bilder einfach wieder zu finden. Folgen Sie dazu den Anweisungen in <xref linkend="tag"/>, um eine neue Markierung anzulegen. Beim Importieren aktivieren Sie <guilabel>Markierung hinzufügen</guilabel> und wählen die erstellte Markierung aus.</para>
 			
 			<tip>
-				<para>
-					F-Spot uses a database stored at 
-					<filename>~/.config/f-spot/photos.db</filename>. Note, to access it, use 
-					the sqlite3 command. You can also manually specify path to a database by 
-					running F-Spot with <option>-b</option> option.
-				</para>
+				<para>F-Spot benutzt eine Datenbank, die in <filename>~/.config/f-spot/photos.db</filename> gespeichert ist. Hinweis: Um auf die Datenbank zuzugreifen, müssen Sie den sqlite3-Befehl verwenden. Sie können den Pfad zur Datenbank selbst angeben, indem Sie F-Spot mit der Option <option>-b</option> ausführen.</para>
 			</tip>
 			
 			<para>Nach dem Importieren zeigt F-Spot nur die Bilder des aktuellen Importvorgangs an. Lesen Sie <xref linkend="enjoying-search"/>, um mehr über Import-Markierungen zu erfahren.</para>
-			<para>Sie können auch direkt aus Mozilla <ulink url="http://www.mozilla.com/en-US/firefox/">Firefox</ulink> und <ulink url="http://www.mozilla.com/en-US/thunderbird/">Thunderbird</ulink> importieren, indem Sie die <ulink url="https://addons.mozilla.org/en-US/firefox/addon/7091">Firefox</ulink> und <ulink url="https://addons.mozilla.org/en-US/thunderbird/addon/7011">Thunderbird</ulink> F-Spot Erweiterungen von <ulink url="http://personalpages.tds.net/~cdovel/">Pizzach</ulink> verwenden.</para>
+			<para>Sie können auch direkt aus Mozilla <ulink url="http://www.mozilla-europe.org/de/firefox/">Firefox</ulink> und <ulink url="http://www.mozilla-europe.org/de/thunderbird/">Thunderbird</ulink> importieren, indem Sie die <ulink url="https://addons.mozilla.org/de/firefox/addon/7091">Firefox</ulink> und <ulink url="https://addons.mozilla.org/de/thunderbird/addon/7011">Thunderbird</ulink> F-Spot Erweiterungen von <ulink url="http://personalpages.tds.net/~cdovel/">Pizzach</ulink> verwenden.</para>
 		</sect1>
 		
 		<sect1 id="edit">
 			<title>Bearbeiten</title>
 			
-			<para>Durch doppeltes Klicken, oder Drücken der Eingabetaste, kommen Sie in den Bearbeitungsmodus, wo Sie rote Augen entfernen, Zuschneiden und Farben oder Helligkeit anpassen können.</para>
+			<para>Durch einen Doppelklick oder durch Drücken der Eingabetaste gelangen Sie in den Bearbeitungsmodus, wo Sie rote Augen entfernen, Zuschneiden und Farben oder Helligkeit anpassen können.</para>
 			
 			<sect2 id="edit-versions">
 				<title>Versionen</title>
 				
-				<para>
-					When you edit your photos, a new copy (called a version) is created, 
-					so your original is never altered. After your first edit to a photo, subsequent 
-					edits will modify the same version. If you want to create multiple versions 
-					of your photo, perhaps with different cropping or coloring, you can do so 
-					via the <menuchoice><guimenu>File</guimenu>
-					<guimenuitem>Create new version</guimenuitem></menuchoice> option.
-				</para>
+				<para>Wenn Sie Ihre Fotos bearbeiten, wird eine neue Version des Bildes angelegt. So bleibt das Original immer erhalten. Nachdem Sie das Foto zum ersten Mal bearbeitet haben, werden alle Änderungen in diese Version übernommen. Falls Sie weitere Versionen dieses Bildes anlegen möchten – etwa mit verschiedenen Zuschnitten oder Farbanpassungen – dann verwenden Sie die Funktion <menuchoice><guimenu>Datei</guimenu><guimenuitem>Neue Version erstellen</guimenuitem></menuchoice>.</para>
 			</sect2>
 
 			<sect2 id="edit-crop">
 				<title>Zuschneiden</title>
 				
-				<para>
-					Cropping an image is a great way to improve the quality of a photograph by 
-					change how it is framed. You crop a photo by selecting the part of the photo 
-					you want to keep. If you want your photo to be the exact dimensions necessary 
-					for a certain print size, you can constrain the kind of selection F-Spot will allow 
-					you to draw by choosing the appropriate size from the constraint drop down. 
-					See the <xref linkend="edit-remove-red-eye"/> below for details on making 
-					a selection on your photo.
-				</para>
+				<para>Zuschneiden ist eine gute Möglichkeit, die Qualität Ihrer Fotografie zu verbessern, indem Sie unnötige Bereiche am Rand entfernen. Sie schneiden das Foto zu, indem Sie den Teil des Bildes auswählen, den Sie erhalten möchten. Falls Sie Ihr Foto auf ein exaktes Maß zuschneiden möchten, können Sie den ausgewählten Bereich mit dem angebotenen Auswahlmenü auf die gewünschte Größe anpassen. Im nachfolgenden <xref linkend="edit-remove-red-eye"/> finden Sie weitere Details über das Auswählen eines Bereiches Ihrer Fotografie.</para>
 				<figure>
 					<title>Zuschneiden-Werkzeug</title>
 					<mediaobject>
@@ -140,7 +120,7 @@
 			<sect2 id="edit-adjust-colors">
 				<title>Farbabgleich</title>
 				
-				<para>Um die Helligkeit, den Kontrast oder Farben eines Fotos anzupassen, klicken Sie zuerst auf den <guibutton>Farbabgleich</guibutton>-Knopf, um den Farbabgleichs-Dialog zu öffnen. Ändern Sie die gewünschten Parameter und speichern sie mit <guibutton>Anpassen</guibutton>.</para>
+				<para>Um die Helligkeit, den Kontrast oder Farben eines Fotos anzupassen, klicken Sie zuerst auf den <guibutton>Farbabgleich</guibutton>-Knopf, um den Farbabgleichs-Dialog zu öffnen. Ändern Sie die gewünschten Parameter und speichern Sie sie mit <guibutton>Anpassen</guibutton>.</para>
 				<figure>
 					<title>Farbabgleichs-Werkzeug</title>
 					<mediaobject>
@@ -198,7 +178,7 @@
 				
 				<para>Um rote Augen aus Ihrem Foto zu entfernen, wählen Sie ein Bild Ihrer Wahl und drücken den <guibutton>Rote-Augen-Reduzieren</guibutton> Knopf. Sie müssen zunächst den Augenbereich auswählen. Am besten Sie vergrößern das Bild, um die Augen im Foto akkurat auszuwählen. Normalerweise können Sie mehrere Augen auf einmal auswählen und gleichzeitig korrigieren. Falls dies nicht funktioniert, oder sich wichtige rote Bereiche (z.B. Lippen) gleich daneben befinden, kann es besser sein, ein Auge nach dem anderen zu korrigieren.</para>
 				<para>Um Ihre Auswahl zu treffen, klicken Sie auf eine Ecke des Rechtecks, das Ihre Auswahl begrenzen soll. Dann ziehen Sie die Auswahl mit der Maus in die diagonal gegenüberliegende Ecke und lassen Sie die Maus-Taste los. Sie können die Größe der Auswahl noch ändern, indem Sie an den Ecken ziehen, oder Sie durch Klicken in der Mitte verschieben.</para>
-				<para>Sobald Sie den Bereich markiert haben, können Sie die roten Augen entfernen. Klicken Sie dazu auf den <guibutton>Korrigiere!</guibutton> Kopf.</para>
+				<para>Sobald Sie den Bereich markiert haben, können Sie die roten Augen entfernen. Klicken Sie dazu auf den <guibutton>Korrigiere!</guibutton>-Knopf.</para>
 				<figure>
 					<title>Werkzeug zur Reduzierung roter Augen</title>
 					<mediaobject>
@@ -267,7 +247,7 @@
 
 		<sect1 id="tag">
 			<title>Markierung</title>
-			<para>F-Spot erlaubt Ihnen, Ihre Fotos mit Hilfe benutzerdefinierten Markierungen zu organisieren. Markierungen sind wie Schlagworte. F-Spot wird bereits mit vorgegebenen Markierungen ausgeliefert, um Ihnen den Einstieg zu erleichtern. Sie können diese Markierungen jedoch gerne ändern und/oder Neue hinzufügen. Falls Sie zum Beispiel eine Markierung für ein bestimmtes Ereignis anlegen möchten, können Sie diese Markierung unter der Markierung »Ereignisse« anlegen.</para>
+			<para>F-Spot erlaubt Ihnen, Ihre Fotos mit Hilfe benutzerdefinierter Markierungen zu organisieren. Markierungen sind wie Schlagworte. F-Spot wird bereits mit vorgegebenen Markierungen ausgeliefert, um Ihnen den Einstieg zu erleichtern. Sie können diese Markierungen jedoch gerne ändern und/oder Neue hinzufügen. Falls Sie zum Beispiel eine Markierung für ein bestimmtes Ereignis anlegen möchten, können Sie diese Markierung unter der Markierung »Ereignisse« anlegen.</para>
 			<para>Es gibt verschiedene Möglichkeiten, Fotos zu markieren:</para>
 			<itemizedlist>
 				<listitem>
@@ -318,19 +298,12 @@
 		<sect1 id="enjoying-search">
 			<title>Suche</title>
 			
-			<para>
-				F-Spot uses search filters to help you better define search criteria.
-			</para>
+			<para>F-Spot benutzt Suchfilter, um Ihnen das Festlegen von Suchkriterien zu erleichtern.</para>
 			
 			<sect2 id="enjoying-search-tags">
 				<title>Markierungen</title>
 				
-				<para>
-					You can start a search by double clicking or activating a tag from 
-					the tag list. Alternatively, you can show the find bar with <menuchoice>
-					<guimenu>Find</guimenu><guimenuitem>Show Find Bar</guimenuitem></menuchoice>. 
-					With the find bar shown, you can drag tags from the tag view to the find bar.
-				</para>
+				<para>Sie können eine Suche starten, indem Sie auf eine Markierung doppelklicken oder diese in der Markierungsliste auswählen. Alternativ können Sie das Suchfeld mit Hilfe des Menüs <menuchoice><guimenu>Suchen</guimenu><guimenuitem>Suchfeld anzeigen</guimenuitem></menuchoice>. Bei angezeigtem Suchfeld können Sie Markierungen aus der Markierungsansicht in das Suchfeld ziehen.</para>
 				<para>
 					To find photos that are tagged with both of two tags, activate the first in 
 					the tag view or drag it onto the find bar, then drag the second tag and drop 
@@ -362,24 +335,19 @@
 						<para><parameter class="option">Am</parameter> — um Fotos eines bestimmten Importiervorgangs auszuwählen</para>
 					</listitem>
 					<listitem>
-						<para>
-							<parameter class="option">After</parameter> — to select all photos imported begining with a particular importing session
-						</para>
+						<para><parameter class="option">Nach dem</parameter> — Um alle Fotos auszuwählen, die nach diesem Importvorgang importiert wurden</para>
 					</listitem>
 					<listitem>
 						<para><parameter class="option">Zwischen</parameter> — Um alle Fotos auszuwählen, die zwischen zwei bestimmten Importvorgängen liegen</para>
 					</listitem>
 				</itemizedlist>
-				<para>
-					Every time you change settings of the filter, the amount of selected photos 
-					will appear in the bottom part of the dialog.
-				</para>
+				<para>Jedesmal wenn Sie die Filter-Einstellungen ändern, wird die Anzahl der gewählten Fotos im unteren Bereich des Dialogs angezeigt.</para>
 				<para>
 					When you apply Import Roll filter, in the Find bar you will see 
 					<guilabel>Find: Import Roll</guilabel>. Now you can add some other 
 					filter to finetune your selection.
 				</para>
-				<para>Falls sie den Filmrollen-Importfilter nicht mehr benötigen, wählen Sie <menuchoice><guimenu>Suchen</guimenu><guisubmenu>Nach importierten Filmrollen</guisubmenu><guimenuitem>Filmrollenfilter zurücksetzen</guimenuitem></menuchoice>, um diesen Filter aus den Suchkriterien zu entfernen. Sie können auch auf den Schließen-Knopf der Suchzeile klicken, um alle aktuellen Suchoptionen zu verwerfen.</para>
+				<para>Falls Sie den Filmrollen-Importfilter nicht mehr benötigen, wählen Sie <menuchoice><guimenu>Suchen</guimenu><guisubmenu>Nach importierten Filmrollen</guisubmenu><guimenuitem>Filmrollenfilter zurücksetzen</guimenuitem></menuchoice>, um diesen Filter aus den Suchkriterien zu entfernen. Sie können auch auf den Schließen-Knopf der Suchzeile klicken, um alle aktuellen Suchoptionen zu verwerfen.</para>
 				<tip>
 					<para>Die Anzahl der im Dialog angezeigten Rollen wird im GConf-Schlüssel <filename class="directory">/apps/f-spot/import/gui_roll_history</filename> festgelegt. Standardwert ist 10.</para>
 				</tip>
@@ -479,11 +447,7 @@
 
 		<sect1 id="sharing-flickr-or-php-gallery">
 			<title>Übertragen in Ihre Online-Galerien</title>
-			<para>
-				If you use Flickr, SmugMug, 23hq, Tabblo, Facebook, Zooomr or Picasa Web Album, you can post your files 
-				directly from F-Spot with the <menuchoice><guimenu>File</guimenu>
-				<guisubmenu>Export</guisubmenu></menuchoice> menu, choosing corresponding submenu item.
-			</para>
+			<para>Falls Sie Flickr, SmugMug, 23hq,  Tabblo, Facebook, Zooomr oder Picasa Web-Album verwenden, können Sie Ihre Fotos direkt aus F-Spot übertragen. Die entsprechenden Dialoge finden Sie im Menü unter <menuchoice><guimenu>Datei</guimenu><guisubmenu>Exportieren nach</guisubmenu></menuchoice>.</para>
 			<para>Falls Sie die PHP-Software <ulink url="http://gallery.sourceforge.net/"> Gallery</ulink> verwenden, können Sie Ihre Fotos direkt in ein bestehendes Album übertragen. Gehen Sie im Menü nach <menuchoice><guimenu>Foto</guimenu><guimenuitem>Exportieren nach</guimenuitem><guimenuitem>Web-Galerie …</guimenuitem></menuchoice>. Sie müssen zuerst das Remote-Modul in Ihrer Gallery-Installation aktivieren.</para>
 			<note>
 				<title>Hinweis für Benutzer von Gallery 2.2</title>
@@ -571,12 +535,7 @@
 
 			<itemizedlist>
 				<listitem>
-					<para>
-						Copy your color profiles into the 
-						<filename class="directory">/usr/share/color/icc</filename> or 
-						<filename class="directory">/usr/local/share/color/icc</filename> 
-						directory.
-					</para>
+					<para>Kopieren Sie Ihre Farbprofile in den Ordner <filename class="directory">/usr/share/color/icc</filename> oder <filename class="directory">/usr/local/share/color/icc</filename>.</para>
 				</listitem>
 				<listitem>
 					<para>Aktivieren Sie die Farbverwaltung im Menü <menuchoice><guimenu>Bearbeiten</guimenu><guimenuitem>Einstellungen</guimenuitem></menuchoice>.</para>				
@@ -659,10 +618,7 @@
 				<title>Erweiterungen aus- und einschalten</title>
 
 				<para>Möglicherweise möchten Sie vorübergehend ein bestimmtes Erweiterungspaket aktivieren oder deaktivieren. Beispielsweise dann, wenn eine Erweiterung nicht stabil genug ist, um mit einer großen Anzahl von Bildern umgehen zu können, oder wenn Menüs zu sehr mit Erweiterungen vollgestopft sind.</para>
-				<para>
-					In the <guilabel>Manage Extensions</guilabel> dialog select the extension 
-					package and click <guibutton>Enable</guibutton> or <guibutton>Disable</guibutton>. 
-				</para>
+				<para>Im Dialog <guilabel>Erweiterungen verwalten</guilabel> wählen Sie das Erweiterungspaket aus und klicken auf <guibutton>Aktivieren</guibutton> oder <guibutton>Deaktivieren</guibutton>.</para>
 			</sect2>
 			
 			<sect2 id="extend-managing-extensions-removing-extensions">
@@ -738,9 +694,7 @@
 							<entry>
 								<keycombo><keycap>Umschalttaste</keycap><keycap>Entf</keycap></keycombo>
 							</entry>
-							<entry>
-								Delete selected photos permanently from the drive. If possible, they will moved to trash.
-							</entry>
+							<entry>Ausgewählte Fotos dauerhaft von der Festplatte löschen. Falls möglich, werden diese in den Müll verschoben.</entry>
 						</row>
  
 						<row>
@@ -952,7 +906,7 @@
 							<entry>
 								<keycap>Escape</keycap>
 							</entry>
-							<entry>Zum Übersichts-Modus zurückkehren</entry>
+							<entry>Zum Übersichtsmodus zurückkehren</entry>
 						</row>
 						<row>
 							<entry>
@@ -962,7 +916,7 @@
 						</row>
 						<row>
 							<entry><keycap>Umschalttaste</keycap>-Mausrad</entry>
-							<entry>Schnellerer Filmstreifen Lauf</entry>
+							<entry>Schnellerer Filmstreifen-Lauf</entry>
 						</row>
 						<row>
 							<entry>
