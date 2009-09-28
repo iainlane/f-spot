@@ -1,3 +1,13 @@
+f-spot (0.6.1.3-2) karmic; urgency=low
+
+  * debian/rules, debian/control: Use mono-csc instead of csc to build. Bump
+    mono-devel build-dep version to 2.4.2.3 for this.
+  * debian/rules: Remove LDFLAGS definition and set flags in dh_auto_configure
+    override. Somehow it was being parsed twice - this was only used in one
+    place so just setting it directly in the target doesn't hurt.
+
+ -- Iain Lane <laney@ubuntu.com>  Mon, 28 Sep 2009 22:32:46 +0100
+
 f-spot (0.6.1.3-1) unstable; urgency=low
 
   * New upstream Version 0.6.1.3

@@ -6,7 +6,7 @@ Uploaders: Mirco Bauer <meebey@debian.org>, Iain Lane <laney@ubuntu.com>
 Build-Depends: debhelper (>= 7.0.50),
  cli-common-dev (>= 0.5.4),
  quilt (>= 0.46-7~),
- mono-devel (>= 2.0),
+ mono-devel (>= 2.4.2.3),
  libgtk2.0-dev (>= 2.14),
  libgtk2.0-cil (>= 2.12.2),
  gtk-sharp2-gapi,

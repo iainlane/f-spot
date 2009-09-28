@@ -5,8 +5,6 @@ include /usr/share/cli-common/cli.make
 VERSION = $(shell dpkg-parsechangelog | grep ^Vers | cut -d\  -f2)
 UPVERSION = $(shell echo $(VERSION) | sed 's,-.*,,' | sed 's,+dfsg.*,,') 
 
-LDFLAGS += -Wl,-z,defs -Wl,-O1 -Wl,--as-needed
-
 # robbed from tomboy
 autoreconf: autoreconf-stamp
 autoreconf-stamp:
@@ -23,8 +21,8 @@ override_dh_clean:
 override_dh_auto_configure: autoreconf-stamp
 	dh_auto_configure -- \
 		--disable-scrollkeeper \
-		LDFLAGS="$(LDFLAGS)" \
-		MCS=/usr/bin/csc
+		LDFLAGS="-Wl,-z,defs -Wl,-O1 -Wl,--as-needed" \
+		MCS=/usr/bin/mono-csc
 
 override_dh_install:
 	rm -f $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.a \
