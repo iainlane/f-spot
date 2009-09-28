@@ -6,9 +6,11 @@
 ## DP: Link against system flickrnet-2.1.5 rather than bundled f-spot version.
 
 @DPATCH@
---- a/configure.ac
-+++ b/configure.ac
-@@ -318,7 +318,6 @@
+Index: f-spot.git/configure.ac
+===================================================================
+--- f-spot.git.orig/configure.ac	2009-09-28 21:28:31.130890999 +0100
++++ f-spot.git/configure.ac	2009-09-28 21:36:06.054891875 +0100
+@@ -323,7 +323,6 @@
  extensions/Exporters/CDExport/Makefile
  extensions/Exporters/DefaultExporters/Makefile
  extensions/Exporters/FlickrExport/Makefile
@@ -16,8 +18,10 @@
  extensions/Exporters/GalleryExport/Makefile
  extensions/Exporters/FacebookExport/Makefile
  extensions/Exporters/FolderExport/Makefile
---- a/extensions/Exporters/FlickrExport/Makefile.am
-+++ b/extensions/Exporters/FlickrExport/Makefile.am
+Index: f-spot.git/extensions/Exporters/FlickrExport/Makefile.am
+===================================================================
+--- f-spot.git.orig/extensions/Exporters/FlickrExport/Makefile.am	2009-09-28 21:12:52.487391241 +0100
++++ f-spot.git/extensions/Exporters/FlickrExport/Makefile.am	2009-09-28 21:36:06.054891875 +0100
 @@ -20,16 +20,13 @@
  	$(LINK_GIOSHARP)				\
  	$(LINK_GTKSHARPBEANS)		\
@@ -36,11 +40,3 @@
  RESOURCES =				\
  	-resource:$(srcdir)/$(PLUGIN_MANIFEST)	\
  	-resource:$(srcdir)/$(PLUGIN_NAME).glade
-@@ -40,7 +37,6 @@
- 	mautil p $(PLUGIN_ASSEMBLY)
- 
- $(PLUGIN_ASSEMBLY): $(PLUGIN_SOURCES) $(PLUGIN_MANIFEST)
--	$(MAKE) -C $(SUBDIRS)
- 	$(CSC_LIB) -out:$@ $(PLUGIN_SOURCES) $(REFS) $(PKGS) $(ASSEMBLIES) $(RESOURCES)
- 
- plugindir = $(pkglibdir)/extensions

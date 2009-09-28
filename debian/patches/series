@@ -7,7 +7,6 @@ debian_link-system-flickrnet.patch
 debian_link-system-gnome-keyring.patch
 debian_fix_f-spot.exe.config.patch
 
-upstream_facebook-label-crash.patch
 ubuntu_importer-targetdir-selector.patch
 ubuntu_fname_quote_percent.patch
 ubuntu_fix_export_crash_FlickrRemote.cs.patch

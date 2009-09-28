@@ -1,3 +1,25 @@
+f-spot (0.6.1.3-1) UNRELEASED; urgency=low
+
+  * New upstream Version 0.6.1.3
+    - call g_type_init () prior to using gconf 
+    - avoid echoing an entry as tip
+    - check for existing files on version creation 
+    - set the progress dialog properties atomically
+    - avoid a crash in the facebook extensions (Iain Lane)
+    - fix slideshow transitions on gdk csw (>=2.18)
+    - prevent a crash on broken exif data (Karl Mikaelsson)
+    - support for X-GNOME-FullName in .desktop files
+    - avoid locking on loading tiffs
+    - better support for parallel build (Christian Krause)
+    - avoid a crash on some broken color profiles 
+    - don't copy files to memory first at import (libgphoto2 >= 2.4, for usb
+      cameras only)
+    - backported translations from master
+  * debian_link-system-flickrnet.patch: Part of this chance was incorporated
+    upstream (for another reason); remove from patch. 
+
+ -- Iain Lane <laney@ubuntu.com>  Mon, 28 Sep 2009 21:39:19 +0100
+
 f-spot (0.6.1.2-1) unstable; urgency=low
 
   * New upstream Version 0.6.1.2
