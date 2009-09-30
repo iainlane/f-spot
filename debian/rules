@@ -15,7 +15,7 @@ autoreconf-stamp:
 
 override_dh_clean:
 	dh_clean
-	rm -rf autoreconf-stamp configure config.sub config.guess ltmain.sh aclocal.m4 autom4te.cache/
+	rm -rf autoreconf-stamp configure config.sub config.guess ltmain.sh aclocal.m4 autom4te.cache/ po/*.pot
 	find . -name "Makefile.in" -delete
 
 override_dh_auto_configure: autoreconf-stamp
@@ -29,6 +29,7 @@ override_dh_install:
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.la \
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.so
 	dh_install
+	cd po; intltool-update --pot
 
 # disable tests
 override_dh_auto_test:
