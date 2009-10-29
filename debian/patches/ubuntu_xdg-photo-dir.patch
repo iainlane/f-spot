@@ -4,8 +4,10 @@
 -- f-spot-0.6.0.0.orig/debian/patches/ubuntu_xdg_photo_dir.patch
 ++ f-spot-0.6.0.0/debian/patches/ubuntu_xdg_photo_dir.patch
 @ -0,0 +1,16 @@
---- a/src/Preferences.cs
-+++ b/src/Preferences.cs
+Index: f-spot.git/src/Preferences.cs
+===================================================================
+--- f-spot.git.orig/src/Preferences.cs	2009-10-29 14:18:28.922756627 +0000
++++ f-spot.git/src/Preferences.cs	2009-10-29 14:19:10.045756727 +0000
 @@ -146,7 +146,14 @@
  			case SCREENSAVER_TAG:
  				return 1;

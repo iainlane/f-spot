@@ -5,8 +5,10 @@
 ## DP: No description.
 
 @DPATCH@
---- a/src/f-spot.exe.config.in
-+++ b/src/f-spot.exe.config.in
+Index: f-spot.git/src/f-spot.exe.config.in
+===================================================================
+--- f-spot.git.orig/src/f-spot.exe.config.in	2009-10-29 14:18:29.266756878 +0000
++++ f-spot.git/src/f-spot.exe.config.in	2009-10-29 14:19:07.621765182 +0000
 @@ -13,4 +13,5 @@
    <dllmap dll="libXcomposite.dll" target="libXcomposite.so.1"/>
    <dllmap dll="liblcms-1.0.0.dll" target="liblcms.so.1"/>

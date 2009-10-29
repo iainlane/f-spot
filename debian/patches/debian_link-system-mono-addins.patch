@@ -5,8 +5,10 @@
 ## DP: Link against system libraries in preference to versions bundled in the
 ## DP: f-spot tarball.
 
---- a/Makefile.include
-+++ b/Makefile.include
+Index: f-spot.git/Makefile.include
+===================================================================
+--- f-spot.git.orig/Makefile.include	2009-10-29 14:18:29.542756809 +0000
++++ f-spot.git/Makefile.include	2009-10-29 14:19:05.509756682 +0000
 @@ -3,9 +3,6 @@
  
  ## Directories
@@ -32,9 +34,11 @@
  LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
  LINK_GIOSHARP = -r:$(DIR_GIOSHARP)/gio-sharp.dll
  LINK_GTKSHARPBEANS = -r:$(DIR_GTKSHARPBEANS)/gtk-sharp-beans.dll
---- a/configure.ac
-+++ b/configure.ac
-@@ -302,10 +302,6 @@
+Index: f-spot.git/configure.ac
+===================================================================
+--- f-spot.git.orig/configure.ac	2009-10-29 14:18:29.578756336 +0000
++++ f-spot.git/configure.ac	2009-10-29 14:19:05.509756682 +0000
+@@ -308,10 +308,6 @@
  lib/libgphoto2-sharp/Makefile
  lib/libjpegtran/Makefile
  lib/Makefile
@@ -45,8 +49,10 @@
  lib/semweb/Makefile
  docs/Makefile
  icons/Makefile
---- a/lib/Makefile.am
-+++ b/lib/Makefile.am
+Index: f-spot.git/lib/Makefile.am
+===================================================================
+--- f-spot.git.orig/lib/Makefile.am	2009-10-29 14:18:29.562758733 +0000
++++ f-spot.git/lib/Makefile.am	2009-10-29 14:19:05.509756682 +0000
 @@ -10,7 +10,6 @@
  	libjpegtran			\
  	libfspot			\

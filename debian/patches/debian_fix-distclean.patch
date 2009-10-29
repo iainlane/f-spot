@@ -5,8 +5,10 @@
 ## DP: No description.
 
 @DPATCH@
---- a/Makefile.am
-+++ b/Makefile.am
+Index: f-spot.git/Makefile.am
+===================================================================
+--- f-spot.git.orig/Makefile.am	2009-10-29 14:18:29.798756638 +0000
++++ f-spot.git/Makefile.am	2009-10-29 14:19:03.969757415 +0000
 @@ -44,7 +44,6 @@
          intltool-extract        \
          intltool-merge          \

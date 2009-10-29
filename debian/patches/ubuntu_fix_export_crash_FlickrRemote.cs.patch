@@ -6,8 +6,10 @@
 ## DP: http://bugzilla.gnome.org/show_bug.cgi?id=553518
 
 @DPATCH@
---- a/extensions/Exporters/FlickrExport/FlickrRemote.cs
-+++ b/extensions/Exporters/FlickrExport/FlickrRemote.cs
+Index: f-spot.git/extensions/Exporters/FlickrExport/FlickrRemote.cs
+===================================================================
+--- f-spot.git.orig/extensions/Exporters/FlickrExport/FlickrRemote.cs	2009-10-29 14:18:29.090754899 +0000
++++ f-spot.git/extensions/Exporters/FlickrExport/FlickrRemote.cs	2009-10-29 14:19:08.558758093 +0000
 @@ -17,6 +17,7 @@
  using FSpot;
  using FSpot.Utils;

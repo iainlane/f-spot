@@ -1,3 +1,20 @@
+f-spot (0.6.1.4-1) UNRELEASED; urgency=low
+
+  * New upstream release 0.6.1.4
+   - keep sorting on startup
+   - fix a NRE on LastRollDialog
+   - fix the toolbar 2.28-ification
+   - accept --sync as comandline parameter
+   - avoid crashing on AdjustTimeDialog 
+   - allow more than 60 pictures per Facebook albums
+   - backported translations
+  * debian/control: Require at least Cairo 1.4.0 per upstream 
+  * debian/control: Require cli-common-dev >= 0.5.7 per Debian CLI
+    policy
+  * Refresh various patches to apply cleanly  
+
+ -- Iain Lane <laney@ubuntu.com>  Thu, 29 Oct 2009 14:30:30 +0000
+
 f-spot (0.6.1.3-2) unstable; urgency=low
 
   [ Iain Lane ]

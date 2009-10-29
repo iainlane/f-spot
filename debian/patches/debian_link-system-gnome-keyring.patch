@@ -4,8 +4,10 @@
 ## All lines beginning with `## DP:' are a description of the patch.
 ## DP: No description.
 
---- a/Makefile.include
-+++ b/Makefile.include
+Index: f-spot.git/Makefile.include
+===================================================================
+--- f-spot.git.orig/Makefile.include	2009-10-29 14:19:05.509756682 +0000
++++ f-spot.git/Makefile.include	2009-10-29 14:19:07.317757872 +0000
 @@ -18,7 +18,7 @@
  
  ## Links
@@ -15,8 +17,10 @@
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS =			\
---- a/lib/Makefile.am
-+++ b/lib/Makefile.am
+Index: f-spot.git/lib/Makefile.am
+===================================================================
+--- f-spot.git.orig/lib/Makefile.am	2009-10-29 14:19:05.509756682 +0000
++++ f-spot.git/lib/Makefile.am	2009-10-29 14:19:07.317757872 +0000
 @@ -5,7 +5,6 @@
  	GKeyFile 			\
  	gio-sharp			\

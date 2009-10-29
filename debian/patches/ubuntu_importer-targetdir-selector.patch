@@ -6,8 +6,10 @@
 ## DP: LP: #182858, http://bugzilla.gnome.org/show_bug.cgi?id=511569
 
 @DPATCH@
---- a/src/CameraFileSelectionDialog.cs
-+++ b/src/CameraFileSelectionDialog.cs
+Index: f-spot.git/src/CameraFileSelectionDialog.cs
+===================================================================
+--- f-spot.git.orig/src/CameraFileSelectionDialog.cs	2009-10-29 14:18:29.198756433 +0000
++++ f-spot.git/src/CameraFileSelectionDialog.cs	2009-10-29 14:19:07.933765187 +0000
 @@ -33,6 +33,7 @@
  		[Widget] Gtk.OptionMenu tag_option_menu;
  		[Widget] Gtk.CheckButton attach_check;
@@ -26,7 +28,7 @@
  			
  			GetPreviews ();
  		}
-@@ -279,7 +283,11 @@
+@@ -276,7 +280,11 @@
  
  				return new SaveResult (path, true);
  			} else {
@@ -39,8 +41,10 @@
  				System.IO.File.Move (path, dest);
  
  				return new SaveResult (dest, false);
---- a/src/f-spot.glade
-+++ b/src/f-spot.glade
+Index: f-spot.git/src/f-spot.glade
+===================================================================
+--- f-spot.git.orig/src/f-spot.glade	2009-10-29 14:18:29.214766595 +0000
++++ f-spot.git/src/f-spot.glade	2009-10-29 14:19:07.933765187 +0000
 @@ -668,10 +668,44 @@
                </widget>
                <packing>

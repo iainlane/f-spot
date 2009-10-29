@@ -6,8 +6,10 @@
 ## DP: https://launchpad.net/bugs/258083
 
 @DPATCH@
---- a/src/Utils/UriUtils.cs
-+++ b/src/Utils/UriUtils.cs
+Index: f-spot.git/src/Utils/UriUtils.cs
+===================================================================
+--- f-spot.git.orig/src/Utils/UriUtils.cs	2009-10-29 14:18:29.150757347 +0000
++++ f-spot.git/src/Utils/UriUtils.cs	2009-10-29 14:19:08.265757117 +0000
 @@ -45,7 +45,7 @@
  			return new Uri (builder.ToString ());
  		}
