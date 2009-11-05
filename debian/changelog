@@ -1,3 +1,12 @@
+f-spot (0.6.1.5-1) UNRELEASED; urgency=low
+
+  * New upstream release 0.6.1.5
+   - make IconView responsive to mouseclicks on gdk 2.18 (LP: #448162)
+   - do not ignore .rw2 files
+   - avoid an Array.OORE on empty dbs (Mike Gemuende)
+
+ -- Iain Lane <laney@ubuntu.com>  Thu, 05 Nov 2009 16:18:30 +0000
+
 f-spot (0.6.1.4-1) unstable; urgency=low
 
   * New upstream release 0.6.1.4
