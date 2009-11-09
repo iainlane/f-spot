@@ -4,8 +4,9 @@ f-spot (0.6.1.5-1) UNRELEASED; urgency=low
    - make IconView responsive to mouseclicks on gdk 2.18 (LP: #448162)
    - do not ignore .rw2 files
    - avoid an Array.OORE on empty dbs (Mike Gemuende)
+  * debian/rules: Make get-orig-source policy compliant 
 
- -- Iain Lane <laney@ubuntu.com>  Thu, 05 Nov 2009 16:18:30 +0000
+ -- Iain Lane <laney@ubuntu.com>  Mon, 09 Nov 2009 18:12:08 +0000
 
 f-spot (0.6.1.4-1) unstable; urgency=low
 

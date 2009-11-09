@@ -38,12 +38,11 @@ override_dh_auto_test:
 override_dh_makeclilibs:
 
 get-orig-source:
-	[ -d ../tarballs ] || mkdir ../tarballs
 	uscan \
 		--force-download \
 		--download-version $(UPVERSION) \
 		--rename \
-		--destdir ../tarballs
+		--destdir .
 
 %:
 	dh --with quilt $@
