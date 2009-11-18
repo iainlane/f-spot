@@ -1,3 +1,10 @@
+f-spot (0.6.1.5-2) UNRELEASED; urgency=low
+
+  * debian/control: Update flickrnet dependency to use the new -dev package
+    (Closes: #556802)
+
+ -- Iain Lane <laney@ubuntu.com>  Wed, 18 Nov 2009 19:32:57 +0000
+
 f-spot (0.6.1.5-1) unstable; urgency=low
 
   * New upstream release 0.6.1.5
