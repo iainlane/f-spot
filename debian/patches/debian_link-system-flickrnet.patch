@@ -30,7 +30,7 @@ Index: f-spot.git/extensions/Exporters/FlickrExport/Makefile.am
  	-r:Mono.Posix
  
  PKGS =					\
-+    -pkg:flickrnet-2.2    \
++    -pkg:flickrnet    \
  	-pkg:gtk-sharp-2.0		\
  	-pkg:glade-sharp-2.0
  
