@@ -1,16 +1,16 @@
 f-spot (0.6.1.5-2) UNRELEASED; urgency=low
 
-  * debian/control, debian/patches/debian_link-system-flickrnet.patch: Update
-    flickrnet dependency to use the new -dev package. Update patch to search
-    for unversioned pcfile (Closes: #556802)
+  * debian/control, debian/patches/debian_link-system-*.patch: Update
+    flickrnet and keyring-sharp dependencies to use the new -dev packages.
+    Update patches to search for unversioned pcfiles (Closes: #556802)
   * debian/control:
    + Bump mono-devel build-dep to >= 2.4.3 and remove all build-depends on
      packages now provided transitively by mono-devel.
    + Replace library build-depends with -dev counterparts which now contain
      the pcfiles.
-  * debian/ltmain-as-needed.sh: Steal updated version from Tomboy 
+  * debian/ltmain-as-needed.sh: Steal updated version from Tomboy  
 
- -- Iain Lane <laney@ubuntu.com>  Sat, 09 Jan 2010 13:10:03 +0000
+ -- Iain Lane <laney@ubuntu.com>  Sat, 09 Jan 2010 13:23:01 +0000
 
 f-spot (0.6.1.5-1) unstable; urgency=low
 

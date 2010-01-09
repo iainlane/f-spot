@@ -13,7 +13,7 @@ Index: f-spot.git/Makefile.include
  ## Links
  
 -LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
-+LINK_KEYRING = -pkg:gnome-keyring-sharp
++LINK_KEYRING = -pkg:gnome-keyring-sharp-1.0
  LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
  LINK_MONO_ADDINS =			\
