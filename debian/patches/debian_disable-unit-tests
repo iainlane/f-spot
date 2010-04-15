@@ -1,0 +1,19 @@
+Description: Disable unit tests unconditionally as they cause extra binary deps
+Author: Iain Lane <laney@ubuntu.com>
+Forwarded: not-needed
+
+Index: f-spot.git/configure.ac
+===================================================================
+--- f-spot.git.orig/configure.ac	2010-04-15 11:48:26.036097143 +0100
++++ f-spot.git/configure.ac	2010-04-15 11:48:33.774845929 +0100
+@@ -147,8 +147,8 @@
+ AC_SUBST(PATH_DBUS)
+ 
+ dnl -- nunit
+-PKG_CHECK_MODULES(NUNIT, nunit >= $NUNIT_REQUIRED, 
+-	do_tests="yes", do_tests="no")
++#PKG_CHECK_MODULES(NUNIT, nunit >= $NUNIT_REQUIRED, 
++#	do_tests="yes", do_tests="no")
+ 
+ AC_SUBST(NUNIT_LIBS)
+ AM_CONDITIONAL(ENABLE_TESTS, test "x$do_tests" = "xyes")
