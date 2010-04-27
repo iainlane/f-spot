@@ -1,11 +1,14 @@
 f-spot (0.6.1.5-3) UNRELEASED; urgency=low
 
-  * debian/control: Add missing build-dependency on libjpeg-dev, fixes FTBFS
-    (Closes: #577894)
+  * debian/control: 
+     + Add missing build-dependency on libjpeg-dev, fixes FTBFS
+       (Closes: #577894)
+     + Increase Standards-Version to 3.8.4, no changes required
   * debian/patches/debian_disable-unit-tests: Disable unit tests as these
     were never meant to be enabled and cause an unnecessary dep on nunit. 
+  * debian/source/format: Add with 1.0
 
- -- Iain Lane <laney@ubuntu.com>  Thu, 15 Apr 2010 11:24:41 +0100
+ -- Iain Lane <laney@ubuntu.com>  Tue, 27 Apr 2010 13:42:53 +0100
 
 f-spot (0.6.1.5-2) unstable; urgency=low
 

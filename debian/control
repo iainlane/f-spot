@@ -40,7 +40,7 @@ Build-Depends: debhelper (>= 7.0.50),
  libtool,
  autoconf,
  automake1.10
-Standards-Version: 3.8.3
+Standards-Version: 3.8.4
 Homepage: http://www.f-spot.org/
 Vcs-Git: git://git.debian.org/git/pkg-cli-apps/packages/f-spot.git
 Vcs-Browser: http://git.debian.org/?p=pkg-cli-apps/packages/f-spot.git
