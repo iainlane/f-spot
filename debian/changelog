@@ -39,6 +39,8 @@ f-spot (0.6.2-1) UNRELEASED; urgency=low
     variables at configure time. Should reduce the BD chain significantly. 
   * debian/control: Increase minimum version on libgphoto2-dev BD in line with
     configure requirements.
+  * debian/control: Add build-dependency on libunique-dev to build new
+    unique-sharp bindings which f-spot now uses to handle activation.
 
  -- Iain Lane <laney@ubuntu.com>  Mon, 17 May 2010 11:59:58 +0100
 
