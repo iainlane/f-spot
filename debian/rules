@@ -21,6 +21,9 @@ override_dh_clean:
 override_dh_auto_configure: autoreconf-stamp
 	dh_auto_configure -- \
 		--disable-scrollkeeper \
+		--with-gnome-screensaver=/usr \
+		--with-gnome-screensaver-privlibexecdir=/usr/lib/gnome-screensaver/gnome-screensaver \
+		--with-gnome-screensaver-themesdir=/usr/share/applications/screensavers \
 		LDFLAGS="-Wl,-z,defs -Wl,-O1 -Wl,--as-needed" \
 		MCS=/usr/bin/mono-csc
 
