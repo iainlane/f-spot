@@ -37,6 +37,8 @@ f-spot (0.6.2-1) UNRELEASED; urgency=low
    + Tons of translation updates (seriously)
   * debian/control, debian/rules: Drop gnome-screensaver build-dep and set
     variables at configure time. Should reduce the BD chain significantly. 
+  * debian/control: Increase minimum version on libgphoto2-dev BD in line with
+    configure requirements.
 
  -- Iain Lane <laney@ubuntu.com>  Mon, 17 May 2010 11:59:58 +0100
 
