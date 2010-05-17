@@ -1,0 +1,874 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML 4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book id="f-spot" lang="sl">
+	<bookinfo>
+		<title>F-Spot priročnik</title>
+		<abstract role="description">
+			<para>To je uporabniški priročnik za F-Spot, GNOME upravljalnik fotografij</para>
+		</abstract>
+		<subtitle>To je uporabniški priročnik za F-Spot, GNOME upravljalnik fotografij</subtitle>
+		<copyright>
+			<year>2007-2009</year>
+			<holder>Aaron Bockover, Gabriel Burt, Miguel de Icaza, Bengt Thuree</holder>
+		</copyright>
+		<publisher>
+			<publishername>GNOME projekt dokumentacije</publishername>
+		</publisher>
+		<authorgroup>
+			<author>
+				<firstname>Miguel</firstname>
+				<surname>de Icaza</surname>
+			</author>
+			<author>
+				<firstname>Aaron</firstname>
+				<surname>Bockover</surname>
+			</author>
+			<author>
+				<firstname>Bengt</firstname>
+				<surname>Thuree</surname>
+			</author>
+			<author>
+				<firstname>Gabriel</firstname>
+				<surname>Burt</surname>
+			</author>
+			<author>
+				<firstname>Alexandre</firstname>
+				<surname>Prokoudine</surname>
+			</author>
+			<author role="maintainer">
+				<firstname>Stephane</firstname>
+				<surname>Delcroix</surname>
+			</author>
+		</authorgroup>
+		<!--<include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>-->
+		<revhistory>
+			<revision>
+				<revnumber>0,5</revnumber>
+				<date>2008-09-25</date>
+			</revision>
+			<revision>
+				<revnumber>0,4</revnumber>
+				<date>2008-09-12</date>
+			</revision>
+			<revision>
+				<revnumber>0,3</revnumber>
+				<date>26-07-2007</date>
+			</revision>
+		 </revhistory>
+	</bookinfo>
+
+	<chapter id="organizing">
+		<title>Organizacija vaših fotografij</title>
+		
+		<sect1 id="import">
+			<title>Uvažanje</title>
+
+			<para>Fotografije lahko uvozite s trdega diska ali fotoaparata. V primeru uvoza fotografij v F-Spot s fotoaparata, bo F-Spot vedno naredil njihovo kopijo in vam omogočil čiščenje pomnilnika vašega fotoaparata. Privzeto F-Spot naredi kopijo fotografij uvoženih s trdega diska. V primeru da datotek ne želite kopirati s trdega diska, odkljukajte možnost <guilabel>Kopiranje datotek v mapo fotografij</guilabel> v pogovornem oknu uvoza ali pa med vlečenjem fotografij v F-Spot držite tipko <keycap>Dvigalka</keycap>.</para>
+			
+			<para>Privzeto F-Spot kopira vaše fotografije v mapo <filename class="directory">~/Slike</filename>. Mapo, ki jo uporablja F-Spot lahko spremenite v pogovornem oknu <guilabel>Možnosti</guilabel> (<menuchoice><guimenu>Uredi</guimenu><guimenuitem>Možnosti</guimenuitem></menuchoice>).</para>
+			<para>V primeru da ste morda nekatere fotografije iz izbranega vira že uvozili, lahko uporabite možnost <guilabel>Zaznavanje dvojnikov</guilabel>. F-Spot bo poskusil ugotoviti ali natanko ta slika že obstaja v podatkovni zbirki. V tem primeru kopija slike ne bo uvožena.</para>
+			<para>V primeru da so vse uvožene fotografije z določenega dogodka, ali imajo neko drugo skupno značilnost, lahko za njih ustvarite oznako zato da jih kasneje lahko najdete. Za to sledite navodilom z  <xref linkend="tag"/> za ustvarjanje nove oznake, nato med uvažanjem označite gumb <guilabel>Pripni oznako</guilabel> in izberite ustvarjeno oznako.</para>
+			
+			<tip>
+				<para>F-Spot uporablja podatkovno zbirko shranjeno v <filename>~/.config/f-spot/photos.db</filename>. Za dostop do nje uporabite ukaz sqlite3. Pot do podatkovne zbirke lahko ročno navedete z zagonom F-Spot z možnostjo <option>-b</option>.</para>
+			</tip>
+			
+			<para>Po uvozu bo F-Spot prikazal le slike zadnjega uvoznega zvitka. Preberite <xref linkend="enjoying-search"/> za podrobnosti o upravljanju z uvoznimi zvitki.</para>
+			<para>Uvoziti je mogoče tudi neposredno iz Mozilla <ulink url="http://www.mozilla.com/en-US/firefox/">Firefox</ulink> in <ulink url="http://www.mozilla.com/en-US/thunderbird/">Thunderbird</ulink> z uporabo <ulink url="https://addons.mozilla.org/en-US/firefox/addon/7091">Firefox</ulink> in <ulink url="https://addons.mozilla.org/en-US/thunderbird/addon/7011">Thunderbird</ulink> razširitve F-Spot uvoznik, ki jo je napisal<ulink url="http://personalpages.tds.net/~cdovel/">Pizzach</ulink>.</para>
+		</sect1>
+		
+		<sect1 id="edit">
+			<title>Urejanje</title>
+			
+			<para>V primeru da dvojno kliknite ali pritisnete vnosno tipko, vstopite v način urejanje, kjer lahko odstranite rdeče oči, obrežete ter prilagodite svetlost in barve.</para>
+			
+			<sect2 id="edit-versions">
+				<title>Različice</title>
+				
+				<para>Ko urejate fotografije, je ustvarjena nova kopija (imenovana različica), tako izvorna fotografija ni nikoli spremenjena. Po prvem urejanju fotografije bodo naslednja urejanja spremenila isto različico. V primeru da želite ustvariti več različic fotografije, morda z drugim obrezovanjem ali barvami lahko to storite preko možnosti  <menuchoice><guimenu>Fotografija</guimenu><guimenuitem>Ustvari novo različico</guimenuitem></menuchoice>.</para>
+			</sect2>
+
+			<sect2 id="edit-crop">
+				<title>Obreži</title>
+				
+				<para>Obrezovanje slike je dober način za izboljšanje kakovosti slike s spremembo okvirjanja. Fotografijo lahko obrežete z izbiro dela fotografije, ki ga želite obdržati. V primeru da želite imeti fotografijo natančnih mer zahtevanih za določeno velikost tiskanja, lahko z izbiro primerne velikosti s spustnega menija omejitev omejite izbiro, ki vam jo bo dovolil narisati F-Spot. Za podrobnosti o izbiri na fotografiji si oglejte <xref linkend="edit-remove-red-eye"/> spodaj.</para>
+				<figure>
+					<title>Orodje obreži</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-crop.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<para>Ko ste naredili izbor obreza, morate za končanje obrezovanja klikniti gumb pod sliko. V primeru da delate z izvorno fotografijo, obrezovanje ustvari novo različico vaše fotografije.</para>
+			</sect2>
+			
+			<sect2 id="edit-straighten">
+				<title>Poravnava</title>
+				
+				<para>Učinek poravnave je orodje za poravnanje fotografij, precej uporabno za sliko pokrajine posnete brez stativa, ko (navidezna) črta horizonta ni na 0°. To orodje zavrti sliko za določen kot in samodejno čarobno obreže nastalo sliko, tako da vedno vidite idealen pravokotnik.</para>
+				<figure>
+					<title>Orodje poravnave</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-straighten.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+
+			<sect2 id="edit-adjust-colors">
+				<title>Prilagajanje barv</title>
+				
+				<para>Za prilagajanje svetlosti, kontrasta in barv fotografije najprej kliknite ikono <guibutton>Prilagodi barve fotografije</guibutton> za odpiranje pogovornega okna prilagajanja. Spremenite nekaj nastavitev in jih shranite z <guibutton>V redu</guibutton>.</para>
+				<figure>
+					<title>Orodje prilagajanja barv</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-adjust-colors.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+			
+			<sect2 id="edit-auto-color">
+				<title>Samodejna barva</title>
+				
+				<para>Ta učinek samodejno prilagodi barvne ravni za ustvarjanje barvno uravnotežene slike. Najboljše deluje za slike posnete s samodejnim ravnotežjem bele barve, ko fotoaparat ni uspel dobro opraviti dela. </para>
+				<figure>
+					<title>Samodejna barva</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-autocolor.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+
+			<sect2 id="edit-desaturate">
+				<title>Zmanjšaj nasičenje</title>
+				
+				<para>Za pretvorbo barve fotografije v črno belo odprite izbrano fotografijo iz pritisnite gumb <guibutton>Zmanjšaj nasičenje</guibutton>.</para>
+				<figure>
+					<title>Orodje zmanjšanja nasičenja</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-desaturate.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+
+			<sect2 id="edit-sepia">
+				<title>Sepia</title>
+				
+				<para>Za pretvorbo barvne fotografije v staro sliko sepia tonov odprite izbrano fotografijo in pritisnite gumb <guibutton>Sepia učinek staranja</guibutton>.</para>
+				<figure>
+					<title>Orodje zmanjšanja nasičenja</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-sepia.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</sect2>
+
+			<sect2 id="edit-remove-red-eye">
+				<title>Odstranjevanje rdečih oči</title>
+				
+				<para>Za odstranitev rdečih oči s fotografije morate izbrati področje, ki vsebuje oči. Pametno je povečati sliko za natančno izbiro oči v fotografiji. Naenkrat bi lahko popravite obe oči iste osebe ali celo oči več oseb na enkrat. V primeru da to ne deluje, ali izbrano področje vsebuje druge živo rdeče dele (ustnice, ...) boste najbrž morali popraviti eno oko na enkrat.</para>
+				<para>Za izbiranje kliknite en kot kvadrata, ki bo vaš izbor, povlecite vašo miško v diagonalni kot in jo spustite. Izboru lahko spremenite velikost z vlečenjem njegovih robom ali pa ga lahko premaknete s klikom v sredino izbora in ga povlečete kamor ga želite.</para>
+				<para>Ko ste izbrali področje, lahko rdeče oko odstranite s klikom na gumb rdeče-oko pod fotografijo.</para>
+				<figure>
+					<title>Orodje rdečih oči</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-red-eye.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<tip>
+					<para>Prag za zaznavanje rdečih oči lahko spremenite s spremembo gconf ključa ¸<filename class="directory">/apps/f-spot/edit/redeye_threshold</filename>.</para>
+				</tip>
+			</sect2>
+			
+			<sect2 id="edit-soft-focus">
+				<title>Mehko žarišče</title>
+				
+				<para>V fotografiji je izostritev enega predela slike in zameglitev vsega ostalega način za poudarjanje in pridobitev pozornosti. To je mogoče doseči z uporabo leče ki dovoli snemanje s kratko razdaljo pred in za predmetom, ki je videti v gorišču. Učinek mehkega gorišča je način za posnemanje takšne leče.</para>
+				<figure>
+					<title>Orodje mehkega žarišča</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="figures/f-spot-soft-focus.png"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<para>Kliknite za izbor središča področja, ki naj bo v gorišču in prilagodite količino megljenja in nato kliknite <guibutton>V redu</guibutton>.</para>
+			</sect2>
+
+			<sect2 id="edit-sharpen">
+				<title>Izostritev</title>
+				
+				<para>Fotografije izven gorišča in večina digitaliziranih slik pogosto potrebujejo popravek izostritve. Učinek maske odstranitve izostritve izostri robove elementov brez povečanja šuma ali napak. Za izostritev fotografije izberite <menuchoice><guimenu>Uredi</guimenu><guimenuitem>Izostri...</guimenuitem></menuchoice> in navedite naslednje vrednosti:</para>
+				
+				<itemizedlist>
+					<listitem>
+						<para><parameter class="option">Količina</parameter> — moč izostritve.</para>
+					</listitem>
+					<listitem>
+						<para><parameter class="option">Polmer</parameter> — na koliko točk na vsaki strani roba bo vplivala izostritev. Slike z visoko ločljivostjo omogočijo večje polmere.</para>
+					</listitem>
+					<listitem>
+						<para><parameter class="option">Prag</parameter> — najmanjša razlika v vrednostih točk ki določiti rob, kjer mora biti uveljavljena izostritev. To pomaga pri izogibanju ustvarjanja napak v obrazu, nebu ali vodni površini.</para>
+					</listitem>
+				</itemizedlist>
+			</sect2>
+			
+			<sect2 id="edit-describe">
+				<title>Opisovanje</title>
+				
+				<para>Vpis slike lahko vnesete s klikom na polje besedilnega vnosa pod sliko in tipkanjem.</para>
+				<para>Ko ste naredili izbor obreza, morate za končanje obrezovanja klikniti gumb pod sliko. V primeru da delate z izvorno fotografijo, obrezovanje ustvari novo različico vaše fotografije.</para>
+			</sect2>
+
+			<sect2 id="edit-adjust-time">
+				<title>Prilagodi čas</title>
+				
+				<para>Tako v načinu 'brskanje' kot 'urejanje' lahko prilagodite čas ene ali več slik (<menuchoice><guimenu>Uredi</guimenu><guimenuitem>Prilagodi čas</guimenuitem></menuchoice>). Prilagajanje časa več slik na enkrat vam pomaga premakniti celoten uvozni zvitek, na primer če je čas na vašem fotoaparatu slabo nastavljen in ste ali če ste ga pozabili spremeniti z/na poletni čas. </para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="tag">
+			<title>Oznaka</title>
+			<para>F-Spot vam omogoča organizacijo in uživanje v vaših fotografijah s povezavo z različnimi uporabniško prilagodljivimi oznakami. F-Spot  za začetek vsebuje privzete oznake, lahko jih spremenite in dodate nove. Na primer, če želite ustvariti oznako za določen dogodek, lahko ustvarite oznako imenovano po dogodku pod oznako dogodki.</para>
+			<para>Obstaja več načinov za oznako fotografij:</para>
+			<itemizedlist>
+				<listitem>
+					<para>povlecite in spustite fotografij-o/e na oznako</para>
+				</listitem>
+				<listitem>
+					<para>povlecite in spustite oznako na fotografij-o/e</para>
+				</listitem>
+				<listitem>
+					<para>preko menija desnega klika fotografija</para>
+				</listitem>
+				<listitem>
+					<para>preko menijev Oznake in Uredi</para>
+				</listitem>
+				<listitem>
+					<para>s tipkanjem oznak. Pritisnite <keycap>t</keycap> za pojav vnosne vrstice oznak. Sem lahko vnesete oznake, ločene z vejicami.</para>
+					<para>V vnosni vrstici lahko uporabite samodejno dokončanje. Po vnosu začetka imena oznake pritisnite <keycap>Tabulator</keycap> za ogled prvega mogočega dokončanja. Med mogočimi dokončanji lahko krožite naprej s ponovnim pritiskom na <keycap>Tabulator</keycap> in nazaj s pritiskom na <keycombo action="simul"><keycap>Dvigalka</keycap><keycap>Tabulator</keycap></keycombo>. Za potrditev predlaganega dokončanja in vnos nove oznake pritisnite <keycap>,</keycap>. S pritiskom <keycap>Vnosna tipka</keycap> zapustite vnosno vrstico oznak in s tem morda potrdite trenutno dokončanje. Za preklic samodejnega dokončevanja tipkajte naprej. </para>
+				</listitem>
+			</itemizedlist>
+			<para>Prva fotografija, ki jo povežete z oznako, bo uporabljena za ikono oznake. Z desnim klikom na oznako in izbiro  <guilabel>Uredi oznako</guilabel> lahko uredite ime oznake, nadrejeno oznako in ikono oznake.</para>
+			<para>Nadrejeni predmet oznake lahko spremenite tako, da ga povlečete in spustite kamor želite. Ime oznake lahko uredite tako, da jo izberete in pritisnete <keycap>F2</keycap>. V primeru da je gradnik drevesa oznak v žarišču, (na primer ste ravnokar kliknili na oznako) lahko začnete tipkati ime oznake, vse razširjene oznake na seznamu bodo preiskane in skočili boste na zadetke.</para>
+			
+			<para>Velikost ikon značk v stranski vrstici lahko spremenite ali pa jih celo napravite nevidne z izbiro prednostne možnosti v meniju <menuchoice><guimenu>Pogled</guimenu><guimenuitem>Ikone oznak</guimenuitem></menuchoice>.</para>
+			
+			<tip>
+				<para>F-Spot lahko oznake zapiše v datoteke JPEG kot polja metapodatkov. Oznake za različne RAW, PNG, TIFF in druge datoteke so zapisane v podatkovno zbirko F-Spot. Te datoteke boste morali ob ponovnem uvozu zbirke ponovno označiti.</para>
+			</tip>
+		</sect1>
+	</chapter>
+
+	<chapter id="enjoying">
+		<title>Uživanje v vaših fotografijah</title>
+		<sect1 id="enjoying-browse">
+			<title>Brskanje</title>
+			<para>Za brskanje po vaših fotografijah po mesecu ali po mapi lahko uporabite drsni gradnik. Za spremembo te nastavitve pojdite na <menuchoice><guimenu>Pogled</guimenu><guimenuitem>Urejeno po</guimenuitem></menuchoice>.</para>
+		</sect1>
+		<sect1 id="enjoying-search">
+			<title>Iskanje</title>
+			
+			<para>F-Spot uporablja iskalne filtre za pomoč pri boljšem določanju iskalnih kriterijev.</para>
+			
+			<sect2 id="enjoying-search-tags">
+				<title>Oznake</title>
+				
+				<para>Iskanje lahko začnete z dvojnim klikom ali omogočanjem oznake iz seznama oznak. Dodatno lahko pokažete iskalno vrstico z  <menuchoice><guimenu>Najdi</guimenu><guimenuitem>Pokaži iskalno vrstico</guimenuitem></menuchoice>. Ko je iskalna vrstica prikazana, lahko oznake povlečete iz pogleda oznak v iskalno vrstico.</para>
+				<para>Za iskanje fotografij, ki so označene z obema od dveh oznak, omogočite prvo v pogledu oznak ali jo povlecite v iskalno vrstico in nato povlecite drugo oznako in jo spustite na prvo. Lahko tudi desno kliknete na drugo oznako v pogledu oznak ali uporabite meni <guimenu>Najdi</guimenu> in izberite <guimenuitem>Najdi z...</guimenuitem> in izberite prvo oznako (ali skupino oznak).</para>
+				<para>Ikono oznake lahko povlečete na iskalno vrstico za spremembo iz iskanja te oznake in druge oznake v iskanje te oznake ali druge oznake. </para>
+				<para>Fotografije brez določene oznake lahko iščete z dvojnim klikom na oznako v iskalni vrstici. Dodatna možnost je desni klik na oznako v iskalni vrstici in izbira <guimenuitem>Izključi</guimenuitem>.</para>
+				<para>Za odstranitev oznake iz iskanja jo povlecite vstran od vrstice iskanja ali desno kliknite in izberite <guimenuitem>Odstrani</guimenuitem>.</para>
+				<para>Privzeto so fotografije označene <emphasis>Skrito</emphasis> skrite. Za iskanje takšnih fotografij morate eksplicitno vključiti oznako <emphasis>Skrito</emphasis>.</para>
+			</sect2>
+
+			<sect2 id="enjoying-search-import-rolls">
+				<title>Uvozni zvitki</title>
+				<para>F-Spot si vsake toliko časa zapomni katere slike so bile uvožene. Uporabite <menuchoice><guimenu>Najdi</guimenu><guisubmenu>Po uvoznem zvitku</guisubmenu><guimenuitem>Zadnji uvozni zvitek</guimenuitem></menuchoice> za omejitev iskanja na zadnjo sejo uvažanja ali uporabite <menuchoice><guimenu>Najdi</guimenu><guisubmenu>Po uvoznem zvitku</guisubmenu><guimenuitem>Izberi uvozne zvitke ...</guimenuitem></menuchoice> za fino izbiro uvoženih fotografij:</para>
+				<itemizedlist>
+					<listitem>
+						<para><parameter class="option">Ob</parameter> — za izbor fotografij iz določene seje uvažanja</para>
+					</listitem>
+					<listitem>
+						<para><parameter class="option">Za</parameter> — za izbor vseh uvoženih fotografij z začetkom pri določeni seji uvažanja</para>
+					</listitem>
+					<listitem>
+						<para><parameter class="option">Med</parameter> — za izbor vseh fotografij uvoženih med dvema določenima sejama uvažanja</para>
+					</listitem>
+				</itemizedlist>
+				<para>Vsakič ko spremenite nastavitve filtra, se količina izbranih fotografij pojavi na spodnjem delu pogovornega okna.</para>
+				<para>Ko boste uveljavili filter uvoznih zvitkov boste videli <guilabel>Najdi: Uvozni zvitek</guilabel>. Sedaj lahko dodate druge filtre za fino nastavljanje vašega izbora.</para>
+				<para>V primeru da filtra uvoznih zvitkov ne potrebujete več, za odstranitev uvoznih zvitkov iz iskalnih kriterijev izberite <menuchoice><guimenu>Najdi</guimenu><guisubmenu>Uvozni zvitek</guisubmenu><guimenuitem>Počisti filter uvoznih zvitkov</guimenuitem></menuchoice>.  Za zavračanje vseh trenutnih možnosti iskanja lahko kliknete tudi na gumb zapri (<guibutton>X</guibutton>) v iskalni vrstici.</para>
+				<tip>
+					<para>Število prikazanih zvitkov v pogovornem oknu je določeno z gconf ključem <filename class="directory">/apps/f-spot/import/gui_roll_history</filename>. Privzeta vrednost je 10.</para>
+				</tip>
+			</sect2>
+			
+			<sect2 id="enjoying-search-type-to-find">
+				<title>Tipkajte-za-iskanje</title>
+				<para>Obstaja tudi vnos tipkaj-za-iskanje. Za odpiranje pritisnite <keycap>/</keycap>. Vnosa ni mogoče uporabiti istočasno kot iskalne vrstice. Vtipkate lahko poizvedbe kot so "OznakaA and (OznakaB or (OznakaC and OznakaD)". V vsakem primeru bo F-Spot posodobil vaše iskanje, če zazna veljavno poizvedbo. Operator <emphasis>not</emphasis> še ni podprt.</para>
+				
+				<para>Ta funkcija bo iskala tudi besedilo vneseno v komentarje fotografije in ime datoteke.</para>
+			</sect2>
+		</sect1>
+		
+		<sect1 id="enjoying-fullscreen-mode-and-slideshows">
+			<title>Celozaslonski način in diapredstavitve</title>
+			<para>Za manj motenj in večji prikaz si lahko ogledate fotografije v celozaslonskem načinu. Nadzirate lahko kdaj naj bo prikazana naslednja ali predhodna fotografija. V celozaslonski način lahko kadarkoli vstopite s pritiskom na <keycap>F11</keycap> ali s pritiskom gumba v orodni vrstici.</para>
+			<figure>
+				<title>Celozaslonski način</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="figures/f-spot-fullscreen.png"/>
+					</imageobject>
+				</mediaobject>
+			</figure>
+			<para>V načinu diapredstavitve se lahko usedete in si ogledate svoje fotografije medtem ko so vam predstavljene. Diapredstavitev lahko zaženete s pritiskom na gumb v orodni vrstici.</para>
+			<figure>
+				<title>Diapredstavitev</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="figures/f-spot-slideshow.png"/>
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</sect1>
+	</chapter>
+	
+	<chapter id="sharing">
+		<title>Souporaba vaših fotografij</title>
+		
+		<abstract>
+			<para>Za souporabo vaših fotografij z F-Spot obstaja več načinov. Vse naslednje metode bodo dale v souporabo le fotografije, ki ste jih izbrali ob zagonu souporabe.</para>
+		</abstract>
+		
+		<sect1 id="sharing-e-mail">
+			<title>E-pošta</title>
+			<para>Svoje fotografije lahko pošljete preko elektronske pošte neposredno iz F-Spot z uporabo menija <menuchoice><guimenu>Fotografija</guimenu><guimenuitem>Pošlji po pošti</guimenuitem></menuchoice>. </para>
+			<note>
+				<title>Opomba 1</title>
+				<para>Uporabljen bo e-poštni program, ki je določen na ravni GNOME. Privzeti e-poštni program lahko spremenite za svoj račun z uporabo orodja <application>Prednostni programi</application> v meniju <menuchoice><guimenu>Sistem</guimenu><guisubmenu>Nastavitve</guisubmenu></menuchoice>.</para>
+			</note>
+			<note>
+				<title>Opomba 2</title>
+				<para>V primeru da so fotografije, ki jih želite poslati preko elektronske pošte vrste, ki je F-Spot ne more zapisati (na primer slike RAW) bo pogovorno okno postalo neobčutljivo in bodo poslane izvorne fotografije.</para>
+			</note>
+			<tip>
+				<para>V primeru da pošiljate slike s spremenjenimi velikostmi, bo F-Spot obdržal spremenjene različice nekje v mapi <filename class="directory">/tmp</filename> za 30 sekund. To ne povzroča težav z evolution, ki naredi svojo krajevno kopijo prilog, toda bi lahko bilo malce krajše, če uporabljate Thunderbird. Zamik lahko spremenite z urejanjem gconf ključa <filename class="directory">/apps/f-spot/export/email/delete_timeout_seconds</filename>.</para>
+			</tip>
+		</sect1>
+
+		<sect1 id="sharing-print">
+			<title>Tisk</title>
+			<para>Fotografije lahko natisnite z menijem <menuchoice><guimenu>Datoteka</guimenu><guimenuitem>Natisni</guimenuitem></menuchoice>.</para>
+		</sect1>
+
+		<sect1 id="sharing-burn-to-cd">
+			<title>Zapisovanje na CD</title>
+			<para>Zapišite vaše fotografije z menijem <menuchoice><guimenu>Fotografija</guimenu><guisubmenu>Izvozi</guisubmenu><guimenuitem>Izvozi na CD</guimenuitem></menuchoice>.</para>
+		</sect1>
+
+		<sect1 id="website-gallery-folder">
+			<title>Ustvarjanje spletne galerije ali mape</title>
+			<para>Zmožnost <menuchoice><guimenu>Fotografija</guimenu><guimenuitem>Izvozi v</guimenuitem><guimenuitem>Izvozi v mapo</guimenuitem></menuchoice> vam poda tri načine za izvažanje vaših slik.</para>
+			<itemizedlist>
+				<listitem>
+					<para><guilabel>Uporabi izvorno</guilabel> izvozi vaše fotografije pripravljene za uporabo z brezplačnim programom Jakuba Steinerja <ulink url="http://jimmac.musichall.cz/original.php"> Original Photo Gallery</ulink>. V primeru da niste prepričani o tej možnosti, verjetno ni prava za vas.</para>
+				</listitem>
+				<listitem>
+					<para><guilabel>Uporabi statične datoteke HTML</guilabel> izvozi vaše fotografije v interaktivno spletišče, pripravljeno na pošiljanje.</para>
+				</listitem>
+				<listitem>
+					<para><guilabel>Običajne datoteke</guilabel> izvozi vaše slike kot datoteke v mape, brez pošiljanja v galerijo.</para>
+				</listitem>
+			</itemizedlist>
+		</sect1>
+
+		<sect1 id="sharing-flickr-or-php-gallery">
+			<title>Objavljanje v spletne galerije</title>
+			<para>V primeru da uporabljate Flickr, SmugMug, 23hq, Tabblo, Facebook, Zooomr ali Picasa spletne albume lahko svoje datoteke objavite neposredno iz F-Spot z uporabo menija <menuchoice><guimenu>Fotografija</guimenu><guisubmenu>Izvozi v</guisubmenu></menuchoice> in izbiro ustreznega predmeta podmenija.</para>
+			<para>V primeru da uporabljate PHP program poznan kot <ulink url="http://gallery.sourceforge.net/"> Gallery</ulink>, lahko svoje fotografije objavite v svoj obstoječ album z menijem <menuchoice><guimenu>Fotografija</guimenu><guimenuitem>Izvozi v</guimenuitem><guimenuitem>Izvozi v spletno galerijo</guimenuitem></menuchoice>. Najprej morate v namestitvi Gallery omogočiti modul Oddaljeno. </para>
+			<note>
+				<title>Opomba za uporabnike Gallery 2.2</title>
+				<para>Oddaljeni vstavek Gallery mora biti 1.0.8 ali novejši.</para>
+			</note>
+			<para><ulink url="http://pennave.sourceforge.net">PennAve</ulink> je spletni program v Pythonu, ki neposredno uporablja podatkovno zbirko F-Spot za predstavljanje dinamične galerije vaših fotografij in oznak.</para>
+			<para><ulink url="http://www.conduit-project.org">Conduit</ulink> je program, ki lahko uskladi fotografije z določeno oznako s spletno shrambo Flicker ali Picasa spletni albumi.</para>
+		</sect1>
+	</chapter>
+
+	<chapter id="cms">
+		<title>Upravljanje barv</title>
+
+		<sect1 id="cms-what-is-cms">
+			<title>Kaj je upravljanje barv</title>
+			
+			<para>Fotografija je na zaslonu videti drugače kot na zaslonu predogleda fotoaparata ali kateremukoli drugemu zaslonu. Tudi natisnjena fotografija je videti drugačna. To se zgodi zato, ker ima vsaka barva edinstvene zmožnosti poustvaritve barv. </para>
+
+			<para>Sistem za upravljanje barv (CMS) je orodje za doseganje zanesljive poustvaritve barv tako za zaslon kot izhod (na primer tiskalnik). CMS se zanaša na barvne profile za preslikavo izvornih barv v barve, ki jih lahko poustvarijo naprave, tako, da so barve povsod videti enake - na računalniškem zaslonu LCD, natisnjene, itn.</para>
+		</sect1>
+
+		<sect1 id="cms-what-is-icc-profile">
+			<title>Kaj je barvni profil</title>
+			
+			<para>Barvni profil je datoteka s pripono .icc (zato je pogosto imenovan profil ICC) ali .icm ki opiše kako barve naprave ustrezajo splošnemu opisu naprav.</para>
+
+			<para>Obstaja več vrst profilov:</para>
+
+			<itemizedlist>
+				<listitem>
+					<para>Profil vhodne naprave. To je profil fotoaparata ali profil, ki ga lahko program kot je XSane vključi v skenirano sliko.</para>
+				</listitem>
+				<listitem>
+					<para>
+						Working space profile. It's a profile that describes color space in 
+						which all operations are done inside an application. Usually very wide 
+						gamut profiles like AdobeRGB1998 or ProPhotoRGB are used for that.
+					</para>				
+				</listitem>
+				<listitem>
+					<para>Profil zaslona. To je profil za zaslon.</para>				
+				</listitem>
+				<listitem>
+					<para>Izhodni profil. To je običajno profil za tiskalnik.</para>				
+				</listitem>
+			</itemizedlist>					
+
+			<para>Trenutno F-Spot dovoli le nastavljanje profilov zaslona in izhoda. Vsa barvna opravila so narejena v barvnem prostoru sRGB.</para>
+		</sect1>
+
+		<sect1 id="cms-how-to-get-icc-profile">
+			<title>Kako dobiti barvni profil zaslona/tiskalnika</title>
+
+			<para>Obstaja več načinov za pridobivanje barvnega profila.</para>
+			
+			<sect2 id="cms-icc-from-cd-or-internet">
+				<title>Iz CD-ja ali medmrežja</title>
+
+				<para>Veliko proizvajalcev strojene opreme priložijo CD z barvnimi profili. V primeru da ga imate (od zaslona ali tiskalnika) ga lahko uporabite. Lahko ga prejmete z medmrežja (običajno z odseka podpore na spletišču proizvajalca). Barvne profile zagotavljajo tudi nekateri proizvajalci fotoaparatov (Nikon, Canon).</para>
+			</sect2>
+
+			<sect2 id="cms-icc-from-calibrating-and-profiling">
+				<title>Umerjanje in profiliranje</title>
+
+				<para>Najboljše rezultate je mogoče doseči z umerjanjem in profiliranjem naprav z meritveno napravo. To ni težko, vendar pa je za izvajanje vseh meritev in ustvarjanje profila ICC potreben spektrofotometer.</para>
+
+				<para>V primeru da uporabljate Windows ali Mac OS X lahko uporabite program proizvajalca, ki je prispel s spektrofotometrom. Na Linuxu boste morali uporabiti <ulink url="http://www.argyllcms.com">Argyll</ulink>, ki je niz vsestranskih orodij ukazne vrstice ali <ulink url="http://lprof.sourceforge.net/">LProf</ulink>, ki ima grafični uporabniški vmesnik.</para>
+				<para>
+					Please refer to documentation of third party hardware and software 
+					vendors for details.
+				</para>
+			</sect2>
+
+			<sect2 id="cms-icc-from-embedding">
+				<title>Vključevanje</title>
+
+				<para>Nekatere vrste slik (kot so TIFF, JPEG, PNG ...) lahko vsebujejo vključene barvne profile. V primeru da je upravljanje barv omogočeno, F-Spot poišče vključene profile in jih upošteva.</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="cms-how-to-use">
+			<title>Kako uporabiti upravljanje barv v F-Spot</title>
+			
+			<para>Upravljanje barv v F-Spot lahko trenutno uporabi le profile RGB (drugih profilov v F-Spot ni mogoče videti).</para>
+
+			<itemizedlist>
+				<listitem>
+					<para>Kopirajte svoje barvne profile v mapo <filename class="directory">/usr/share/color/icc</filename> ali <filename class="directory">/usr/local/share/color/icc</filename>.</para>
+				</listitem>
+				<listitem>
+					<para>Upravljanje barv omogočite z menijem <menuchoice><guimenu>Uredi</guimenu><guimenuitem>Možnosti</guimenuitem></menuchoice>.</para>				
+				</listitem>
+				<listitem>
+					<para>Izberite profila <guilabel>Prikaz</guilabel> in <guilabel>Izhod</guilabel>.</para>				
+				</listitem>
+			</itemizedlist>					
+
+			<tip>
+				<para>Za nalaganje profila ICC za prikaz in uporabo naloženega profila iz F-Spot lahko uporabite <ulink url="http://burtonini.com/blog/computers/xicc">xicc</ulink>. Samo označite potrditveno polje <guilabel>Poskus uporabe sistemskega profila prikaza</guilabel>.</para>
+			</tip>
+		</sect1>
+	</chapter>
+	
+	<chapter id="extend">
+		<title>Razširitev zmožnosti</title>
+		
+		<sect1 id="extend-what-extensions-are">
+			<title>Kaj so razširitve</title>
+
+			<para>Razširitve F-Spot dajo programu nove zmožnosti. F-Spot podpira dve vrsti razširitev: izvoznike (omogočajo izvažanje fotografij na spletne storitve ali podatkovne shrambe) in orodja (omogočajo nove načine popravljanja barv, podvajanje fotografij, itn.). Razširitve so distribuirane v obliki paketov razširitev.</para>
+			<para>Z namenom zmanjšanja podvajanja dela lahko razširitve uporabijo druge razširitve, kar pomeni da lahko razširitev ne deluje, če ni nameščena druga razširitev. Ta koncept odvisnosti pomeni da</para>
+			<itemizedlist>
+				<listitem>
+					<para>ne morete namestiti razširitve, če je odvisna od druge razširitve, ki je ni na sistemu</para>
+				</listitem>
+				<listitem>
+					<para>ne morete odstraniti razširitve od katere je odvisna druga razširitev</para>
+				</listitem>
+			</itemizedlist>
+		</sect1>
+		
+		<sect1 id="extend-managing-extensions">
+			<title>Upravljanje razširitev</title>
+			
+			<para>Za upravljanje razširitev izberite predmet menija <menuchoice><guimenu>Uredi</guimenu><guimenuitem>Upravljanje razširitev</guimenuitem></menuchoice>.</para>
+
+			<sect2 id="extend-managing-extensions-managing-extension-repositories">
+				<title>Upravljanje s skladišči razširitev</title>
+
+				<para>Preprosto povedano so skladišča shrambe razširitev. Lahko so omrežna ali krajevna. Za dodajanje novega skladišča kliknite gumb Skladišča, izberite vrsto skladišča za dodajanje in vnesite URL ali pot. V primeru da navedeni URL ali pot ne vsebuje datoteke opisa (kazala) za razširitve, vas bo o tem obvestilo opozorilno sporočilo.</para>
+				<para>Za odstranitev skladišča ponovno kliknite gumb <guibutton>Skladišča</guibutton>, izberite skladišče za izbris in kliknite gumb <guibutton>Izbriši</guibutton>.</para>
+			</sect2>
+			
+			<sect2 id="extend-managing-extensions-installing-and-updating-extensions">
+				<title>Nameščanje in posodabljanje razširitev</title>
+
+				<para>Za namestitev razširitve kliknite gumb <guibutton>Namesti razširitve ...</guibutton> . V novo predstavljenem pogovornem oknu</para>
+				<orderedlist>
+					<listitem>
+						<para>Izberite skladišče za namestitev iz vseh znanih skladišč ali razpoložljivih skladišč.</para>
+					</listitem>
+					<listitem>
+						<para>Izberite katere pakete razširitev želite videti: Vse, le nove, le posodobitve.</para>
+					</listitem>
+					<listitem>
+						<para>Kliknite gumb <guibutton>Posodobi</guibutton> za posodobitev seznama razpoložljivih paketov razširitev glede na dane kriterije.</para>
+					</listitem>
+					<listitem>
+						<para>Izberite razširitve, ki jih želite namestiti/posodobiti, ter kliknite <guibutton>Podrobnosti</guibutton> za ogled povzetka izbranega paketa, če želite.</para>
+					</listitem>
+					<listitem>
+						<para>Kliknite gumb <guibutton>Naprej</guibutton> za nadaljevanje z namestitvijo.</para>
+					</listitem>
+				</orderedlist>
+			</sect2>
+			
+			<sect2 id="extend-managing-extensions-enabling-and-disabling-extensions">
+				<title>Omogočanje in onemogočanje razširitev </title>
+
+				<para>Morda želite začasno omogočiti ali onemogočiti določen paket razširitve, na primer če razširitev ni dovolj stabilna za upravljanje z veliko količino fotografij ali če so meniji preveč natrpani z razširitvami.</para>
+				<para>V pogovornem oknu <guilabel>Upravljanje razširitev</guilabel> izberite paket razširitev in kliknite gumb <guibutton>Omogoči</guibutton> ali <guibutton>Onemogoči</guibutton>. </para>
+			</sect2>
+			
+			<sect2 id="extend-managing-extensions-removing-extensions">
+				<title>Odstranjevanje razširitev</title>
+
+				<para>V primeru da razširitve ne potrebujete, jo lahko popolnoma odstranite s sistema. V pogovornem oknu <guilabel>Upravljanje razširitev</guilabel> izberite paket razširitev, ki ga želite izbrisati in kliknite <guibutton>Izbriši</guibutton>.</para>
+			</sect2>
+			
+			<sect2 id="extend-managing-extensions-reading-summary-of-extensions">
+				<title>Branje povzetka razširitev</title>
+
+				<para>Vsak paket razširitve vsebuje metapodatke, ki zagotavljajo naslednje podrobnosti o razširitvi:</para>
+
+				<orderedlist>
+					<listitem>
+						<para>Opis, ki običajno opiše namen razširitve</para>
+					</listitem>
+					<listitem>
+						<para>Različica</para>
+					</listitem>
+					<listitem>
+						<para>Avtor</para>
+					</listitem>
+					<listitem>
+						<para>Odvisnosti</para>
+					</listitem>
+				</orderedlist>
+				
+				<para>V pogovornem oknu <guilabel>Upravljanje razširitev</guilabel> izberite paket razširitve katerega opis želite prebrati in kliknite <guibutton>Podrobnosti</guibutton>.</para>
+			</sect2>
+		</sect1>
+		
+		<sect1 id="extend-developing-extensions">
+			<title>Razvijanje razširitev</title>
+
+			<para>Dokument <ulink url="http://f-spot.org/Extend_F-Spot">razširite F-Spot</ulink> vsebuje navodila za razvijanje vaših lastnih razširitev za F-Spot.</para>
+		</sect1>
+	</chapter>
+	
+	<chapter id="shortcuts">
+		<title>Bližnjice</title>
+		
+		<sect1 id="Global-Shortcuts">
+			<title>Splošne bližnjice</title>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<thead>
+						<row>
+							<entry>Tipka</entry>
+							<entry>Dejanje</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<keycap>[</keycap>
+							</entry>
+							<entry>Vrtenje izbranih fotografij levo</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>]</keycap>
+							</entry>
+							<entry>Vrtenje izbranih fotografij desno</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>Del</keycap>
+							</entry>
+							<entry>Odstrani izbrane fotografije iz kataloga F-Spot</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Dvigalka</keycap><keycap>Del</keycap></keycombo>
+							</entry>
+							<entry>Trajno izbriše izbrane fotografije s pogona. V primeru, da je to mogoče, bodo premaknjene v smeti.</entry>
+						</row>
+ 
+						<row>
+							<entry>
+								<keycap>t</keycap>
+							</entry>
+							<entry>Ogled ali urejanje oznak za izbrane fotografije</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>F11</keycap>
+							</entry>
+							<entry>Celozaslonski pogled</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo>
+							</entry>
+							<entry>Prikaz podrobnosti o fotografiji</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>Je enako</keycap></keycombo>
+							</entry>
+							<entry>Približanje</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>Minus</keycap></keycombo>
+							</entry>
+							<entry>Oddaljevanje</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo>
+							</entry>
+							<entry>Uvoz fotografij</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Alt</keycap><keycap>0-5</keycap></keycombo>
+							</entry>
+							<entry>Alt in število od 0 do 5 za oceno izbran-e/ih slik(e)</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</sect1>
+		
+		<sect1 id="shortcuts-browse-mode">
+			<title>Bližnjice načina brskanja</title>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<thead>
+						<row>
+							<entry>Tipka</entry>
+							<entry>Dejanje</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>A</keycap></keycombo>
+							</entry>
+							<entry>Izbor vsega</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>Dvigalka</keycap>
+								<keycap>A</keycap></keycombo>
+							</entry>
+							<entry>Preklic izbora</entry>
+						</row>
+						<row>
+							<entry>Tipke puščice ali <keycap>H</keycap>, <keycap>J</keycap>, <keycap>K</keycap>, <keycap>L</keycap></entry>
+							<entry>Premakne žarišče</entry>
+						</row>
+						<row>
+							<entry><keycap>Ctrl</keycap>-Tipka puščice</entry>
+							<entry>Premakne žarišče brez spremembe izbora</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>Preslednica</keycap>
+							</entry>
+							<entry>Izbere ali prekliče izbor fotografije v žarišču</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Dvigalka</keycap>
+								<keycap>Tipka puščice</keycap></keycombo>
+							</entry>
+							<entry>Sprememba izbire fotografije</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>Dvigalka</keycap>
+								<keycap>Leva puščica ali desna puščica</keycap></keycombo>
+							</entry>
+							<entry>Doda/odstrani vse fotografije v vrstici v izbrani smeri do izbora</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>V</keycap>
+							</entry>
+							<entry>Pojavi večji predogled slike pokazane z miško</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Dvigalka</keycap><keycap>V</keycap></keycombo>
+							</entry>
+							<entry>Pojavi večji predogled in barvni histogram slike pokazane z miško</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</sect1>
+		
+		<sect1 id="shortcuts-tag">
+			<title>Bližnjice oznak</title>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<thead>
+						<row>
+							<entry>Tipka</entry>
+							<entry>Dejanje</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<keycap>F2</keycap>
+							</entry>
+							<entry>Preimenovanje izbranih oznak</entry>
+						</row>
+						<row>
+							<entry>
+								<keycombo><keycap>Ctrl</keycap><keycap>T</keycap></keycombo>
+							</entry>
+							<entry>Dodajanje oznak izbranim fotografijam</entry>
+						</row>
+						<row>
+							<entry>n/a</entry>
+							<entry>Za premikanje oznak jih povlecite in spustite</entry>
+						</row>
+						<row>
+							<entry>n/a</entry>
+							<entry>Vtipkajte ime oznake za skok nanjo (deluje le, če je oznaka prikazana/razširjena)</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</sect1>
+
+		<sect1 id="shortcuts-edit-mode">
+			<title>Bližnjice načina urejanja</title>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<thead>
+						<row>
+							<entry>Tipka</entry>
+							<entry>Dejanje</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry><keycap>Stran navzgor</keycap>, <keycap>Povratna tipka</keycap>, <keycap>B</keycap></entry>
+							<entry>Pojdi na predhodno fotografijo</entry>
+						</row>
+						<row>
+							<entry><keycap>Stran navzdol</keycap>, <keycap>Preslednica</keycap>, <keycap>N</keycap></entry>
+							<entry>Pojdi na naslednjo fotografijo</entry>
+						</row>
+						<row>
+							<entry>Tipke puščice ali <keycap>H</keycap>, <keycap>J</keycap>, <keycap>K</keycap>, <keycap>L</keycap></entry>
+							<entry>Gre na predhodno/naslednjo fotografijo ali premakne naokoli povečano fotografijo</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>R</keycap>
+							</entry>
+							<entry>Pojdi na naključno fotografijo</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>f</keycap>
+							</entry>
+							<entry>Celozaslonski pogled</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>0</keycap>
+							</entry>
+							<entry>Prilagajanje slike zaslonu</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>1</keycap>
+							</entry>
+							<entry>Faktor povečave 1.0 (1 točka zaslona na točko slike)</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>2</keycap>
+							</entry>
+							<entry>Faktor povečave na 2.0 (4 točke zaslona na točko slike)</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>Ubežna tipka</keycap>
+							</entry>
+							<entry>Vrne v način brskalnika</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>V</keycap>
+							</entry>
+							<entry>Preučevanje fotografije s povečevalnim steklom. Za zaprtje povečevalnega stekla kliknite nanj ali vtipkajte <keycap>v</keycap>.</entry>
+						</row>
+						<row>
+							<entry><keycap>Dvigalka</keycap>-Miškino kolesce</entry>
+							<entry>Hitrejše drsenje filmskega traku</entry>
+						</row>
+						<row>
+							<entry>
+								<keycap>i</keycap>
+							</entry>
+							<entry>Preklop vidnosti polja podrobnosti "(le v celozaslonskem načinu)"</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</sect1>
+	</chapter>
+
+</book>

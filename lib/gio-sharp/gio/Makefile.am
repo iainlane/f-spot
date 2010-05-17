@@ -12,7 +12,7 @@ CUSTOMS =							\
 	$(srcdir)/AppInfoAdapter.custom				\
 	$(srcdir)/FileAdapter.custom				\
 	$(srcdir)/File.custom					\
-	$(srcdir)/FileEnumerator.custom
+	$(srcdir)/FileEnumerator.custom	
 
 SNK = 	$(srcdir)/snk
 
@@ -25,12 +25,12 @@ gio-api.xml: $(srcdir)/gio-api.raw $(srcdir)/Gio.metadata
 	@echo -e "\n*** Massaging the raw api into $@"
 	cp $(srcdir)/gio-api.raw gio-api.xml
 	chmod +w gio-api.xml
-	gapi2-fixup --api=gio-api.xml --metadata=$(srcdir)/Gio.metadata
+	$(GAPI2FIXUP) --api=gio-api.xml --metadata=$(srcdir)/Gio.metadata
 
 $(top_builddir)/gio-sharp/generator/gapi_codegen.exe:
 	$(MAKE) -C $(top_builddir)/lib/gio-sharp/generator
 
-generated/File.cs: gio-api.xml $(CUSTOMS) $(top_builddir)/gio-sharp/generator/gapi_codegen.exe
+generated/File.cs: gio-api.xml $(CUSTOMS) $(builddir)/../generator/gapi_codegen.exe
 	@echo -e "\n*** Generating C# code"
 	$(MONO) $(top_builddir)/lib/gio-sharp/generator/gapi_codegen.exe $(GLIBSHARP_CFLAGS) --outdir=generated --customdir=$(srcdir) --generate gio-api.xml
 

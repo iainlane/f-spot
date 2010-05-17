@@ -9,18 +9,17 @@ PLUGIN_ASSEMBLY = $(PLUGIN_NAME).dll
 PLUGIN_SOURCES =			\
 	$(srcdir)/SmugMugExport.cs
 
-REFS =					\
-	-r:$(top_builddir)/src/f-spot.exe		\
+REFS =						\
+	-r:$(top_builddir)/src/f-spot.exe	\
 	-r:$(top_builddir)/src/FSpot.Core.dll	\
 	-r:$(top_builddir)/src/FSpot.Utils.dll	\
-	-r:SmugMugNet/SmugMugNet.dll	\
+	-r:SmugMugNet/SmugMugNet.dll		\
 	$(LINK_SEMWEB)				\
-	$(LINK_MONO_ADDINS)			\
-	$(LINK_GIOSHARP)		\
+	$(LINK_GIOSHARP)			\
 	$(LINK_GPHOTO2)				\
-	$(LINK_GTKSHARPBEANS)		\
-	$(LINK_KEYRING)			\
-	$(LINK_DBUS)			\
+	$(LINK_GTKSHARPBEANS)			\
+	$(LINK_KEYRING)				\
+	$(LINK_UNIQUESHARP)			\
 	-r:Mono.Posix
 
 PKGS =					\
@@ -43,7 +42,7 @@ $(PLUGIN_ASSEMBLY): $(PLUGIN_SOURCES) $(PLUGIN_MANIFEST)
 plugindir = $(pkglibdir)/extensions
 
 install-data-hook:
-	rm -f $(plugindir)/$(PLUGIN_NAME).addin.xml
+	if [ -w $(DESTDIR)$(plugindir)/$(PLUGIN_NAME).addin.xml ] ; then rm -f $(DESTDIR)$(plugindir)/$(PLUGIN_NAME).addin.xml; fi
 
 plugin_DATA =			\
 	$(PLUGIN_ASSEMBLY)

@@ -7,7 +7,7 @@
  * 	Gabriel Burt
  *	Stephane Delcroix  <stephane@delcroix.org>
  *	Ruben Vermeersch <ruben@savanne.be>
- *  Mike Gemuende <mike@gemuende.de>
+ *	Mike Gemuende <mike@gemuende.de>
  *
  * This is free software. See COPYING for details.
  */
@@ -184,16 +184,17 @@ namespace FSpot.Widgets
 				ContextSwitchStrategy.SetHistogramVisible (Context, histogram_expander.Expanded);
 				UpdateHistogram ();
 			};
+			histogram_expander.StyleSet += delegate (object sender, StyleSetArgs args) { 
+				Gdk.Color c = this.Toplevel.Style.Backgrounds [(int)Gtk.StateType.Active];
+				histogram.RedColorHint = (byte) (c.Red / 0xff);
+				histogram.GreenColorHint = (byte) (c.Green / 0xff);
+				histogram.BlueColorHint = (byte) (c.Blue / 0xff);
+				histogram.BackgroundColorHint = 0xff;
+				UpdateHistogram ();
+			};
 			histogram_image = new Gtk.Image ();
 			histogram = new Histogram ();
 			histogram_expander.Add (histogram_image);
-
-			Window window = MainWindow.Toplevel.Window;
-			Gdk.Color c = window.Style.Backgrounds [(int)Gtk.StateType.Active];
-			histogram.RedColorHint = (byte) (c.Red / 0xff);
-			histogram.GreenColorHint = (byte) (c.Green / 0xff);
-			histogram.BlueColorHint = (byte) (c.Blue / 0xff);
-			histogram.BackgroundColorHint = 0xff;
 
 			Add (histogram_expander);
 
@@ -337,7 +338,7 @@ namespace FSpot.Widgets
 					height = real_height.ToString ();
 				}
 	#if USE_EXIF_DATE
-				date = img.Date.ToLocalTime ();
+				date = img.Date;
 	#endif
 			}
 	
@@ -521,7 +522,7 @@ namespace FSpot.Widgets
 	#if USE_EXIF_DATE
 				date_value_label.Text = info.Date;
 	#else
-				DateTime local_time = photo.Time.ToLocalTime ();
+				DateTime local_time = photo.Time;
 				date_value_label.Text = String.Format ("{0}{2}{1}",
 				                                       local_time.ToShortDateString (),
 				                                       local_time.ToShortTimeString (),
@@ -546,15 +547,23 @@ namespace FSpot.Widgets
 			version_combo.Visible = true;
 			version_list.Clear ();
 			version_combo.Changed -= OnVersionComboChanged;
-			int i = 0;
-			foreach (uint version_id in photo.VersionIds) {
-				version_list.AppendValues (version_id, (photo.GetVersion (version_id) as PhotoVersion).Name, true);
-				if (version_id == photo.DefaultVersionId)
-					version_combo.Active = i;
-				i++;
+			
+			bool hasVersions = photo.VersionIds.Length > 1;
+			version_combo.Sensitive = hasVersions;
+			if (hasVersions) {
+				int i = 0;
+				foreach (uint version_id in photo.VersionIds) {
+					version_list.AppendValues (version_id, (photo.GetVersion (version_id) as PhotoVersion).Name, true);
+					if (version_id == photo.DefaultVersionId)
+						version_combo.Active = i;
+					i++;
+				}
+				version_combo.TooltipText = String.Format (Catalog.GetPluralString ("(One Edit)", "({0} Edits)", i - 1), i - 1);
+			} else {
+				version_list.AppendValues (photo.DefaultVersionId, photo.DefaultVersion.Name + " " + Catalog.GetString ("(No Edits)"), true);
+				version_combo.Active = 0;
+				version_combo.TooltipText = Catalog.GetString ("(No Edits)");
 			}
-			if (photo.VersionIds.Length == 1)
-				version_list.AppendValues ((uint)0, Catalog.GetString ("(No Edits)"), false);
 			version_combo.Changed += OnVersionComboChanged;
 
 			if (show_file_size) {
@@ -629,13 +638,13 @@ namespace FSpot.Widgets
 				if (first.Time.Date == last.Time.Date) {
 					//Note for translators: {0} is a date, {1} and {2} are times.
 					date_value_label.Text = String.Format(Catalog.GetString("On {0} between \n{1} and {2}"), 
-					                                      first.Time.ToLocalTime ().ToShortDateString (),
-					                                      first.Time.ToLocalTime ().ToShortTimeString (),
-					                                      last.Time.ToLocalTime ().ToShortTimeString ());
+					                                      first.Time.ToShortDateString (),
+					                                      first.Time.ToShortTimeString (),
+					                                      last.Time.ToShortTimeString ());
 				} else {
 					date_value_label.Text = String.Format(Catalog.GetString("Between {0} \nand {1}"),
-					                                      first.Time.ToLocalTime ().ToShortDateString (),
-					                                      last.Time.ToLocalTime ().ToShortDateString ());
+					                                      first.Time.ToShortDateString (),
+					                                      last.Time.ToShortDateString ());
 				}
 			}
 			date_label.Visible = show_date;

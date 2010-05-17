@@ -13,6 +13,7 @@ CMS_CSDISTFILES =				\
 	$(srcdir)/Cms/Format.cs			\
 	$(srcdir)/Cms/GammaTable.cs		\
 	$(srcdir)/Cms/IccColorSpace.cs		\
+	$(srcdir)/Cms/IccProfileClass.cs	\
 	$(srcdir)/Cms/Intent.cs			\
 	$(srcdir)/Cms/NativeMethods.cs		\
 	$(srcdir)/Cms/Profile.cs		\
@@ -86,6 +87,8 @@ WIDGETS_CSDISTFILES =				\
 	$(srcdir)/Widgets/BuilderWindow.cs	\
 	$(srcdir)/Widgets/CheckPattern.cs	\
 	$(srcdir)/Widgets/ComplexMenuItem.cs	\
+	$(srcdir)/Widgets/Curve.cs		\
+	$(srcdir)/Widgets/CurveType.cs		\
 	$(srcdir)/Widgets/CustomPrintWidget.cs	\
 	$(srcdir)/Widgets/DateEdit.cs		\
 	$(srcdir)/Widgets/DateEditFlags.cs	\
@@ -128,7 +131,7 @@ F_SPOT_CSDISTFILES =				\
 	$(srcdir)/ColorAdjustment/FullColorAdjustment.cs		\
 	$(srcdir)/ColorAdjustment/SepiaTone.cs		\
 	$(srcdir)/ControlOverlay.cs		\
-	$(srcdir)/Core.cs			\
+	$(srcdir)/Core/App.cs			\
 	$(srcdir)/Core/ColorManagement.cs	\
 	$(srcdir)/Core/Photo.cs			\
 	$(srcdir)/Core/PhotoVersion.cs		\
@@ -156,6 +159,8 @@ F_SPOT_CSDISTFILES =				\
 	$(srcdir)/Extensions/PhotoSelectionCondition.cs	\
 	$(srcdir)/Extensions/PopupCommands.cs	\
 	$(srcdir)/Extensions/ServiceNode.cs	\
+	$(srcdir)/Extensions/SidebarPage.cs	\
+	$(srcdir)/Extensions/SidebarPageNode.cs	\
 	$(srcdir)/Extensions/TransitionNode.cs	\
 	$(srcdir)/Extensions/ViewModeCondition.cs	\
 	$(srcdir)/Fader.cs			\
@@ -174,7 +179,6 @@ F_SPOT_CSDISTFILES =				\
 	$(srcdir)/FolderQueryWidget.cs			\
 	$(srcdir)/FormClient.cs			\
 	$(srcdir)/FullScreenView.cs		\
-	$(srcdir)/GdkGlx.cs			\
 	$(srcdir)/GroupAdaptor.cs		\
 	$(srcdir)/GroupSelector.cs		\
 	$(srcdir)/Accelerometer.cs		\
@@ -238,7 +242,7 @@ F_SPOT_CSDISTFILES =				\
 	$(srcdir)/RollStore.cs			\
 	$(srcdir)/SelectionDataExtensions.cs	\
 	$(srcdir)/SendEmail.cs                  \
-	$(srcdir)/SlideView.cs			\
+	$(srcdir)/XScreenSaverSlide.cs		\
 	$(srcdir)/SingleView.cs			\
 	$(srcdir)/SimpleCalendar.cs		\
 	$(srcdir)/Sharpener.cs			\
@@ -339,9 +343,7 @@ UTILS_ASSEMBLIES =				\
 	-pkg:gnome-sharp-2.0			\
 	-r:Mono.Posix				\
 	-r:Mono.Cairo				\
-	$(LINK_GLITZ)				\
-	$(GCONF_PKG)				\
-	$(LINK_DBUS)
+	$(GCONF_PKG)
 
 JOBSCHEDULER_ASSEMBLIES =			\
 	-r:FSpot.Utils.dll
@@ -349,13 +351,14 @@ JOBSCHEDULER_ASSEMBLIES =			\
 BLING_ASSEMBLIES =				\
 	-pkg:gtk-sharp-2.0			\
 	-r:Mono.Cairo				\
+	$(LINK_GIOSHARP)			\
 	$(LINK_GTKSHARPBEANS)
 
 WIDGETS_ASSEMBLIES =				\
-	$(LINK_MONO_ADDINS)			\
 	$(LINK_GIOSHARP)			\
 	-pkg:gtk-sharp-2.0			\
 	-pkg:gnome-sharp-2.0			\
+	-pkg:mono-addins			\
 	$(LINK_GTKSHARPBEANS)			\
 	-r:Mono.Cairo				\
 	-r:Cms.dll				\
@@ -368,7 +371,7 @@ GNOME_PLATFORM_ASSEMBLIES =			\
 	-pkg:gnome-sharp-2.0			\
 	-pkg:gtk-sharp-2.0			\
 	-pkg:gconf-sharp-2.0			\
-	$(LINK_DBUS)				\
+	$(NDESK_DBUS_LIBS)				\
 	-r:Mono.Posix				\
 	-r:FSpot.Utils.dll
 
@@ -376,15 +379,14 @@ NULL_PLATFORM_ASSEMBLIES =			\
 	-r:FSpot.Utils.dll
 
 F_SPOT_ASSEMBLIES = 				\
-	$(LINK_DBUS)				\
 	$(LINK_GPHOTO2)				\
-	$(LINK_MONO_ADDINS)			\
 	$(LINK_FLICKR)				\
 	$(LINK_KEYRING)				\
 	$(LINK_SMUGMUG)				\
 	$(LINK_SEMWEB)				\
 	$(LINK_GTKSHARPBEANS)			\
 	$(LINK_GIOSHARP)			\
+	$(LINK_UNIQUESHARP)			\
 	-r:System.Data				\
 	-r:System.Web				\
 	-r:Mono.Data.SqliteClient		\
@@ -401,8 +403,12 @@ F_SPOT_ASSEMBLIES = 				\
 	-r:FSpot.Platform.dll			\
 	-r:Cms.dll				\
 	$(NUNIT_LIBS)				\
+	$(NDESK_DBUS_LIBS)				\
 	$(GCONF_PKG)				\
 	$(GTKHTML_SHARP_PKG)			\
+	-pkg:mono-addins			\
+	-pkg:mono-addins-setup			\
+	-pkg:mono-addins-gui			\
 	-pkg:glade-sharp-2.0			\
 	-pkg:gnome-sharp-2.0			\
 	-pkg:gnome-vfs-sharp-2.0

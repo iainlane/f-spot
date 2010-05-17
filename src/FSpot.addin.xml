@@ -1,7 +1,7 @@
 <Addin namespace = "FSpot" 
        id = "Core" 
-       version = "0.6.1.5"
-       compatVersion = "0.6"
+       version = "0.7.0.0"
+       compatVersion = "0.7"
        isroot="true">
 
 	<Runtime>
@@ -18,7 +18,7 @@
 	</ExtensionPoint>
 
 	<ExtensionPoint path = "/FSpot/Sidebar">
-		<ExtensionNode type="FSpot.Widgets.SidebarPageNode"/>
+		<ExtensionNode name="SidebarPage" type="FSpot.Extensions.SidebarPageNode"/>
 	</ExtensionPoint>
 
 	<ExtensionPoint path = "/FSpot/Services">
@@ -45,7 +45,7 @@
 	<ConditionType id="ViewMode" type="FSpot.Extensions.ViewModeCondition" />
 
 	<Extension path = "/FSpot/Menus/PhotoPopup">
-		<Command id = "CopyLocation" _label = "Copy Photo Locat_ion" command_type = "FSpot.Extensions.CopyLocation" />
+		<Command id = "Copy" _label = "Copy Photo" command_type = "FSpot.Extensions.Copy" />
 		<MenuSeparator id = "Separator1" />
 		<Command id = "RLeft" _label = "Rotate _Left" icon = "object-rotate-left" command_type = "FSpot.Extensions.Rotate270" />
 		<Command id = "RRight" _label = "Rotate _Right" icon = "object-rotate-right" command_type = "FSpot.Extensions.Rotate90" />

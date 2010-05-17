@@ -1,8 +1,13 @@
 using System;
 using System.IO;
+using System.Collections;
+
 using FSpot.Utils;
 using Mono.Unix;
+using Mono.Unix.Native;
 using Gdk;
+
+using GFileInfo = GLib.FileInfo;
 
 namespace FSpot {
 	public class ImageFormatException : ApplicationException {
@@ -14,7 +19,8 @@ namespace FSpot {
 	public class ImageFile : IDisposable {
 		protected Uri uri;
 
-		static System.Collections.Hashtable name_table;
+		static Hashtable name_table;
+		internal static Hashtable NameTable { get { return name_table; } }
 
 		public ImageFile (string path) 
 		{
@@ -41,7 +47,7 @@ namespace FSpot {
 
 		static ImageFile ()
 		{
-			name_table = new System.Collections.Hashtable ();
+			name_table = new Hashtable ();
 			name_table [".svg"] = typeof (FSpot.Svg.SvgFile);
 			name_table [".gif"] = typeof (ImageFile);
 			name_table [".bmp"] = typeof (ImageFile);
@@ -66,6 +72,22 @@ namespace FSpot {
 			name_table [".mrw"] = typeof (FSpot.Mrw.MrwFile);
 			name_table [".raf"] = typeof (FSpot.Raf.RafFile);
 			name_table [".x3f"] = typeof (FSpot.X3f.X3fFile);
+
+			// add mimetypes for fallback
+			name_table ["image/bmp"]     = name_table ["image/x-bmp"] = name_table [".bmp"];
+			name_table ["image/gif"]     = name_table [".gif"];
+			name_table ["image/pjpeg"]   = name_table ["image/jpeg"] = name_table ["image/jpg"] = name_table [".jpg"];
+			name_table ["image/x-png"]   = name_table ["image/png"]  = name_table [".png"];
+			name_table ["image/svg+xml"] = name_table [".svg"];
+			name_table ["image/tiff"]    = name_table [".tiff"];
+			name_table ["image/x-dcraw"] = name_table [".raw"];
+			name_table ["image/x-ciff"]  = name_table [".crw"];
+			name_table ["image/x-mrw"]   = name_table [".mrw"];
+			name_table ["image/x-x3f"]   = name_table [".x3f"];
+			name_table ["image/x-orf"]   = name_table [".orf"];
+			name_table ["image/x-nef"]   = name_table [".nef"];
+			name_table ["image/x-cr2"]   = name_table [".cr2"];
+			name_table ["image/x-raf"]   = name_table [".raf"];
 
 			//as xcf pixbufloader is not part of gdk-pixbuf, check if it's there,
 			//and enable it if needed.
@@ -149,10 +171,9 @@ namespace FSpot {
 			get {
 				// FIXME mono uses the file change time (ctime) incorrectly
 				// as the creation time so we try to work around that slightly
-				Gnome.Vfs.FileInfo info = new Gnome.Vfs.FileInfo (uri.ToString ());
-
-				DateTime create = info.Ctime;
-				DateTime write = info.Mtime;
+				GFileInfo info = GLib.FileFactory.NewForUri (uri).QueryInfo ("time::modified,time::created", GLib.FileQueryInfoFlags.None, null);
+				DateTime write = NativeConvert.ToDateTime ((long)info.GetAttributeULong ("time::modified"));
+				DateTime create = NativeConvert.ToDateTime ((long)info.GetAttributeULong ("time::created"));
 
 				if (create < write)
 					return create;
@@ -169,13 +190,23 @@ namespace FSpot {
 		
 		public static bool HasLoader (Uri uri)
 		{
-			string path = uri.AbsolutePath;
-			string extension = System.IO.Path.GetExtension (path).ToLower ();
-			System.Type t = (System.Type) name_table [extension];
-			
-			return (t != null);
+			return GetLoaderType (uri) != null;
 		}
 
+		static Type GetLoaderType (Uri uri)
+		{
+			string path = uri.AbsolutePath;
+			string extension = System.IO.Path.GetExtension (path).ToLower ();
+			Type t = (Type) name_table [extension];
+
+			if (t == null) {
+				GLib.FileInfo info = GLib.FileFactory.NewForUri (uri).QueryInfo ("standard::type,standard::content-type", GLib.FileQueryInfoFlags.None, null);
+				t = (Type) name_table [info.ContentType];
+			}
+
+			return t;
+		}
+		
 		[Obsolete ("use Create (System.Uri) instead")]
 		public static ImageFile Create (string path)
 		{
@@ -184,9 +215,7 @@ namespace FSpot {
 
 		public static ImageFile Create (Uri uri)
 		{
-			string path = uri.AbsolutePath;
-			string extension = System.IO.Path.GetExtension (path).ToLower ();
-			System.Type t = (System.Type) name_table [extension];
+			System.Type t = GetLoaderType (uri);
 			ImageFile img;
 
 			if (t != null)
