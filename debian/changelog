@@ -1,3 +1,43 @@
+f-spot (0.6.2-1) UNRELEASED; urgency=low
+
+  * New upstream release 0.6.2:
+   + Stable release before starting large cleanup refactorings, mostly 
+     usability, bug fixes and translations as well as some modernization.
+     A large part of this comes from the Ubuntu one hundred papercuts effort.
+   + Replaced the old slow slideshow code with new fast SlideShow
+     (Gabriel Burt)
+   + Wording changes for clarity (Edit Tag) (Jeffrey Finkelstein)
+   + Fix version selection tooltip (Lorenzo Milesi)
+   + Add gconf schema (Jeffrey Stedfast)
+   + Added a border to filmstrip thumbnails (Matt Perry)
+   + Fix display names of color profiles (Pascal de Bruijn)
+   + Fix histogram colors on theme change (Paul Wellner Bou)
+   + Always update ImageView adjustments when scaling.
+     (Wojciech Dzierżanowski)
+   + Correctly set attributes on copying (Yann Leprince)
+   + Correct mnemonics in create tag dialog (Yves Kurz)
+   + Provide sane defaults for image resize size (Yves Kurz)
+   + Updates to the build system, including fixes for distcheck
+     (Ruben Vermeersch)
+   + Fix wording for duplicate hashing (Matt Perry)
+   + Fix wording for imported tags tag (Ian Churcher)
+   + Fix label alignment in preferences dialog (Pascal de Bruijn)
+   + Add unique# and use it to handle our activation (Stephane Delcroix)
+   + Stop bundling Mono.Addins (Stephane Delcroix)
+   + Avoid leakage in straighten and softfocus editor (Stephane Delcroix)
+   + Allow to copy files to clipboard (Stephane Delcroix)
+   + Large number of color management related fixes (Stephane Delcroix)
+   + Removed the Beagle plugin at the request of the openSUSE team
+     (Ruben Vermeersch)
+   + A pile of other cleanups and fixes (Ruben Vermeersch)
+   + Two performance improvement patches for our database interaction
+     (Michal Nánási)
+   + Fix the longstanding issue of F-Spot changing photo timestamps
+     (Paul Wellner Bou)
+   + Tons of translation updates (seriously)
+
+ -- Iain Lane <laney@ubuntu.com>  Mon, 17 May 2010 11:59:58 +0100
+
 f-spot (0.6.1.5-3) unstable; urgency=low
 
   * debian/control: 
