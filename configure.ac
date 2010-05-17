@@ -1,19 +1,89 @@
-AC_INIT(F-Spot, 0.6.1.5)
-AC_CONFIG_SRCDIR(src/main.cs)
+dnl Granularly define the version components
+dnl Remember to also update the Display Version
+m4_define([fspot_version_major], [0])
+m4_define([fspot_version_minor], [6])
+m4_define([fspot_version_micro], [2])
 
-AM_CONFIG_HEADER(config.h)
+dnl set to 0 when doing an official release
+m4_define([fspot_version_pre_release], [0])
 
-AM_INIT_AUTOMAKE([tar-ustar])
+m4_define([concat], $1$2$3$4)
 
+dnl create base version string
+m4_define([fspot_version], concat(
+	fspot_version_major.,
+	fspot_version_minor.,
+	fspot_version_micro))
+
+dnl create the release version
+m4_define([fspot_version],
+	m4_if(fspot_version_pre_release, [0],
+		fspot_version,
+		concat(fspot_version, fspot_version_pre_release)))
+
+dnl this can sometimes differ manually
+m4_define([fspot_display_version],
+	["0.6.2"])
+
+m4_define([fspot_api_version],
+	[fspot_version_major.fspot_version_minor])
+
+m4_define([fspot_asm_version],
+	[fspot_api_version.0.0])
+
+AC_PREREQ(2.52)
+AC_INIT([f-spot], fspot_version,
+	[http://bugzilla.gnome.org/enter_bug.cgi?product=f-spot])
+
+AM_INIT_AUTOMAKE([1.9 dist-bzip2 tar-ustar dist-zip foreign])
 AM_MAINTAINER_MODE
+AM_CONFIG_HEADER(config.h)
+AC_SUBST([ACLOCAL_AMFLAGS], ["-I build/m4/shamrock -I build/m4/shave \${ACLOCAL_FLAGS}"])
 
 IT_PROG_INTLTOOL([0.35.0])
+AC_PROG_LIBTOOL
+AC_PROG_INSTALL
+
+dnl How to configure for distcheck
+DISTCHECK_CONFIGURE_FLAGS="--disable-docs --enable-release"
+AC_SUBST(DISTCHECK_CONFIGURE_FLAGS)
+
+dnl Export Version Info
+AC_SUBST([API_VERSION], [fspot_api_version])
+AC_SUBST([ASM_VERSION], [fspot_asm_version])
+AC_SUBST([DISPLAY_VERSION], [fspot_display_version])
+
+dnl Expansions
+SHAMROCK_EXPAND_LIBDIR
+SHAMROCK_EXPAND_BINDIR
+SHAMROCK_EXPAND_DATADIR
+
+
+dnl Mono and gmcs
+SHAMROCK_CHECK_MONO_MODULE(2.2)
+SHAMROCK_FIND_MONO_2_0_COMPILER
+SHAMROCK_FIND_MONO_RUNTIME
+SHAMROCK_CHECK_MONO_2_0_GAC_ASSEMBLIES([
+    Mono.Data.SqliteClient
+    Mono.Posix
+    System.Runtime.Remoting
+    System.Web
+    System.Web.Services
+    Mono.Cairo
+])
+
+
+
+
+
+
+
+AC_CONFIG_SRCDIR(src/main.cs)
 
 AC_PROG_CC
 AC_PROG_CXX
 AC_ISC_POSIX
 AC_HEADER_STDC
-AM_PROG_LIBTOOL
 
 GNOME_COMPILE_WARNINGS
 AM_PATH_GLIB_2_0
@@ -28,6 +98,27 @@ if test ! -x "$MCS"; then
 	AC_MSG_ERROR([No $CS compiler found])
 fi
 
+dnl --- Check for gapi programs
+
+AC_PATH_PROG(GAPI2FIXUP, gapi2-fixup, no)
+
+if test ! -x "$GAPI2FIXUP"; then
+	AC_MSG_ERROR([No gapi post-processor found])
+fi
+
+AC_PATH_PROG(GAPI2PARSER, gapi2-parser, no)
+
+if test ! -x "$GAPI2PARSER"; then
+	AC_MSG_ERROR([No gapi parser found])
+fi
+
+AC_PATH_PROG(GAPI2CODEGEN, gapi2-codegen, no)
+
+if test ! -x "$GAPI2CODEGEN"; then
+	AC_MSG_ERROR([No gapi code generator found])
+fi
+
+
 dnl -- Initialize docs
 
 GNOME_DOC_INIT
@@ -41,18 +132,6 @@ else
   AC_MSG_RESULT([found])
 fi
 
-dnl -- check for various mono DLLs that we need.
-
-needed_dlls="Mono.Data.SqliteClient Mono.Posix System.Runtime.Remoting System.Web System.Web.Services Mono.Cairo"
-for i in $needed_dlls; do
-  AC_MSG_CHECKING([for $i.dll])
-  if test ! \( -e `$PKG_CONFIG --variable=prefix mono`/lib/mono/2.0/$i.dll -o -e `$PKG_CONFIG --variable=prefix mono`/lib64/mono/2.0//$i.dll \); then
-    AC_MSG_ERROR([missing required mono 2.0 DLL: $i.dll])
-  else
-    AC_MSG_RESULT([found])
-  fi
-done
-
 dnl --- Required libraries
 
 LIBGNOME_REQUIRED=2.2
@@ -63,18 +142,16 @@ GIO_REQUIRED=2.16.0
 GIOSHARP_REQUIRED=2.13.92
 GTKSHARPBEANS_REQUIRED=2.13.92
 GTKSHARP_REQUIRED=2.12.2
-MONO_REQUIRED=2.0.0
 GTK_REQUIRED=2.14
-BEAGLE_REQUIRED=0.3.0
 NDESK_DBUS_REQUIRED=0.4.2
 NDESK_DBUS_GLIB_REQUIRED=0.3.0
 MONO_CAIRO_REQUIRED=1.2.4
 CAIRO_REQUIRED=1.4.0
-dnl -- this check is 	
 LCMS_REQUIRED=1.12
-dnl -- LIBGPHOTO2_REQUIRED=2.1.4
+LIBGPHOTO2_REQUIRED=2.4
+MONOADDINS_REQUIRED=0.3
 
-PKG_CHECK_MODULES(F, libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED libexif >= $LIBEXIF_REQUIRED_MIN libexif < $LIBEXIF_REQUIRED_MAX gtk-sharp-2.0 >= $GTKSHARP_REQUIRED glib-sharp-2.0 >= $GTKSHARP_REQUIRED glade-sharp-2.0 >= $GTKSHARP_REQUIRED gnome-vfs-sharp-2.0 >= $GTKSHARP_REQUIRED gtk+-2.0 >= $GTK_REQUIRED mono >= $MONO_REQUIRED mono-cairo >= $MONO_CAIRO_REQUIRED cairo >= $CAIRO_REQUIRED)
+PKG_CHECK_MODULES(F, libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED libexif >= $LIBEXIF_REQUIRED_MIN libexif < $LIBEXIF_REQUIRED_MAX gtk-sharp-2.0 >= $GTKSHARP_REQUIRED glib-sharp-2.0 >= $GTKSHARP_REQUIRED glade-sharp-2.0 >= $GTKSHARP_REQUIRED gnome-vfs-sharp-2.0 >= $GTKSHARP_REQUIRED gtk+-2.0 >= $GTK_REQUIRED mono-cairo >= $MONO_CAIRO_REQUIRED cairo >= $CAIRO_REQUIRED mono-addins >= $MONOADDINS_REQUIRED mono-addins-gui >= $MONOADDINS_REQUIRED mono-addins-setup >= $MONOADDINS_REQUIRED)
 AC_SUBST(F_CFLAGS)
 AC_SUBST(F_LIBS)
 
@@ -103,6 +180,8 @@ AM_CONDITIONAL(NOGCONF, test "x$enable_gconf" = "xno")
 if test "x$enable_gconf" = "xno"; then
   CSC_DEFINES="$CSC_DEFINES -d:NOGCONF"
 else
+  AC_PATH_PROG(GCONFTOOL, gconftool-2)
+  AM_GCONF_SOURCE_2
   PKG_CHECK_MODULES(GCONF_SHARP, gconf-sharp-2.0 >= $GTKSHARP_REQUIRED)
   if pkg-config --atleast-version=2.18 gconf-sharp-2.0; then
     CSC_DEFINES="$CSC_DEFINES -d:GCONF_SHARP_2_18"
@@ -112,39 +191,13 @@ else
   fi
 fi
 
+if pkg-config --at-least-version=2.16 gtk+-2.0; then
+	CSC_DEFINES="$CSC_DEFINES -d:GTK_2_16"
+fi
 
-PKG_CHECK_MODULES(BEAGLE, beagle-0.0 >= $BEAGLE_REQUIRED,
-[
-	dnl this is a work around to avoid linking against beagles Util.dll
-	BEAGLE_DIR=`$PKG_CONFIG --variable=dlldir beagle-0.0`	
-	LINK_BEAGLE="-r:$BEAGLE_DIR/Beagle"
-	CSC_DEFINES="$CSC_DEFINES -d:ENABLE_BEAGLE"
-],
-[
-	AC_MSG_RESULT([beagle not found])
-])
-AC_SUBST(BEAGLE_DIR)
-AC_SUBST(LINK_BEAGLE)
-
-
-dnl -- dbus-sharp: link or bundle ?
-PKG_CHECK_MODULES(NDESK_DBUS, ndesk-dbus-1.0 >= $NDESK_DBUS_REQUIRED ndesk-dbus-glib-1.0 >= $NDESK_DBUS_GLIB_REQUIRED,
-[
-	LINK_DBUS="-pkg:ndesk-dbus-1.0 -pkg:ndesk-dbus-glib-1.0"
-	DIR_DBUS=""
-	DIR_DBUS_GLIB=""
-	PATH_DBUS=""
-],
-[
-	LINK_DBUS='-r:$(top_builddir)/lib/dbus-sharp/NDesk.DBus.dll -r:$(top_builddir)/lib/dbus-sharp-glib/NDesk.DBus.GLib.dll'
-	DIR_DBUS="dbus-sharp"
-	DIR_DBUS_GLIB="dbus-sharp-glib"
-	PATH_DBUS='../lib/dbus-sharp:../lib/dbus-sharp-glib:'
-])
-AC_SUBST(DIR_DBUS)
-AC_SUBST(DIR_DBUS_GLIB)
-AC_SUBST(LINK_DBUS)
-AC_SUBST(PATH_DBUS)
+dnl -- dbus-sharp
+PKG_CHECK_MODULES(NDESK_DBUS, ndesk-dbus-1.0 >= $NDESK_DBUS_REQUIRED ndesk-dbus-glib-1.0 >= $NDESK_DBUS_GLIB_REQUIRED)
+AC_SUBST(NDESK_DBUS_LIBS)
 
 dnl -- nunit
 PKG_CHECK_MODULES(NUNIT, nunit >= $NUNIT_REQUIRED, 
@@ -193,13 +246,9 @@ PKG_CHECK_MODULES(LCMS, lcms >= $LCMS_REQUIRED, [],
 	LCMS_CFLAGS=''])
 
 
-dnl --- libgphoto2-sharp
+dnl --- libgphoto2
 
-PKG_CHECK_MODULES(LIBGPHOTO2, libgphoto2 >= 2.1.4)
-
-if pkg-config --atleast-version=2.4 libgphoto2; then
-	CSC_DEFINES="$CSC_DEFINES -d:GPHOTO2_2_4"
-fi
+PKG_CHECK_MODULES(LIBGPHOTO2, libgphoto2 >= $LIBGPHOTO2_REQUIRED)
 
 AC_SUBST(CSC_DEFINES)
 
@@ -214,6 +263,9 @@ AC_SUBST(EXIF_LIBS)
 PKG_CHECK_MODULES(LIBEXIF_VERSION_CHECK, libexif >= 0.6.12, EXIF_SOVERSION=12, EXIF_SOVERSION=10)
 AC_SUBST(EXIF_SOVERSION)
 
+dnl --- libunique check
+PKG_CHECK_MODULES(UNIQUE, unique-1.0 >= 1.0)
+
 dnl --- Set up paths
 
 AC_ARG_WITH(turtle, [ --with-turtle=DIR                set path to source directory for turtle])
@@ -224,34 +276,25 @@ if test "x$with_turtle" != "xno"; then
    AC_SUBST(TURTLEDIR)
 fi
 
-AC_ARG_WITH(gnome-screensaver,[ --with-gnome-screensaver=PREFIX  set gnome gnome-screensaver prefix])
+AC_ARG_WITH(gnome-screensaver,
+    [ --with-gnome-screensaver=PREFIX  set gnome gnome-screensaver prefix],
+    gnome_screensaver_prefix=$with_gnome_screensaver,
+    gnome_screensaver_prefix=$prefix)
 
-if test "x$with_gnome_screensaver" != "x"; then
-	gnome_screensaver_prefix=$with_gnome_screensaver
-else
-	gnome_screensaver_prefix=$prefix		   
-fi
+AC_ARG_WITH(gnome-screensaver-privlibexecdir,
+    [ --with-gnome-screensaver-privlibexecdir=DIR  set gnome-screensaver privlibexecdir],
+    GNOME_SCREENSAVER_SAVERDIR=$with_gnome_screensaver_privlibexecdir,
+    if test -d $gnome_screensaver_prefix/lib/gnome-screensaver; then
+        GNOME_SCREENSAVER_SAVERDIR=$gnome_screensaver_prefix/lib/gnome-screensaver
+    else
+        GNOME_SCREENSAVER_SAVERDIR=$gnome_screensaver_prefix/libexec/gnome-screensaver
+    fi)
 
-PKG_CHECK_EXISTS(gnome-screensaver, have_gs_pkgconfig=yes, have_gs_pkgconfig=no)
-if test "$have_gs_pkgconfig" = "yes"; then
-	gs_pc_prefix=`$PKG_CONFIG --variable=prefix gnome-screensaver`
-	gs_pc_saverdir=`$PKG_CONFIG --variable=privlibexecdir gnome-screensaver`
-	gs_pc_themesdir=`$PKG_CONFIG --variable=themesdir gnome-screensaver`
-fi
-
-if test "$have_gs_pkgconfig" = "yes" && test "x$gs_pc_prefix" = "x$gnome_screensaver_prefix"; then
-	GNOME_SCREENSAVER_SAVERDIR=$gs_pc_saverdir
-elif test -d $gnome_screensaver_prefix/lib/gnome-screensaver; then
-	GNOME_SCREENSAVER_SAVERDIR=$gnome_screensaver_prefix/lib/gnome-screensaver/gnome-screensaver
-else 
-	GNOME_SCREENSAVER_SAVERDIR=$gnome_screensaver_prefix/libexec/gnome-screensaver
-fi
-
-if test "$have_gs_pkgconfig" = "yes" && test "x$gs_pc_prefix" = "x$gnome_screensaver_prefix"; then
-	GNOME_SCREENSAVER_THEMESDIR=$gs_pc_themesdir
-else
-	GNOME_SCREENSAVER_THEMESDIR=$gnome_screensaver_prefix/share/applications/screensavers
-fi
+AC_ARG_WITH(gnome-screensaver-themesdir,
+    [ --with-gnome-screensaver-themesdir=DIR  set gnome-screensaver themesdir],
+    GNOME_SCREENSAVER_THEMESDIR=$with_gnome_screensaver_themesdir,
+    GNOME_SCREENSAVER_THEMESDIR=$gnome_screensaver_prefix/share/applications/screensavers
+    )
 
 AC_SUBST(GNOME_SCREENSAVER_SAVERDIR)
 AC_SUBST(GNOME_SCREENSAVER_THEMESDIR)
@@ -276,20 +319,21 @@ AC_SUBST(CFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(LDFLAGS)
 
-expanded_libdir=`( case $prefix in NONE) prefix=$ac_default_prefix ;; *) ;; esac
-		   case $exec_prefix in NONE) exec_prefix=$prefix ;; *) ;; esac
-		   eval echo $libdir )`
-AC_SUBST(expanded_libdir)
-
 AC_CONFIG_FILES([src/f-spot],[chmod +x src/f-spot])
 
 GNOME_ICON_THEME_PREFIX=`$PKG_CONFIG --variable=prefix gnome-icon-theme`
 AC_SUBST(GNOME_ICON_THEME_PREFIX)
 
+SHAVE_INIT([build/m4/shave], [enable])
+
 AC_OUTPUT(
 Makefile
-lib/dbus-sharp/Makefile
-lib/dbus-sharp-glib/Makefile
+
+build/Makefile
+build/m4/Makefile
+build/m4/shave/shave
+build/m4/shave/shave-libtool
+
 lib/dpap-sharp/Makefile
 lib/dpap-sharp/lib/Makefile
 lib/dpap-sharp/dpap-client/Makefile
@@ -300,19 +344,18 @@ lib/GKeyFile/Makefile
 lib/gio-sharp/Makefile
 lib/gio-sharp/gio/Makefile
 lib/gio-sharp/generator/Makefile
-lib/glitz-sharp/Makefile
-lib/glitz-sharp/src/Makefile
 lib/gnome-keyring-sharp/Makefile
 lib/gtk-sharp-beans/Makefile
 lib/libfspot/Makefile
 lib/libgphoto2-sharp/Makefile
+lib/libgphoto2-sharp/libgphoto2-sharp.dll.config
+lib/libgphoto2-sharp/glue/Makefile
 lib/libjpegtran/Makefile
 lib/Makefile
-lib/mono-addins/Makefile
-lib/mono-addins/Mono.Addins.Gui/Makefile
-lib/mono-addins/Mono.Addins/Makefile
-lib/mono-addins/Mono.Addins.Setup/Makefile
 lib/semweb/Makefile
+lib/unique-sharp/Makefile
+lib/unique-sharp/generator/Makefile
+lib/unique-sharp/unique/Makefile
 docs/Makefile
 icons/Makefile
 tools/Makefile
@@ -324,9 +367,14 @@ src/Cms.dll.config
 src/FSpot.Widgets.dll.config
 src/Makefile
 extensions/Makefile
+extensions/Editors/Makefile
+extensions/Editors/BlackoutEditor/Makefile
+extensions/Editors/BWEditor/Makefile
+extensions/Editors/FlipEditor/Makefile
+extensions/Editors/PixelateEditor/Makefile
+extensions/Editors/ResizeEditor/Makefile
 extensions/Exporters/Makefile
 extensions/Exporters/CDExport/Makefile
-extensions/Exporters/DefaultExporters/Makefile
 extensions/Exporters/FlickrExport/Makefile
 extensions/Exporters/FlickrExport/FlickrNet/Makefile
 extensions/Exporters/GalleryExport/Makefile
@@ -340,14 +388,15 @@ extensions/Exporters/PicasaWebExport/Makefile
 extensions/Exporters/PicasaWebExport/google-sharp/Makefile
 extensions/Exporters/ZipExport/Makefile
 extensions/Services/Makefile
-extensions/Services/BeagleService/Makefile
 extensions/Services/DBusService/Makefile
 extensions/Tools/Makefile
 extensions/Tools/RawPlusJpeg/Makefile
 extensions/Tools/ChangePhotoPath/Makefile
 extensions/Tools/HashJob/Makefile
 extensions/Tools/DevelopInUFraw/Makefile
+extensions/Tools/LiveWebGallery/Makefile
 extensions/Tools/MergeDb/Makefile
+extensions/Tools/RetroactiveRoll/Makefile
 extensions/Tools/ScreensaverConfig/Makefile
 extensions/Transitions/Makefile
 extensions/Transitions/CoverTransition/Makefile

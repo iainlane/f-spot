@@ -1,4 +1,5 @@
 SUBDIRS = 		\
+	build 		\
 	lib 		\
 	docs		\
 	icons		\
@@ -19,10 +20,17 @@ desktop_files=$(desktop_in_files:.desktop.in=.desktop)
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = f-spot.pc
 
+schemadir = $(sysconfdir)/gconf/schemas
+schema_in_files = f-spot.schemas.in
+schema_DATA = $(schema_in_files:.schemas.in=.schemas)
+@INTLTOOL_SCHEMAS_RULE@
+
 Applicationsdir = $(datadir)/applications
 Applications_DATA = $(desktop_files)
 
 CLEANFILES =			\
+	$(desktop_DATA)		\
+	$(schema_DATA)		\
 	intltool-extract	\
 	intltool-update		\
 	intltool-merge
@@ -35,8 +43,10 @@ EXTRA_DIST =			\
 	f-spot.pc.in		\
 	f-spot.spec		\
 	Makefile.include	\
+	Makefile.addins		\
 	gnome-doc-utils.make	\
 	icon-theme-installer	\
+	$(schema_in_files)	\
         $(desktop_in_files)     \
         $(desktop_files)
 
@@ -55,6 +65,9 @@ UPDATE_DESKTOP = \
 			update-desktop-database; \
 		fi \
 	fi
+
+install-data-local:
+	-GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(srcdir)/$(schema_DATA)
 
 install-data-hook: 
 	$(UPDATE_DESKTOP)

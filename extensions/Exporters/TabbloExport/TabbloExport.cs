@@ -82,6 +82,8 @@ namespace FSpotTabbloExport {
 			// focus (it can be invalid, and hence disabled, for a
 			// moment).
 			main_dialog.ResetFocus ();
+
+			main_dialog.Show ();
 		}
 
 
@@ -90,8 +92,7 @@ namespace FSpotTabbloExport {
 			Debug.Assert (null != model);
 			Debug.Assert (null != main_dialog);
 
-			main_dialog.tabblo_export_dialog.Response +=
-					HandleResponse;
+			main_dialog.Response += HandleResponse;
 
 			// Account data
 			model.UsernameChanged += HandleUsernameChanged;
@@ -251,10 +252,9 @@ namespace FSpotTabbloExport {
 
 		private FSpot.Tag [] SelectTags ()
 		{
-			TagStore tag_store = FSpot.Core.Database.Tags;
-			FSpot.UI.Dialog.TagSelectionDialog tagDialog =
-					new FSpot.UI.Dialog.TagSelectionDialog (
-							tag_store);
+			TagStore tag_store = FSpot.App.Instance.Database.Tags;
+			TagSelectionDialog tagDialog =
+					new TagSelectionDialog (tag_store);
 			FSpot.Tag [] tags = tagDialog.Run ();
 
 			tagDialog.Hide ();
@@ -371,7 +371,7 @@ namespace FSpotTabbloExport {
 				return;
 			}
 
-			PhotoStore photo_store = FSpot.Core.Database.Photos;
+			PhotoStore photo_store = FSpot.App.Instance.Database.Photos;
 			FSpot.Photo photo = photo_store.GetByUri (
 					item.DefaultVersionUri);
 			Debug.Assert (null != photo);

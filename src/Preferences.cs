@@ -61,11 +61,11 @@ namespace FSpot
 
 		public const string EXPORT_EMAIL_SIZE = APP_FSPOT + "export/email/size";
 		public const string EXPORT_EMAIL_ROTATE = APP_FSPOT + "export/email/auto_rotate";
-		public const string EXPORT_EMAIL_DELETE_TIMEOUT_SEC = APP_FSPOT + "export/email/delete_timeout_seconds";
 
 		public const string IMPORT_GUI_ROLL_HISTORY = APP_FSPOT + "import/gui_roll_history";
 
 		public const string SCREENSAVER_TAG = APP_FSPOT + "screensaver/tag_id";
+		public const string SCREENSAVER_DELAY = APP_FSPOT + "screensaver/delay";
 
 		public const string STORAGE_PATH = APP_FSPOT + "import/storage_path";
 
@@ -145,6 +145,8 @@ namespace FSpot
 
 			case SCREENSAVER_TAG:
 				return 1;
+			case SCREENSAVER_DELAY:
+				return 4.0;
 			case STORAGE_PATH:
 				return System.IO.Path.Combine (FSpot.Global.HomeDirectory, Catalog.GetString("Photos"));
 			case EXPORT_EMAIL_SIZE:
@@ -152,8 +154,6 @@ namespace FSpot
 			case EXPORT_EMAIL_ROTATE:
 			case VIEWER_INTERPOLATION:
 				return true;
-			case EXPORT_EMAIL_DELETE_TIMEOUT_SEC:
-				return 30;	// delete temporary email pictures after 30 seconds
 			case VIEWER_TRANSPARENCY:
 				return "NONE";
 			case VIEWER_TRANS_COLOR:

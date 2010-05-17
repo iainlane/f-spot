@@ -4,7 +4,6 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 libdir=@libdir@ 
 turtledir=@TURTLEDIR@
-beagledir=@BEAGLE_DIR@
 
 EXE_TO_RUN="$libdir/f-spot/f-spot.exe"
 
@@ -17,10 +16,6 @@ fi
 
 if test "x$turtledir" != "x"; then
     export MONO_PATH=$turtledir/lib:$turtledir/gui:$MONO_PATH
-fi
-
-if test "x$beagledir" != "x"; then
-    export MONO_PATH=$beagledir:$MONO_PATH
 fi
 
 [ -n "$FSPOT_DEBUG" ] && FSPOT_DEBUG="--debug"
@@ -60,7 +55,7 @@ for arg in "$@"; do
 	x--uninstalled)
 	    echo "*** Running uninstalled f-spot ***"
 	    EXE_TO_RUN="./f-spot.exe"
-	    export MONO_PATH=@PATH_DBUS@:../lib/gnome-keyring-sharp:../lib/libgphoto2-sharp:../lib/semweb:../lib/glitz-sharp/src/:../lib/mono-addins/Mono.Addins:../lib/mono-addins/Mono.Addins.Setup:../lib/mono-addins/Mono.Addins.Gui:../lib/gio-sharp/gio:../lib/gtk-sharp-beans:$MONO_PATH
+	    export MONO_PATH=../lib/gnome-keyring-sharp:../lib/libgphoto2-sharp:../lib/semweb:../lib/mono-addins/Mono.Addins:../lib/mono-addins/Mono.Addins.Setup:../lib/mono-addins/Mono.Addins.Gui:../lib/gio-sharp/gio:../lib/gtk-sharp-beans:../lib/unique-sharp/unique:$MONO_PATH
 	    ;;
     esac
 done
@@ -93,7 +88,7 @@ fi
 if $run_mdb; then
 	mdb $EXE_TO_RUN -args "$@"
 elif $run_gdb; then
-	gdb --eval-command=run --args mono $MONO_OPTIONS $EXE_TO_RUN "$@"
+	gdb --eval-command="handle SIGXCPU SIG33 SIG35 SIGPWR nostop noprint" --eval-command=run --args mono $MONO_OPTIONS $EXE_TO_RUN "$@"
 elif $run_valgrind; then
 	valgrind --tool=memcheck --leak-check=full --show-reachable=yes --log-file=valgrind --smc-check=all --suppressions=/home/sde/Mono/mono/data/mono.supp mono $MONO_OPTIONS $EXE_TO_RUN "$@"
 elif $run_strace; then

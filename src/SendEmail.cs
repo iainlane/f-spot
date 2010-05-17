@@ -203,26 +203,6 @@ namespace FSpot {
 		}
 
 
-		private bool DeleteTempFile ()
-		{
-//			System.Console.WriteLine ("Lets delete all temp files");
-
-			// Lets delete all the temporary files now
-			for (int k = 0; k < tmp_paths.Count; k++) {
-				if (System.IO.File.Exists((string) tmp_paths[k])) {
-					System.IO.File.Delete ((string) tmp_paths[k]);
-//					System.Console.WriteLine ("Lets delete temp file {0}", tmp_paths[k]);
-				}
-			}
-			
-			if (System.IO.Directory.Exists(tmp_mail_dir)) {
-				System.IO.Directory.Delete(tmp_mail_dir);
-//				System.Console.WriteLine ("Lets delete temp dir {0}", tmp_mail_dir);
-			}
-			
-			return false;
-		}
-
 		private void HandleResponse (object sender, Gtk.ResponseArgs args)
 		{
 			int size = 0;
@@ -247,17 +227,17 @@ namespace FSpot {
 			// evaluate mailto command and define attachment args for cli
 			System.Text.StringBuilder attach_arg = new System.Text.StringBuilder ();
 			switch (Preferences.Get<string> (Preferences.GNOME_MAILTO_COMMAND)) {
-				case "thunderbird %s":
-				case "mozilla-thunderbird %s":
-				case "seamonkey -mail -compose %s":
-				case "icedove %s":
-					attach_arg.Append(",");
+			case "thunderbird %s":
+			case "mozilla-thunderbird %s":
+			case "seamonkey -mail -compose %s":
+			case "icedove %s":
+				attach_arg.Append(",");
 				break;
-				case "kmail %s":
-					attach_arg.Append(" --attach ");
+			case "kmail %s":
+				attach_arg.Append(" --attach ");
 				break;
-				default:  //evolution falls into default, since it supports mailto uri correctly
-					attach_arg.Append("&attach=");
+			default:  //evolution falls into default, since it supports mailto uri correctly
+				attach_arg.Append("&attach=");
 				break;
 			}
 
@@ -323,42 +303,33 @@ namespace FSpot {
 			if (progress_dialog != null) 
 				progress_dialog.Destroy (); // No need to keep this window
 
-			if (UserCancelled)
-				DeleteTempFile();
-			else {		
-				// Send the mail :)
-				string mail_subject = Catalog.GetString("my photos");
-				switch (Preferences.Get<string> (Preferences.GNOME_MAILTO_COMMAND)) {
-					// openSuSE
-					case "thunderbird %s":
-						System.Diagnostics.Process.Start("thunderbird", " -compose \"subject=" + mail_subject + ",attachment='" + mail_attach + "'\"");
-					break;
-					case "icedove %s":
-						System.Diagnostics.Process.Start("icedove", " -compose \"subject=" + mail_subject + ",attachment='" + mail_attach + "'\"");
-					break;
-					case "mozilla-thunderbird %s":
-						System.Diagnostics.Process.Start("mozilla-thunderbird", " -compose \"subject=" + mail_subject + ",attachment='" + mail_attach + "'\"");
-					break;
-					case "seamonkey -mail -compose %s":
-						System.Diagnostics.Process.Start("seamonkey", " -mail -compose \"subject=" + mail_subject + ",attachment='" + mail_attach + "'\"");
-					break;
-					case "kmail %s":
-						System.Diagnostics.Process.Start("kmail", "  --composer --subject \"" + mail_subject + "\"" + mail_attach);
-					break;
-					default: 
-						GtkBeans.Global.ShowUri (Dialog.Screen, "mailto:?subject=" + System.Web.HttpUtility.UrlEncode(mail_subject) + mail_attach);
-					break;
-				}
-				                
-				// Check if we have any temporary files to be deleted
-				if (tmp_paths.Count > 0) {
-					// Fetch timeout value from preferences. In seconds. Needs to be multiplied with 1000 to get msec
-					uint delete_timeout;
-					delete_timeout = (uint) (Preferences.Get<int> (Preferences.EXPORT_EMAIL_DELETE_TIMEOUT_SEC));
-					delete_timeout = delete_timeout * 1000; // to get milliseconds.
 
-					// Start a timer and when it occurs, delete the temp files.
-					GLib.Timeout.Add (delete_timeout, new GLib.TimeoutHandler (DeleteTempFile));
+			if (!UserCancelled) {
+				// Send the mail :)
+				string mail_subject = Catalog.GetString("My Photos");
+				switch (Preferences.Get<string> (Preferences.GNOME_MAILTO_COMMAND)) {
+				// openSuSE
+				case "thunderbird %s":
+					System.Diagnostics.Process.Start("thunderbird", " -compose \"subject=" + mail_subject + ",attachment='" + mail_attach + "'\"");
+					break;
+				case "icedove %s":
+					System.Diagnostics.Process.Start("icedove", " -compose \"subject=" + mail_subject + ",attachment='" + mail_attach + "'\"");
+					break;
+				case "mozilla-thunderbird %s":
+					System.Diagnostics.Process.Start("mozilla-thunderbird", " -compose \"subject=" + mail_subject + ",attachment='" + mail_attach + "'\"");
+					break;
+				case "seamonkey -mail -compose %s":
+					System.Diagnostics.Process.Start("seamonkey", " -mail -compose \"subject=" + mail_subject + ",attachment='" + mail_attach + "'\"");
+					break;
+				case "kmail %s":
+					System.Diagnostics.Process.Start("kmail", "  --composer --subject \"" + mail_subject + "\"" + mail_attach);
+					break;
+				case "evolution %s": //evo doesn't urldecode the subject
+					GtkBeans.Global.ShowUri (Dialog.Screen, "mailto:?subject=" + mail_subject + mail_attach);
+					break;
+				default: 
+					GtkBeans.Global.ShowUri (Dialog.Screen, "mailto:?subject=" + System.Web.HttpUtility.UrlEncode(mail_subject) + mail_attach);
+					break;
 				}
 			}
 		}

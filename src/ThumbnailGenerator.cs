@@ -12,6 +12,9 @@ using System.IO;
 using FSpot.Utils;
 using FSpot.Platform;
 
+using Mono.Unix.Native;
+using GFileInfo = GLib.FileInfo;
+
 namespace FSpot {
 	public class ThumbnailGenerator : ImageLoaderThread {
 
@@ -35,8 +38,8 @@ namespace FSpot {
 					return null;
 
 				try { //Setting the thumb options
-					Gnome.Vfs.FileInfo vfs = new Gnome.Vfs.FileInfo (UriUtils.UriToStringEscaped (uri));
-					DateTime mtime = vfs.Mtime;
+					GFileInfo info = GLib.FileFactory.NewForUri (uri).QueryInfo ("time::modified", GLib.FileQueryInfoFlags.None, null);
+					DateTime mtime = NativeConvert.ToDateTime ((long)info.GetAttributeULong ("time::modified"));
 
 					FSpot.Utils.PixbufUtils.SetOption (thumb, ThumbUri, UriUtils.UriToStringEscaped (uri));
 					FSpot.Utils.PixbufUtils.SetOption (thumb, ThumbMTime, ((uint)GLib.Marshaller.DateTimeTotime_t (mtime)).ToString ());

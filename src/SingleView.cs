@@ -1,6 +1,8 @@
 using Gtk;
 using Gdk;
 using System;
+using System.Collections.Generic;
+
 using Mono.Addins;
 using Mono.Unix;
 
@@ -50,21 +52,6 @@ namespace FSpot {
 		FullScreenView fsview;
 
 		private static Gtk.Tooltips toolTips = new Gtk.Tooltips ();
-
-		public SingleView () : this (FSpot.Global.HomeDirectory) {}
-
-
-		public SingleView (string path) : this (UriUtils.PathToFileUri (path)) 
-		{
-		}
-
-		public SingleView (Uri uri) : this (new Uri [] { uri })
-		{
-		}
-
-		public SingleView (UriList list) : this (list.ToArray ())
-		{
-		}
 
 		public SingleView (Uri [] uris) 
 		{
@@ -190,7 +177,7 @@ namespace FSpot {
 		private void OnSidebarExtensionChanged (object s, ExtensionNodeEventArgs args) {
 			// FIXME: No sidebar page removal yet!
 			if (args.Change == ExtensionChange.Add)
-				sidebar.AppendPage ((args.ExtensionNode as SidebarPageNode).GetSidebarPage ());
+				sidebar.AppendPage ((args.ExtensionNode as SidebarPageNode).GetPage ());
 		}
 
 		void HandleExportActivated (object o, EventArgs e)
@@ -331,7 +318,7 @@ namespace FSpot {
 		private void HandleNewWindow (object sender, System.EventArgs args)
 		{
 			/* FIXME this needs to register witth the core */
-			new SingleView (uri);
+			new SingleView (new Uri[] {uri});
 		}
 
 		private void HandlePreferences (object sender, System.EventArgs args)
@@ -371,19 +358,6 @@ namespace FSpot {
 			
 
 			chooser.Destroy ();
-		}
-
-		private bool SlideShow ()
-		{
-			IBrowsableItem [] items = new IBrowsableItem [collection.Count];
-			for (int i = 0; i < collection.Count; i++) {
-				items [i] = collection [i];
-			}
-
-			FSpot.FullSlide full = new FSpot.FullSlide (Window, items);
-			full.Play ();
-			this.Window.GdkWindow.Cursor = null;
-			return false;
 		}
 
 		private void HandleViewFullscreen (object sender, System.EventArgs args)
@@ -529,9 +503,12 @@ namespace FSpot {
 			int response = file_selector.Run ();
 			
 			if ((Gtk.ResponseType) response == Gtk.ResponseType.Ok) {
-				open = file_selector.Filename;
-				new FSpot.SingleView (open);
+				var l = new List<Uri> ();
+				foreach (var s in file_selector.Uris)
+					l.Add (new Uri (s));
+				new FSpot.SingleView (l.ToArray ());
 			}
+
 			
 			file_selector.Destroy ();
 		}

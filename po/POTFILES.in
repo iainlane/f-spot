@@ -27,13 +27,17 @@ extensions/Exporters/SmugMugExport/SmugMugExport.glade
 extensions/Exporters/TabbloExport/Tabblo/Connection.cs
 extensions/Exporters/TabbloExport/TabbloExport.addin.xml
 extensions/Exporters/TabbloExport/TabbloExport.cs
-extensions/Exporters/TabbloExport/TabbloExport.glade
-extensions/Exporters/TabbloExport/TrustError.glade
+[type: gettext/glade]extensions/Exporters/TabbloExport/ui/TabbloExport.ui
+[type: gettext/glade]extensions/Exporters/TabbloExport/ui/TrustError.ui
 extensions/Exporters/ZipExport/ZipExport.addin.xml
 extensions/Exporters/ZipExport/ZipExport.cs
 extensions/Exporters/ZipExport/ZipExport.glade
 extensions/Tools/HashJob/HashJob.cs
 extensions/Tools/HashJob/HashJob.addin.xml
+extensions/Tools/LiveWebGallery/GalleryRequestHandler.cs
+extensions/Tools/LiveWebGallery/LiveWebGallery.addin.xml
+[type: gettext/glade]extensions/Tools/LiveWebGallery/ui/LiveWebGallery.ui
+extensions/Tools/LiveWebGallery/LiveWebGalleryDialog.cs
 extensions/Tools/MergeDb/MergeDb.addin.xml
 extensions/Tools/MergeDb/MergeDb.cs
 extensions/Tools/MergeDb/MergeDb.glade
@@ -41,30 +45,13 @@ extensions/Tools/MergeDb/PickFolderDialog.cs
 extensions/Tools/ScreensaverConfig/ScreensaverConfig.addin.xml
 [type: gettext/glade]extensions/Tools/ScreensaverConfig/ScreensaverConfigDialog.ui
 f-spot.desktop.in.in
+f-spot.schemas.in
 f-spot-import.desktop.in.in
 f-spot-view.desktop.in.in
 lib/libfspot/f-jpeg-utils.c
-lib/mono-addins/Mono.Addins.Gui/gtk-gui/Mono.Addins.Gui.AddinInfoDialog.cs
-lib/mono-addins/Mono.Addins.Gui/gtk-gui/Mono.Addins.Gui.AddinInstallDialog.cs
-lib/mono-addins/Mono.Addins.Gui/gtk-gui/Mono.Addins.Gui.AddinInstallerDialog.cs
-lib/mono-addins/Mono.Addins.Gui/gtk-gui/Mono.Addins.Gui.AddinManagerDialog.cs
-lib/mono-addins/Mono.Addins.Gui/gtk-gui/Mono.Addins.Gui.ErrorDialog.cs
-lib/mono-addins/Mono.Addins.Gui/gtk-gui/Mono.Addins.Gui.ManageSitesDialog.cs
-lib/mono-addins/Mono.Addins.Gui/gtk-gui/Mono.Addins.Gui.NewSiteDialog.cs
-lib/mono-addins/Mono.Addins.Gui/Mono.Addins.Gui/AddinInfoDialog.cs
-lib/mono-addins/Mono.Addins.Gui/Mono.Addins.Gui/AddinInstallDialog.cs
-lib/mono-addins/Mono.Addins.Gui/Mono.Addins.Gui/AddinInstaller.cs
-lib/mono-addins/Mono.Addins.Gui/Mono.Addins.Gui/AddinInstallerDialog.cs
-lib/mono-addins/Mono.Addins.Gui/Mono.Addins.Gui/AddinTreeWidget.cs
-lib/mono-addins/Mono.Addins.Gui/Mono.Addins.Gui/ManageSitesDialog.cs
-lib/mono-addins/Mono.Addins.Gui/Mono.Addins.Gui/Services.cs
-lib/mono-addins/Mono.Addins/Mono.Addins/AddinSessionService.cs
-lib/mono-addins/Mono.Addins/Mono.Addins/AddinSessionService.cs
-lib/mono-addins/Mono.Addins/Mono.Addins.Description/AssemblyDependency.cs
-lib/mono-addins/Mono.Addins/Mono.Addins.Description/AssemblyDependency.cs
 src/CameraFileSelectionDialog.cs
 src/CameraSelectionDialog.cs
-src/Core.cs
+src/Core/App.cs
 src/Core/Photo.cs
 src/Editors/AutoStretchEditor.cs
 src/Editors/ColorEditor.cs

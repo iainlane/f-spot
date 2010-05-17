@@ -409,7 +409,11 @@ namespace FSpotFolderExport {
 				break;
 
 			case SIZE_KEY:
-				size_spin.Value = (double) Preferences.Get<int> (key);
+				int size;
+				if (Preferences.TryGet<int> (key, out size))
+					size_spin.Value = (double) size;
+				else
+					size_spin.Value = 400;
 				break;
 
 			case OPEN_KEY:
@@ -532,8 +536,8 @@ namespace FSpotFolderExport {
 				else
 					File.Copy (request.Current.LocalPath, path, true);
 
-				if (photo != null && photo is Photo && Core.Database != null) {
-					Core.Database.Exports.Create ((photo as Photo).Id, (photo as Photo).DefaultVersionId,
+				if (photo != null && photo is Photo && App.Instance.Database != null) {
+					App.Instance.Database.Exports.Create ((photo as Photo).Id, (photo as Photo).DefaultVersionId,
 								      ExportStore.FolderExportType,
 								      // FIXME this is wrong, the final path is the one
 								      // after the Xfer.
