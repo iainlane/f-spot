@@ -6,25 +6,25 @@
 
 Index: f-spot.git/Makefile.include
 ===================================================================
---- f-spot.git.orig/Makefile.include	2009-10-29 14:19:05.509756682 +0000
-+++ f-spot.git/Makefile.include	2009-10-29 14:19:07.317757872 +0000
+--- f-spot.git.orig/Makefile.include	2010-05-17 11:59:36.000000000 +0100
++++ f-spot.git/Makefile.include	2010-05-17 16:55:09.267960224 +0100
 @@ -18,7 +18,7 @@
  
  ## Links
  
 -LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
 +LINK_KEYRING = -pkg:gnome-keyring-sharp-1.0
- LINK_GLITZ = -r:$(DIR_GLITZ)/NDesk.Glitz.dll 
  LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
- LINK_MONO_ADDINS =			\
+ LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
+ LINK_GIOSHARP = -r:$(DIR_GIOSHARP)/gio-sharp.dll
 Index: f-spot.git/lib/Makefile.am
 ===================================================================
---- f-spot.git.orig/lib/Makefile.am	2009-10-29 14:19:05.509756682 +0000
-+++ f-spot.git/lib/Makefile.am	2009-10-29 14:19:07.317757872 +0000
-@@ -5,7 +5,6 @@
+--- f-spot.git.orig/lib/Makefile.am	2010-05-17 11:59:36.000000000 +0100
++++ f-spot.git/lib/Makefile.am	2010-05-17 16:55:49.197959582 +0100
+@@ -4,7 +4,6 @@
+ UNCONDITIONAL_SUBDIRS = \
  	GKeyFile 			\
  	gio-sharp			\
- 	glitz-sharp			\
 -	gnome-keyring-sharp	\
  	gtk-sharp-beans		\
  	libjpegtran			\

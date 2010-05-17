@@ -7,17 +7,17 @@
 @DPATCH@
 Index: f-spot.git/f-spot-import.desktop.in
 ===================================================================
---- f-spot.git.orig/f-spot-import.desktop.in	2009-10-29 14:18:28.990756849 +0000
-+++ f-spot.git/f-spot-import.desktop.in	2009-10-29 14:19:08.849756837 +0000
+--- f-spot.git.orig/f-spot-import.desktop.in	2010-05-17 11:59:36.637958342 +0100
++++ f-spot.git/f-spot-import.desktop.in	2010-05-17 16:57:22.506710261 +0100
 @@ -16,3 +16,4 @@
  X-GNOME-Bugzilla-Component=General
- X-GNOME-Bugzilla-Version=0.6.1.4
+ X-GNOME-Bugzilla-Version=0.6.2
  X-GNOME-DocPath=f-spot/f-spot.xml
 +X-GIO-NoFuse=true
 Index: f-spot.git/f-spot-import.desktop.in.in
 ===================================================================
---- f-spot.git.orig/f-spot-import.desktop.in.in	2009-10-29 14:18:29.006757763 +0000
-+++ f-spot.git/f-spot-import.desktop.in.in	2009-10-29 14:19:08.849756837 +0000
+--- f-spot.git.orig/f-spot-import.desktop.in.in	2009-10-21 16:01:20.000000000 +0100
++++ f-spot.git/f-spot-import.desktop.in.in	2010-05-17 16:57:22.506710261 +0100
 @@ -16,3 +16,4 @@
  X-GNOME-Bugzilla-Component=General
  X-GNOME-Bugzilla-Version=@VERSION@

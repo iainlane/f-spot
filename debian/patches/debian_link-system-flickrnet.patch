@@ -8,11 +8,11 @@
 @DPATCH@
 Index: f-spot.git/configure.ac
 ===================================================================
---- f-spot.git.orig/configure.ac	2009-10-29 14:19:05.509756682 +0000
-+++ f-spot.git/configure.ac	2009-10-29 14:19:05.821756676 +0000
-@@ -324,7 +324,6 @@
+--- f-spot.git.orig/configure.ac	2010-05-17 11:59:36.000000000 +0100
++++ f-spot.git/configure.ac	2010-05-17 16:37:43.976710072 +0100
+@@ -376,7 +376,6 @@
+ extensions/Exporters/Makefile
  extensions/Exporters/CDExport/Makefile
- extensions/Exporters/DefaultExporters/Makefile
  extensions/Exporters/FlickrExport/Makefile
 -extensions/Exporters/FlickrExport/FlickrNet/Makefile
  extensions/Exporters/GalleryExport/Makefile
@@ -20,17 +20,17 @@ Index: f-spot.git/configure.ac
  extensions/Exporters/FolderExport/Makefile
 Index: f-spot.git/extensions/Exporters/FlickrExport/Makefile.am
 ===================================================================
---- f-spot.git.orig/extensions/Exporters/FlickrExport/Makefile.am	2009-10-29 14:18:29.426756349 +0000
-+++ f-spot.git/extensions/Exporters/FlickrExport/Makefile.am	2009-10-29 14:19:05.821756676 +0000
-@@ -20,16 +20,13 @@
- 	$(LINK_GIOSHARP)				\
- 	$(LINK_GTKSHARPBEANS)		\
- 	$(LINK_DBUS)				\
+--- f-spot.git.orig/extensions/Exporters/FlickrExport/Makefile.am	2010-05-17 11:59:36.000000000 +0100
++++ f-spot.git/extensions/Exporters/FlickrExport/Makefile.am	2010-05-17 16:43:30.046709088 +0100
+@@ -19,16 +19,13 @@
+ 	$(LINK_GIOSHARP)			\
+ 	$(LINK_GTKSHARPBEANS)			\
+ 	$(LINK_UNIQUESHARP)			\
 -	-r:FlickrNet/FlickrNet.dll	\
  	-r:Mono.Posix
  
  PKGS =					\
-+    -pkg:flickrnet    \
++    -pkg:flickrnet \
  	-pkg:gtk-sharp-2.0		\
  	-pkg:glade-sharp-2.0
  

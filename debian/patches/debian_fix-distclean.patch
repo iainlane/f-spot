@@ -7,9 +7,9 @@
 @DPATCH@
 Index: f-spot.git/Makefile.am
 ===================================================================
---- f-spot.git.orig/Makefile.am	2009-10-29 14:18:29.798756638 +0000
-+++ f-spot.git/Makefile.am	2009-10-29 14:19:03.969757415 +0000
-@@ -44,7 +44,6 @@
+--- f-spot.git.orig/Makefile.am	2010-05-17 11:59:36.606708998 +0100
++++ f-spot.git/Makefile.am	2010-05-17 16:32:15.376708636 +0100
+@@ -54,7 +54,6 @@
          intltool-extract        \
          intltool-merge          \
          intltool-update         \

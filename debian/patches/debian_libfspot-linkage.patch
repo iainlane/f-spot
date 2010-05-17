@@ -7,8 +7,8 @@
 @DPATCH@
 Index: f-spot.git/lib/libfspot/Makefile.am
 ===================================================================
---- f-spot.git.orig/lib/libfspot/Makefile.am	2009-10-29 14:18:29.714756954 +0000
-+++ f-spot.git/lib/libfspot/Makefile.am	2009-10-29 14:19:04.953756819 +0000
+--- f-spot.git.orig/lib/libfspot/Makefile.am	2009-10-21 16:01:21.000000000 +0100
++++ f-spot.git/lib/libfspot/Makefile.am	2010-05-17 16:33:14.856720436 +0100
 @@ -31,6 +31,8 @@
  	f-utils.h
  

@@ -4,10 +4,10 @@ Forwarded: not-needed
 
 Index: f-spot.git/configure.ac
 ===================================================================
---- f-spot.git.orig/configure.ac	2010-04-15 11:48:26.036097143 +0100
-+++ f-spot.git/configure.ac	2010-04-15 11:48:33.774845929 +0100
-@@ -147,8 +147,8 @@
- AC_SUBST(PATH_DBUS)
+--- f-spot.git.orig/configure.ac	2010-05-17 16:37:43.976710072 +0100
++++ f-spot.git/configure.ac	2010-05-17 16:56:00.066711595 +0100
+@@ -200,8 +200,8 @@
+ AC_SUBST(NDESK_DBUS_LIBS)
  
  dnl -- nunit
 -PKG_CHECK_MODULES(NUNIT, nunit >= $NUNIT_REQUIRED, 

@@ -8,7 +8,6 @@ debian_disable-unit-tests
 debian_fix_f-spot.exe.config.patch
 
 ubuntu_importer-targetdir-selector.patch
-ubuntu_fname_quote_percent.patch
 ubuntu_fix_export_crash_FlickrRemote.cs.patch
 ubuntu_nofuse_fix_photo_import.patch
 ubuntu_xdg-photo-dir.patch

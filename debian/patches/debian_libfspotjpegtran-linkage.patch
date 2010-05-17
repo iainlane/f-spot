@@ -7,8 +7,8 @@
 @DPATCH@
 Index: f-spot.git/lib/libjpegtran/Makefile.am
 ===================================================================
---- f-spot.git.orig/lib/libjpegtran/Makefile.am	2009-10-29 14:18:29.658757147 +0000
-+++ f-spot.git/lib/libjpegtran/Makefile.am	2009-10-29 14:19:05.233767113 +0000
+--- f-spot.git.orig/lib/libjpegtran/Makefile.am	2009-10-21 16:01:21.000000000 +0100
++++ f-spot.git/lib/libjpegtran/Makefile.am	2010-05-17 16:33:20.006711137 +0100
 @@ -18,5 +18,6 @@
  libfspotjpegtran_la_SOURCES =			\
  	$(libfspotjpegtran_files)
