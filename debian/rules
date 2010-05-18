@@ -8,7 +8,7 @@ UPVERSION = $(shell echo $(VERSION) | sed 's,-.*,,' | sed 's,+dfsg.*,,')
 # robbed from tomboy
 autoreconf: autoreconf-stamp
 autoreconf-stamp:
-	autoreconf -f -i -s
+	autoreconf -f -i -s -I $(CURDIR)/build/m4/shamrock -I $(CURDIR)/build/m4/shave
 	# replace ltmain.sh with our patched one that supports --as-needed
 	install --mode=755 $(CURDIR)/debian/ltmain-as-needed.sh $(CURDIR)/ltmain.sh
 	touch $@
