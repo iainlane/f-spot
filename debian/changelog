@@ -9,7 +9,7 @@ f-spot (0.6.2-1) UNRELEASED; urgency=low
    + Wording changes for clarity (Edit Tag) (Jeffrey Finkelstein)
    + Fix version selection tooltip (Lorenzo Milesi)
    + Add gconf schema (Jeffrey Stedfast)
-   + Added a border to filmstrip thumbnails (Matt Perry)
+   + Added a border to filmstrip thumbnails (Matt Perry) (LP: #513036)
    + Fix display names of color profiles (Pascal de Bruijn)
    + Fix histogram colors on theme change (Paul Wellner Bou)
    + Always update ImageView adjustments when scaling.
@@ -30,10 +30,11 @@ f-spot (0.6.2-1) UNRELEASED; urgency=low
    + Removed the Beagle plugin at the request of the openSUSE team
      (Ruben Vermeersch)
    + A pile of other cleanups and fixes (Ruben Vermeersch)
+     - Including '"Import tags" category sounds like an action' (LP: #488784)
    + Two performance improvement patches for our database interaction
      (Michal Nánási)
    + Fix the longstanding issue of F-Spot changing photo timestamps
-     (Paul Wellner Bou)
+     (Paul Wellner Bou) (Closes: #445511) (LP: #175191)
    + Tons of translation updates (seriously)
   * debian/control, debian/rules: Drop gnome-screensaver build-dep and set
     variables at configure time. Should reduce the BD chain significantly. 
