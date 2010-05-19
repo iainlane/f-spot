@@ -27,6 +27,9 @@ override_dh_auto_configure: autoreconf-stamp
 		LDFLAGS="-Wl,-z,defs -Wl,-O1 -Wl,--as-needed" \
 		MCS=/usr/bin/mono-csc
 
+override_dh_auto_install:
+	GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1 dh_auto_install
+
 override_dh_install:
 	rm -f $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.a \
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.la \
