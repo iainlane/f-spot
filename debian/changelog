@@ -45,6 +45,7 @@ f-spot (0.6.2-1) UNRELEASED; urgency=low
   * debian/patches/*: Refresh to apply to new upstream version 
   * debian/rules: Pass include directories to autoreconf to have the correct
     macros in scope for the new build system 
+  * debian/patches/ubuntu_fname_quote_percent.patch: Drop, now upstream.
 
  -- Iain Lane <laney@ubuntu.com>  Mon, 17 May 2010 11:59:58 +0100
 
