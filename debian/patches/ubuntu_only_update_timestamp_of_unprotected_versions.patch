@@ -1,0 +1,17 @@
+Index: f-spot.git/src/Jobs/SyncMetadataJob.cs
+===================================================================
+--- f-spot.git.orig/src/Jobs/SyncMetadataJob.cs	2010-05-18 17:30:51.000000000 +0100
++++ f-spot.git/src/Jobs/SyncMetadataJob.cs	2010-05-19 12:07:32.506709827 +0100
+@@ -53,7 +53,11 @@
+ 					FSpot.JpegFile jimg = img as FSpot.JpegFile;
+ 				
+ 					jimg.SetDescription (photo.Description);
+-					jimg.SetDateTimeOriginal (photo.Time);
++					if (!photo.DefaultVersion.IsProtected) {
++						// If the version is protected we should be able to assume that the data hasn't changed.
++						// Thus, the DateTime shouldn't change, either.
++						jimg.SetDateTimeOriginal (photo.Time);
++					}
+ 					jimg.SetXmp (UpdateXmp (photo, jimg.Header.GetXmp ()));
+ 	
+ 					jimg.SaveMetaData (path);

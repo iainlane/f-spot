@@ -7,7 +7,20 @@ debian_link-system-gnome-keyring.patch
 debian_disable-unit-tests
 debian_fix_f-spot.exe.config.patch
 
+# Patches from Ubuntu
 ubuntu_importer-targetdir-selector.patch
 ubuntu_fix_export_crash_FlickrRemote.cs.patch
 ubuntu_nofuse_fix_photo_import.patch
 ubuntu_xdg-photo-dir.patch
+
+ubuntu_add_editing_to_view_mode.patch
+ubuntu_fix_disposed_pixbuf_errors_in_adjustment.patch
+ubuntu_add_save_and_undo.patch
+ubuntu_add_filmstrip_browsing_to_view_mode.patch
+ubuntu_add_other_files_in_directory_in_view_mode.patch
+ubuntu_clear_selection_on_crop.patch
+ubuntu_only_update_timestamp_of_unprotected_versions.patch
+ubuntu_handle_broken_uris_to_view_mode.patch
+
+ubuntu_default_view_size.patch
+ubuntu_fix_folder_export_hang.patch

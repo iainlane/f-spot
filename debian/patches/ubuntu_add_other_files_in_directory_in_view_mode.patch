@@ -1,0 +1,382 @@
+Description: Display all images in directories passed to --view
+ When a file is passed to --view, also view all the other images in the same
+ directory.
+Author: Christopher James Halse Rogers <christopher.halse.rogers@canonical.com>
+Bug-LP: https://bugs.edge.launchpad.net/ubuntu/+source/f-spot/+bug/484887
+Bug: https://bugzilla.gnome.org/show_bug.cgi?id=333189
+
+Index: f-spot.git/src/SingleView.cs
+===================================================================
+--- f-spot.git.orig/src/SingleView.cs	2010-05-19 14:28:58.147959007 +0100
++++ f-spot.git/src/SingleView.cs	2010-05-19 14:28:58.167959093 +0100
+@@ -60,6 +60,8 @@
+ 		UndoCache undo_history;
+ 		
+ 		FullScreenView fsview;
++		
++		List<FileSystemWatcher> directory_watchers;
+ 
+ 		private static Gtk.Tooltips toolTips = new Gtk.Tooltips ();
+ 
+@@ -68,28 +70,53 @@
+ 			string glade_name = "single_view";
+ 			this.uri = uris[0];
+ 			
++			directory_watchers = new List<FileSystemWatcher> ();
++			// If we are passed the URI to a file we want to
++			// (a) Display & select that file, and 
++			// (b) Display the other files in the same directory.
++			List<Uri> uris_to_display = new List<Uri> ();
++			foreach (var uri in uris) {
++				Uri candidate_uri;
++				if (!Directory.Exists (uri.LocalPath)) {
++					candidate_uri = uri.GetDirectoryUri ();
++				} else {
++					candidate_uri = uri;
++				}
++				if (!uris_to_display.Contains (candidate_uri)) {
++					uris_to_display.Add (candidate_uri);
++					var directory_watcher = new FileSystemWatcher (candidate_uri.LocalPath);
++					Log.Debug ("Watching directory {0} for changes.", candidate_uri.LocalPath);
++					directory_watcher.IncludeSubdirectories = false;
++					directory_watcher.Changed += HandleFileChangedEvent;
++					directory_watcher.Created += HandleFileCreatedEvent;
++					directory_watcher.Deleted += HandleFileDeletedEvent;
++					directory_watcher.EnableRaisingEvents = true;
++					directory_watchers.Add (directory_watcher);
++				}
++			}
++			
+ 			xml = new Glade.XML (null, "f-spot.glade", glade_name, "f-spot");
+ 			xml.Autoconnect (this);
+ 			window = (Gtk.Window)xml.GetWidget (glade_name);
+-		
++			
+ 			LoadPreference (Preferences.VIEWER_WIDTH);
+ 			LoadPreference (Preferences.VIEWER_MAXIMIZED);
+-
++			
+ 			Gtk.Toolbar toolbar = new Gtk.Toolbar ();
+ 			toolbar_hbox.PackStart (toolbar);
+-		
++			
+ 			rl_button = GtkUtil.ToolButtonFromTheme ("object-rotate-left", Catalog.GetString ("Rotate Left"), true);
+ 			rl_button.Clicked += HandleRotate270Command;
+ 			rl_button.SetTooltip (toolTips, Catalog.GetString ("Rotate photo left"), null);
+ 			toolbar.Insert (rl_button, -1);
+-
++			
+ 			rr_button = GtkUtil.ToolButtonFromTheme ("object-rotate-right", Catalog.GetString ("Rotate Right"), true);
+ 			rr_button.Clicked += HandleRotate90Command;
+ 			rr_button.SetTooltip (toolTips, Catalog.GetString ("Rotate photo right"), null);
+ 			toolbar.Insert (rr_button, -1);
+-
++			
+ 			toolbar.Insert (new SeparatorToolItem (), -1);
+-
++			
+ 			StockItem undo_info = Stock.Lookup (Stock.Undo);
+ 			undo = new ToolButton (undo_info.StockId);
+ 			undo.Label = undo_info.Label;
+@@ -104,7 +131,7 @@
+ 			fs_button.Clicked += HandleViewFullscreen;
+ 			fs_button.SetTooltip (toolTips, Catalog.GetString ("View photos fullscreen"), null);
+ 			toolbar.Insert (fs_button, -1);
+-
++			
+ 			ToolButton ss_button = GtkUtil.ToolButtonFromTheme ("media-playback-start", Catalog.GetString ("Slideshow"), true);
+ 			ss_button.Clicked += HandleViewSlideshow;
+ 			ss_button.SetTooltip (toolTips, Catalog.GetString ("View photos in a slideshow"), null);
+@@ -129,9 +156,10 @@
+ 			toolbar.Insert (next_image, -1);
+ 			next_image.TooltipText = Catalog.GetString ("Next photo");
+ 			next_image.Clicked += (sender, args) => { image_view.Item.MoveNext (); };
+-
+ 			
+-			collection = new UriCollection (uris);
++			collection = new UriCollection (uris_to_display.ToArray ());
++			collection.LoadingComplete += HandleCollectionLoadingComplete;
++			
+ 			undo_history = new UndoCache ();
+ 			undo_history.UndoStateChanged += HandleUndoStateChanged;
+ 
+@@ -187,7 +215,7 @@
+ 			
+ 			Window.ShowAll ();
+ 
+-			AddinManager.AddExtensionNodeHandler ("/FSpot/Sidebar", OnSidebarExtensionChanged);	
++			AddinManager.AddExtensionNodeHandler ("/FSpot/Sidebar", OnSidebarExtensionChanged);
+ 			sidebar.Context = ViewContext.Single;
+ 
+ 			zoom_scale.ValueChanged += HandleZoomScaleValueChanged;
+@@ -223,14 +251,119 @@
+ 			UpdateStatusLabel ();
+ 			UpdateToolbar (image_view.Item.Collection);
+ 			
+-			if (collection.Count > 0)
+-				directory_view.Selection.Add (0);
++			if (collection.Count > 0) {
++				if (File.Exists (uris[0].AbsolutePath)) {
++					Log.Debug ("File {0} exists, displaying", uris[0].AbsolutePath);
++					var selected_image = collection.Items.FirstOrDefault ((item) => item.DefaultVersionUri == uris[0]);
++					if (selected_image != null) {
++						directory_view.Selection.Add (selected_image);
++					} else {
++						Log.Warning ("Unable to open requested file {0}", uris[0].AbsolutePath);
++					}
++				} else {
++					directory_view.Selection.Add (0);
++				}
++			}
+ 
+ 			export.Submenu = (Mono.Addins.AddinManager.GetExtensionNode ("/FSpot/Menus/Exports") as FSpot.Extensions.SubmenuNode).GetMenuItem (this).Submenu;
+ 			export.Submenu.ShowAll ();
+ 			export.Activated += HandleExportActivated ;
+ 		}
+ 
++		void HandleFileCreatedEvent (object sender, FileSystemEventArgs e)
++		{
++			Log.Debug ("Trying to add new file {0} to viewer", e.FullPath);
++			GLib.Timeout.Add (500, () =>
++			{
++				if (!File.Exists (e.FullPath)) {
++					// The file may have been deleted after being created, particularly if it was a temporary file
++					// for write => rename over save methods.  In this case, we've got nothing to do now.
++					return false;
++				}
++				if ((DateTime.Now - File.GetLastWriteTime (e.FullPath)).TotalMilliseconds < 400) {
++					Log.Debug ("A process is still writing to {0}.  Waiting another 500ms then trying again", e.FullPath);
++					return true;
++				}
++				collection.Add (new Uri (e.FullPath));
++				return false;
++			});
++		}
++		
++		void HandleFileDeletedEvent (object sender, FileSystemEventArgs e)
++		{
++			Log.Debug ("File {0} deleted, removing references from viewer", e.FullPath);
++			Uri deleted_uri = new Uri (e.FullPath);
++			// File monitor events will come from an arbitrary thread.  Proxy them to the main thread via the main loop to make things easier.
++			GLib.Timeout.Add(0, () => {
++				foreach (var deleted_item in collection.Items.Where ((item) => item.DefaultVersionUri == deleted_uri)) {
++					if (deleted_item != null) {
++						var current_item = image_view.Item.Current;
++						if (current_item == deleted_item) {
++							if (collection.Count == 1) {
++								// Someone's deleted our only file!  Waaaa!
++								// The user can still edit this copy, though.
++								return false;
++							}
++							if (image_view.Item.Index < collection.Count - 1) {
++								// We're not at the last item, so we can move to the next one
++								current_item = collection[image_view.Item.Index + 1];
++							} else {
++								// We are at the last item.  Move to the previous item
++								current_item = collection[image_view.Item.Index - 1];
++							}
++						}
++						while (undo_history.ContainsUndoInformationFor (deleted_uri)) {
++							undo_history.PopEdit (deleted_uri);
++						}
++						collection.Items = collection.Items.Where ((item) => item != deleted_item).ToArray ();
++						image_view.Item.MoveFirst ();
++						image_view.Item.Index = collection.IndexOf (current_item);
++					}
++				}
++				return false;
++			});
++		}
++		
++		HashSet<string> file_change_processors = new HashSet<string> ();
++		void HandleFileChangedEvent (object sender, FileSystemEventArgs e)
++		{
++			Uri changed_uri = new Uri (e.FullPath);
++			var changed_item = collection.Items.FirstOrDefault ((item) => item.DefaultVersionUri == changed_uri);
++			if (changed_item != null) {
++				if (!file_change_processors.Contains (e.FullPath)) {
++					Log.Debug ("File {0} changed, triggering update.", e.FullPath);
++					file_change_processors.Add (e.FullPath);
++					GLib.Timeout.Add (500, () => {
++						if ((DateTime.Now - File.GetLastWriteTime (e.FullPath)).TotalMilliseconds < 400) {
++							Log.Debug ("A process is still writing to {0}.  Waiting 500ms for it to finish", e.FullPath);
++							return true;
++						}
++						collection.MarkChanged (new BrowsableEventArgs (collection.IndexOf (changed_item), new FullInvalidate ()));
++						file_change_processors.Remove (e.FullPath);
++						return false;
++					});
++				}
++			}
++		}
++		
++		void HandleCollectionLoadingComplete (object sender, EventArgs e)
++		{
++			if (collection.Count > 0) {
++				if (File.Exists (Uri.UnescapeDataString (uri.AbsolutePath))) {
++					Log.Debug ("{0} exists, displaying", uri);
++					var selected_image = collection.Items.FirstOrDefault ((item) => item.DefaultVersionUri == uri);
++					
++					if (selected_image != null && directory_view != null) {
++						directory_view.Selection.Clear ();
++						directory_view.Selection.Add (selected_image);
++					}
++				} else {
++					Log.Warning ("Unable to open requested file {0}", uri);
++				}
++			}
++			collection.LoadingComplete -= HandleCollectionLoadingComplete;
++		}
++
+ 		void ToggleFilmstrip (bool enabled)
+ 		{
+ 			Gtk.Widget packed_filmstrip = display_vbox.AllChildren.Cast<Gtk.Widget> ().FirstOrDefault ((widget) => {return widget == filmstrip;});
+Index: f-spot.git/src/UriCollection.cs
+===================================================================
+--- f-spot.git.orig/src/UriCollection.cs	2010-05-19 13:49:44.436739359 +0100
++++ f-spot.git/src/UriCollection.cs	2010-05-19 14:28:58.167959093 +0100
+@@ -21,25 +21,31 @@
+ 
+ namespace FSpot {
+ 	public class UriCollection : PhotoList {
+-		public UriCollection () : base (new IBrowsableItem [0])
++		public UriCollection () : base(new IBrowsableItem[0])
+ 		{
++			loading_count = 0;
+ 		}
+ 
+-		public UriCollection (System.IO.FileInfo [] files) : this ()
++		public UriCollection (System.IO.FileInfo[] files) : this()
+ 		{
++			loading_count = 0;
++			LoaderStarting ();
+ 			LoadItems (files);
+ 		}
+ 
+-		public UriCollection (Uri [] uri) : this ()
++		public UriCollection (Uri[] uri) : this()
+ 		{
++			loading_count = 0;
+ 			LoadItems (uri);
+ 		}
+ 
+ 		public void Add (Uri uri)
+ 		{
++			LoaderStarting ();
+ 			if (FSpot.ImageFile.HasLoader (uri)) {
+ 				//Console.WriteLine ("using image loader {0}", uri.ToString ());
+ 				Add (new FileBrowsableItem (uri));
++				LoaderComplete ();
+ 			} else {
+ 				GLib.FileInfo info = FileFactory.NewForUri (uri).QueryInfo ("standard::type,standard::content-type", FileQueryInfoFlags.None, null);
+ 
+@@ -57,13 +63,37 @@
+ 			}
+ 		}
+ 
+-		public void LoadItems (Uri [] uris)
++		public void LoadItems (Uri[] uris)
+ 		{
++			// Prime the count with 1, so that if everything is synchronous the LoadingCount-- at the end
++			// will trigger LoadingComplete.
++			LoaderStarting ();
+ 			foreach (Uri uri in uris) {
+ 				Add (uri);
+ 			}
++			LoaderComplete ();
+ 		}
+ 
++		public event EventHandler LoadingComplete;
++		
++		int loading_count;
++		void LoaderStarting ()
++		{
++			System.Threading.Interlocked.Increment (ref loading_count);
++		}
++		
++		void LoaderComplete ()
++		{
++			if (System.Threading.Interlocked.Decrement (ref loading_count) == 0) {
++				FSpot.Utils.Log.Debug ("Final loader finished, triggering LoadingComplete signal");
++				var handler = LoadingComplete;
++				if (handler != null) {
++					handler (this, EventArgs.Empty);
++				}
++			}
++		}
++		
++		
+ 		private class RssLoader
+ 		{
+ 			public RssLoader (UriCollection collection, System.Uri uri)
+@@ -74,15 +104,15 @@
+ 				ns.AddNamespace ("media", "http://search.yahoo.com/mrss/");
+ 				ns.AddNamespace ("pheed", "http://www.pheed.com/pheed/");
+ 				ns.AddNamespace ("apple", "http://www.apple.com/ilife/wallpapers");
+-
++				
+ 				ArrayList items = new ArrayList ();
+ 				XmlNodeList list = doc.SelectNodes ("/rss/channel/item/media:content", ns);
+ 				foreach (XmlNode item in list) {
+-					Uri image_uri = new Uri (item.Attributes ["url"].Value);
++					Uri image_uri = new Uri (item.Attributes["url"].Value);
+ 					System.Console.WriteLine ("flickr uri = {0}", image_uri.ToString ());
+ 					items.Add (new FileBrowsableItem (image_uri));
+ 				}
+-
++				
+ 				if (list.Count < 1) {
+ 					list = doc.SelectNodes ("/rss/channel/item/pheed:imgsrc", ns);
+ 					foreach (XmlNode item in list) {
+@@ -91,7 +121,7 @@
+ 						items.Add (new FileBrowsableItem (image_uri));
+ 					}
+ 				}
+-
++				
+ 				if (list.Count < 1) {
+ 					list = doc.SelectNodes ("/rss/channel/item/apple:image", ns);
+ 					foreach (XmlNode item in list) {
+@@ -100,7 +130,8 @@
+ 						items.Add (new FileBrowsableItem (image_uri));
+ 					}
+ 				}
+-				collection.Add (items.ToArray (typeof (FileBrowsableItem)) as FileBrowsableItem []);
++				collection.Add (items.ToArray (typeof(FileBrowsableItem)) as FileBrowsableItem[]);
++				collection.LoaderComplete ();
+ 			}
+ 		}
+ 
+@@ -120,7 +151,6 @@
+ 							     500,
+ 							     null,
+ 							     InfoLoaded);
+-										    
+ 			}
+ 
+ 			void InfoLoaded (GLib.Object o, GLib.AsyncResult res)
+@@ -132,13 +162,14 @@
+ 					if (FSpot.ImageFile.HasLoader (i))
+ 						items.Add (new FileBrowsableItem (i));
+ 				}
+-				Gtk.Application.Invoke (items, System.EventArgs.Empty, delegate (object sender, EventArgs args) {
++				Gtk.Application.Invoke (items, System.EventArgs.Empty, delegate(object sender, EventArgs args) {
+ 					collection.Add (items.ToArray ());
++					collection.LoaderComplete ();
+ 				});
+ 			}
+ 		}
+ 
+-		protected void LoadItems (System.IO.FileInfo [] files)
++		protected void LoadItems (System.IO.FileInfo[] files)
+ 		{
+ 			List<IBrowsableItem> items = new List<IBrowsableItem> ();
+ 			foreach (var f in files) {
+@@ -149,6 +180,7 @@
+ 			}
+ 
+ 			list = items;
++			LoaderComplete ();
+ 			this.Reload ();
+ 		}
+ 	}

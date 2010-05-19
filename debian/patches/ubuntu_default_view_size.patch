@@ -1,0 +1,27 @@
+------------------------------------------------------------
+revno: 112
+committer: Christopher James Halse Rogers <christopher.halse.rogers@canonical.com>
+branch nick: edit-fixes
+timestamp: Wed 2010-03-31 17:23:34 +1100
+message:
+  Set a more reasonable default size for View mode
+modified:
+  src/Preferences.cs
+diff:
+=== modified file 'src/Preferences.cs'
+--- a/src/Preferences.cs	2009-09-01 22:12:30 +0000
++++ b/src/Preferences.cs	2010-03-31 06:23:34 +0000
+@@ -110,7 +110,12 @@
+ 			case IMPORT_WINDOW_PANE_POSITION:
+ 			case FILMSTRIP_ORIENTATION:
+ 				return 0;
+-					
++
++			case VIEWER_WIDTH:
++				return 700;
++			case VIEWER_HEIGHT:
++				return 550;
++
+ 			case METADATA_EMBED_IN_IMAGE:
+ 			case MAIN_WINDOW_MAXIMIZED:
+ 			case GROUP_ADAPTOR_ORDER_ASC:

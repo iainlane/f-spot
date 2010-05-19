@@ -1,0 +1,30 @@
+Description: Clear the selection after crop
+Author: Christopher James Halse Rogers <christopher.halse.rogers@canonical.com>
+Bug-LP: https://bugs.edge.launchpad.net/ubuntu/+source/f-spot/+bug/535186
+Forwarded: No
+
+------------------------------------------------------------
+revno: 99
+committer: Christopher James Halse Rogers <christopher.halse.rogers@canonical.com>
+branch nick: edit-fixes
+timestamp: Thu 2010-03-11 15:08:26 +1100
+message:
+  Clear selection after crop
+modified:
+  src/Editors/CropEditor.cs
+diff:
+=== modified file 'src/Editors/CropEditor.cs'
+Index: f-spot-0.6.1.5/src/Editors/CropEditor.cs
+===================================================================
+--- f-spot-0.6.1.5.orig/src/Editors/CropEditor.cs	2010-03-18 10:17:40.334269406 +1100
++++ f-spot-0.6.1.5/src/Editors/CropEditor.cs	2010-03-18 10:24:25.564260496 +1100
+@@ -178,7 +178,8 @@
+ 						 selection.Width, selection.Height);
+ 
+ 			input.CopyArea (selection.X, selection.Y,
+-					selection.Width, selection.Height, edited, 0, 0);
++				selection.Width, selection.Height, edited, 0, 0);
++			State.PhotoImageView.Selection = Rectangle.Zero;
+ 			return edited;
+ 		}
+ 	}

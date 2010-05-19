@@ -1,0 +1,921 @@
+Description: Add Save & Undo to editing in View mode
+Author: Christopher Halse Rogers <christopher.halse.rogers@canonical.com>
+Forwarded: No
+
+=== modified file 'src/Editors/Editor.cs'
+Index: f-spot.git/src/Editors/Editor.cs
+===================================================================
+--- f-spot.git.orig/src/Editors/Editor.cs	2010-05-19 14:28:58.077959584 +0100
++++ f-spot.git/src/Editors/Editor.cs	2010-05-19 14:28:58.117959302 +0100
+@@ -18,7 +18,6 @@
+ using Mono.Unix;
+ 
+ using System;
+-using System.IO;
+ 
+ namespace FSpot.Editors {
+ 	[ExtensionNode ("Editor")]
+@@ -50,6 +49,9 @@
+ 		public bool InBrowseMode {
+ 			get { return PhotoImageView == null; }
+ 		}
++		
++		// Undo history
++		public UndoCache History;
+ 	}
+ 
+ 	// This is the base class from which all editors inherit.
+@@ -100,11 +102,31 @@
+ 		}
+ 
+ 
+-		protected void LoadPhoto (IBrowsableItem photo, out Pixbuf photo_pixbuf, out Cms.Profile photo_profile) {
+-			// FIXME: We might get this value from the PhotoImageView.
+-			using (ImageFile img = ImageFile.Create (photo.DefaultVersionUri)) {
+-				photo_pixbuf = img.Load ();
+-				photo_profile = img.GetProfile ();
++		protected void LoadPhoto (IBrowsableItem photo, out Pixbuf photo_pixbuf, out Cms.Profile photo_profile)
++		{
++			if (State.History != null) {
++				if (State.History.ContainsImageFor (photo.DefaultVersionUri)) {
++					photo_pixbuf = State.History.Pixbuf (photo.DefaultVersionUri);
++					photo_profile = State.History.Profile (photo.DefaultVersionUri);
++					return;
++				}
++				// FIXME: We might get this value from the PhotoImageView.
++				PixbufOrientation orientation;
++				using (ImageFile img = ImageFile.Create (photo.DefaultVersionUri)) {
++					photo_pixbuf = img.Load ();
++					orientation = img.Orientation;
++					var temp = FSpot.Utils.PixbufUtils.TransformOrientation (photo_pixbuf, FSpot.Utils.PixbufUtils.ReverseTransformation (orientation));
++					photo_pixbuf.Dispose ();
++					photo_pixbuf = temp;
++					photo_profile = img.GetProfile ();
++				}
++				State.History.InitialiseImage (photo.DefaultVersionUri, photo_pixbuf, orientation, photo_profile);
++			} else {
++				// FIXME: We might get this value from the PhotoImageView.
++				using (ImageFile img = ImageFile.Create (photo.DefaultVersionUri)) {
++					photo_pixbuf = img.Load ();
++					photo_profile = img.GetProfile ();
++				}
+ 			}
+ 		}
+ 
+@@ -141,7 +163,8 @@
+ 			}
+ 		}
+ 
+-		private void TryApply () {
++		private void TryApply ()
++		{
+ 			if (NeedsSelection && !State.HasSelection) {
+ 				throw new Exception ("Cannot apply without selection!");
+ 			}
+@@ -152,9 +175,27 @@
+ 				Cms.Profile input_profile;
+ 				LoadPhoto (item, out input, out input_profile);
+ 
++				if (State.History != null) {
++					// If we're loading from history, then we've got the pixbuf in the original orientation
++					// and are transforming it on display.  We need to transform it before editing.
++					var transformed_input = Utils.PixbufUtils.TransformOrientation (input, State.History.Orientation (item.DefaultVersionUri));
++					input.Dispose ();
++					input = transformed_input;
++				}
++				
+ 				Pixbuf edited = Process (input, input_profile);
+ 				input.Dispose ();
+-
++				
++				
++				if (State.History != null) {
++					// And now we need to reverse the transformation, so that the pixbuf remains in the
++					// original orientation.
++					var transformed_edited = Utils.PixbufUtils.TransformOrientation (edited, 
++						Utils.PixbufUtils.ReverseTransformation (State.History.Orientation (item.DefaultVersionUri)));
++					edited.Dispose ();
++					edited = transformed_edited;
++				}
++				
+ 				if (item is Photo) {
+ 					var photo = item as Photo;
+ 					bool create_version = photo.DefaultVersion.IsProtected;
+@@ -162,13 +203,10 @@
+ 					photo.Changes.DataChanged = true;
+ 					App.Instance.Database.Photos.Commit (photo);
+ 				} else {
+-					var pb = edited.Copy ();
+-					using (ImageFile img = ImageFile.Create (item.DefaultVersionUri)) {
+-						using (Stream stream = System.IO.File.OpenWrite (item.DefaultVersionUri.LocalPath)) {
+-							img.Save (edited, stream);
+-						}
+-					}
+-					State.PhotoImageView.Pixbuf = pb; 
++					State.History.PushEdit (item.DefaultVersionUri, edited);
++					Pixbuf prev = State.PhotoImageView.Pixbuf;
++					State.PhotoImageView.Pixbuf = edited;
++					prev.Dispose ();
+ 				}
+ 
+ 				done++;
+Index: f-spot.git/src/Makefile.am
+===================================================================
+--- f-spot.git.orig/src/Makefile.am	2010-05-19 14:27:22.516709468 +0100
++++ f-spot.git/src/Makefile.am	2010-05-19 14:28:58.127960001 +0100
+@@ -59,6 +59,7 @@
+ 	$(srcdir)/Utils/Log.cs			\
+ 	$(srcdir)/Utils/PixbufOrientation.cs	\
+ 	$(srcdir)/Utils/PixbufUtils.cs		\
++	$(srcdir)/Utils/UndoCache.cs		\
+ 	$(srcdir)/Utils/Unix.cs			\
+ 	$(srcdir)/Utils/UriExtensions.cs			\
+ 	$(srcdir)/Utils/UriUtils.cs
+@@ -343,6 +344,7 @@
+ 	-pkg:gnome-sharp-2.0			\
+ 	-r:Mono.Posix				\
+ 	-r:Mono.Cairo				\
++    -r:Cms.dll                  \
+ 	$(GCONF_PKG)
+ 
+ JOBSCHEDULER_ASSEMBLIES =			\
+@@ -502,7 +504,7 @@
+ 
+ FSpot.Utils.dll.mdb: FSpot.Utils.dll
+ 
+-FSpot.Utils.dll: $(UTILS_CSFILES)
++FSpot.Utils.dll: $(UTILS_CSFILES) Cms.dll
+ 	@echo -e "\n*** Compiling $@"
+ 	$(CSC_LIB) -out:$@ $(EXTRAFLAGS) $(UTILS_CSFILES) $(UTILS_ASSEMBLIES)
+ 
+Index: f-spot.git/src/PhotoImageView.cs
+===================================================================
+--- f-spot.git.orig/src/PhotoImageView.cs	2010-05-19 14:27:22.536710442 +0100
++++ f-spot.git/src/PhotoImageView.cs	2010-05-19 14:30:51.287958810 +0100
+@@ -20,9 +20,14 @@
+ namespace FSpot.Widgets {
+ 	public class PhotoImageView : ImageView {
+ #region public API
+-		public PhotoImageView (IBrowsableCollection query) : this (new BrowsablePointer (query, -1))
++		public PhotoImageView (IBrowsableCollection query) : this(new BrowsablePointer (query, -1))
+ 		{
+ 		}
++		
++		public PhotoImageView (IBrowsableCollection query, UndoCache history) : this(query)
++		{
++			history_cache = history;
++		}
+ 
+ 		public PhotoImageView (BrowsablePointer item) : base ()
+ 		{
+@@ -166,8 +171,25 @@
+ #region loader		
+ 		uint timer;
+ 		IImageLoader loader;
++		UndoCache history_cache;
+ 		void Load (Uri uri)
+ 		{
++			if (history_cache != null && history_cache.ContainsImageFor (uri)) {
++				// We can get the pixmap faster out of the cache.  Just load up the orientation from the file
++				using (ImageFile img = ImageFile.Create (uri)) {
++					PixbufOrientation = Accelerometer.GetViewOrientation (img.Orientation);
++				}
++				Pixbuf prev = Pixbuf;
++				Pixbuf = history_cache.Pixbuf (uri);
++				if (prev != null) {
++					prev.Dispose ();
++				}
++				ZoomFit ();
++				Gdk.Rectangle area = ImageCoordsToWindow (new Gdk.Rectangle (0, 0, Pixbuf.Width, Pixbuf.Height));
++				QueueDrawArea (area.X, area.Y, area.Width, area.Height);
++				return;
++			}
++			
+ 			timer = Log.DebugTimerStart ();
+ 			if (loader != null)
+ 				loader.Dispose ();
+Index: f-spot.git/src/SingleView.cs
+===================================================================
+--- f-spot.git.orig/src/SingleView.cs	2010-05-19 14:28:58.077959584 +0100
++++ f-spot.git/src/SingleView.cs	2010-05-19 14:30:51.267959290 +0100
+@@ -1,6 +1,8 @@
+ using Gtk;
+ using Gdk;
+ using System;
++using System.IO;
++using System.Linq;
+ using System.Collections.Generic;
+ 
+ using Mono.Addins;
+@@ -38,6 +40,7 @@
+ 		[Glade.Widget] ImageMenuItem rotate_right;
+ 
+ 		ToolButton rr_button, rl_button;
++		ToolButton undo;
+ 
+ 		Sidebar sidebar;
+ 
+@@ -48,19 +51,20 @@
+ 		private Uri uri;
+ 		
+ 		UriCollection collection;
++		UndoCache undo_history;
+ 		
+ 		FullScreenView fsview;
+ 
+ 		private static Gtk.Tooltips toolTips = new Gtk.Tooltips ();
+ 
+-		public SingleView (Uri [] uris) 
++		public SingleView (Uri[] uris)
+ 		{
+ 			string glade_name = "single_view";
+-			this.uri = uris [0];
++			this.uri = uris[0];
+ 			
+ 			xml = new Glade.XML (null, "f-spot.glade", glade_name, "f-spot");
+ 			xml.Autoconnect (this);
+-			window = (Gtk.Window) xml.GetWidget (glade_name);
++			window = (Gtk.Window)xml.GetWidget (glade_name);
+ 		
+ 			LoadPreference (Preferences.VIEWER_WIDTH);
+ 			LoadPreference (Preferences.VIEWER_MAXIMIZED);
+@@ -80,6 +84,17 @@
+ 
+ 			toolbar.Insert (new SeparatorToolItem (), -1);
+ 
++			StockItem undo_info = Stock.Lookup (Stock.Undo);
++			undo = new ToolButton (undo_info.StockId);
++			undo.Label = undo_info.Label;
++			undo.IsImportant = true;
++			undo.UseUnderline = true;
++			undo.Clicked += HandleUndoClicked;
++			toolbar.Insert (undo, -1);
++			
++			toolbar.Insert (new SeparatorToolItem (), -1);
++
++			
+ 			ToolButton fs_button = GtkUtil.ToolButtonFromTheme ("view-fullscreen", Catalog.GetString ("Fullscreen"), true);
+ 			fs_button.Clicked += HandleViewFullscreen;
+ 			fs_button.SetTooltip (toolTips, Catalog.GetString ("View photos fullscreen"), null);
+@@ -91,6 +106,8 @@
+ 			toolbar.Insert (ss_button, -1);
+ 
+ 			collection = new UriCollection (uris);
++			undo_history = new UndoCache ();
++			undo_history.UndoStateChanged += HandleUndoStateChanged;
+ 
+ 			TargetEntry [] dest_table = {
+ 				FSpot.DragDropTargets.UriListEntry,
+@@ -120,7 +137,7 @@
+ 
+ 			ThumbnailGenerator.Default.OnPixbufLoaded += delegate { directory_view.QueueDraw (); };
+ 
+-			image_view = new PhotoImageView (collection);
++			image_view = new PhotoImageView (collection, undo_history);
+ 			GtkUtil.ModifyColors (image_view);
+ 			GtkUtil.ModifyColors (image_scrolled);
+ 			image_view.ZoomChanged += HandleZoomChanged;
+@@ -176,6 +193,23 @@
+ 			export.Activated += HandleExportActivated ;
+ 		}
+ 
++		void HandleUndoStateChanged (object sender, UndoStateChangedArgs e)
++		{
++			if (e.ChangedFor == image_view.Item.Current.DefaultVersionUri) {
++				undo.Sensitive = undo_history.ContainsUndoInformationFor (e.ChangedFor);
++				UpdateTitle ();
++			}
++		}
++
++		void HandleUndoClicked (object sender, EventArgs e)
++		{
++			undo_history.PopEdit (image_view.Item.Current.DefaultVersionUri);
++			Pixbuf prev = image_view.Pixbuf;
++			image_view.Pixbuf = undo_history.Pixbuf (image_view.Item.Current.DefaultVersionUri);
++			prev.Dispose ();
++			undo.Sensitive = undo_history.ContainsUndoInformationFor (image_view.Item.Current.DefaultVersionUri);
++		}
++
+ 		private void OnSidebarExtensionChanged (object s, ExtensionNodeEventArgs args) {
+ 			// FIXME: No sidebar page removal yet!
+ 			if (args.Change == ExtensionChange.Add) {
+@@ -184,6 +218,11 @@
+ 				page.PhotoImageView = image_view;
+ 				page.ParentWindow = window;
+ 				sidebar.AppendPage (page); 
++				if (page is EditorPage) {
++					// Pass undo history to Editors
++					((EditorPage)page).History = undo_history;
++					sidebar.SwitchTo (page.Label);
++				}
+ 			}
+ 		}
+ 
+@@ -255,23 +294,41 @@
+ 				collection.MarkChanged (image_view.Item.Index, FullInvalidate.Instance);
+ 		}		
+ 
+-		private void HandleSelectionChanged (FSpot.IBrowsableCollection selection) 
++		private void HandleSelectionChanged (FSpot.IBrowsableCollection selection)
+ 		{
+ 			
+ 			if (selection.Count > 0) {
+ 				image_view.Item.Index = ((FSpot.Widgets.IconView.SelectionCollection)selection).Ids[0];
+-
++				
+ 				zoom_scale.Value = image_view.NormalizedZoom;
+ 			}
++			if (selection.Count == 1) {
++				undo.Sensitive = undo_history.ContainsUndoInformationFor (image_view.Item.Current.DefaultVersionUri);
++			} else {
++				undo.Sensitive = false;
++			}
+ 			UpdateStatusLabel ();
+ 		}
+ 
++		void UpdateTitle ()
++		{
++			if (image_view.Item.IsValid) {
++				Window.Title = String.Format ("{0}{1} - F-Spot View",
++					image_view.Item.Current.Name,
++					undo_history.ContainsUndoInformationFor (image_view.Item.Current.DefaultVersionUri) ? "*" : "");
++			} else {
++				Window.Title = "F-Spot View";
++			}
++		}
++
+ 		private void HandleItemChanged (object sender, BrowsablePointerChangedEventArgs old)
+ 		{
+ 			BrowsablePointer pointer = sender as BrowsablePointer;
+ 			if (pointer == null)
+ 				return;
+ 
++			UpdateTitle ();
++
+ 			directory_view.FocusCell = pointer.Index;
+ 			directory_view.Selection.Clear ();
+ 			if (collection.Count > 0) {
+@@ -343,6 +400,115 @@
+ 			Open (FileChooserAction.Open);
+ 		}
+ 
++		void SafeSaveFile (Uri original, Uri saveTo, Pixbuf image, PixbufOrientation orientation)
++		{
++			//Get file permissions... (mkstemp does not keep permissions or ownership)
++			Mono.Unix.Native.Stat stat;
++			int stat_err = Mono.Unix.Native.Syscall.stat (original.LocalPath, out stat);
++			
++			string temp_path = saveTo.LocalPath;
++			using (ImageFile img = ImageFile.Create (original)) {
++				using (Stream stream = FSpot.Utils.Unix.MakeSafeTemp (ref temp_path)) {
++					img.Save (image, stream);
++				}
++				if (img is JpegFile) {
++					((JpegFile)img).SetOrientation (orientation);
++					Log.Debug ("Saving orientation {0}", orientation);
++					((JpegFile)img).SaveMetaData (temp_path);
++				}
++			}
++			File.SetAttributes (temp_path, File.GetAttributes (original.LocalPath));
++			
++			if (FSpot.Utils.Unix.Rename (temp_path, saveTo.LocalPath) < 0) {
++				System.IO.File.Delete (temp_path);
++				throw new System.Exception (System.String.Format ("Unable to rename {0} to {1}",
++						temp_path, saveTo.LocalPath));
++			}
++			
++			//Set file permissions and gid...
++			if (stat_err == 0) {
++				try {
++					Mono.Unix.Native.Syscall.chmod (saveTo.LocalPath, stat.st_mode |
++						Mono.Unix.Native.FilePermissions.S_IRUSR | 
++						Mono.Unix.Native.FilePermissions.S_IWUSR);
++					Mono.Unix.Native.Syscall.chown (saveTo.LocalPath, Mono.Unix.Native.Syscall.getuid (), stat.st_gid);
++				} catch (Exception) {
++				}
++			}
++		}
++		
++		private void HandleSave (object sender, System.EventArgs args)
++		{
++			IBrowsableItem current_item = image_view.Item.Current;
++			if (!undo_history.ChangedUris ().Contains (current_item.DefaultVersionUri)) {
++				Log.Debug ("Not saving unchanged file: {0}", current_item.DefaultVersionUri.AbsoluteUri);
++				return;
++			}
++			Pixbuf current_image = undo_history.Pixbuf (current_item.DefaultVersionUri);
++			PixbufOrientation current_orientation = undo_history.Orientation (current_item.DefaultVersionUri);
++			
++			SafeSaveFile (current_item.DefaultVersionUri, current_item.DefaultVersionUri, current_image, current_orientation);
++			
++			Log.Debug ("Saved changes to {0}", current_item.DefaultVersionUri.LocalPath);
++			undo_history.MarkImageSaved (current_item.DefaultVersionUri);
++			directory_view.UpdateThumbnail (collection.IndexOf (current_item));
++		}
++		
++		private void HandleSaveAs (object sender, System.EventArgs args)
++		{
++			IBrowsableItem current_item = image_view.Item.Current;
++			Pixbuf current_image;
++			PixbufOrientation current_orientation;
++			if (!undo_history.ContainsImageFor (current_item.DefaultVersionUri)) {
++				//TODO: This should probably load from the image file, instead.
++				//TODO: Or possibly just do a filesystem copy?
++				current_image = image_view.Pixbuf;
++				current_orientation = image_view.PixbufOrientation;
++			} else {
++				current_image = undo_history.Pixbuf (current_item.DefaultVersionUri);
++				current_orientation = undo_history.Orientation (current_item.DefaultVersionUri);
++			}
++			FileChooserDialog chooser = new FileChooserDialog (Catalog.GetString ("Save As..."),
++				window,
++				FileChooserAction.Save);
++			
++			chooser.AddButton (Stock.Cancel, ResponseType.Cancel);
++			chooser.AddButton (Stock.Save, ResponseType.Ok);
++			
++			// TODO: In an ideal world, this would be using GIO and we wouldn't have the "local only" constraint.
++			chooser.LocalOnly = true;
++			chooser.DoOverwriteConfirmation = true;
++			
++			chooser.SelectUri (current_item.DefaultVersionUri.AbsoluteUri);
++			int response = chooser.Run ();
++			
++			if ((ResponseType)response == ResponseType.Ok) {
++				Uri saveTo = new Uri (chooser.Uri);
++				SafeSaveFile (current_item.DefaultVersionUri, saveTo, current_image, current_orientation);
++				
++				Log.Debug ("Saved changes to {0} to {1}", current_item.DefaultVersionUri.AbsoluteUri, chooser.Filename);
++				
++				if (current_item.DefaultVersionUri != saveTo) {
++					// We're saving to a new file name
++					if (undo_history.ContainsUndoInformationFor (current_item.DefaultVersionUri)) {
++						undo_history.Clear (current_item.DefaultVersionUri);
++					}
++					
++					Uri new_item_uri = new Uri (chooser.Uri);
++					collection.Add (new_item_uri);
++					// We know that chooser.Uri points to a local file, so collection.Add will be synchronous
++					var new_item = collection.Items.FirstOrDefault ((item) => item.DefaultVersionUri == new_item_uri);
++					directory_view.Selection.Clear ();
++					directory_view.Selection.Add (new_item);
++				} else if (undo_history.ContainsUndoInformationFor (saveTo)) {
++					// We've decided to save to the original file.
++					undo_history.MarkImageSaved (saveTo);
++				}
++			}
++			
++			chooser.Destroy ();
++		}
++		
+ 		private void Open (FileChooserAction action)
+ 		{
+ 			string title = Catalog.GetString ("Open");
+@@ -437,10 +603,78 @@
+ 			popup_menu.Popup (null, null, null, 0, Gtk.Global.CurrentEventTime);
+ 		}
+ 
++
++		bool PresentUnsavedChangesDialog ()
++		{
++			var changed_uris = undo_history.ChangedUris ().ToList ();
++			if (changed_uris.Count == 0) {
++				// We've got no changed files, so we can just allow the quit to proceed.
++				return true;
++			}
++
++			System.Text.StringBuilder changed_filenames = new System.Text.StringBuilder (GLib.Markup.EscapeText (Uri.UnescapeDataString (changed_uris[0].GetFilename ())));
++			for (int i = 1; i < changed_uris.Count; ++i) {
++				changed_filenames.Append ("\n");
++				changed_filenames.Append (GLib.Markup.EscapeText (Uri.UnescapeDataString (changed_uris[i].GetFilename ())));
++			}
++			string message;
++			message = Catalog.GetPluralString ("Save changes to image: {0} before closing?", "Save changes to images:\n{0}\nbefore closing?", changed_uris.Count);
++			var save_dialogue = new HigMessageDialog (Window,
++				DialogFlags.Modal,
++				MessageType.Warning,
++				ButtonsType.None,
++				String.Format (message, changed_filenames),
++				Catalog.GetPluralString ("If you don't save, the changes you have made to this image will be permanently lost",
++					"If you don't save, the changes you have made to these images will be permanently lost",
++					changed_uris.Count));
++			
++			Gtk.Button button = new Gtk.Button ();
++			button.Label = Catalog.GetString ("Discard changes");
++			button.CanDefault = true;
++			button.Show ();
++			save_dialogue.AddActionWidget (button, ResponseType.Close);
++			
++			button = new Gtk.Button ();
++			button.Label = Catalog.GetString ("Continue editing");
++			button.CanDefault = true;
++			button.Show ();
++			save_dialogue.AddActionWidget (button, ResponseType.Cancel);
++			
++			button = new Gtk.Button ();
++			button.Label = Catalog.GetPluralString ("Save", "Save all", changed_uris.Count);
++			button.CanDefault = true;
++			button.Show ();
++			save_dialogue.AddActionWidget (button, ResponseType.Accept);
++			save_dialogue.Default = button;
++			save_dialogue.DefaultResponse = ResponseType.Accept;
++			button.GrabDefault ();
++			
++			ResponseType response = (ResponseType)save_dialogue.Run ();
++			save_dialogue.Destroy ();
++			switch (response) {
++			case ResponseType.Close:
++				return true;
++			case ResponseType.Cancel:
++				return false;
++			case ResponseType.Accept:
++				foreach (var uri in changed_uris) {
++					Pixbuf current_image = undo_history.Pixbuf (uri);
++					PixbufOrientation current_orientation = undo_history.Orientation (uri);
++					SafeSaveFile (uri, uri, current_image, current_orientation);
++					Log.Debug ("Saved changes to {0}", uri.AbsoluteUri);
++				}
++				break;
++			}
++			return true;
++		}
++		
+ 		void HandleDeleteEvent (object sender, DeleteEventArgs args)
+ 		{
+-			SavePreferences ();
+-			this.Window.Destroy ();
++			if (PresentUnsavedChangesDialog ()) {
++				SavePreferences ();
++				undo_history.Dispose ();
++				this.Window.Destroy ();
++			}
+ 			args.RetVal = true;
+ 		}
+ 
+@@ -477,8 +711,11 @@
+ 
+ 		private void HandleFileClose (object sender, System.EventArgs args)
+ 		{
+-			SavePreferences ();
+-			this.Window.Destroy ();
++			if (PresentUnsavedChangesDialog ()) {
++				SavePreferences ();
++				undo_history.Dispose ();
++				this.Window.Destroy ();
++			}
+ 		}
+ 
+ 		private void SavePreferences  ()
+Index: f-spot.git/src/Utils/UndoCache.cs
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ f-spot.git/src/Utils/UndoCache.cs	2010-05-19 14:28:58.127960001 +0100
+@@ -0,0 +1,244 @@
++// 
++//  UndoCache.cs
++//  
++//  Author:
++//       Christopher James Halse Rogers <christopher.halse.rogers@canonical.com>
++// 
++//  Copyright © 2010 Christopher James Halse Rogers <christopher.halse.rogers@canonical.com>
++// 
++//  This program is free software; you can redistribute it and/or modify
++//  it under the terms of the GNU General Public License as published by
++//  the Free Software Foundation; either version 2 of the License, or
++//  (at your option) any later version.
++// 
++//  This program is distributed in the hope that it will be useful,
++//  but WITHOUT ANY WARRANTY; without even the implied warranty of
++//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++//  GNU General Public License for more details.
++//  
++//  You should have received a copy of the GNU General Public License
++//  along with this program; if not, write to the Free Software
++//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++// 
++
++using System;
++using System.Collections.Generic;
++using System.Threading;
++using System.IO;
++
++using Gdk;
++
++using Cms;
++
++namespace FSpot.Utils
++{
++	public class UndoStateChangedArgs : EventArgs
++	{
++		public UndoStateChangedArgs (Uri changedFor)
++		{
++			ChangedFor = changedFor;
++		}
++		
++		public Uri ChangedFor { get; private set; }
++	}
++	
++	public class UndoCache : IDisposable
++	{
++		class CachedPixbuf : IDisposable
++		{
++			Pixbuf mem_cache;
++			FileStream file_cache;
++			ManualResetEvent write_done;
++			
++			public CachedPixbuf (Gdk.Pixbuf image)
++			{
++				// TODO: We can be smarter than always disc caching or always mem caching
++				// Making the cache memory-backed with eviction to disc should be investigated.
++				mem_cache = image.Copy ();
++				
++				write_done = new ManualResetEvent (false);
++				ThreadPool.QueueUserWorkItem ((state) => {
++					uint id = Log.DebugTimerStart ("Saving undo information");
++					// PNG is lossless, and can handle all the bitdepths we're likely to encounter
++					byte[] buffer = mem_cache.SaveToBuffer ("png");
++					
++					file_cache = File.Create (Path.GetTempFileName (), 4096, FileOptions.DeleteOnClose);
++					
++					file_cache.Write (buffer, 0, buffer.Length);
++					Log.DebugTimerPrint (id, "Saving undo information took: {0}");
++					lock (mem_cache) {
++						mem_cache.Dispose ();
++					}
++					write_done.Set ();
++				});
++			}
++			
++			public Pixbuf GetPixbuf ()
++			{
++				lock (mem_cache) {
++					if (mem_cache.Handle != IntPtr.Zero) {
++						// Pixbuf.Dispose sets the handle to IntPtr.Zero
++						return mem_cache.Copy ();
++					}
++				}
++				write_done.WaitOne ();
++				file_cache.Seek (0, SeekOrigin.Begin);
++				return new Pixbuf (file_cache);
++			}
++			
++			public void Dispose ()
++			{
++				if (write_done.WaitOne (0)) {
++					//We've written to disc, which means we've already disposed mem_cache.
++					file_cache.Dispose ();
++				} else {
++					//We're still writing out to disc.  Wait for for it to finish, then dispose.
++					//Do this on the threadpool, as it might take some time.
++					//TODO: Use a cancellable write method.
++					ThreadPool.QueueUserWorkItem ((state) => {
++						write_done.WaitOne ();
++						file_cache.Dispose ();
++					});
++				}
++			}
++		}
++		
++		class PixbufProfilePair
++		{
++			public PixbufProfilePair ()
++			{
++				pixbuf_history = new Stack<CachedPixbuf> ();
++			}
++			public Stack<CachedPixbuf> pixbuf_history;
++			public Profile profile;
++			public PixbufOrientation orientation;
++			public bool on_disc;
++		}
++	
++		Dictionary<Uri, UndoCache.PixbufProfilePair> history;
++		public UndoCache ()
++		{
++			history = new Dictionary<Uri, UndoCache.PixbufProfilePair> ();
++		}
++		
++		public void InitialiseImage (Uri photoUri, Pixbuf baseImage, PixbufOrientation orientation, Profile profile)
++		{
++			if (history.ContainsKey (photoUri)) {
++				throw new ApplicationException (String.Format ("Attempted to initialise the undo cache twice for image {0}", photoUri.AbsolutePath));
++			}
++			history[photoUri] = new PixbufProfilePair ();
++			history[photoUri].profile = profile;
++			history[photoUri].orientation = orientation;
++			history[photoUri].pixbuf_history.Push (new CachedPixbuf (baseImage));
++			history[photoUri].on_disc = true;
++		}
++		
++		public void MarkImageSaved (Uri photoUri)
++		{
++			history[photoUri].on_disc = true;
++			
++			var handler = UndoStateChanged;
++			if (handler != null) {
++				handler (this, new UndoStateChangedArgs (photoUri));
++			}
++		}
++		
++		public void PushEdit (Uri photoUri, Pixbuf image)
++		{
++			if (!history.ContainsKey (photoUri)) {
++				throw new ApplicationException ("Must initialise the undo cache before adding a new edit");
++			}
++			history[photoUri].pixbuf_history.Push (new CachedPixbuf (image));
++			history[photoUri].on_disc = false;
++
++			var handler = UndoStateChanged;
++			if (handler != null) {
++				handler (this, new UndoStateChangedArgs (photoUri));
++			}
++		}
++		
++		public bool ContainsImageFor (Uri uri)
++		{
++			return history.ContainsKey (uri);
++		}
++		
++		public bool ContainsUndoInformationFor (Uri uri)
++		{
++			return ContainsImageFor (uri) && history[uri].pixbuf_history.Count > 1;
++		}
++		
++		public IEnumerable<Uri> ChangedUris ()
++		{
++			foreach (var uri in history.Keys) {
++				if (ContainsUndoInformationFor (uri) && !history[uri].on_disc) {
++					yield return uri;
++				}
++			}
++			yield break;
++		}
++		
++		public Profile Profile (Uri uri)
++		{
++			if (!history.ContainsKey (uri)) {
++				throw new KeyNotFoundException (String.Format ("Undo cache has not yet been initialised for {0}", uri.AbsolutePath));
++			}
++			return history[uri].profile;
++		}
++		
++		public Pixbuf Pixbuf (Uri uri)
++		{
++			if (!history.ContainsKey (uri)) {
++				throw new KeyNotFoundException (String.Format ("Undo cache has not yet been initialised for {0}", uri.AbsolutePath));
++			}
++			return history[uri].pixbuf_history.Peek ().GetPixbuf ();
++		}
++		
++		public PixbufOrientation Orientation (Uri uri)
++		{
++			if (!history.ContainsKey (uri)) {
++				throw new KeyNotFoundException (String.Format ("Undo cache has not yet been initialised for {0}", uri.AbsolutePath));
++			}
++			return history[uri].orientation;
++		}
++		
++		public void PopEdit (Uri photoUri)
++		{
++			if (!ContainsUndoInformationFor (photoUri)) {
++				throw new KeyNotFoundException (String.Format ("No Undo info for image {0}!", photoUri.AbsolutePath));
++			}
++			history[photoUri].pixbuf_history.Pop ().Dispose ();
++			history[photoUri].on_disc = false;
++			
++			var handler = UndoStateChanged;
++			if (handler != null) {
++				handler (this, new UndoStateChangedArgs (photoUri));
++			}
++		}
++		
++		public void Clear (Uri uri)
++		{
++			if (history.ContainsKey (uri)) {
++				foreach (var pixbuf in history[uri].pixbuf_history) {
++					pixbuf.Dispose ();
++				}
++				history.Remove (uri);
++				
++				var handler = UndoStateChanged;
++				if (handler != null) {
++					handler (this, new UndoStateChangedArgs (uri));
++				}
++			}
++		}
++		
++		public void Dispose ()
++		{
++			foreach (var pair in history.Values) {
++				foreach (var pixbuf in pair.pixbuf_history) {
++					pixbuf.Dispose ();
++				}
++			}
++		}
++		
++		public event EventHandler<UndoStateChangedArgs> UndoStateChanged;
++	}
++}
+Index: f-spot.git/src/Widgets/EditorPage.cs
+===================================================================
+--- f-spot.git.orig/src/Widgets/EditorPage.cs	2010-05-19 14:28:58.077959584 +0100
++++ f-spot.git/src/Widgets/EditorPage.cs	2010-05-19 14:30:15.747958503 +0100
+@@ -42,7 +42,12 @@
+ 
+ 		public override Gtk.Window ParentWindow {
+ 			get { return EditorPageWidget.ParentWindow; }
+-			set { EditorPageWidget.ParentWindow = value ;}
++			set { EditorPageWidget.ParentWindow = value; }
++		}
++		
++		public UndoCache History {
++			get { return EditorPageWidget.History; }
++			set { EditorPageWidget.History = value; } 
+ 		}
+ 
+ 		protected override void AddedToSidebar () {
+@@ -52,7 +57,7 @@
+ 
+ 		private void HandleContextChanged (object sender, EventArgs args)
+ 		{
+-            InPhotoView = (Sidebar.Context == ViewContext.Edit) || (Sidebar.Context == ViewContext.Single);
++            InPhotoView = ((Sidebar as Sidebar).Context == ViewContext.Edit) || ((Sidebar as Sidebar).Context == ViewContext.Single);
+ 			EditorPageWidget.ChangeButtonVisibility ();
+ 		}
+ 	}
+@@ -65,7 +70,8 @@
+ 		List<Editor> editors;
+ 		Editor current_editor;
+ 
+-        public PhotoImageView PhotoImageView { get; set;}
++        public PhotoImageView PhotoImageView { get; set; }
++        public UndoCache History { get; set; }
+         public Gtk.Window ParentWindow { get; set; }
+ 
+ 		// Used to make buttons insensitive when selecting multiple images.
+@@ -184,7 +190,8 @@
+ 				Apply (editor); // Instant apply
+ 		}
+ 
+-		private bool SetupEditor (Editor editor) {
++		private bool SetupEditor (Editor editor)
++		{
+ 			EditorState state = editor.CreateState ();
+ 
+ 			PhotoImageView photo_view = PhotoImageView;
+@@ -199,6 +206,8 @@
+ 				return false;
+ 			state.Items = (Page.Sidebar as Sidebar).Selection.Items;
+ 
++            state.History = History;
++
+ 			editor.Initialize (state);
+ 			return true;
+ 		}
+Index: f-spot.git/src/f-spot.glade
+===================================================================
+--- f-spot.git.orig/src/f-spot.glade	2010-05-19 14:28:57.987959630 +0100
++++ f-spot.git/src/f-spot.glade	2010-05-19 14:30:51.307958832 +0100
+@@ -2440,6 +2440,31 @@
+                       </widget>
+                     </child>
+                     <child>
++                      <widget class="GtkImageMenuItem" id="save">
++                        <property name="label">gtk-save</property>
++                        <property name="visible">True</property>
++                        <property name="use_underline">True</property>
++                        <property name="use_stock">True</property>
++                        <signal name="activate" handler="HandleSave"/>
++                        <accelerator key="N" signal="activate" modifiers="GDK_CONTROL_MASK"/>
++                      </widget>
++                    </child>
++                    <child>
++                      <widget class="GtkImageMenuItem" id="save_as">
++                        <property name="label">gtk-save-as</property>
++                        <property name="visible">True</property>
++                        <property name="use_underline">True</property>
++                        <property name="use_stock">True</property>
++                        <signal name="activate" handler="HandleSaveAs"/>
++                        <accelerator key="N" signal="activate" modifiers="GDK_CONTROL_MASK"/>
++                      </widget>
++                    </child>
++                    <child>
++                      <widget class="GtkSeparatorMenuItem" id="separator1">
++                        <property name="visible">True</property>
++                      </widget>
++                    </child>
++                    <child>
+                       <widget class="GtkMenuItem" id="export">
+                         <property name="visible">True</property>
+                         <property name="label" translatable="yes">_Export</property>
+Index: f-spot.git/src/UI.Dialog/HigMessageDialog.cs
+===================================================================
+--- f-spot.git.orig/src/UI.Dialog/HigMessageDialog.cs	2010-05-19 14:27:22.496709303 +0100
++++ f-spot.git/src/UI.Dialog/HigMessageDialog.cs	2010-05-19 14:28:58.127960001 +0100
+@@ -77,6 +77,7 @@
+ 			label.Justify = Gtk.Justification.Left;
+ 			label.LineWrap = true;
+ 			label.SetAlignment (0.0f, 0.5f);
++			label.UseUnderline = false;
+ 			label.Show ();
+ 			label_vbox.PackStart (label, false, false, 0);
+ 	

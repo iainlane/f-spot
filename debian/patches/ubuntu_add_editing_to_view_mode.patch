@@ -1,0 +1,341 @@
+Description: Enable editing in View mode
+Author: Christopher Halse Rogers <christopher.halse.rogers@canonical.com>
+Author: Ken VanDine <ken.vandine@canonical.com>
+Bug-Ubuntu: https://bugs.edge.launchpad.net/ubuntu/+source/f-spot/+bug/484888
+Bug: https://bugzilla.gnome.org/show_bug.cgi?id=513561	
+
+=== modified file 'src/Editors/Editor.cs'
+Index: f-spot.git/src/Editors/Editor.cs
+===================================================================
+--- f-spot.git.orig/src/Editors/Editor.cs	2010-05-19 13:51:16.967958461 +0100
++++ f-spot.git/src/Editors/Editor.cs	2010-05-19 13:51:50.877959347 +0100
+@@ -18,6 +18,7 @@
+ using Mono.Unix;
+ 
+ using System;
++using System.IO;
+ 
+ namespace FSpot.Editors {
+ 	[ExtensionNode ("Editor")]
+@@ -61,6 +62,9 @@
+ 		public event ProcessingStepHandler ProcessingStep;
+ 		public event ProcessingFinishedHandler ProcessingFinished;
+ 
++		public PhotoImageView View { get; set; }
++		public Gtk.Window ParentWindow {get; set; }
++
+ 		// Contains the current selection, the items being edited, ...
+ 		private EditorState state;
+ 		public EditorState State {
+@@ -96,7 +100,7 @@
+ 		}
+ 
+ 
+-		protected void LoadPhoto (Photo photo, out Pixbuf photo_pixbuf, out Cms.Profile photo_profile) {
++		protected void LoadPhoto (IBrowsableItem photo, out Pixbuf photo_pixbuf, out Cms.Profile photo_profile) {
+ 			// FIXME: We might get this value from the PhotoImageView.
+ 			using (ImageFile img = ImageFile.Create (photo.DefaultVersionUri)) {
+ 				photo_pixbuf = img.Load ();
+@@ -143,18 +147,29 @@
+ 			}
+ 
+ 			int done = 0;
+-			foreach (Photo photo in State.Items) {
++			foreach (IBrowsableItem item in State.Items) {
+ 				Pixbuf input;
+ 				Cms.Profile input_profile;
+-				LoadPhoto (photo, out input, out input_profile);
++				LoadPhoto (item, out input, out input_profile);
+ 
+ 				Pixbuf edited = Process (input, input_profile);
+ 				input.Dispose ();
+ 
+-				bool create_version = photo.DefaultVersion.IsProtected;
+-				photo.SaveVersion (edited, create_version);
+-				photo.Changes.DataChanged = true;
+-				App.Instance.Database.Photos.Commit (photo);
++				if (item is Photo) {
++					var photo = item as Photo;
++					bool create_version = photo.DefaultVersion.IsProtected;
++					photo.SaveVersion (edited, create_version);
++					photo.Changes.DataChanged = true;
++					App.Instance.Database.Photos.Commit (photo);
++				} else {
++					var pb = edited.Copy ();
++					using (ImageFile img = ImageFile.Create (item.DefaultVersionUri)) {
++						using (Stream stream = System.IO.File.OpenWrite (item.DefaultVersionUri.LocalPath)) {
++							img.Save (edited, stream);
++						}
++					}
++					State.PhotoImageView.Pixbuf = pb; 
++				}
+ 
+ 				done++;
+ 				if (ProcessingStep != null) {
+@@ -205,7 +220,11 @@
+ 			Pixbuf previewed = ProcessFast (preview, null);
+ 			State.PhotoImageView.Pixbuf = previewed;
+ 			State.PhotoImageView.ZoomFit (false);
+-			MainWindow.Toplevel.InfoBox.UpdateHistogram (previewed);
++			if (MainWindow.Toplevel != null) {
++				//MainWindow.Toplevel is null if we're in View mode.
++				//If we're in View mode we don't have a histogram, so we don't need to update it.
++				MainWindow.Toplevel.InfoBox.UpdateHistogram (previewed);
++			}
+ 
+ 			if (old_preview != null) {
+ 				old_preview.Dispose ();
+@@ -238,7 +257,11 @@
+ 				State.PhotoImageView.Pixbuf = original;
+ 				State.PhotoImageView.ZoomFit (false);
+ 
+-				MainWindow.Toplevel.InfoBox.UpdateHistogram (null);
++				if (MainWindow.Toplevel != null) {
++					//MainWindow.Toplevel is null if we're in View mode.
++					//If we're in View mode we don't have a histogram, so we dont' need to update it.
++					MainWindow.Toplevel.InfoBox.UpdateHistogram (null);
++				}
+ 			}
+ 
+ 			Reset ();
+Index: f-spot.git/src/FSpot.addin.xml
+===================================================================
+--- f-spot.git.orig/src/FSpot.addin.xml	2010-05-19 13:51:16.927958582 +0100
++++ f-spot.git/src/FSpot.addin.xml	2010-05-19 13:51:50.877959347 +0100
+@@ -61,8 +61,8 @@
+ 
+ 	<Extension path = "/FSpot/Sidebar">
+ 		<SidebarPage sidebar_page_type = "FSpot.Widgets.MetadataDisplayPage" />
++		<SidebarPage sidebar_page_type = "FSpot.Widgets.EditorPage" />
+ 		<Condition id="ViewMode" mode="library">
+-			<SidebarPage sidebar_page_type = "FSpot.Widgets.EditorPage" />
+ 			<SidebarPage sidebar_page_type = "FSpot.Widgets.FolderTreePage" />
+ 		</Condition>
+ 	</Extension>
+Index: f-spot.git/src/MainWindow.cs
+===================================================================
+--- f-spot.git.orig/src/MainWindow.cs	2010-05-19 13:51:16.867959974 +0100
++++ f-spot.git/src/MainWindow.cs	2010-05-19 13:51:50.877959347 +0100
+@@ -375,10 +375,8 @@
+ 	
+ 			Sidebar.AppendPage (tag_selection_scrolled, Catalog.GetString ("Tags"), "tag");
+ 	
+-			AddinManager.AddExtensionNodeHandler ("/FSpot/Sidebar", OnSidebarExtensionChanged);
+-	
+ 			Sidebar.Context = ViewContext.Library;
+-	 		
++			
+ 			Sidebar.CloseRequested += HideSidebar;
+ 			Sidebar.Show ();
+ 	
+@@ -454,7 +452,7 @@
+ 			new FSpot.PreviewPopup (icon_view);
+ 	
+ 			Gtk.Drag.SourceSet (icon_view, Gdk.ModifierType.Button1Mask | Gdk.ModifierType.Button3Mask,
+-					    icon_source_target_table, DragAction.Copy | DragAction.Move);
++						icon_source_target_table, DragAction.Copy | DragAction.Move);
+ 			
+ 			icon_view.DragBegin += HandleIconViewDragBegin;
+ 			icon_view.DragDataGet += HandleIconViewDragDataGet;
+@@ -487,6 +485,9 @@
+ 			photo_view.UpdateFinished += HandlePhotoViewUpdateFinished;
+ 	
+ 			photo_view.View.ZoomChanged += HandleZoomChanged;
++
++ 			// Sidebar extensions need access to PhotoView, so this has to be delayed until after we've constructed photo_view
++ 			AddinManager.AddExtensionNodeHandler ("/FSpot/Sidebar", OnSidebarExtensionChanged);
+ 	
+ 			// Tag typing: focus the tag entry if the user starts typing a tag
+ 			icon_view.KeyPressEvent += HandlePossibleTagTyping;
+@@ -567,8 +568,12 @@
+ 	
+ 		private void OnSidebarExtensionChanged (object s, ExtensionNodeEventArgs args) {
+ 			// FIXME: No sidebar page removal yet!
+-			if (args.Change == ExtensionChange.Add)
+-				Sidebar.AppendPage ((args.ExtensionNode as SidebarPageNode).GetPage ());
++ 			if (args.Change == ExtensionChange.Add) {
++				var page = ((SidebarPageNode)args.ExtensionNode).GetPage ();
++				page.PhotoImageView = PhotoView.View;
++				page.ParentWindow = Window;
++				Sidebar.AppendPage (page);
++			}
+ 		}
+ 	
+ 		private Photo CurrentPhoto {
+Index: f-spot.git/src/SingleView.cs
+===================================================================
+--- f-spot.git.orig/src/SingleView.cs	2010-05-19 13:51:16.887960131 +0100
++++ f-spot.git/src/SingleView.cs	2010-05-19 13:51:50.877959347 +0100
+@@ -114,9 +114,6 @@
+ 			info_vbox.Add (sidebar);
+ 			sidebar.AppendPage (directory_scrolled, Catalog.GetString ("Folder"), "gtk-directory");
+ 
+-			AddinManager.AddExtensionNodeHandler ("/FSpot/Sidebar", OnSidebarExtensionChanged);
+- 		
+-			sidebar.Context = ViewContext.Single;
+ 
+ 			sidebar.CloseRequested += HandleHideSidePane;
+ 			sidebar.Show ();
+@@ -136,6 +133,9 @@
+ 			
+ 			Window.ShowAll ();
+ 
++			AddinManager.AddExtensionNodeHandler ("/FSpot/Sidebar", OnSidebarExtensionChanged);	
++			sidebar.Context = ViewContext.Single;
++
+ 			zoom_scale.ValueChanged += HandleZoomScaleValueChanged;
+ 		
+ 			LoadPreference (Preferences.VIEWER_SHOW_TOOLBAR);
+@@ -143,7 +143,9 @@
+ 			LoadPreference (Preferences.VIEWER_TRANSPARENCY);
+ 			LoadPreference (Preferences.VIEWER_TRANS_COLOR);
+ 
+-			ShowSidebar = collection.Count > 1;
++			// We always want to start by showing the sidebar to make it
++			// more obvious how to edit.
++			ShowSidebar = true;
+ 
+ 			LoadPreference (Preferences.VIEWER_SHOW_FILENAMES);
+ 
+@@ -176,8 +178,13 @@
+ 
+ 		private void OnSidebarExtensionChanged (object s, ExtensionNodeEventArgs args) {
+ 			// FIXME: No sidebar page removal yet!
+-			if (args.Change == ExtensionChange.Add)
+-				sidebar.AppendPage ((args.ExtensionNode as SidebarPageNode).GetPage ());
++			if (args.Change == ExtensionChange.Add) {
++				var page = (args.ExtensionNode as SidebarPageNode).GetPage ();
++				Log.Debug ("OnSidebarExtensionAdded {0}  / {1} / {2}", page, image_view, window);
++				page.PhotoImageView = image_view;
++				page.ParentWindow = window;
++				sidebar.AppendPage (page); 
++			}
+ 		}
+ 
+ 		void HandleExportActivated (object o, EventArgs e)
+Index: f-spot.git/src/Widgets/EditorPage.cs
+===================================================================
+--- f-spot.git.orig/src/Widgets/EditorPage.cs	2010-05-19 13:51:16.947959526 +0100
++++ f-spot.git/src/Widgets/EditorPage.cs	2010-05-19 13:51:50.877959347 +0100
+@@ -24,7 +24,7 @@
+ namespace FSpot.Widgets {
+ 	public class EditorPage : SidebarPage {
+ 		internal bool InPhotoView;
+-		private readonly EditorPageWidget EditorPageWidget;
++		readonly EditorPageWidget EditorPageWidget;
+ 
+ 		public EditorPage () : base (new EditorPageWidget (),
+ 									   Catalog.GetString ("Edit"),
+@@ -35,6 +35,16 @@
+ 			EditorPageWidget.Page = this;
+ 		}
+ 
++		public override PhotoImageView PhotoImageView {
++			get { return EditorPageWidget.PhotoImageView; }
++			set { EditorPageWidget.PhotoImageView = value; }
++		}
++
++		public override Gtk.Window ParentWindow {
++			get { return EditorPageWidget.ParentWindow; }
++			set { EditorPageWidget.ParentWindow = value ;}
++		}
++
+ 		protected override void AddedToSidebar () {
+ 			(Sidebar as Sidebar).SelectionChanged += delegate (IBrowsableCollection collection) { EditorPageWidget.ShowTools (); };
+ 			(Sidebar as Sidebar).ContextChanged += HandleContextChanged;
+@@ -42,18 +52,21 @@
+ 
+ 		private void HandleContextChanged (object sender, EventArgs args)
+ 		{
+-			InPhotoView = ((Sidebar as Sidebar).Context == ViewContext.Edit);
++            InPhotoView = (Sidebar.Context == ViewContext.Edit) || (Sidebar.Context == ViewContext.Single);
+ 			EditorPageWidget.ChangeButtonVisibility ();
+ 		}
+ 	}
+ 
+ 	public class EditorPageWidget : ScrolledWindow {
+-		private VBox widgets;
+-		private VButtonBox buttons;
+-		private Widget active_editor;
++		VBox widgets;
++		VButtonBox buttons;
++		Widget active_editor;
++
++		List<Editor> editors;
++		Editor current_editor;
+ 
+-		private List<Editor> editors;
+-		private Editor current_editor;
++        public PhotoImageView PhotoImageView { get; set;}
++        public Gtk.Window ParentWindow { get; set; }
+ 
+ 		// Used to make buttons insensitive when selecting multiple images.
+ 		private Dictionary<Editor, Button> editor_buttons;
+@@ -79,6 +92,8 @@
+ 				editor.ProcessingStarted += OnProcessingStarted;
+ 				editor.ProcessingStep += OnProcessingStep;
+ 				editor.ProcessingFinished += OnProcessingFinished;
++				editor.View = PhotoImageView;
++				editor.ParentWindow = ParentWindow;
+ 				editors.Add (editor);
+ 				PackButton (editor);
+ 			}
+@@ -87,7 +102,7 @@
+ 		private ProgressDialog progress;
+ 
+ 		private void OnProcessingStarted (string name, int count) {
+-			progress = new ProgressDialog (name, ProgressDialog.CancelButtonType.None, count, MainWindow.Toplevel.Window);
++			progress = new ProgressDialog (name, ProgressDialog.CancelButtonType.None, count, ParentWindow);
+ 		}
+ 
+ 		private void OnProcessingStep (int done) {
+@@ -172,8 +187,7 @@
+ 		private bool SetupEditor (Editor editor) {
+ 			EditorState state = editor.CreateState ();
+ 
+-			PhotoImageView photo_view = MainWindow.Toplevel.PhotoView.View;
+-
++			PhotoImageView photo_view = PhotoImageView;
+ 			if (Page.InPhotoView && photo_view != null) {
+ 				state.Selection = photo_view.Selection;
+ 				state.PhotoImageView = photo_view;
+@@ -197,7 +211,7 @@
+ 				string msg = Catalog.GetString ("No selection available");
+ 				string desc = Catalog.GetString ("This tool requires an active selection. Please select a region of the photo and try the operation again");
+ 
+-				HigMessageDialog md = new HigMessageDialog (MainWindow.Toplevel.Window,
++				HigMessageDialog md = new HigMessageDialog (ParentWindow,
+ 										DialogFlags.DestroyWithParent,
+ 										Gtk.MessageType.Error, ButtonsType.Ok,
+ 										msg,
+@@ -218,7 +232,7 @@
+ 				string desc = String.Format (Catalog.GetString ("Received exception \"{0}\". Note that you have to develop RAW files into JPEG before you can edit them."),
+ 							     e.Message);
+ 
+-				HigMessageDialog md = new HigMessageDialog (MainWindow.Toplevel.Window,
++				HigMessageDialog md = new HigMessageDialog (ParentWindow,
+ 									    DialogFlags.DestroyWithParent,
+ 									    Gtk.MessageType.Error, ButtonsType.Ok,
+ 									    msg,
+Index: f-spot.git/src/Extensions/SidebarPage.cs
+===================================================================
+--- f-spot.git.orig/src/Extensions/SidebarPage.cs	2010-05-19 13:51:16.907958803 +0100
++++ f-spot.git/src/Extensions/SidebarPage.cs	2010-05-19 13:52:47.296709401 +0100
+@@ -9,6 +9,7 @@
+  * This is free software. See COPYING for details.
+  */
+ 
++using FSpot.Widgets;
+ using FSpot.Extensions;
+ using FSpot.Utils;
+ using Gtk;
+@@ -64,6 +65,9 @@
+ 		// Can be overriden to get notified as soon as we're added to a sidebar.
+ 		protected virtual void AddedToSidebar () { }
+ 
++        public virtual PhotoImageView PhotoImageView { get; set; }
++        public virtual Gtk.Window ParentWindow { get; set; }
++
+ //		// Whether this page is currently visible
+ //		public bool IsActive {
+ //			get { return Sidebar.IsActive (this); }

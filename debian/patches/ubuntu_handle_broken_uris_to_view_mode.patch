@@ -1,0 +1,38 @@
+------------------------------------------------------------
+revno: 109
+committer: Christopher James Halse Rogers <christopher.halse.rogers@canonical.com>
+branch nick: edit-fixes
+timestamp: Thu 2010-03-18 10:13:37 +1100
+message:
+  Catch exceptions in creating the URI list
+modified:
+  src/Util.cs
+diff:
+=== modified file 'src/Util.cs'
+Index: f-spot-0.6.1.5/src/Util.cs
+===================================================================
+--- f-spot-0.6.1.5.orig/src/Util.cs	2010-04-01 13:13:49.305538478 +1100
++++ f-spot-0.6.1.5/src/Util.cs	2010-04-01 13:13:55.915539697 +1100
+@@ -84,12 +84,16 @@
+ 		{
+ 			Uri uri;
+ 			
+-			if (File.Exists (unknown) || Directory.Exists (unknown))
+-				uri = UriUtils.PathToFileUri (unknown);
+-			else 
+-				uri = new Uri (unknown);
+-			
+-			Add (uri);
++			try {
++				if (File.Exists (unknown) || Directory.Exists (unknown))
++					uri = UriUtils.PathToFileUri (unknown);
++				else
++					uri = new Uri (unknown);
++				
++				Add (uri);
++			} catch (Exception e) {
++				Log.Exception ("Error handling file or directory to view", e);
++			}
+ 		}
+ 	
+ 		public UriList (string data) 

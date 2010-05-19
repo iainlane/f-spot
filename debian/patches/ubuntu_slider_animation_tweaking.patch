@@ -1,0 +1,28 @@
+# Description: tweak the slider animation value
+# Ubuntu: https://bugs.launchpad.net/hundredpapercuts/+bug/513004
+# Upstream: https://bugzilla.gnome.org/show_bug.cgi?id=608443
+From 77800058c950021f2c26bd07a1aef149fb42d753 Mon Sep 17 00:00:00 2001
+From: Alex Launi <alex@jolicloud.org>
+Date: Sat, 20 Feb 2010 23:48:51 -0500
+Subject: [PATCH] Decreases the animation time for the filmstrip slider from 4 seconds to 1.5
+
+---
+ src/Widgets/Filmstrip.cs |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/Widgets/Filmstrip.cs b/src/Widgets/Filmstrip.cs
+index fbd6745..d6a47bd 100644
+--- a/src/Widgets/Filmstrip.cs
++++ b/src/Widgets/Filmstrip.cs
+@@ -308,7 +308,7 @@ namespace FSpot.Widgets
+ 			thumb_cache = new DisposableCache<Uri, Pixbuf> (30);
+ 			ThumbnailGenerator.Default.OnPixbufLoaded += HandlePixbufLoaded;
+ 
+-			animation = new DoubleAnimation (0, 0, TimeSpan.FromSeconds (4), SetPositionCore, new CubicEase (EasingMode.EaseOut));
++			animation = new DoubleAnimation (0, 0, TimeSpan.FromSeconds (1.5), SetPositionCore, new CubicEase (EasingMode.EaseOut));
+ 		}
+ 	
+ 		int min_length = 400;
+-- 
+1.6.3.3
+

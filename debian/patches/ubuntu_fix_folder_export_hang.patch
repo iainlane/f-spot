@@ -1,0 +1,18 @@
+Description: Fix hang when pressing the “export” button in the folder exporter
+Author: Christopher James Halse Rogers <christopher.halse.rogers@canonical.com>
+Bug-LP: https://bugs.edge.launchpad.net/ubuntu/+source/f-spot/+bug/533435
+Forwarded: No
+
+Index: f-spot.git/extensions/Exporters/FolderExport/FolderExport.cs
+===================================================================
+--- f-spot.git.orig/extensions/Exporters/FolderExport/FolderExport.cs	2010-05-19 13:49:44.416709675 +0100
++++ f-spot.git/extensions/Exporters/FolderExport/FolderExport.cs	2010-05-19 14:28:58.257959751 +0100
+@@ -186,7 +186,7 @@
+ 			Gnome.Vfs.Result result = Gnome.Vfs.Result.Ok;
+ 
+ 			try {
+-				Dialog.Hide ();
++				Gtk.Application.Invoke (delegate {Dialog.Hide ();});
+ 
+ 				Gnome.Vfs.Uri source = new Gnome.Vfs.Uri (Path.Combine (gallery_path, gallery_name));
+ 				Gnome.Vfs.Uri target = dest.Clone();

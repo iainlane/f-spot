@@ -1,0 +1,274 @@
+Description: Add a filmstrip and previous/next buttons to View mode
+ Without this, it's frustrating to switch between images to edit.
+Author: Christopher Halse Rogers <christopher.halse.rogers@canonical.com>
+Forwarded: No
+
+=== modified file 'src/PhotoImageView.cs'
+Index: f-spot.git/src/PhotoImageView.cs
+===================================================================
+--- f-spot.git.orig/src/PhotoImageView.cs	2010-05-19 14:28:58.127960001 +0100
++++ f-spot.git/src/PhotoImageView.cs	2010-05-19 14:28:58.147959007 +0100
+@@ -24,7 +24,7 @@
+ 		{
+ 		}
+ 		
+-		public PhotoImageView (IBrowsableCollection query, UndoCache history) : this(query)
++		public PhotoImageView (BrowsablePointer query, UndoCache history) : this(query)
+ 		{
+ 			history_cache = history;
+ 		}
+Index: f-spot.git/src/SingleView.cs
+===================================================================
+--- f-spot.git.orig/src/SingleView.cs	2010-05-19 14:28:58.127960001 +0100
++++ f-spot.git/src/SingleView.cs	2010-05-19 14:30:47.816709694 +0100
+@@ -21,6 +21,7 @@
+ 		[Glade.Widget] Gtk.ScrolledWindow image_scrolled;
+ 		[Glade.Widget] Gtk.HPaned info_hpaned;
+ 
++		[Glade.Widget] Gtk.VBox display_vbox;
+ 		Gtk.ScrolledWindow directory_scrolled;
+ 
+ 		[Glade.Widget] Gtk.CheckMenuItem side_pane_item;
+@@ -41,12 +42,17 @@
+ 
+ 		ToolButton rr_button, rl_button;
+ 		ToolButton undo;
++		
++		ToolButton prev_image;
++		ToolButton next_image;
++		Label count_label;
+ 
+ 		Sidebar sidebar;
+ 
+ 		protected Glade.XML xml;
+ 		private Gtk.Window window;
+ 		PhotoImageView image_view;
++		Filmstrip filmstrip;
+ 		FSpot.Widgets.IconView directory_view;
+ 		private Uri uri;
+ 		
+@@ -93,7 +99,6 @@
+ 			toolbar.Insert (undo, -1);
+ 			
+ 			toolbar.Insert (new SeparatorToolItem (), -1);
+-
+ 			
+ 			ToolButton fs_button = GtkUtil.ToolButtonFromTheme ("view-fullscreen", Catalog.GetString ("Fullscreen"), true);
+ 			fs_button.Clicked += HandleViewFullscreen;
+@@ -104,12 +109,33 @@
+ 			ss_button.Clicked += HandleViewSlideshow;
+ 			ss_button.SetTooltip (toolTips, Catalog.GetString ("View photos in a slideshow"), null);
+ 			toolbar.Insert (ss_button, -1);
++			
++			SeparatorToolItem white_space = new SeparatorToolItem ();
++			white_space.Draw = false;
++			white_space.Expand = true;
++			toolbar.Insert (white_space, -1);
++			
++			ToolItem label_item = new ToolItem ();
++			count_label = new Label (String.Empty);
++			label_item.Child = count_label;
++			toolbar.Insert (label_item, -1);
++			
++			prev_image = new ToolButton (Stock.GoBack);
++			toolbar.Insert (prev_image, -1);
++			prev_image.TooltipText = Catalog.GetString ("Previous photo");
++			prev_image.Clicked += (sender, args) => { image_view.Item.MovePrevious (); };
++			
++			next_image = new ToolButton (Stock.GoForward);
++			toolbar.Insert (next_image, -1);
++			next_image.TooltipText = Catalog.GetString ("Next photo");
++			next_image.Clicked += (sender, args) => { image_view.Item.MoveNext (); };
+ 
++			
+ 			collection = new UriCollection (uris);
+ 			undo_history = new UndoCache ();
+ 			undo_history.UndoStateChanged += HandleUndoStateChanged;
+ 
+-			TargetEntry [] dest_table = {
++			TargetEntry[] dest_table = {
+ 				FSpot.DragDropTargets.UriListEntry,
+ 				FSpot.DragDropTargets.PlainTextEntry
+ 			};
+@@ -118,12 +144,12 @@
+ 			directory_view.Selection.Changed += HandleSelectionChanged;
+ 			directory_view.DragDataReceived += HandleDragDataReceived;
+ 			Gtk.Drag.DestSet (directory_view, DestDefaults.All, dest_table, 
+-					DragAction.Copy | DragAction.Move); 
++					DragAction.Copy | DragAction.Move);
+ 			directory_view.DisplayTags = false;
+ 			directory_view.DisplayDates = false;
+ 			directory_view.DisplayRatings = false;
+ 
+-			directory_scrolled = new ScrolledWindow();
++			directory_scrolled = new ScrolledWindow ();
+ 			directory_scrolled.Add (directory_view);
+ 
+ 			sidebar = new Sidebar ();
+@@ -137,7 +163,8 @@
+ 
+ 			ThumbnailGenerator.Default.OnPixbufLoaded += delegate { directory_view.QueueDraw (); };
+ 
+-			image_view = new PhotoImageView (collection, undo_history);
++			BrowsablePointer bp = new BrowsablePointer (collection, -1);
++			image_view = new PhotoImageView (bp, undo_history);
+ 			GtkUtil.ModifyColors (image_view);
+ 			GtkUtil.ModifyColors (image_scrolled);
+ 			image_view.ZoomChanged += HandleZoomChanged;
+@@ -145,9 +172,19 @@
+ 			image_view.ButtonPressEvent += HandleImageViewButtonPressEvent;
+ 			image_view.DragDataReceived += HandleDragDataReceived;
+ 			Gtk.Drag.DestSet (image_view, DestDefaults.All, dest_table,
+-					DragAction.Copy | DragAction.Move); 
++					DragAction.Copy | DragAction.Move);
+ 			image_scrolled.Add (image_view);
+ 			
++			filmstrip = new Filmstrip (bp);
++			Gdk.Pixbuf bg = new Gdk.Pixbuf (Gdk.Colorspace.Rgb, true, 8, 1, 69);
++			bg.Fill (0x00000000);
++			filmstrip.BackgroundTile = bg;
++			filmstrip.ThumbOffset = 1;
++			filmstrip.Spacing = 4;
++			ToggleFilmstrip (true);
++			filmstrip.Visible = true;
++			GtkUtil.ModifyColors (filmstrip);
++			
+ 			Window.ShowAll ();
+ 
+ 			AddinManager.AddExtensionNodeHandler ("/FSpot/Sidebar", OnSidebarExtensionChanged);	
+@@ -184,6 +221,7 @@
+ 			image_view.Item.Collection.ItemsChanged += sidebar.HandleSelectionItemsChanged;
+ 
+ 			UpdateStatusLabel ();
++			UpdateToolbar (image_view.Item.Collection);
+ 			
+ 			if (collection.Count > 0)
+ 				directory_view.Selection.Add (0);
+@@ -193,6 +231,28 @@
+ 			export.Activated += HandleExportActivated ;
+ 		}
+ 
++		void ToggleFilmstrip (bool enabled)
++		{
++			Gtk.Widget packed_filmstrip = display_vbox.AllChildren.Cast<Gtk.Widget> ().FirstOrDefault ((widget) => {return widget == filmstrip;});
++			if (enabled && packed_filmstrip == null) {
++				// Filmstrip isn't in the vbox, add it
++				Log.Debug ("Packing filmstrip");
++				display_vbox.PackStart (filmstrip, false, false, 0);
++			} else if (!enabled && packed_filmstrip != null) {
++				// Filmstrip is in the vbox, remove it
++				display_vbox.Remove (packed_filmstrip);
++			}
++		}
++		
++		void UpdateToolbar (IBrowsableCollection collection)
++		{
++			// Note for translators: This indicates the current photo is photo {0} of {1} out of photos
++			count_label.Text = String.Format (Catalog.GetString ("{0} of {1}"), 
++				collection.Count == 0 ? 0 : image_view.Item.Index + 1, collection.Count);
++			prev_image.Sensitive = collection.Count > 0 && image_view.Item.Index != 0;
++			next_image.Sensitive = collection.Count > 0 && image_view.Item.Index != image_view.Item.Collection.Count - 1;
++		}
++		
+ 		void HandleUndoStateChanged (object sender, UndoStateChangedArgs e)
+ 		{
+ 			if (e.ChangedFor == image_view.Item.Current.DefaultVersionUri) {
+@@ -244,6 +304,7 @@
+ 			rotate_left.Sensitive = rotate_right.Sensitive = rr_button.Sensitive = rl_button.Sensitive = collection.Count != 0;
+ 
+ 			UpdateStatusLabel ();
++			UpdateToolbar (collection);
+ 		}
+ 
+ 		public bool ShowSidebar {
+@@ -308,6 +369,7 @@
+ 				undo.Sensitive = false;
+ 			}
+ 			UpdateStatusLabel ();
++			UpdateToolbar (image_view.Item.Collection);
+ 		}
+ 
+ 		void UpdateTitle ()
+@@ -370,8 +432,9 @@
+ 	
+ 		private void HandleViewFilenames (object sender, System.EventArgs args)
+ 		{
+-			directory_view.DisplayFilenames = filenames_item.Active; 
++			directory_view.DisplayFilenames = filenames_item.Active;
+ 			UpdateStatusLabel ();
++			UpdateToolbar (image_view.Item.Collection);
+ 		}
+ 
+ 		private void HandleAbout (object sender, System.EventArgs args)
+@@ -672,6 +735,7 @@
+ 		{
+ 			if (PresentUnsavedChangesDialog ()) {
+ 				SavePreferences ();
++				filmstrip.Dispose ();
+ 				undo_history.Dispose ();
+ 				this.Window.Destroy ();
+ 			}
+@@ -714,6 +778,7 @@
+ 			if (PresentUnsavedChangesDialog ()) {
+ 				SavePreferences ();
+ 				undo_history.Dispose ();
++				filmstrip.Dispose ();
+ 				this.Window.Destroy ();
+ 			}
+ 		}
+Index: f-spot.git/src/f-spot.glade
+===================================================================
+--- f-spot.git.orig/src/f-spot.glade	2010-05-19 14:28:58.127960001 +0100
++++ f-spot.git/src/f-spot.glade	2010-05-19 14:28:58.147959007 +0100
+@@ -2699,15 +2699,28 @@
+               </packing>
+             </child>
+             <child>
+-              <widget class="GtkScrolledWindow" id="image_scrolled">
++              <widget class="GtkVBox" id="display_vbox">
+                 <property name="visible">True</property>
+-                <property name="can_focus">True</property>
+-                <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+-                <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+-                <property name="shadow_type">GTK_SHADOW_IN</property>
++                <property name="orientation">vertical</property>
+                 <child>
+                   <placeholder/>
+                 </child>
++                <child>
++                  <widget class="GtkScrolledWindow" id="image_scrolled">
++                    <property name="visible">True</property>
++                    <property name="can_focus">True</property>
++                    <property name="hscrollbar_policy">automatic</property>
++                    <property name="vscrollbar_policy">automatic</property>
++                    <property name="shadow_type">in</property>
++                    <child>
++                      <placeholder/>
++                    </child>
++                  </widget>
++                  <packing>
++                    <property name="pack_type">end</property>
++                    <property name="position">0</property>
++                  </packing>
++                </child>
+               </widget>
+               <packing>
+                 <property name="resize">True</property>
+Index: f-spot.git/src/Widgets/Filmstrip.cs
+===================================================================
+--- f-spot.git.orig/src/Widgets/Filmstrip.cs	2010-05-19 13:49:44.436739359 +0100
++++ f-spot.git/src/Widgets/Filmstrip.cs	2010-05-19 14:28:58.147959007 +0100
+@@ -587,8 +587,11 @@
+ 
+ 		protected override bool OnButtonPressEvent (EventButton evnt)
+ 		{
+-			if (evnt.Button == 3)
+-				return DrawOrientationMenu (evnt); 
++			// We don't handle changing the orientation in View mode at this point
++			if (MainWindow.Toplevel != null) {
++				if (evnt.Button == 3)
++					return DrawOrientationMenu (evnt); 
++			}
+ 
+ 			if (evnt.Button != 1 || (
+ 				(Orientation == Orientation.Horizontal && (evnt.X > filmstrip_end_pos || evnt.X < filmstrip_start_pos)) || 

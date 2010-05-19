@@ -1,0 +1,36 @@
+Description: Fix disposed pixmap bug in Adjust Colours tool
+ The code paths in Adjustment.Adjust () for the alpha- and non- alpha channel
+ cases have an important difference - the alpha channel codepath modifies
+ Input and returns it, the non-alpha channel path returns a modified copy of 
+ Input.
+ .
+ In the alpha case, returning Input eventually results in the preview pixmap
+ being disposed, causing debug spew and (in View mode) the window to display
+ garbage.
+Author: Christopher Halse Rogers <christopher.halse.rogers@canonical.com>
+Bug: https://bugzilla.gnome.org/show_bug.cgi?id=611773
+
+=== modified file 'src/ColorAdjustment/Adjustment.cs'
+--- a/src/ColorAdjustment/Adjustment.cs	2008-10-06 23:11:41 +0000
++++ b/src/ColorAdjustment/Adjustment.cs	2010-03-04 04:24:09 +0000
+@@ -64,16 +64,17 @@
+ 			Cms.Profile [] list = GenerateAdjustments ().ToArray ();
+ 			
+ 			if (Input.HasAlpha) {
++				Gdk.Pixbuf input_copy = (Gdk.Pixbuf)Input.Clone ();
+ 				Pixbuf alpha = PixbufUtils.Flatten (Input);
+ 				Transform transform = new Transform (list,
+ 								     PixbufUtils.PixbufCmsFormat (alpha),
+ 								     PixbufUtils.PixbufCmsFormat (final),
+ 								     intent, 0x0000);
+ 				PixbufUtils.ColorAdjust (alpha, final, transform);
+-				PixbufUtils.ReplaceColor (final, Input);
++				PixbufUtils.ReplaceColor (final, input_copy);
+ 				alpha.Dispose ();
+ 				final.Dispose ();
+-				final = Input;
++				final = input_copy;
+ 			} else {
+ 				Cms.Transform transform = new Cms.Transform (list,
+ 									     PixbufUtils.PixbufCmsFormat (Input),
+
