@@ -32,7 +32,14 @@ override_dh_install:
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.la \
 	   $(CURDIR)/debian/f-spot/usr/lib/f-spot/*.so
 	dh_install
+ifeq ($(shell dpkg-vendor --query vendor), Ubuntu)
 	cd po; intltool-update --pot
+
+	for d in $$(find debian/f-spot -type f \( -name "*.desktop" -o -name "*.directory" \) ); do \
+	    sed -ri '/^(Name|GenericName|Comment|X-GNOME-FullName)\[/d' $$d; \
+	    echo "X-Ubuntu-Gettext-Domain=f-spot" >> $$d; \
+	done 
+endif
 
 # disable tests
 override_dh_auto_test:
