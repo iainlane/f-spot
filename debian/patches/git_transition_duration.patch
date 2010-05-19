@@ -1,0 +1,43 @@
+From 0d705371f388410d62172e1413c060d8629ac0f6 Mon Sep 17 00:00:00 2001
+From: Iain Lane <laney@ubuntu.com>
+Date: Tue, 09 Mar 2010 19:36:20 +0000
+Subject: Fix for bgo#608216
+
+src/Fader.cs: Change the constructor for the fader to accept a double
+              representing the number of milliseconds to fade for,
+			  instead of the number of seconds.
+
+src/FullScreenView.cs: Change the timeout for entering full screen view to 600ms.
+---
+Index: f-spot.git/src/Fader.cs
+===================================================================
+--- f-spot.git.orig/src/Fader.cs	2010-05-19 15:18:08.036710007 +0100
++++ f-spot.git/src/Fader.cs	2010-05-19 15:49:45.186710570 +0100
+@@ -21,12 +21,12 @@
+ 		double target_opacity;
+ 		DoubleAnimation fadin;
+ 
+-		public Fader (Gtk.Window win, double target, int sec)
++		public Fader (Gtk.Window win, double target, double msec)
+ 		{
+ 			this.win = win;
+ 			win.Mapped += HandleMapped;
+ 			win.Unmapped += HandleUnmapped;
+-			fadin = new DoubleAnimation (0.0, target, new TimeSpan (0, 0, sec), delegate (double opacity) {
++			fadin = new DoubleAnimation (0.0, target, TimeSpan.FromMilliseconds(msec), delegate (double opacity) {
+ 				CompositeUtils.SetWinOpacity (win, opacity);
+ 			});	
+ 		}
+Index: f-spot.git/src/FullScreenView.cs
+===================================================================
+--- f-spot.git.orig/src/FullScreenView.cs	2010-05-19 15:18:08.056710820 +0100
++++ f-spot.git/src/FullScreenView.cs	2010-05-19 15:49:45.186710570 +0100
+@@ -85,7 +85,7 @@
+ 				slide_show.Activated += SlideShowAction;
+ 				actions.Add (slide_show);
+ 
+-				new Fader (this, 1.0, 3);
++				new Fader (this, 1.0, 600);
+ 				notebook = new Notebook ();
+ 				notebook.ShowBorder = false;
+ 				notebook.ShowTabs = false;

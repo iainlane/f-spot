@@ -49,6 +49,9 @@ f-spot (0.6.2-1) UNRELEASED; urgency=low
     --view mode and add an undo/redo stack. Rebase on new upstream version.
     Thanks to Chris Halse Rogers.
   * debian/patches/ubuntu_fname_quote_percent.patch: Drop, now upstream.
+  * debian/patches/git_transition_duration.patch: Cherrypick patch from
+    upstream to reduce the transition duration when entering fullscreen to
+    600ms. 
   * debian/rules: Incorporate Ubuntu specific changes, and guard by a call to
     dpkg-vendor.
 

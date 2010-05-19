@@ -24,3 +24,4 @@ ubuntu_handle_broken_uris_to_view_mode.patch
 
 ubuntu_default_view_size.patch
 ubuntu_fix_folder_export_hang.patch
+git_transition_duration.patch
