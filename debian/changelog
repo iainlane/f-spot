@@ -1,4 +1,4 @@
-f-spot (0.6.2-1) UNRELEASED; urgency=low
+f-spot (0.6.2-1) unstable; urgency=low
 
   * New upstream release 0.6.2:
    + Stable release before starting large cleanup refactorings, mostly 
