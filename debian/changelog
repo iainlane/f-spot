@@ -1,3 +1,11 @@
+f-spot (0.6.2-2) UNRELEASED; urgency=low
+
+  * debian/rules: Don't run dh_makeshilbs as we don't ship any shared
+    libraries. There are some private ones though, which get picked up and
+    result in a useless postinst/postrm call to ldconfig. Thanks, lintian.
+
+ -- Iain Lane <laney@ubuntu.com>  Mon, 24 May 2010 10:35:57 +0100
+
 f-spot (0.6.2-1) unstable; urgency=low
 
   * New upstream release 0.6.2:
