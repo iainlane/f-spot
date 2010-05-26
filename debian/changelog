@@ -3,7 +3,8 @@ f-spot (0.6.2-2) UNRELEASED; urgency=low
   * debian/rules: Don't run dh_makeshilbs as we don't ship any shared
     libraries. There are some private ones though, which get picked up and
     result in a useless postinst/postrm call to ldconfig. Thanks, lintian.
-  * debian/patches/debian_fix-distclean.patch:
+  * debian/patches/debian_fix-distclean.patch,
+    debian/patches/debian_fix_f-spot.exe.config.patch:
     Clean up obsolete patches which are no longer necessary 
 
  -- Iain Lane <laney@ubuntu.com>  Mon, 24 May 2010 10:35:57 +0100
