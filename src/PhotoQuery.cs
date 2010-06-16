@@ -12,7 +12,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using FSpot.Query;
-using FSpot.Utils;
+using Hyena;
 
 namespace FSpot {
 	public class PhotoQuery : FSpot.IBrowsableCollection {
@@ -60,7 +60,6 @@ namespace FSpot {
 		PhotoCache cache;
 		private PhotoStore store;
 		private Term terms;
-		private Tag [] tags;
 
 		static int query_count = 0;
 		static int QueryCount {
@@ -77,10 +76,6 @@ namespace FSpot {
 		public PhotoQuery (PhotoStore store, params IQueryCondition [] conditions)
 		{
 			this.store = store;
-			// Note: this is to let the query pick up
-			// 	 photos that were added or removed over dbus
-			this.store.ItemsAddedOverDBus += delegate { RequestReload(); };
-			this.store.ItemsRemovedOverDBus += delegate { RequestReload(); };
 			this.store.ItemsChanged += MarkChanged;
 			cache = new PhotoCache (store, temp_table);
 			reverse_lookup = new Dictionary<uint, int> ();
@@ -186,7 +181,7 @@ namespace FSpot {
 					untagged = value;
 					
 					if (untagged) {
-						UnSetCondition<TagConditionWrapper> ();
+						UnSetCondition<ConditionWrapper> ();
 						UnSetCondition<HiddenTag> ();
 					}
 					
@@ -219,10 +214,10 @@ namespace FSpot {
 			}
 		}
 		
-		public TagConditionWrapper TagTerm {
-			get { return GetCondition<TagConditionWrapper> (); }
+		public ConditionWrapper TagTerm {
+			get { return GetCondition<ConditionWrapper> (); }
 			set {
-				if (value == null && UnSetCondition<TagConditionWrapper>()
+				if (value == null && UnSetCondition<ConditionWrapper>()
 				    || value != null && SetCondition (value)) {
 					
 					if (value != null) {
@@ -265,8 +260,8 @@ namespace FSpot {
 				i = 1;
 			} else {
 				condition_array = new IQueryCondition[conditions.Count + 2];
-		//		condition_array[0] = new TagConditionWrapper (extra_condition);
-				condition_array[1] = new TagConditionWrapper (terms != null ? terms.SqlCondition () : null);
+		//		condition_array[0] = new ConditionWrapper (extra_condition);
+				condition_array[1] = new ConditionWrapper (terms != null ? terms.SqlCondition () : null);
 				i = 2;
 			}
 			

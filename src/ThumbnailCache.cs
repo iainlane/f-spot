@@ -13,7 +13,7 @@ using System;
 using System.Collections;
 using Gdk;
 
-using FSpot.Utils;
+using Hyena;
 
 namespace FSpot
 {
@@ -23,7 +23,7 @@ public class ThumbnailCache : IDisposable {
 
 	private class Thumbnail {
 		// Uri of the image source
-		public Uri uri;
+		public SafeUri uri;
 
 		// The uncompressed thumbnail.
 		public Pixbuf pixbuf;
@@ -55,7 +55,7 @@ public class ThumbnailCache : IDisposable {
 		}
 	}
 
-	public void AddThumbnail (Uri uri, Pixbuf pixbuf)
+	public void AddThumbnail (SafeUri uri, Pixbuf pixbuf)
 	{
 		Thumbnail thumbnail = new Thumbnail ();
 
@@ -70,7 +70,7 @@ public class ThumbnailCache : IDisposable {
 		MaybeExpunge ();
 	}
 
-	public Pixbuf GetThumbnailForUri (Uri uri)
+	public Pixbuf GetThumbnailForUri (SafeUri uri)
 	{
 		if (! pixbuf_hash.ContainsKey (uri))
 			return null;
@@ -83,7 +83,7 @@ public class ThumbnailCache : IDisposable {
 		return PixbufUtils.ShallowCopy (item.pixbuf);
 	}
 
-	public void RemoveThumbnailForUri (Uri uri)
+	public void RemoveThumbnailForUri (SafeUri uri)
 	{
 		if (! pixbuf_hash.ContainsKey (uri))
 			return;
@@ -109,7 +109,7 @@ public class ThumbnailCache : IDisposable {
 
 	~ThumbnailCache ()
 	{
-		Log.Debug ("Finalizer called on {0}. Should be Disposed", GetType ());		
+		Log.DebugFormat ("Finalizer called on {0}. Should be Disposed", GetType ());
 		foreach (object item in pixbuf_mru) {
 			Thumbnail thumb = item as Thumbnail;
 			pixbuf_hash.Remove (thumb.uri);

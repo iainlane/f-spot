@@ -17,6 +17,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 
+using Hyena;
 using GLib;
 
 namespace FSpot {
@@ -30,12 +31,12 @@ namespace FSpot {
 			LoadItems (files);
 		}
 
-		public UriCollection (Uri [] uri) : this ()
+		public UriCollection (SafeUri [] uri) : this ()
 		{
 			LoadItems (uri);
 		}
 
-		public void Add (Uri uri)
+		public void Add (SafeUri uri)
 		{
 			if (FSpot.ImageFile.HasLoader (uri)) {
 				//Console.WriteLine ("using image loader {0}", uri.ToString ());
@@ -57,16 +58,16 @@ namespace FSpot {
 			}
 		}
 
-		public void LoadItems (Uri [] uris)
+		public void LoadItems (SafeUri [] uris)
 		{
-			foreach (Uri uri in uris) {
+			foreach (SafeUri uri in uris) {
 				Add (uri);
 			}
 		}
 
 		private class RssLoader
 		{
-			public RssLoader (UriCollection collection, System.Uri uri)
+			public RssLoader (UriCollection collection, SafeUri uri)
 			{
 				XmlDocument doc = new XmlDocument ();
 				doc.Load (uri.ToString ());
@@ -78,16 +79,16 @@ namespace FSpot {
 				ArrayList items = new ArrayList ();
 				XmlNodeList list = doc.SelectNodes ("/rss/channel/item/media:content", ns);
 				foreach (XmlNode item in list) {
-					Uri image_uri = new Uri (item.Attributes ["url"].Value);
-					System.Console.WriteLine ("flickr uri = {0}", image_uri.ToString ());
+					SafeUri image_uri = new SafeUri (item.Attributes ["url"].Value);
+					Hyena.Log.DebugFormat ("flickr uri = {0}", image_uri.ToString ());
 					items.Add (new FileBrowsableItem (image_uri));
 				}
 
 				if (list.Count < 1) {
 					list = doc.SelectNodes ("/rss/channel/item/pheed:imgsrc", ns);
 					foreach (XmlNode item in list) {
-						Uri image_uri = new Uri (item.InnerText.Trim ());
-						System.Console.WriteLine ("pheed uri = {0}", uri);
+						SafeUri image_uri = new SafeUri (item.InnerText.Trim ());
+						Hyena.Log.DebugFormat ("pheed uri = {0}", uri);
 						items.Add (new FileBrowsableItem (image_uri));
 					}
 				}
@@ -95,8 +96,8 @@ namespace FSpot {
 				if (list.Count < 1) {
 					list = doc.SelectNodes ("/rss/channel/item/apple:image", ns);
 					foreach (XmlNode item in list) {
-						Uri image_uri = new Uri (item.InnerText.Trim ());
-						System.Console.WriteLine ("apple uri = {0}", uri);
+						SafeUri image_uri = new SafeUri (item.InnerText.Trim ());
+						Hyena.Log.DebugFormat ("apple uri = {0}", uri);
 						items.Add (new FileBrowsableItem (image_uri));
 					}
 				}
@@ -107,13 +108,11 @@ namespace FSpot {
 		private class DirectoryLoader
 		{
 			UriCollection collection;
-			Uri uri;
 			GLib.File file;
 
-			public DirectoryLoader (UriCollection collection, System.Uri uri)
+			public DirectoryLoader (UriCollection collection, SafeUri uri)
 			{
 				this.collection = collection;
-				this.uri = uri;
 				file = FileFactory.NewForUri (uri);
 				file.EnumerateChildrenAsync ("standard::*",
 							     FileQueryInfoFlags.None,
@@ -127,8 +126,8 @@ namespace FSpot {
 			{
 				List<FileBrowsableItem> items = new List<FileBrowsableItem> ();
 				foreach (GLib.FileInfo info in file.EnumerateChildrenFinish (res)) {
-					Uri i = file.GetChild (info.Name).Uri;
-					FSpot.Utils.Log.Debug ("testing uri = {0}", i);
+					SafeUri i = new SafeUri (file.GetChild (info.Name).Uri);
+					Hyena.Log.DebugFormat ("testing uri = {0}", i);
 					if (FSpot.ImageFile.HasLoader (i))
 						items.Add (new FileBrowsableItem (i));
 				}
@@ -142,9 +141,9 @@ namespace FSpot {
 		{
 			List<IBrowsableItem> items = new List<IBrowsableItem> ();
 			foreach (var f in files) {
-				if (FSpot.ImageFile.HasLoader (f.FullName)) {
-					Console.WriteLine (f.FullName);
-					items.Add (new FileBrowsableItem (f.FullName));
+				if (FSpot.ImageFile.HasLoader (new SafeUri (f.FullName))) {
+					Hyena.Log.Debug (f.FullName);
+					items.Add (new FileBrowsableItem (new SafeUri (f.FullName)));
 				}
 			}
 

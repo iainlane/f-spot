@@ -1,6 +1,11 @@
 # List of source files containing translatable strings.
-# Please keep this file in alphabetical order.
+# Please keep this file in alphabetical order; run ./sort-potfiles
+# after adding files here.
 [encoding: UTF-8]
+data/desktop-files/f-spot.desktop.in.in
+data/desktop-files/f-spot.desktop.in.in
+data/desktop-files/f-spot-import.desktop.in.in
+data/desktop-files/f-spot-view.desktop.in.in
 extensions/Exporters/CDExport/CDExport.addin.xml
 extensions/Exporters/CDExport/CDExport.cs
 [type: gettext/glade]extensions/Exporters/CDExport/CDExport.ui
@@ -14,6 +19,7 @@ extensions/Exporters/FlickrExport/FlickrExport.glade
 extensions/Exporters/FolderExport/FolderExport.addin.xml
 extensions/Exporters/FolderExport/FolderExport.cs
 extensions/Exporters/FolderExport/FolderExport.glade
+extensions/Exporters/GalleryExport/FormClient.cs
 extensions/Exporters/GalleryExport/GalleryExport.addin.xml
 extensions/Exporters/GalleryExport/GalleryExport.cs
 extensions/Exporters/GalleryExport/GalleryExport.glade
@@ -32,25 +38,20 @@ extensions/Exporters/TabbloExport/TabbloExport.cs
 extensions/Exporters/ZipExport/ZipExport.addin.xml
 extensions/Exporters/ZipExport/ZipExport.cs
 extensions/Exporters/ZipExport/ZipExport.glade
-extensions/Tools/HashJob/HashJob.cs
 extensions/Tools/HashJob/HashJob.addin.xml
+extensions/Tools/HashJob/HashJob.cs
 extensions/Tools/LiveWebGallery/GalleryRequestHandler.cs
 extensions/Tools/LiveWebGallery/LiveWebGallery.addin.xml
-[type: gettext/glade]extensions/Tools/LiveWebGallery/ui/LiveWebGallery.ui
 extensions/Tools/LiveWebGallery/LiveWebGalleryDialog.cs
+[type: gettext/glade]extensions/Tools/LiveWebGallery/ui/LiveWebGallery.ui
 extensions/Tools/MergeDb/MergeDb.addin.xml
 extensions/Tools/MergeDb/MergeDb.cs
 extensions/Tools/MergeDb/MergeDb.glade
 extensions/Tools/MergeDb/PickFolderDialog.cs
 extensions/Tools/ScreensaverConfig/ScreensaverConfig.addin.xml
 [type: gettext/glade]extensions/Tools/ScreensaverConfig/ScreensaverConfigDialog.ui
-f-spot.desktop.in.in
 f-spot.schemas.in
-f-spot-import.desktop.in.in
-f-spot-view.desktop.in.in
 lib/libfspot/f-jpeg-utils.c
-src/CameraFileSelectionDialog.cs
-src/CameraSelectionDialog.cs
 src/Core/App.cs
 src/Core/Photo.cs
 src/Editors/AutoStretchEditor.cs
@@ -61,11 +62,8 @@ src/Editors/RedEyeEditor.cs
 src/Editors/SepiaEditor.cs
 src/Editors/SoftFocusEditor.cs
 src/Editors/TiltEditor.cs
-src/FileImportBackend.cs
 src/Filters/ResizeFilter.cs
 src/Filters/SharpFilter.cs
-src/FormClient.cs
-src/FormClient.cs
 src/FSpot.addin.xml
 src/f-spot.glade
 src/FullScreenView.cs
@@ -73,7 +71,7 @@ src/GroupSelector.cs
 src/Imaging/Exif.cs
 src/Imaging/ImageFile.cs
 src/Imaging/IptcFile.cs
-src/ImportCommand.cs
+src/Import/ImportController.cs
 src/ItemAction.cs
 src/Loupe.cs
 src/MainWindow.cs
@@ -105,6 +103,7 @@ src/UI.Dialog/EditExceptionDialog.cs
 src/UI.Dialog/EditTagDialog.cs
 src/UI.Dialog/EditTagIconDialog.cs
 src/UI.Dialog/ExceptionDialog.cs
+src/UI.Dialog/ImportDialog.cs
 src/UI.Dialog/PreferenceDialog.cs
 src/UI.Dialog/ProgressDialog.cs
 src/UI.Dialog/RepairDbDialog.cs
@@ -116,6 +115,8 @@ src/UI.Dialog/ThreadProgressDialog.cs
 [type: gettext/glade]src/UI.Dialog/ui/EditTagIconDialog.ui
 [type: gettext/glade]src/UI.Dialog/ui/PreferenceDialog.ui
 [type: gettext/glade]src/UI.Dialog/ui/RatingFilterDialog.ui
+[type: gettext/glade]src/ui/import.ui
+[type: gettext/glade]src/ui/mail_dialog.ui
 [type: gettext/glade]src/ui/main_window.ui
 src/Updater.cs
 src/Util.cs

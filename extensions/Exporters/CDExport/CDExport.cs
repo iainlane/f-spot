@@ -20,7 +20,7 @@ using Mono.Unix;
 using FSpot;
 using FSpot.Filters;
 using FSpot.Widgets;
-using FSpot.Utils;
+using Hyena;
 using FSpot.UI.Dialog;
 
 using GLib;
@@ -58,7 +58,7 @@ namespace FSpotCDExport {
 			System.IO.FileInfo file_info;
 
 			foreach (IBrowsableItem item in selection.Items) {
-				path = item.DefaultVersionUri.LocalPath;
+				path = item.DefaultVersion.Uri.LocalPath;
 				if (System.IO.File.Exists (path)) {
 					file_info = new System.IO.FileInfo (path);
 					total_size += file_info.Length;
@@ -207,7 +207,7 @@ namespace FSpotCDExport {
 				foreach (IBrowsableItem photo in selection.Items) {
 
 				//FIXME need to implement the uniquename as a filter
-					using (FilterRequest request = new FilterRequest (photo.DefaultVersionUri)) {
+					using (FilterRequest request = new FilterRequest (photo.DefaultVersion.Uri)) {
 						if (rotate)
 							new OrientationFilter ().Convert (request);
 
@@ -245,7 +245,7 @@ namespace FSpotCDExport {
 				}
 
 			} catch (System.Exception e) {
-				FSpot.Utils.Log.DebugException (e);
+				Hyena.Log.DebugException (e);
 				progress_dialog.Message = e.ToString ();
 				progress_dialog.ProgressText = Catalog.GetString ("Error Transferring");
 				return;

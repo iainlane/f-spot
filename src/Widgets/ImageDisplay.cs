@@ -16,6 +16,7 @@ using System;
 using Cairo;
 using FSpot;
 using FSpot.Utils;
+using Hyena;
 
 namespace FSpot.Widgets {
 	[Binding(Gdk.Key.Up, "Up")]
@@ -26,10 +27,8 @@ namespace FSpot.Widgets {
 	public class ImageDisplay : Gtk.EventBox {
 		ImageInfo current;
 		ImageInfo next;
-		BrowsablePointer item;
 		ITransition transition;
 		Delay delay;
-		int index = 0;
 		int block_size = 256;
 
 		ITransition Transition {
@@ -50,11 +49,10 @@ namespace FSpot.Widgets {
 
 		public ImageDisplay (BrowsablePointer item) 
 		{
-			this.item = item;
 			CanFocus = true;
-			current = new ImageInfo (item.Current.DefaultVersionUri);
+			current = new ImageInfo (item.Current.DefaultVersion.Uri);
 			if (item.Collection.Count > item.Index + 1) {
-				next = new ImageInfo (item.Collection [item.Index + 1].DefaultVersionUri);
+				next = new ImageInfo (item.Collection [item.Index + 1].DefaultVersion.Uri);
 			}
 			delay = new Delay (30, new GLib.IdleHandler (DrawFrame));
 		}
@@ -78,35 +76,35 @@ namespace FSpot.Widgets {
 	
 		public bool Up ()
 		{
-			Console.WriteLine ("Up");
+			Log.Debug ("Up");
 			Transition = new Dissolve (current, next);
 			return true;
 		}
 
 		public bool Down ()
 		{
-			Console.WriteLine ("down");
+			Log.Debug ("down");
 			Transition = new Dissolve (next, current);
 			return true;
 		}
 
 		public bool Pan ()
 		{
-			Console.WriteLine ("space");
+			Log.Debug ("space");
 			Transition = new Wipe (current, next);
 			return true;
 		}
 		
 		public bool RevealImage ()
 		{
-			Console.WriteLine ("r");
+			Log.Debug ("r");
 			Transition = new Reveal (current, next);
 			return true;
 		}
 
 		public bool PushImage ()
 		{
-			Console.WriteLine ("p");
+			Log.Debug ("p");
 			Transition = new Push (current, next);
 			return true;
 		}
@@ -160,7 +158,7 @@ namespace FSpot.Widgets {
 					}
 				}
 				if (done) {
-					System.Console.WriteLine ("frames = {0}", Transition.Frames);
+					Log.DebugFormat ("frames = {0}", Transition.Frames);
 					Transition = null;
 				}
 			} else {

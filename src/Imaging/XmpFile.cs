@@ -2,7 +2,7 @@ using System.Xml;
 using System.Collections;
 using SemWeb;
 
-using FSpot.Utils;
+using Hyena;
 
 namespace FSpot.Xmp {
 	public class XmpFile : SemWeb.StatementSource, SemWeb.StatementSink
@@ -37,7 +37,7 @@ namespace FSpot.Xmp {
 				store.Import (reader);
 				//Dump ();
 			} catch (System.Exception e) {
-				Log.Debug ("Caught an exception :{0}", e.ToString ());
+				Log.DebugFormat ("Caught an exception :{0}", e.ToString ());
 			}
 		}
 
@@ -92,7 +92,7 @@ namespace FSpot.Xmp {
 				text.Close ();
 				
 			} catch (System.Exception e) {
-				System.Console.WriteLine (e);
+				Log.Exception (e);
 			}
 		}
 
@@ -109,7 +109,7 @@ namespace FSpot.Xmp {
 		public void Dump ()
 		{
 			foreach (SemWeb.Statement stmt in store) {
-				System.Console.WriteLine(stmt);
+				Log.Debug(stmt.ToString());
 			}
 		}
 

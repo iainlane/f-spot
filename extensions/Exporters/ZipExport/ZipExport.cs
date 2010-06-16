@@ -16,7 +16,7 @@ using FSpot;
 using FSpot.UI.Dialog;
 using FSpot.Extensions;
 using FSpot.Filters;
-using FSpot.Utils;
+using Hyena;
 using System;
 using System.IO;
 using System.Collections;
@@ -42,7 +42,7 @@ namespace ZipExport {
 		public void Run (IBrowsableCollection p) {
 			Log.Information ("Executing ZipExport extension");
 			if (p.Count == 0) {
-				HigMessageDialog md = new HigMessageDialog (MainWindow.Toplevel.Window, DialogFlags.DestroyWithParent,
+				HigMessageDialog md = new HigMessageDialog (App.Instance.Organizer.Window, DialogFlags.DestroyWithParent,
 							  Gtk.MessageType.Error, ButtonsType.Ok,
 							  Catalog.GetString ("No selection available"),
 							  Catalog.GetString ("This tool requires an active selection. Please select one or more pictures and try again"));
@@ -94,10 +94,10 @@ namespace ZipExport {
 			System.Uri dest = new System.Uri (uri_chooser.Uri);
 			Crc32 crc = new Crc32 ();
 			string filedest = dest.LocalPath + "/" + filename.Text;
-			Log.Debug ("Creating zip file {0}", filedest);
+			Log.DebugFormat ("Creating zip file {0}", filedest);
 			ZipOutputStream s = new ZipOutputStream (File.Create(filedest));
 			if (scale_check.Active)
-				Log.Debug ("Scaling to {0}", scale_size.ValueAsInt);
+				Log.DebugFormat ("Scaling to {0}", scale_size.ValueAsInt);
 
 			ProgressDialog progress_dialog = new ProgressDialog (Catalog.GetString ("Exporting files"),
 							      ProgressDialog.CancelButtonType.Stop,
@@ -115,17 +115,17 @@ namespace ZipExport {
 					FilterSet filters = new FilterSet ();
 					filters.Add (new JpegFilter ());
 					filters.Add (new ResizeFilter ((uint) scale_size.ValueAsInt));
-					FilterRequest freq = new FilterRequest (photos [i].DefaultVersionUri);
+					FilterRequest freq = new FilterRequest (photos [i].DefaultVersion.Uri);
 					filters.Convert (freq);
 					f = freq.Current.LocalPath;
 				} else {
-					f = photos [i].DefaultVersionUri.LocalPath;
+					f = photos [i].DefaultVersion.Uri.LocalPath;
 				}
 				FileStream fs = File.OpenRead (f);
 
 				byte [] buffer = new byte [fs.Length];
 				fs.Read (buffer, 0, buffer.Length);
-				ZipEntry entry = new ZipEntry (System.IO.Path.GetFileName (photos [i].DefaultVersionUri.LocalPath));
+				ZipEntry entry = new ZipEntry (System.IO.Path.GetFileName (photos [i].DefaultVersion.Uri.LocalPath));
 
 				entry.DateTime = DateTime.Now;
 

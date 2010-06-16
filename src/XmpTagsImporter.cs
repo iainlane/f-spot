@@ -18,7 +18,7 @@ using FSpot.Xmp;
 using SemWeb;
 using SemWeb.Util;
 using Mono.Unix;
-using FSpot.Utils;
+using Hyena;
 
 namespace FSpot.Xmp {
         internal class XmpTagsImporter {
@@ -200,7 +200,7 @@ namespace FSpot.Xmp {
 							tmp_ui = System.Convert.ToUInt32 (l.Value);
 						} catch {
 							// Set rating to 0, and continue
-							Log.Debug ("Found illegal rating >{0}< in predicate {1}. Rating cleared",
+							Log.DebugFormat ("Found illegal rating >{0}< in predicate {1}. Rating cleared",
 										 l.Value, stmt.Predicate.Uri);
 							tmp_ui = 0;
 						}
@@ -271,10 +271,13 @@ namespace FSpot.Xmp {
 #endif
 		}
 		
-		public bool Import (Photo photo, string path, string orig_path)
+		public bool Import (Photo photo, SafeUri uri, SafeUri orig_uri)
 		{
 			XmpFile xmp;
 			
+			string path = uri.AbsolutePath;
+			string orig_path = orig_uri.AbsolutePath;
+
 			string source_sidecar = String.Format ("{0}{1}{2}.xmp",
 							       Path.GetDirectoryName (orig_path),
 							       Path.DirectorySeparatorChar,
@@ -293,7 +296,7 @@ namespace FSpot.Xmp {
 				xmp = new XmpFile ();
 			}
 			
-			using (ImageFile img = ImageFile.Create (path)) {
+			using (ImageFile img = ImageFile.Create (uri)) {
 				StatementSource source = img as StatementSource;
 				if (source != null) {
 					try {

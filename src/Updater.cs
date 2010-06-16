@@ -5,14 +5,17 @@ using System;
 using System.Collections;
 using Banshee.Database;
 using FSpot.Utils;
+using Hyena;
 using FSpot.UI.Dialog;
 
 namespace FSpot.Database {
 	public static class Updater {
 		private static ProgressDialog dialog;
 		private static Hashtable updates = new Hashtable ();
-		private static MetaItem db_version;
-		private static Db db;
+		private static Version db_version;
+		private static QueuedSqliteDatabase db;
+
+		public static bool silent = false;
 
 
 		public static Version LatestVersion {
@@ -320,7 +323,7 @@ namespace FSpot.Database {
 							)
 				 );
 
-				 JobStore.CreateTable (db.Database);
+				 JobStore.CreateTable (db);
 
 				 // This is kind of hacky but should be a lot faster on
 				 // large photo databases
@@ -489,11 +492,6 @@ namespace FSpot.Database {
 				Execute ("UPDATE photos SET md5_sum = NULL WHERE md5_sum = ''");
 				Execute ("UPDATE photo_versions SET md5_sum = NULL WHERE md5_sum = ''");
 			});
-
-			// Update to version 17.0
-			//AddUpdate (new Version (14,0), delegate () {
-			//	do update here
-			//});
 			
 			// Update to version 17.0, split uri and filename
 			AddUpdate (new Version (17,0),delegate () {
@@ -588,37 +586,141 @@ namespace FSpot.Database {
 				Execute ("UPDATE tags SET name = 'Imported Tags' WHERE name = 'Import Tags'");
 			});
 			
+			// Update to version 17.2, Make sure every photo has an Original version in photo_versions
+			AddUpdate (new Version(17,2),delegate () {
+				// Find photos that have no original version;
+				var have_original_query = "SELECT id FROM photos LEFT JOIN photo_versions AS pv ON pv.photo_id = id WHERE pv.version_id = 1";
+				var no_original_query = String.Format ("SELECT id, base_uri, filename FROM photos WHERE id NOT IN ({0})", have_original_query);
+
+				var reader = ExecuteReader (no_original_query);
+
+				while (reader.Read ()) {
+					Execute (new DbCommand (
+						"INSERT INTO photo_versions (photo_id, version_id, name, base_uri, filename, protected, md5_sum) " +
+						"VALUES (:photo_id, :version_id, :name, :base_uri, :filename, :is_protected, :md5_sum)",
+						"photo_id", Convert.ToUInt32 (reader ["id"]),
+						"version_id", 1,
+						"name", "Original",
+						"base_uri", reader["base_uri"].ToString (),
+						"filename", reader["filename"].ToString (),
+						"is_protected", 1,
+						"md5_sum", ""));
+				}
+			}, true);
+
+			// Update to version 18.0, Import MD5 hashes
+			AddUpdate (new Version(18,0),delegate () {
+				string tmp_photos = MoveTableToTemp ("photos");
+				string tmp_versions = MoveTableToTemp ("photo_versions");
+
+				Execute (
+					"CREATE TABLE photos (\n" +
+					"	id			INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \n" +
+					"	time			INTEGER NOT NULL, \n" +
+					"	base_uri		STRING NOT NULL, \n" +
+					"	filename		STRING NOT NULL, \n" +
+					"	description		TEXT NOT NULL, \n" +
+					"	roll_id			INTEGER NOT NULL, \n" +
+					"	default_version_id	INTEGER NOT NULL, \n" +
+					"	rating			INTEGER NULL \n" +
+					")");
+
+				Execute (
+					"CREATE TABLE photo_versions (\n"+
+					"	photo_id	INTEGER, \n" +
+					"	version_id	INTEGER, \n" +
+					"	name		STRING, \n" +
+					"	base_uri		STRING NOT NULL, \n" +
+					"	filename		STRING NOT NULL, \n" +
+					"	import_md5		TEXT NULL, \n" +
+					"	protected	BOOLEAN, \n" +
+					"	UNIQUE (photo_id, version_id)\n" +
+					")");
+
+				var reader = ExecuteReader (String.Format (
+					"SELECT id, time, base_uri, filename, description, roll_id, default_version_id, rating " +
+					"FROM {0} ", tmp_photos));
+
+				while (reader.Read ()) {
+					Execute (new DbCommand (
+						"INSERT INTO photos (id, time, base_uri, filename, description, roll_id, default_version_id, rating) "	+
+						"VALUES (:id, :time, :base_uri, :filename, :description, :roll_id, :default_version_id, :rating)",
+						"id", Convert.ToUInt32 (reader ["id"]),
+						"time", reader ["time"],
+						"base_uri", reader ["base_uri"].ToString (),
+						"filename", reader ["filename"].ToString (),
+						"description", reader["description"].ToString (),
+						"roll_id", Convert.ToUInt32 (reader ["roll_id"]),
+						"default_version_id", Convert.ToUInt32 (reader ["default_version_id"]),
+						"rating", Convert.ToUInt32 (reader ["rating"])));
+				}
+
+				reader.Close ();
+
+				reader = ExecuteReader (String.Format (
+						"SELECT photo_id, version_id, name, base_uri, filename, protected " +
+						"FROM {0} ", tmp_versions));
+
+				while (reader.Read ()) {
+					Execute (new DbCommand (
+						"INSERT INTO photo_versions (photo_id, version_id, name, base_uri, filename, protected, import_md5) " +
+						"VALUES (:photo_id, :version_id, :name, :base_uri, :filename, :is_protected, :import_md5)",
+						"photo_id", Convert.ToUInt32 (reader ["photo_id"]),
+						"version_id", Convert.ToUInt32 (reader ["version_id"]),
+						"name", reader["name"].ToString (),
+						"base_uri", reader["base_uri"].ToString (),
+						"filename", reader["filename"].ToString (),
+						"is_protected", Convert.ToBoolean (reader["protected"]),
+						"import_md5", ""));
+				}
+
+				Execute ("CREATE INDEX idx_photo_versions_import_md5 ON photo_versions(import_md5)");
+
+			}, true);
 		}
 
-		public static void Run (Db database)
+		private const string meta_db_version_string = "F-Spot Database Version";
+
+		private static Version GetDatabaseVersion ()
+		{
+			if (!TableExists ("meta"))
+				throw new Exception ("No meta table found!");
+
+			var query = String.Format ("SELECT data FROM meta WHERE name = '{0}'", meta_db_version_string);
+			var version_id = SelectSingleString (query);
+			return new Version (version_id);
+		}
+
+		public static void Run (QueuedSqliteDatabase database)
 		{
 			db = database;
-			db_version = db.Meta.DatabaseVersion;
+			db_version = GetDatabaseVersion ();
 
 			if (updates.Count == 0)
 				return;
 
-			Version current_version = new Version (db_version.Value);
-
-			if (current_version == LatestVersion)
+			if (db_version == LatestVersion)
 				return;
-			else if (current_version > LatestVersion) {
-				Log.Information ("The existing database version is more recent than this version of F-Spot expects.");
+			else if (db_version > LatestVersion) {
+				if (!silent)
+					Log.Information ("The existing database version is more recent than this version of F-Spot expects.");
 				return;
 			}
 
-			uint timer = Log.InformationTimerStart ("Updating F-Spot Database");
+			uint timer = 0;
+			if (!silent)
+				timer = Log.InformationTimerStart ("Updating F-Spot Database");
 
 			// Only create and show the dialog if one or more of the updates to be done is
 			// marked as being slow
 			bool slow = false;
 			foreach (Version version in updates.Keys) {
-				if (version > current_version && (updates[version] as Update).IsSlow)
+				if (version > db_version && (updates[version] as Update).IsSlow)
 					slow = true;
 					break;
 			}
 
-			if (slow) {
+			if (slow && !silent) {
 				dialog = new ProgressDialog (Catalog.GetString ("Updating F-Spot Database"), ProgressDialog.CancelButtonType.None, 0, null);
 				dialog.Message.Text = Catalog.GetString ("Please wait while your F-Spot gallery's database is updated. This may take some time.");
 				dialog.Bar.Fraction = 0.0;
@@ -635,7 +737,7 @@ namespace FSpot.Database {
 				ArrayList keys = new ArrayList (updates.Keys);
 				keys.Sort ();
 				foreach (Version version in keys) {
-					if (version <= current_version)
+					if (version <= db_version)
 						continue;
 
 					Pulse ();
@@ -643,8 +745,11 @@ namespace FSpot.Database {
 				}
 
 				db.CommitTransaction ();
-			} catch (Exception e) {Log.DebugException (e);
-				Log.Warning ("Rolling back database changes because of Exception");
+			} catch (Exception e) {
+				if (!silent) {
+					Log.DebugException (e);
+					Log.Warning ("Rolling back database changes because of Exception");
+				}
 				// There was an error, roll back the database
 				db.RollbackTransaction ();
 
@@ -655,7 +760,7 @@ namespace FSpot.Database {
 			if (dialog != null)
 				dialog.Destroy ();
 			
-			if (new Version(db_version.Value) == LatestVersion)
+			if (db_version == LatestVersion && !silent)
 				Log.InformationTimerPrint (timer, "Database updates completed successfully (in {0}).");
 		}
 		
@@ -679,37 +784,37 @@ namespace FSpot.Database {
 
 		private static int Execute (string statement)
 		{
-			return db.Database.Execute (statement);
+			return db.Execute (statement);
 		}
 
 		private static int Execute (DbCommand command)
 		{
-			return db.Database.Execute (command);
+			return db.Execute (command);
 		}
 
 		private static void ExecuteNonQuery (string statement)
 		{
-			db.Database.ExecuteNonQuery(statement);
+			db.ExecuteNonQuery(statement);
 		}
 
 		private static void ExecuteNonQuery (DbCommand command)
 		{
-			db.Database.ExecuteNonQuery(command);
+			db.ExecuteNonQuery(command);
 		}
 		
 		private static int ExecuteScalar (string statement)
 		{
-			return db.Database.Execute(statement);
+			return db.Execute(statement);
 		}
 
 		private static SqliteDataReader ExecuteReader (string statement)
 		{
-			return db.Database.Query (statement);
+			return db.Query (statement);
 		}
 		
 		private static bool TableExists (string table)
 		{
-			return db.Database.TableExists (table);
+			return db.TableExists (table);
 		}
 
 		private static string SelectSingleString (string statement)
@@ -717,7 +822,7 @@ namespace FSpot.Database {
 			string result = null;
 
 			try {
-				result = (string)db.Database.QuerySingle(statement);
+				result = (string)db.QuerySingle(statement);
 			} catch (Exception) {}
 
 			return result;
@@ -765,17 +870,17 @@ namespace FSpot.Database {
 				this.code = code;
 			}
 
-			public void Execute (Db db, MetaItem db_version)
+			public void Execute (QueuedSqliteDatabase db, Version db_version)
 			{
 				code ();
 				
-				Log.Debug ("Updated database from version {0} to {1}",
-						db_version.Value,
-						Version.ToString ());
+				if (!silent)
+					Log.DebugFormat ("Updated database from version {0} to {1}",
+							db_version.ToString (),
+							Version.ToString ());
 
-
-				db_version.Value = Version.ToString ();
-				db.Meta.Commit (db_version);
+				db_version = Version;
+				db.ExecuteNonQuery(new DbCommand("UPDATE meta SET data = :data WHERE name = :name", "name", meta_db_version_string, "data", db_version.ToString ()));
 			}
 		}
 

@@ -1,4 +1,5 @@
 using FSpot.Tiff;
+using Hyena;
 
 namespace FSpot.Mrw {
 	// Minolta raw format
@@ -20,7 +21,7 @@ namespace FSpot.Mrw {
 			byte [] tmp = new byte [8];
 			stream.Read (tmp, 0, tmp.Length);
 			System.Array.Copy (tmp, name, name.Length);
-			System.Console.WriteLine (this.Name);
+			Log.Debug (this.Name);
 			Length = BitConverter.ToUInt32 (tmp, name.Length, false);
 			stream.Position = stream.Position + Length;
 		}
@@ -129,10 +130,10 @@ namespace FSpot.Mrw {
 				if (header == null) {
 					try {
 						System.IO.MemoryStream mem = new System.IO.MemoryStream (this.Data);
-						System.Console.WriteLine ("before header");
+						Log.Debug ("before header");
 						header = new Header (mem);
 					} catch (System.Exception e) {
-						System.Console.WriteLine (e.ToString ());
+						Log.Exception (e);
 					}
 				}
 				
@@ -173,7 +174,7 @@ namespace FSpot.Mrw {
 		MrmBlock mrm;
 		FSpot.Tiff.Header header;
 
-		public MrwFile (System.Uri uri) : base (uri)
+		public MrwFile (SafeUri uri) : base (uri)
 		{
 		}
 
@@ -181,10 +182,6 @@ namespace FSpot.Mrw {
                 public bool Distinct {
                         get { return false; }
                 }
-
-		public MrwFile (string path) : base (path)
-		{
-		}
 
 		public FSpot.Tiff.Header Header {
 			get {
@@ -243,7 +240,7 @@ namespace FSpot.Mrw {
 						}
 					}
 				} catch (System.Exception e) {
-					System.Console.WriteLine (e.ToString ());
+					Log.Exception (e);
 				}
 			}
 		}

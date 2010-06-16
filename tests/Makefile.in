@@ -33,13 +33,20 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+	$(top_srcdir)/build/build.environment.mk
 subdir = tests
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/build/m4/shave/shave.m4 \
 	$(top_srcdir)/build/m4/shamrock/expansions.m4 \
+	$(top_srcdir)/build/m4/shamrock/gnome-doc.m4 \
 	$(top_srcdir)/build/m4/shamrock/mono.m4 \
+	$(top_srcdir)/build/m4/shamrock/nunit.m4 \
 	$(top_srcdir)/build/m4/shamrock/programs.m4 \
+	$(top_srcdir)/build/m4/f-spot/flickrnet.m4 \
+	$(top_srcdir)/build/m4/f-spot/gnome-keyring-sharp.m4 \
+	$(top_srcdir)/build/m4/f-spot/gtk-sharp.m4 \
+	$(top_srcdir)/build/m4/f-spot/mono-addins.m4 \
 	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
@@ -49,47 +56,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 SOURCES =
 DIST_SOURCES =
-RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
-	html-recursive info-recursive install-data-recursive \
-	install-dvi-recursive install-exec-recursive \
-	install-html-recursive install-info-recursive \
-	install-pdf-recursive install-ps-recursive install-recursive \
-	installcheck-recursive installdirs-recursive pdf-recursive \
-	ps-recursive uninstall-recursive
-RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
-  distclean-recursive maintainer-clean-recursive
-AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
-	$(RECURSIVE_CLEAN_TARGETS:-recursive=) tags TAGS ctags CTAGS \
-	distdir
-ETAGS = etags
-CTAGS = ctags
-DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-am__relativize = \
-  dir0=`pwd`; \
-  sed_first='s,^\([^/]*\)/.*$$,\1,'; \
-  sed_rest='s,^[^/]*/*,,'; \
-  sed_last='s,^.*/\([^/]*\)$$,\1,'; \
-  sed_butlast='s,/*[^/]*$$,,'; \
-  while test -n "$$dir1"; do \
-    first=`echo "$$dir1" | sed -e "$$sed_first"`; \
-    if test "$$first" != "."; then \
-      if test "$$first" = ".."; then \
-        dir2=`echo "$$dir0" | sed -e "$$sed_last"`/"$$dir2"; \
-        dir0=`echo "$$dir0" | sed -e "$$sed_butlast"`; \
-      else \
-        first2=`echo "$$dir2" | sed -e "$$sed_first"`; \
-        if test "$$first2" = "$$first"; then \
-          dir2=`echo "$$dir2" | sed -e "$$sed_rest"`; \
-        else \
-          dir2="../$$dir2"; \
-        fi; \
-        dir0="$$dir0"/"$$first"; \
-      fi; \
-    fi; \
-    dir1=`echo "$$dir1" | sed -e "$$sed_rest"`; \
-  done; \
-  reldir="$$dir2"
 ACLOCAL = @ACLOCAL@
 ACLOCAL_AMFLAGS = @ACLOCAL_AMFLAGS@
 ALL_LINGUAS = @ALL_LINGUAS@
@@ -134,6 +101,8 @@ EXIF_SOVERSION = @EXIF_SOVERSION@
 F77 = @F77@
 FC = @FC@
 FGREP = @FGREP@
+FLICKRNET_CFLAGS = @FLICKRNET_CFLAGS@
+FLICKRNET_LIBS = @FLICKRNET_LIBS@
 F_CFLAGS = @F_CFLAGS@
 F_LIBS = @F_LIBS@
 GAPI2CODEGEN = @GAPI2CODEGEN@
@@ -147,6 +116,8 @@ GCONF_SHARP_LIBS = @GCONF_SHARP_LIBS@
 GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 GIO_CFLAGS = @GIO_CFLAGS@
 GIO_LIBS = @GIO_LIBS@
+GLIBSHARP_2_12_7_CFLAGS = @GLIBSHARP_2_12_7_CFLAGS@
+GLIBSHARP_2_12_7_LIBS = @GLIBSHARP_2_12_7_LIBS@
 GLIBSHARP_CFLAGS = @GLIBSHARP_CFLAGS@
 GLIBSHARP_LIBS = @GLIBSHARP_LIBS@
 GLIB_CFLAGS = @GLIB_CFLAGS@
@@ -162,6 +133,10 @@ GNOME_SHARP_CFLAGS = @GNOME_SHARP_CFLAGS@
 GNOME_SHARP_LIBS = @GNOME_SHARP_LIBS@
 GOBJECT_QUERY = @GOBJECT_QUERY@
 GREP = @GREP@
+GTKSHARP_A11Y_CFLAGS = @GTKSHARP_A11Y_CFLAGS@
+GTKSHARP_A11Y_LIBS = @GTKSHARP_A11Y_LIBS@
+GTKSHARP_CFLAGS = @GTKSHARP_CFLAGS@
+GTKSHARP_LIBS = @GTKSHARP_LIBS@
 HELP_DIR = @HELP_DIR@
 ICONS_DIRECTORY = @ICONS_DIRECTORY@
 INSTALL = @INSTALL@
@@ -175,14 +150,14 @@ INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
 INTLTOOL_MERGE = @INTLTOOL_MERGE@
 INTLTOOL_PERL = @INTLTOOL_PERL@
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
+KEYRINGSHARP_CFLAGS = @KEYRINGSHARP_CFLAGS@
+KEYRINGSHARP_LIBS = @KEYRINGSHARP_LIBS@
 LCMS_CFLAGS = @LCMS_CFLAGS@
 LCMS_LIBS = @LCMS_LIBS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBEXIF_VERSION_CHECK_CFLAGS = @LIBEXIF_VERSION_CHECK_CFLAGS@
 LIBEXIF_VERSION_CHECK_LIBS = @LIBEXIF_VERSION_CHECK_LIBS@
-LIBGPHOTO2_CFLAGS = @LIBGPHOTO2_CFLAGS@
-LIBGPHOTO2_LIBS = @LIBGPHOTO2_LIBS@
 LIBJPEG = @LIBJPEG@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
@@ -197,6 +172,12 @@ MCS = @MCS@
 MKDIR_P = @MKDIR_P@
 MKINSTALLDIRS = @MKINSTALLDIRS@
 MONO = @MONO@
+MONO_ADDINS_CFLAGS = @MONO_ADDINS_CFLAGS@
+MONO_ADDINS_GUI_CFLAGS = @MONO_ADDINS_GUI_CFLAGS@
+MONO_ADDINS_GUI_LIBS = @MONO_ADDINS_GUI_LIBS@
+MONO_ADDINS_LIBS = @MONO_ADDINS_LIBS@
+MONO_ADDINS_SETUP_CFLAGS = @MONO_ADDINS_SETUP_CFLAGS@
+MONO_ADDINS_SETUP_LIBS = @MONO_ADDINS_SETUP_LIBS@
 MONO_MODULE_CFLAGS = @MONO_MODULE_CFLAGS@
 MONO_MODULE_LIBS = @MONO_MODULE_LIBS@
 MSGFMT = @MSGFMT@
@@ -207,7 +188,6 @@ NDESK_DBUS_LIBS = @NDESK_DBUS_LIBS@
 NM = @NM@
 NMEDIT = @NMEDIT@
 NUNIT_CFLAGS = @NUNIT_CFLAGS@
-NUNIT_DEFINES = @NUNIT_DEFINES@
 NUNIT_LIBS = @NUNIT_LIBS@
 OBJC = @OBJC@
 OBJDUMP = @OBJDUMP@
@@ -299,16 +279,196 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = \
-	src
 
-MAINTAINERCLEANFILES = \
-	Makefile.in
+# Initializers
+MONO_BASE_PATH = 
+MONO_ADDINS_PATH = 
 
-all: all-recursive
+# Install Paths
+DEFAULT_INSTALL_DIR = $(pkglibdir)
+BACKENDS_INSTALL_DIR = $(DEFAULT_INSTALL_DIR)/Backends
+EXTENSIONS_INSTALL_DIR = $(DEFAULT_INSTALL_DIR)/Extensions
+DIR_DOCS = $(top_builddir)/docs
+DIR_EXTENSIONS = $(top_builddir)/extensions
+DIR_ICONS = $(top_builddir)/icons
+DIR_JPEGTRAN = $(top_builddir)/lib/libjpegtran
+DIR_LIBFSPOT = $(top_builddir)/lib/libfspot
+DIR_SEMWEB = $(top_builddir)/lib/semweb
+DIR_SRC = $(top_builddir)/src
+DIR_GIOSHARP = $(top_builddir)/lib/gio-sharp/gio
+DIR_GTKSHARPBEANS = $(top_builddir)/lib/gtk-sharp-beans
+DIR_UNIQUESHARP = $(top_builddir)/lib/unique-sharp/unique
+DIR_BIN = $(top_builddir)/bin
+
+# External libraries to link against, generated from configure
+LINK_SYSTEM = -r:System
+LINK_SYSTEMDATA = -r:System.Data
+LINK_SYSTEM_WEB = -r:System.Web
+LINK_MONO_POSIX = -r:Mono.Posix
+LINK_MONO_CAIRO = -r:Mono.Cairo
+LINK_MONO_SIMD = -r:Mono.Simd
+LINK_MONODATA = -r:Mono.Data
+LINK_MONO_DATA_SQLITECLIENT = -r:Mono.Data.SqliteClient
+LINK_ICSHARP_ZIP_LIB = -r:ICSharpCode.SharpZipLib
+LINK_KEYRING = $(KEYRINGSHARP_LIBS)
+LINK_GLIB = $(GLIBSHARP_LIBS)
+LINK_GTK = $(GTKSHARP_LIBS)
+LINK_GNOME = $(GNOME_SHARP_LIBS)
+LINK_GCONF = $(GCONF_SHARP_LIBS)
+LINK_GLADE = -pkg:glade-sharp-2.0
+LINK_FLICKRNET = -pkg:flickrnet
+LINK_DBUS = $(NDESK_DBUS_LIBS) $(NDESK_DBUS_GLIB_LIBS)
+LINK_DBUS_NO_GLIB = $(NDESK_DBUS_LIBS)
+LINK_MONO_ADDINS_DEPS = $(MONO_ADDINS_LIBS)
+LINK_MONO_ADDINS_SETUP_DEPS = $(MONO_ADDINS_SETUP_LIBS)
+LINK_MONO_ADDINS_GUI_DEPS = $(MONO_ADDINS_GUI_LIBS)
+
+# GIO
+REF_GIO = 
+LINK_GIO = -r:$(DIR_GIOSHARP)/gio-sharp.dll
+LINK_GIO_DEPS = $(REF_GIO) $(LINK_GIO)
+
+# Gtk Beans
+REF_GTK_BEANS = $(LINK_GIO_DEPS)
+LINK_GTK_BEANS = -r:$(DIR_GTKSHARPBEANS)/gtk-sharp-beans.dll
+LINK_GTK_BEANS_DEPS = $(REF_GTK_BEANS) $(LINK_GTK_BEANS)
+
+# Uniqe
+REF_UNIQUE = 
+LINK_UNIQUE = -r:$(DIR_UNIQUESHARP)/unique-sharp.dll
+LINK_UNIQUE_DEPS = $(REF_UNIQUE) $(LINK_UNIQUE)
+
+# Hyena
+REF_HYENA = $(LINK_SYSTEM) $(LINK_MONO_POSIX)
+LINK_HYENA = -r:$(DIR_BIN)/Hyena.dll
+LINK_HYENA_DEPS = $(REF_HYENA) $(LINK_HYENA)
+
+# Semweb
+REF_SEMWEB = $(LINK_SYSTEMDATA) $(LINK_HYENA_DEPS)
+LINK_SEMWEB = -r:$(DIR_BIN)/SemWeb.dll
+LINK_SEMWEB_DEPS = $(REF_SEMWEB) $(LINK_SEMWEB)
+
+# Hyena.Data.Sqlite
+REF_HYENA_DATA_SQLITE = $(LINK_SQLITE)
+LINK_HYENA_DATA_SQLITE = -r:$(DIR_BIN)/Hyena.Data.Sqlite.dll
+LINK_HYENA_DATA_SQLITE_DEPS = $(REF_HYENA_DATA_SQLITE) $(LINK_HYENA_DATA_SQLITE)
+
+# Hyena.Gui
+REF_HYENA_GUI = $(LINK_HYENA_DEPS)
+LINK_HYENA_GUI = -r:$(DIR_BIN)/Hyena.Gui.dll
+LINK_HENA_GUI_DEPS = $(REF_HYENA_GUI) $(LINK_HYENA_GUI)
+
+# FSpot.Cms
+REF_FSPOT_CMS = $(LINK_GTK)
+LINK_FSPOT_CMS = -r:$(DIR_BIN)/FSpot.Cms.dll
+LINK_FSPOT_CMS_DEPS = $(REF_FSPOT_CMS) $(LINK_FSPOT_CMS)
+
+# FSpot.Utils
+REF_FSPOT_UTILS = $(LINK_HYENA_DEPS) $(LINK_GTK) $(LINK_GIO) $(LINK_MONO_CAIRO)
+LINK_FSPOT_UTILS = -r:$(DIR_BIN)/FSpot.Utils.dll
+LINK_FSPOT_UTILS_DEPS = $(REF_FSPOT_UTILS) $(LINK_FSPOT_UTILS)
+
+# FSpot.Core
+REF_FSPOT_CORE = $(LINK_FSPOT_UTILS_DEPS) $(LINK_FSPOT_CMS_DEPS)
+LINK_FSPOT_CORE = -r:$(DIR_BIN)/FSpot.Core.dll
+LINK_FSPOT_CORE_DEPS = $(REF_FSPOT_CORE) $(LINK_FSPOT_CORE)
+
+# FSpot.Query
+REF_FSPOT_QUERY = $(LINK_FSPOT_CORE_DEPS)
+LINK_FSPOT_QUERY = -r:$(DIR_BIN)/FSpot.Query.dll
+LINK_FSPOT_QUERY_DEPS = $(REF_FSPOT_QUERY) $(LINK_FSPOT_QUERY)
+
+# FSpot.JobScheduler
+REF_FSPOT_JOB_SCHEDULER = $(LINK_HYENA_DEPS)
+LINK_FSPOT_JOB_SCHEDULER = -r:$(DIR_BIN)/FSpot.JobScheduler.dll
+LINK_FSPOT_JOB_SCHEDULER_DEPS = $(REF_FSPOT_JOB_SCHEDULER) $(LINK_FSPOT_JOB_SCHEDULER)
+
+# FSpot.Bling
+REF_FSPOT_BLING = $(LINK_GTK_BEANS_DEPS) $(LINK_GLIB)
+LINK_FSPOT_BLING = -r:$(DIR_BIN)/FSpot.Bling.dll
+LINK_FSPOT_BLING_DEPS = $(REF_FSPOT_BLING) $(LINK_FSPOT_BLING)
+
+# FSpot.Platform
+REF_FSPOT_PLATFORM = $(LINK_GCONF) $(LINK_GTK) $(LINK_FSPOT_CORE_DEPS) $(LINK_DBUS)
+LINK_FSPOT_PLATFORM = -r:$(DIR_BIN)/FSpot.Platform.dll
+LINK_FSPOT_PLATFORM_DEPS = $(REF_FSPOT_PLATFORM) $(LINK_FSPOT_PLATFORM)
+
+# FSpot.Widgets
+REF_FSPOT_WIDGETS = $(LINK_FSPOT_CORE_DEPS) $(LINK_FSPOT_BLING_DEPS)
+LINK_FSPOT_WIDGETS = -r:$(DIR_BIN)/FSpot.Widgets.dll
+LINK_FSPOT_WIDGETS_DEPS = $(REF_FSPOT_WIDGETS) $(LINK_FSPOT_WIDGETS)
+
+# FSpot (executable)
+REF_FSPOT = $(LINK_FSPOT_WIDGETS_DEPS) $(LINK_FSPOT_PLATFORM_DEPS) $(LINK_FSPOT_QUERY_DEPS) \
+            $(LINK_GLIB) $(LINK_MONO_ADDINS_DEPS) $(LINK_UNIQUE_DEPS) $(LINK_MONO_ADDINS_SETUP_DEPS) \
+            $(LINK_SEMWEB_DEPS) $(LINK_GLADE) $(LINK_MONODATA) $(LINK_MONO_DATA_SQLITECLIENT) \
+            $(LINK_MONO_ADDINS_GUI_DEPS) $(LINK_FSPOT_JOB_SCHEDULER_DEPS) $(LINK_ICSHARP_ZIP_LIB) \
+            $(LINK_GNOME)
+
+# FIXME: do not link executables
+LINK_FSPOT = -r:$(DIR_BIN)/f-spot.exe
+LINK_FSPOT_DEPS = $(REF_FSPOT) $(LINK_FSPOT)
+
+# Extensions
+REF_FSPOT_EXTENSION_BLACKOUTEDITOR = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_BWEDITOR = $(LINK_FSPOT_DEPS) $(LINK_MONO_SIMD)
+REF_FSPOT_EXTENSION_FLIPEDITOR = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_PIXELATEEDITOR = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_RESIZEEDITOR = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_CDEXPORT = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_FACEBOOKEXPORT = $(LINK_FSPOT_DEPS) $(LINK_KEYRING)
+REF_FSPOT_EXTENSION_FLICKREXPORT = $(LINK_FSPOT_DEPS) $(LINK_FLICKRNET)
+REF_FSPOT_EXTENSION_FOLDEREXPORT = $(LINK_FSPOT_DEPS) $(LINK_SYSTEM_WEB)
+REF_FSPOT_EXTENSION_GALLERYEXPORT = $(LINK_FSPOT_DEPS)
+REF_MONO_GOOGLE = $(LINK_HYENA_DEPS)
+LINK_MONO_GOOGLE = -r:$(DIR_BIN)/Mono.Google.dll
+LINK_MONO_GOOGLE_DEPS = $(REF_MONO_GOOGLE) $(LINK_MONO_GOOGLE)
+REF_FSPOT_EXTENSION_PICASAWEBEXPORT = $(LINK_FSPOT_DEPS) $(LINK_MONO_GOOGLE) $(LINK_KEYRING)
+REF_SMUGMUGNET = $(LINK_FSPOT_DEPS)
+LINK_SMUGMUGNET = -r:$(DIR_BIN)/SmugMugNet.dll
+LINK_SMUGMUGNET_DEPS = $(REF_SMUGMUGNET) $(LINK_SMUGMUGNET)
+REF_FSPOT_EXTENSION_SMUGMUGEXPORT = $(LINK_SMUGMUGNET_DEPS) $(LINK_KEYRING)
+REF_MONO_TABBLO = $(LINK_HYENA_DEPS)
+LINK_MONO_TABBLO = -r:$(DIR_BIN)/Mono.Tabblo.dll
+LINK_MONO_TABBLO_DEPS = $(REF_MONO_TABBLO) $(LINK_MONO_TABBLO)
+REF_FSPOT_EXTENSION_TABBLOEXPORT = $(LINK_FSPOT_DEPS) $(LINK_KEYRING) $(LINK_MONO_TABBLO_DEPS)
+REF_FSPOT_EXTENSION_ZIPEXPORT = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_CHANGEPHOTOPATH = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_DEVELOPINUFRAW = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_HASHJOB = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_LIVEWEBGALLERY = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_MERGEDB = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_RAWPLUSJPEG = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_RETROACTIVEROLL = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_SCREENSAVERCONFIG = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_COVERTRANSITION = $(LINK_FSPOT_DEPS)
+
+# Cute hack to replace a space with something
+colon := :
+empty := 
+space := $(empty) $(empty)
+
+# Build path to allow running uninstalled
+RUN_PATH = $(subst $(space),$(colon), $(MONO_BASE_PATH))
+EXTRA_DIST = \
+	data/f-spot-0.6.1.5.db \
+	data/f-spot-0.6.2.db \
+	data/f-spot-0.7.0-17.2.db \
+	data/f-spot-0.7.0-18.0.db
+
+@ENABLE_TESTS_TRUE@TEST_ASSEMBLIES = \
+@ENABLE_TESTS_TRUE@	f-spot.exe \
+@ENABLE_TESTS_TRUE@	FSpot.Query.dll \
+@ENABLE_TESTS_TRUE@	FSpot.Utils.dll
+
+@ENABLE_TESTS_TRUE@ENV_OPTIONS = TZ=America/Chicago LC_ALL=it_IT LANG=it_IT
+@ENABLE_TESTS_TRUE@NUNIT_CONSOLE = $$(echo $$(which nunit-console2 || which nunit-console))
+@ENABLE_TESTS_TRUE@RUNNER = for asm in $${TEST_ASSEMBLIES}; do echo -e "\033[1mRunning tests on $${asm}...\033[0m"; $(ENV_OPTIONS) $(NUNIT_CONSOLE) -nologo -noshadow $$asm; done
+MAINTAINERCLEANFILES = Makefile.in
+all: all-am
 
 .SUFFIXES:
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am $(top_srcdir)/build/build.environment.mk $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -344,141 +504,12 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-
-# This directory's subdirectories are mostly independent; you can cd
-# into them and run `make' without going through this Makefile.
-# To change the values of `make' variables: instead of editing Makefiles,
-# (1) if the variable is set in `config.status', edit `config.status'
-#     (which will cause the Makefiles to be regenerated when you run `make');
-# (2) otherwise, pass the desired values on the `make' command line.
-$(RECURSIVE_TARGETS):
-	@fail= failcom='exit 1'; \
-	for f in x $$MAKEFLAGS; do \
-	  case $$f in \
-	    *=* | --[!k]*);; \
-	    *k*) failcom='fail=yes';; \
-	  esac; \
-	done; \
-	dot_seen=no; \
-	target=`echo $@ | sed s/-recursive//`; \
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  echo "Making $$target in $$subdir"; \
-	  if test "$$subdir" = "."; then \
-	    dot_seen=yes; \
-	    local_target="$$target-am"; \
-	  else \
-	    local_target="$$target"; \
-	  fi; \
-	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
-	  || eval $$failcom; \
-	done; \
-	if test "$$dot_seen" = "no"; then \
-	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
-	fi; test -z "$$fail"
-
-$(RECURSIVE_CLEAN_TARGETS):
-	@fail= failcom='exit 1'; \
-	for f in x $$MAKEFLAGS; do \
-	  case $$f in \
-	    *=* | --[!k]*);; \
-	    *k*) failcom='fail=yes';; \
-	  esac; \
-	done; \
-	dot_seen=no; \
-	case "$@" in \
-	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
-	  *) list='$(SUBDIRS)' ;; \
-	esac; \
-	rev=''; for subdir in $$list; do \
-	  if test "$$subdir" = "."; then :; else \
-	    rev="$$subdir $$rev"; \
-	  fi; \
-	done; \
-	rev="$$rev ."; \
-	target=`echo $@ | sed s/-recursive//`; \
-	for subdir in $$rev; do \
-	  echo "Making $$target in $$subdir"; \
-	  if test "$$subdir" = "."; then \
-	    local_target="$$target-am"; \
-	  else \
-	    local_target="$$target"; \
-	  fi; \
-	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
-	  || eval $$failcom; \
-	done && test -z "$$fail"
-tags-recursive:
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  test "$$subdir" = . || ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) tags); \
-	done
-ctags-recursive:
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  test "$$subdir" = . || ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) ctags); \
-	done
-
-ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
-	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
-	unique=`for i in $$list; do \
-	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-	  done | \
-	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
-	      END { if (nonempty) { for (i in files) print i; }; }'`; \
-	mkid -fID $$unique
 tags: TAGS
+TAGS:
 
-TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
-		$(TAGS_FILES) $(LISP)
-	set x; \
-	here=`pwd`; \
-	if ($(ETAGS) --etags-include --version) >/dev/null 2>&1; then \
-	  include_option=--etags-include; \
-	  empty_fix=.; \
-	else \
-	  include_option=--include; \
-	  empty_fix=; \
-	fi; \
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  if test "$$subdir" = .; then :; else \
-	    test ! -f $$subdir/TAGS || \
-	      set "$$@" "$$include_option=$$here/$$subdir/TAGS"; \
-	  fi; \
-	done; \
-	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
-	unique=`for i in $$list; do \
-	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-	  done | \
-	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
-	      END { if (nonempty) { for (i in files) print i; }; }'`; \
-	shift; \
-	if test -z "$(ETAGS_ARGS)$$*$$unique"; then :; else \
-	  test -n "$$unique" || unique=$$empty_fix; \
-	  if test $$# -gt 0; then \
-	    $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
-	      "$$@" $$unique; \
-	  else \
-	    $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
-	      $$unique; \
-	  fi; \
-	fi
 ctags: CTAGS
-CTAGS: ctags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
-		$(TAGS_FILES) $(LISP)
-	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
-	unique=`for i in $$list; do \
-	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-	  done | \
-	  $(AWK) '{ files[$$0] = 1; nonempty = 1; } \
-	      END { if (nonempty) { for (i in files) print i; }; }'`; \
-	test -z "$(CTAGS_ARGS)$$unique" \
-	  || $(CTAGS) $(CTAGSFLAGS) $(AM_CTAGSFLAGS) $(CTAGS_ARGS) \
-	     $$unique
+CTAGS:
 
-GTAGS:
-	here=`$(am__cd) $(top_builddir) && pwd` \
-	  && $(am__cd) $(top_srcdir) \
-	  && gtags -i $(GTAGS_ARGS) "$$here"
-
-distclean-tags:
-	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
 	@srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
@@ -510,48 +541,19 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
-	@list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
-	  if test "$$subdir" = .; then :; else \
-	    test -d "$(distdir)/$$subdir" \
-	    || $(MKDIR_P) "$(distdir)/$$subdir" \
-	    || exit 1; \
-	  fi; \
-	done
-	@list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
-	  if test "$$subdir" = .; then :; else \
-	    dir1=$$subdir; dir2="$(distdir)/$$subdir"; \
-	    $(am__relativize); \
-	    new_distdir=$$reldir; \
-	    dir1=$$subdir; dir2="$(top_distdir)"; \
-	    $(am__relativize); \
-	    new_top_distdir=$$reldir; \
-	    echo " (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) top_distdir="$$new_top_distdir" distdir="$$new_distdir" \\"; \
-	    echo "     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)"; \
-	    ($(am__cd) $$subdir && \
-	      $(MAKE) $(AM_MAKEFLAGS) \
-	        top_distdir="$$new_top_distdir" \
-	        distdir="$$new_distdir" \
-		am__remove_distdir=: \
-		am__skip_length_check=: \
-		am__skip_mode_fix=: \
-	        distdir) \
-	      || exit 1; \
-	  fi; \
-	done
 check-am: all-am
-check: check-recursive
+check: check-am
 all-am: Makefile
-installdirs: installdirs-recursive
-installdirs-am:
-install: install-recursive
-install-exec: install-exec-recursive
-install-data: install-data-recursive
-uninstall: uninstall-recursive
+installdirs:
+install: install-am
+install-exec: install-exec-am
+install-data: install-data-am
+uninstall: uninstall-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 
-installcheck: installcheck-recursive
+installcheck: installcheck-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
 	  install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
@@ -569,89 +571,99 @@ maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
-clean: clean-recursive
+clean: clean-am
 
 clean-am: clean-generic clean-libtool mostlyclean-am
 
-distclean: distclean-recursive
+distclean: distclean-am
 	-rm -f Makefile
-distclean-am: clean-am distclean-generic distclean-tags
+distclean-am: clean-am distclean-generic
 
-dvi: dvi-recursive
+dvi: dvi-am
 
 dvi-am:
 
-html: html-recursive
+html: html-am
 
 html-am:
 
-info: info-recursive
+info: info-am
 
 info-am:
 
 install-data-am:
 
-install-dvi: install-dvi-recursive
+install-dvi: install-dvi-am
 
 install-dvi-am:
 
 install-exec-am:
 
-install-html: install-html-recursive
+install-html: install-html-am
 
 install-html-am:
 
-install-info: install-info-recursive
+install-info: install-info-am
 
 install-info-am:
 
 install-man:
 
-install-pdf: install-pdf-recursive
+install-pdf: install-pdf-am
 
 install-pdf-am:
 
-install-ps: install-ps-recursive
+install-ps: install-ps-am
 
 install-ps-am:
 
 installcheck-am:
 
-maintainer-clean: maintainer-clean-recursive
+maintainer-clean: maintainer-clean-am
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
-mostlyclean: mostlyclean-recursive
+mostlyclean: mostlyclean-am
 
 mostlyclean-am: mostlyclean-generic mostlyclean-libtool
 
-pdf: pdf-recursive
+pdf: pdf-am
 
 pdf-am:
 
-ps: ps-recursive
+ps: ps-am
 
 ps-am:
 
 uninstall-am:
 
-.MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) ctags-recursive \
-	install-am install-strip tags-recursive
+.MAKE: install-am install-strip
 
-.PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
-	all all-am check check-am clean clean-generic clean-libtool \
-	ctags ctags-recursive distclean distclean-generic \
-	distclean-libtool distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs installdirs-am maintainer-clean \
+.PHONY: all all-am check check-am clean clean-generic clean-libtool \
+	distclean distclean-generic distclean-libtool distdir dvi \
+	dvi-am html html-am info info-am install install-am \
+	install-data install-data-am install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-recursive \
-	uninstall uninstall-am
+	mostlyclean-libtool pdf pdf-am ps ps-am uninstall uninstall-am
 
+
+@ENABLE_TESTS_TRUE@test:
+@ENABLE_TESTS_TRUE@	@pushd $(DIR_BIN) &>/dev/null; \
+@ENABLE_TESTS_TRUE@	export MONO_PATH=../lib/semweb:../lib/gio-sharp/gio:../lib/gtk-sharp-beans:../lib/unique-sharp/unique:../bin:$$MONO_PATH; \
+@ENABLE_TESTS_TRUE@	export TEST_ASSEMBLIES="$(TEST_ASSEMBLIES)"; $(RUNNER); \
+@ENABLE_TESTS_TRUE@	popd &>/dev/null;
+
+@ENABLE_TESTS_TRUE@%:
+@ENABLE_TESTS_TRUE@	@pushd $(DIR_BIN) &>/dev/null; \
+@ENABLE_TESTS_TRUE@	for i in *.dll; do \
+@ENABLE_TESTS_TRUE@		if [[ $$(echo "$$i" | tr "[:upper:]" "[:lower:]") = "$$(echo "$@" | tr "[:upper:]" "[:lower:]").dll" ]]; then \
+@ENABLE_TESTS_TRUE@			export TEST_ASSEMBLIES="$$i"; $(RUNNER); \
+@ENABLE_TESTS_TRUE@		fi; \
+@ENABLE_TESTS_TRUE@	done;
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

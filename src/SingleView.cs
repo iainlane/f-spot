@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Mono.Addins;
 using Mono.Unix;
 
+using Hyena;
 using FSpot.Extensions;
 using FSpot.Utils;
 using FSpot.UI.Dialog;
@@ -45,15 +46,13 @@ namespace FSpot {
 		private Gtk.Window window;
 		PhotoImageView image_view;
 		FSpot.Widgets.IconView directory_view;
-		private Uri uri;
+		private SafeUri uri;
 		
 		UriCollection collection;
 		
 		FullScreenView fsview;
 
-		private static Gtk.Tooltips toolTips = new Gtk.Tooltips ();
-
-		public SingleView (Uri [] uris) 
+		public SingleView (SafeUri [] uris)
 		{
 			string glade_name = "single_view";
 			this.uri = uris [0];
@@ -70,24 +69,24 @@ namespace FSpot {
 		
 			rl_button = GtkUtil.ToolButtonFromTheme ("object-rotate-left", Catalog.GetString ("Rotate Left"), true);
 			rl_button.Clicked += HandleRotate270Command;
-			rl_button.SetTooltip (toolTips, Catalog.GetString ("Rotate photo left"), null);
+			rl_button.TooltipText = Catalog.GetString ("Rotate photo left");
 			toolbar.Insert (rl_button, -1);
 
 			rr_button = GtkUtil.ToolButtonFromTheme ("object-rotate-right", Catalog.GetString ("Rotate Right"), true);
 			rr_button.Clicked += HandleRotate90Command;
-			rr_button.SetTooltip (toolTips, Catalog.GetString ("Rotate photo right"), null);
+			rr_button.TooltipText = Catalog.GetString ("Rotate photo right");
 			toolbar.Insert (rr_button, -1);
 
 			toolbar.Insert (new SeparatorToolItem (), -1);
 
 			ToolButton fs_button = GtkUtil.ToolButtonFromTheme ("view-fullscreen", Catalog.GetString ("Fullscreen"), true);
 			fs_button.Clicked += HandleViewFullscreen;
-			fs_button.SetTooltip (toolTips, Catalog.GetString ("View photos fullscreen"), null);
+			fs_button.TooltipText = Catalog.GetString ("View photos fullscreen");
 			toolbar.Insert (fs_button, -1);
 
 			ToolButton ss_button = GtkUtil.ToolButtonFromTheme ("media-playback-start", Catalog.GetString ("Slideshow"), true);
 			ss_button.Clicked += HandleViewSlideshow;
-			ss_button.SetTooltip (toolTips, Catalog.GetString ("View photos in a slideshow"), null);
+			ss_button.TooltipText = Catalog.GetString ("View photos in a slideshow");
 			toolbar.Insert (ss_button, -1);
 
 			collection = new UriCollection (uris);
@@ -121,7 +120,7 @@ namespace FSpot {
 			sidebar.CloseRequested += HandleHideSidePane;
 			sidebar.Show ();
 
-			ThumbnailGenerator.Default.OnPixbufLoaded += delegate { directory_view.QueueDraw (); };
+			ThumbnailLoader.Default.OnPixbufLoaded += delegate { directory_view.QueueDraw (); };
 
 			image_view = new PhotoImageView (collection);
 			GtkUtil.ModifyColors (image_view);
@@ -158,8 +157,7 @@ namespace FSpot {
 					if (pointer == null)
 						return;
 					IBrowsableItem [] item = {pointer.Current};
-					PhotoArray item_array = new PhotoArray (item);
-					sidebar.HandleSelectionChanged (item_array);
+					sidebar.HandleSelectionChanged (new PhotoList (item));
 			};
 			
 			image_view.Item.Collection.ItemsChanged += sidebar.HandleSelectionItemsChanged;
@@ -182,13 +180,13 @@ namespace FSpot {
 
 		void HandleExportActivated (object o, EventArgs e)
 		{
-			FSpot.Extensions.ExportMenuItemNode.SelectedImages = delegate () {return new FSpot.PhotoArray (directory_view.Selection.Items); };
+			FSpot.Extensions.ExportMenuItemNode.SelectedImages = delegate () {return new PhotoList (directory_view.Selection.Items); };
 		}
 
 		public void HandleCollectionChanged (IBrowsableCollection collection)
 		{
 			if (collection.Count > 0 && directory_view.Selection.Count == 0) {
-				Console.WriteLine ("Added selection");
+				Log.Debug ("Added selection");
 				directory_view.Selection.Add (0);
 			}
 
@@ -222,7 +220,7 @@ namespace FSpot {
 			}
 		}
 
-		private Uri CurrentUri
+		private SafeUri CurrentUri
 		{
 			get { 
 			 	return this.uri; 
@@ -230,7 +228,7 @@ namespace FSpot {
 			set {
 			 	this.uri = value;
 				collection.Clear ();
-				collection.LoadItems (new Uri[] { this.uri });
+				collection.LoadItems (new SafeUri[] { this.uri });
 			}
 		}
 
@@ -280,7 +278,7 @@ namespace FSpot {
 			if (current == null)
 				return;
 
-			Desktop.SetBackgroundImage (current.DefaultVersionUri.LocalPath);
+			Desktop.SetBackgroundImage (current.DefaultVersion.Uri.LocalPath);
 		}
 
 		private void HandleViewToolbar (object sender, System.EventArgs args)
@@ -318,7 +316,7 @@ namespace FSpot {
 		private void HandleNewWindow (object sender, System.EventArgs args)
 		{
 			/* FIXME this needs to register witth the core */
-			new SingleView (new Uri[] {uri});
+			new SingleView (new SafeUri[] {uri});
 		}
 
 		private void HandlePreferences (object sender, System.EventArgs args)
@@ -354,7 +352,7 @@ namespace FSpot {
 			int response = chooser.Run ();
 
 			if ((ResponseType) response == ResponseType.Ok)
-				CurrentUri = new System.Uri (chooser.Uri);
+				CurrentUri = new SafeUri (chooser.Uri, true);
 			
 
 			chooser.Destroy ();
@@ -462,7 +460,7 @@ namespace FSpot {
 			IBrowsableItem item = image_view.Item.Current;
 			System.Text.StringBuilder sb = new System.Text.StringBuilder();
 			if (filenames_item.Active && item != null)
-				sb.Append (System.IO.Path.GetFileName (item.DefaultVersionUri.LocalPath) + "  -  ");
+				sb.Append (System.IO.Path.GetFileName (item.DefaultVersion.Uri.LocalPath) + "  -  ");
 
 			sb.AppendFormat (Catalog.GetPluralString ("{0} Photo", "{0} Photos", collection.Count), collection.Count);
 			status_label.Text = sb.ToString ();
@@ -493,8 +491,6 @@ namespace FSpot {
 
 		private void HandleFileOpen (object sender, System.EventArgs args)
 		{
-			string open = null;
-			
 			FileChooserDialog file_selector =
 				new FileChooserDialog ("Open", this.Window,
 						       FileChooserAction.Open);
@@ -503,12 +499,11 @@ namespace FSpot {
 			int response = file_selector.Run ();
 			
 			if ((Gtk.ResponseType) response == Gtk.ResponseType.Ok) {
-				var l = new List<Uri> ();
+				var l = new List<SafeUri> ();
 				foreach (var s in file_selector.Uris)
-					l.Add (new Uri (s));
+					l.Add (new SafeUri (s));
 				new FSpot.SingleView (l.ToArray ());
 			}
-
 			
 			file_selector.Destroy ();
 		}

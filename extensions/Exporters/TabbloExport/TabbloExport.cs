@@ -36,7 +36,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading;
 
-using FSpot.Utils;
+using Hyena;
 using FSpot.UI.Dialog;
 
 namespace FSpotTabbloExport {
@@ -319,7 +319,7 @@ namespace FSpotTabbloExport {
 						Catalog.GetString ("Error");
 				// FIXME:  Retry logic? 
 //				  progressDialog.PerformRetrySkip ();
-				Console.WriteLine (e);
+				Log.Exception (e);
 			} finally {
 				OnUploadFinished ();
 			}
@@ -373,7 +373,7 @@ namespace FSpotTabbloExport {
 
 			PhotoStore photo_store = FSpot.App.Instance.Database.Photos;
 			FSpot.Photo photo = photo_store.GetByUri (
-					item.DefaultVersionUri);
+					item.DefaultVersion.Uri);
 			Debug.Assert (null != photo);
 			if (null == photo) {
 				return;
@@ -395,11 +395,11 @@ namespace FSpotTabbloExport {
 			FSpot.IBrowsableItem [] items = model.Photos;
 
 			for (int i = 0; i < pictures.Length; ++i) {
-				string mime_type = GLib.FileFactory.NewForUri (items [i].DefaultVersionUri).
+				string mime_type = GLib.FileFactory.NewForUri (items [i].DefaultVersion.Uri).
 							QueryInfo ("standard::content-type", GLib.FileQueryInfoFlags.None, null).ContentType;
 
 				pictures [i] = new Picture (items [i].Name,
-						items [i].DefaultVersionUri,
+						new Uri (items [i].DefaultVersion.Uri.AbsoluteUri),
 						mime_type,
 						model.Privacy);
 			}

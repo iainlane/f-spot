@@ -21,6 +21,8 @@ namespace FSpot.Widgets
 	public class ImageView : Container
 	{
 #region public API
+		protected ImageView (IntPtr raw) : base (raw) { }
+
 		public ImageView (Adjustment hadjustment, Adjustment vadjustment, bool can_select) : base ()
 		{
 			OnSetScrollAdjustments (hadjustment, vadjustment);
@@ -205,6 +207,13 @@ namespace FSpot.Widgets
 
 			if (scrolled != null)
 				GLib.Idle.Add (delegate {scrolled.SetPolicy (Gtk.PolicyType.Automatic, Gtk.PolicyType.Automatic); return false;});
+		}
+
+		bool panning = false;
+		public bool Panning {
+			get {
+				return panning;
+			}
 		}
 
 		public Point WindowCoordsToImage (Point win)
@@ -469,37 +478,20 @@ namespace FSpot.Widgets
 				HandleAdjustmentsValueChanged (this, EventArgs.Empty);
 		}	
 
-//		bool dragging = false;
-//		int draganchor_x = 0;
-//		int draganchor_y = 0;
 		protected override bool OnButtonPressEvent (EventButton evnt)
 		{
 			bool handled = false;
+
 			if (!HasFocus)
 				GrabFocus ();
 
 			if (PointerMode == PointerMode.None)
 				return false;
 
+			handled = handled || OnPanButtonPressEvent (evnt);
+
 			if (can_select)
-				handled |= OnSelectionButtonPressEvent (evnt);
-
-			if (handled)
-				return handled;
-
-	//		if (dragging)
-	//			return base.OnButtonPressEvent (evnt);
-
-	//		switch (evnt.Button) {
-	//		case 1:	
-	//			dragging = true;
-	//			draganchor_x = (int)evnt.X;
-	//			draganchor_y = (int)evnt.Y;
-
-	//			handled = true;
-	//		default:
-	//			break;
-	//		}
+				handled = handled || OnSelectionButtonPressEvent (evnt);
 
 			return handled || base.OnButtonPressEvent (evnt);
 		}
@@ -508,21 +500,22 @@ namespace FSpot.Widgets
 		{
 			bool handled = false;
 
+			handled = handled || OnPanButtonReleaseEvent (evnt);
+
 			if (can_select)
-				handled |= OnSelectionButtonReleaseEvent (evnt);
+				handled = handled || OnSelectionButtonReleaseEvent (evnt);
 
-			if (handled)
-				return handled;
-
-			return handled |= base.OnButtonReleaseEvent (evnt);
+			return handled || base.OnButtonReleaseEvent (evnt);
 		}
 
 		protected override bool OnMotionNotifyEvent (EventMotion evnt)
 		{
 			bool handled = false;
 
+			handled = handled || OnPanMotionNotifyEvent (evnt);
+
 			if (can_select)
-				handled |= OnSelectionMotionNotifyEvent (evnt);
+				handled = handled || OnSelectionMotionNotifyEvent (evnt);
 
 			return handled || base.OnMotionNotifyEvent (evnt);
 
@@ -992,7 +985,7 @@ namespace FSpot.Widgets
 		void SelectionSetPointer (int x, int y)
 		{
 			if (is_moving_selection)
-				GdkWindow.Cursor = new Cursor (CursorType.Fleur);
+				GdkWindow.Cursor = new Cursor (CursorType.Crosshair);
 			else {
 				switch (GetDragMode (x, y)) {
 				case DragMode.Move:
@@ -1030,6 +1023,7 @@ namespace FSpot.Widgets
 
 			
 		}
+
 
 		const int SELECTION_THRESHOLD = 5;
 		bool OnSelectionMotionNotifyEvent (EventMotion evnt)
@@ -1114,6 +1108,66 @@ namespace FSpot.Widgets
 			return new Rectangle (sel.X + width < Pixbuf.Width ? sel.X : Pixbuf.Width - width,
 					      sel.Y + height < Pixbuf.Height ? sel.Y : Pixbuf.Height - height,
 					      width, height);
+		}
+#endregion
+
+#region panning
+		Point pan_anchor = new Point (0, 0);
+
+		bool OnPanButtonPressEvent (EventButton evnt)
+		{
+			if (2 != evnt.Button) {
+				return false;
+			}
+
+			System.Diagnostics.Debug.Assert (!panning);
+			panning = true;
+
+			pan_anchor.X = (int) evnt.X;
+			pan_anchor.Y = (int) evnt.Y;
+
+			PanSetPointer ();
+
+			return true;
+		}
+
+		bool OnPanMotionNotifyEvent (EventMotion evnt)
+		{
+			if (!panning) {
+				return false;
+			}
+
+			int pan_x = pan_anchor.X - (int) evnt.X;
+			int pan_y = pan_anchor.Y - (int) evnt.Y;
+			ScrollBy (pan_x, pan_y);
+
+			pan_anchor.X = (int) evnt.X;
+			pan_anchor.Y = (int) evnt.Y;
+
+			PanSetPointer ();
+
+			return true;
+		}
+
+		bool OnPanButtonReleaseEvent (EventButton evnt)
+		{
+			if (2 != evnt.Button) {
+				return false;
+			}
+
+			System.Diagnostics.Debug.Assert (panning);
+			panning = false;
+
+			PanSetPointer ();
+
+			return true;
+		}
+
+		void PanSetPointer ()
+		{
+			GdkWindow.Cursor = panning
+					? new Cursor (CursorType.Fleur)
+					: null;
 		}
 #endregion
 	}

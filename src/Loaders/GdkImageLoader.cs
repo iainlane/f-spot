@@ -14,6 +14,7 @@ using System.Threading;
 using Gdk;
 using FSpot.Utils;
 using FSpot.Platform;
+using Hyena;
 
 namespace FSpot.Loaders {
 	public class GdkImageLoader : Gdk.PixbufLoader, IImageLoader
@@ -23,13 +24,19 @@ namespace FSpot.Loaders {
 		{	
 		}
 
-		public void Load (Uri uri)
+        ~GdkImageLoader ()
+        {
+            if (!is_disposed)
+                Dispose ();
+        }
+
+		public void Load (SafeUri uri)
 		{
 			if (is_disposed)
 				return;
 
 			//First, send a thumbnail if we have one
-			if ((thumb = ThumbnailFactory.LoadThumbnail (uri)) != null) {
+			if ((thumb = XdgThumbnailSpec.LoadThumbnail (uri, ThumbnailSize.Large, null)) != null) {
 				pixbuf_orientation = PixbufOrientation.TopLeft;
 				EventHandler<AreaPreparedEventArgs> prep = AreaPrepared;
 				if (prep != null)

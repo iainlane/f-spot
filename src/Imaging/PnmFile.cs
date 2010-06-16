@@ -2,10 +2,7 @@ using FSpot.Imaging;
 using SemWeb;
 using System;
 using System.IO;
-
-#if ENABLE_NUNIT
-using NUnit.Framework;
-#endif
+using Hyena;
 
 namespace FSpot.Pnm {
 	public class PnmFile : ImageFile, StatementSource {
@@ -15,11 +12,7 @@ namespace FSpot.Pnm {
                         get { return false; }
                 }
 
-		public PnmFile (Uri uri) : base (uri) 
-		{
-		}
-
-		public PnmFile (string path) : base (path) 
+		public PnmFile (SafeUri uri) : base (uri)
 		{
 		}
 
@@ -45,7 +38,7 @@ namespace FSpot.Pnm {
 
 			public void Dump ()
 			{
-				System.Console.WriteLine ("Loading ({0} - {1},{2} - {3})", 
+				Log.DebugFormat ("Loading ({0} - {1},{2} - {3})",
 							  Magic, Width, Height, Max);
 			}
 		}
@@ -115,25 +108,6 @@ namespace FSpot.Pnm {
 				data [i] = BitConverter.ToUInt16 (tmp, 0, false);
 			}
 			return data;
-		}
-
-		static Gdk.Pixbuf LoadRGB16 (Stream stream, int width, int height)
-		{
-			Gdk.Pixbuf pixbuf = new Gdk.Pixbuf (Gdk.Colorspace.Rgb, false, 8, width, height);
-			unsafe {
-				byte *pixels = (byte *)pixbuf.Pixels;
-				int length = width * 6;
-				byte [] buffer = new byte [length];
-				
-				for (int row = 0; row < height; row++) {
-					stream.Read (buffer, 0, buffer.Length);
-					for (int i = 0; i < width * 3; i++) {
-						pixels [i] = (byte) (BitConverter.ToUInt16 (buffer, i * 2, false) >> 8);
-					}
-					pixels += pixbuf.Rowstride;
-				}
-			}
-			return pixbuf;
 		}
 
 		static Gdk.Pixbuf LoadRGB8 (Stream stream, int width, int height)
@@ -215,7 +189,7 @@ namespace FSpot.Pnm {
 					return pixbuf;
 				}
 			} catch (System.Exception e) {
-				System.Console.WriteLine (e.ToString ());
+				Log.Exception (e);
 			}
 			return null;
 		}
@@ -281,38 +255,4 @@ namespace FSpot.Pnm {
 			}			
 		}
 	}
-
-#if ENABLE_NUNIT
-	[TestFixture]
-	public class Tests {
-		[Test]
-		public void SaveLoad ()
-		{
-			using (Gdk.Pixbuf pixbuf = new Gdk.Pixbuf (null, "f-spot-32.png")) {
-				Gdk.Pixbuf source = pixbuf;
-				if (pixbuf.HasAlpha)
-					source = PixbufUtils.Flatten (pixbuf);
-
-				string path = ImageFile.TempPath ("test.ppm");
-				PnmFile pnm = new PnmFile (path);
-				using (Stream stream = File.OpenWrite (path)) {
-					pnm.Save (source, stream);
-				}
-
-				pnm = new PnmFile (path);
-
-				using (Gdk.Pixbuf saved = pnm.Load ()) {
-					Assert.IsNotNull (saved);
-					Assert.AreEqual (saved.Width, source.Width);
-					Assert.AreEqual (saved.Height, source.Height);
-				}
-				
-				if (source != pixbuf)
-					source.Dispose ();
-
-				File.Delete (path);
-			}
-		}
-	}	
-#endif
 }

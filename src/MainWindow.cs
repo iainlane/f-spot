@@ -17,6 +17,7 @@ using Gtk;
 using Mono.Addins;
 using Mono.Unix;
 
+using Hyena;
 using Banshee.Kernel;
 
 using FSpot;
@@ -26,14 +27,12 @@ using FSpot.Widgets;
 using FSpot.Utils;
 using FSpot.UI.Dialog;
 using FSpot.Platform;
-
-using GPhoto2;
+using FSpot.Import;
 
 namespace FSpot
 {
 	public class MainWindow
 	{
-		public static MainWindow Toplevel;
 		public Sidebar Sidebar { get; private set; }
 	
 		TagSelectionWidget tag_selection_widget;
@@ -43,8 +42,6 @@ namespace FSpot
 		}
 	
 		[GtkBeans.Builder.Object] Gtk.HPaned main_hpaned;
-		[GtkBeans.Builder.Object] Gtk.VBox left_vbox;
-		[GtkBeans.Builder.Object] Gtk.VBox group_vbox;
 		[GtkBeans.Builder.Object] Gtk.VBox view_vbox;
 	
 		[GtkBeans.Builder.Object] Gtk.VBox toolbar_vbox;
@@ -58,9 +55,10 @@ namespace FSpot
 		[GtkBeans.Builder.Object] Label status_label;
 	
 		[GtkBeans.Builder.Object] Gtk.UIManager uimanager;
-		// File
+		// Photo
 		[GtkBeans.Builder.Object] Gtk.Action create_version_menu_item;
 		[GtkBeans.Builder.Object] Gtk.Action delete_version_menu_item;
+		[GtkBeans.Builder.Object] Gtk.Action detach_version_menu_item;
 		[GtkBeans.Builder.Object] Gtk.Action rename_version_menu_item;
 		
 		[GtkBeans.Builder.Object] Gtk.Action tools;
@@ -183,9 +181,7 @@ namespace FSpot
 		
 		private static TargetEntry [] icon_dest_target_table = 
 			new TargetEntry [] {
-	#if ENABLE_REPARENTING
 				DragDropTargets.PhotoListEntry,
-	#endif
 				DragDropTargets.TagListEntry,
 				DragDropTargets.UriListEntry
 		};
@@ -195,33 +191,12 @@ namespace FSpot
 				DragDropTargets.TagListEntry
 		};
 		
-		private static TargetEntry [] tag_dest_target_table = 
-			new TargetEntry [] {
-				DragDropTargets.PhotoListEntry,
-				DragDropTargets.UriListEntry,
-				DragDropTargets.TagListEntry
-		};
-	
 		const int PHOTO_IDX_NONE = -1;
-	
-		private static Gtk.Tooltips toolTips;
-		public static Gtk.Tooltips ToolTips {
-			get {
-				if (toolTips == null)
-					toolTips = new Gtk.Tooltips ();
-				return toolTips;
-			}
-		}
 	
 		public Db Database { get; private set; }
 		public ModeType ViewMode { get; private set; }
 		public MainSelection Selection { get; private set; }
 		public InfoBox InfoBox { get; private set; }
-	
-		public MenuItem FindByTag {
-			get { return uimanager.GetWidget ("/ui/menubar1/find/find_by_tag") as MenuItem; }
-		}
-	
 	
 		//
 		// Constructor
@@ -233,7 +208,7 @@ namespace FSpot
 					service.Initialize ();
 					service.Start ();
 				} catch (Exception e) {
-					Log.Warning ("Something went wrong while starting the {0} extension.", service.Id);
+					Log.WarningFormat ("Something went wrong while starting the {0} extension.", service.Id);
 					Log.DebugException (e);
 				}
 			}
@@ -262,16 +237,13 @@ namespace FSpot
 				else if (max_size == 0)
 					Log.Warning ("maximum_size is 0 (tin-hat mode), not overriding");
 				else if (max_size < size) {
-					Log.Debug ("Setting maximum_size to a saner value ({0}MB), according to your db size", size);
+					Log.DebugFormat ("Setting maximum_size to a saner value ({0}MB), according to your db size", size);
 					Preferences.Set (Preferences.GSD_THUMBS_MAX_SIZE, size);
 				}
 			}
 
 #endif
 			Database = db;
-	
-			if (Toplevel == null)
-				Toplevel = this;
 	
 			GtkBeans.Builder builder = new GtkBeans.Builder ("main_window.ui");
 			builder.Autoconnect (this);
@@ -299,8 +271,8 @@ namespace FSpot
 			toolbar_vbox.PackStart (toolbar);
 	
 			ToolButton import_button = GtkUtil.ToolButtonFromTheme ("gtk-add", Catalog.GetString ("Import"), true);
-			import_button.Clicked += HandleImportCommand;
-			import_button.SetTooltip (ToolTips, Catalog.GetString ("Import new images"), null);
+			import_button.Clicked += (o, args) => StartImport (null);
+			import_button.TooltipText = Catalog.GetString ("Import new images");
 			toolbar.Insert (import_button, -1);
 		
 			toolbar.Insert (new SeparatorToolItem (), -1);
@@ -320,7 +292,7 @@ namespace FSpot
 			browse_button.IconName = "mode-browse";
 			browse_button.IsImportant = true;
 			browse_button.Toggled += HandleToggleViewBrowse;
-			browse_button.SetTooltip (ToolTips, Catalog.GetString ("Browse many photos simultaneously"), null);
+			browse_button.TooltipText = Catalog.GetString ("Browse many photos simultaneously");
 			toolbar.Insert (browse_button, -1);
 	
 			edit_button = new ToggleToolButton ();
@@ -328,19 +300,19 @@ namespace FSpot
 			edit_button.IconName = "mode-image-edit";
 			edit_button.IsImportant = true;
 			edit_button.Toggled += HandleToggleViewPhoto;
-			edit_button.SetTooltip (ToolTips, Catalog.GetString ("View and edit a photo"), null);
+			edit_button.TooltipText = Catalog.GetString ("View and edit a photo");
 			toolbar.Insert (edit_button, -1);
 	
 			toolbar.Insert (new SeparatorToolItem (), -1);
 	
 			ToolButton fs_button = GtkUtil.ToolButtonFromTheme ("view-fullscreen", Catalog.GetString ("Fullscreen"), false);
 			fs_button.Clicked += HandleViewFullscreen;
-			fs_button.SetTooltip (ToolTips, Catalog.GetString ("View photos fullscreen"), null);
+			fs_button.TooltipText = Catalog.GetString ("View photos fullscreen");
 			toolbar.Insert (fs_button, -1);
 	
 			ToolButton ss_button = GtkUtil.ToolButtonFromTheme ("media-playback-start", Catalog.GetString ("Slideshow"), false);
 			ss_button.Clicked += HandleViewSlideShow;
-			ss_button.SetTooltip (ToolTips, Catalog.GetString ("View photos in a slideshow"), null);
+			ss_button.TooltipText = Catalog.GetString ("View photos in a slideshow");
 			toolbar.Insert (ss_button, -1);
 	
 			SeparatorToolItem white_space = new SeparatorToolItem ();
@@ -355,12 +327,12 @@ namespace FSpot
 	
 			display_previous_button = new ToolButton (Stock.GoBack);
 			toolbar.Insert (display_previous_button, -1);
-			display_previous_button.SetTooltip (ToolTips, Catalog.GetString ("Previous photo"), String.Empty);
+			display_previous_button.TooltipText = Catalog.GetString ("Previous photo");
 			display_previous_button.Clicked += new EventHandler (HandleDisplayPreviousButtonClicked);
 	
 			display_next_button = new ToolButton (Stock.GoForward);
 			toolbar.Insert (display_next_button, -1);
-			display_next_button.SetTooltip (ToolTips, Catalog.GetString ("Next photo"), String.Empty);
+			display_next_button.TooltipText = Catalog.GetString ("Next photo");
 			display_next_button.Clicked += new EventHandler (HandleDisplayNextButtonClicked);
 	
 			Sidebar = new Sidebar ();
@@ -412,11 +384,6 @@ namespace FSpot
 			Database.Tags.ItemsChanged += HandleTagsChanged;
 			Database.Tags.ItemsAdded += HandleTagsChanged;
 			Database.Tags.ItemsRemoved += HandleTagsChanged;
-	#if SHOW_CALENDAR
-			FSpot.SimpleCalendar cal = new FSpot.SimpleCalendar (query);
-			cal.DaySelected += HandleCalendarDaySelected;
-			left_vbox.PackStart (cal, false, true, 0);
-	#endif
 	
 			group_selector = new FSpot.GroupSelector ();
 			group_selector.Adaptor = new FSpot.TimeAdaptor (query, Preferences.Get<bool> (Preferences.GROUP_ADAPTOR_ORDER_ASC));
@@ -439,6 +406,14 @@ namespace FSpot
 			query_widget.Logic.Changed += HandleQueryLogicChanged;
 			view_vbox.PackStart (query_widget, false, false, 0);
 			view_vbox.ReorderChild (query_widget, 2);
+			
+			MenuItem findByTag = uimanager.GetWidget ("/ui/menubar1/find/find_by_tag") as MenuItem;
+			query_widget.Hidden += delegate (object sender, EventArgs args) {
+				((Gtk.Label)findByTag.Child).TextWithMnemonic = Catalog.GetString ("Show _Find Bar");
+			};
+			query_widget.Shown += delegate (object sender, EventArgs args) {
+				((Gtk.Label)findByTag.Child).TextWithMnemonic = Catalog.GetString ("Hide _Find Bar");
+			};
 	
 			icon_view = new QueryView (query);
 			icon_view.ZoomChanged += HandleZoomChanged;
@@ -453,11 +428,13 @@ namespace FSpot
 	
 			new FSpot.PreviewPopup (icon_view);
 	
-			Gtk.Drag.SourceSet (icon_view, Gdk.ModifierType.Button1Mask | Gdk.ModifierType.Button3Mask,
-					    icon_source_target_table, DragAction.Copy | DragAction.Move);
-			
 			icon_view.DragBegin += HandleIconViewDragBegin;
+			icon_view.DragEnd += HandleIconViewDragEnd;
 			icon_view.DragDataGet += HandleIconViewDragDataGet;
+			icon_view.DragMotion += HandleIconViewDragMotion;
+			icon_view.DragDrop += HandleIconViewDragDrop;
+			// StartDrag is fired by IconView
+			icon_view.StartDrag += HandleIconViewStartDrag;
 	
 			TagMenu tag_menu = new TagMenu (null, Database.Tags);
 			tag_menu.NewTagHandler += delegate { HandleCreateTagAndAttach (this, null); };
@@ -472,9 +449,6 @@ namespace FSpot
 			Gtk.Drag.DestSet (icon_view, DestDefaults.All, icon_dest_target_table, 
 					  DragAction.Copy | DragAction.Move); 
 	
-			//		icon_view.DragLeave += new DragLeaveHandler (HandleIconViewDragLeave);
-			icon_view.DragMotion += HandleIconViewDragMotion;
-			icon_view.DragDrop += HandleIconViewDragDrop;
 			icon_view.DragDataReceived += HandleIconViewDragDataReceived;
 			icon_view.KeyPressEvent += HandleIconViewKeyPressEvent;
 	
@@ -539,9 +513,6 @@ namespace FSpot
 			Preferences.SettingChanged += OnPreferencesChanged;
 	
 			main_window.DeleteEvent += HandleDeleteEvent;
-			
-			query_widget.HandleChanged (query);
-			query_widget.Close ();
 	
 			// When the icon_view is loaded, set it's initial scroll position
 			icon_view.SizeAllocated += HandleIconViewReady;
@@ -681,7 +652,7 @@ namespace FSpot
 	
 		private void HandleExportActivated (object o, EventArgs e)
 		{
-			FSpot.Extensions.ExportMenuItemNode.SelectedImages = delegate () {return new FSpot.PhotoArray (SelectedPhotos ()); };
+			FSpot.Extensions.ExportMenuItemNode.SelectedImages = delegate () {return new PhotoList (SelectedPhotos ()); };
 		}
 	
 		private void HandleDbItemsChanged (object sender, DbItemEventArgs<Photo> args)
@@ -906,18 +877,6 @@ namespace FSpot
 		}
 	
 		//
-		// Change Notification functions
-		//
-	
-		private void InvalidateViews ()
-		{
-			icon_view.QueueDraw ();
-			photo_view.Reload ();
-			if (fsview != null)
-				fsview.View.Reload ();
-		}
-			
-		//
 		// Commands
 		//
 	
@@ -927,7 +886,7 @@ namespace FSpot
 			
 			int [] selected_ids = SelectedIds ();
 			if (command.Execute (direction, SelectedPhotos (selected_ids)))
-				query.MarkChanged (selected_ids, new PhotoChanges () {DataChanged = true});
+				query.MarkChanged (selected_ids, InvalidateData.Instance);
 		}
 	
 		//
@@ -958,7 +917,7 @@ namespace FSpot
 			}
 		}
 		
-		public void SetFolderQuery (IEnumerable<Uri> uri_list)
+		public void SetFolderQuery (IEnumerable<SafeUri> uri_list)
 		{
 			ShowQueryWidget ();
 			query_widget.SetFolders (uri_list);
@@ -993,20 +952,6 @@ namespace FSpot
 	 		ShowQueryWidget ();
 	 		query_widget.Include (new Tag [] {tag_selection_widget.TagByPath (args.Path)});
 		}
-	
-	
-	#if SHOW_CALENDAR
-		void HandleCalendarDaySelected (object sender, System.EventArgs args)
-		{
-			FSpot.SimpleCalendar cal = sender as FSpot.SimpleCalendar;
-			JumpTo (cal.Date);
-		}
-	
-		void JumpTo (System.DateTime time)
-		{
-			JumpTo (query.LookupItem (time));*/
-		}
-	#endif
 	
 		void JumpTo (int index)
 		{
@@ -1055,7 +1000,9 @@ namespace FSpot
 			 * actually operate directly on the adaptor not on the selector but I don't have 
 			 * time to fix it right now.
 			 */
-			group_selector.SetPosition (group_selector.Adaptor.IndexFromPhoto (photo));
+			if (!group_selector.GlassUpdating) {
+				group_selector.SetPosition (group_selector.Adaptor.IndexFromPhoto (photo));
+			}
 	#endif
 		}
 		
@@ -1076,8 +1023,14 @@ namespace FSpot
 		//
 		// IconView Drag Handlers
 		//
+
+		public void HandleIconViewStartDrag (object sender, StartDragArgs args)
+		{
+			Gtk.Drag.Begin (icon_view, new TargetList (icon_source_target_table),
+					DragAction.Copy | DragAction.Move, (int) args.Button, args.Event);
+		}
 	
-		void HandleIconViewDragBegin (object sender, DragBeginArgs args)
+		public void HandleIconViewDragBegin (object sender, DragBeginArgs args)
 		{
 			Photo [] photos = SelectedPhotos ();
 			
@@ -1092,7 +1045,7 @@ namespace FSpot
 	
 				bool use_icon = false;;
 				while (len-- > 0) {
-					FSpot.PixbufCache.CacheEntry entry = icon_view.Cache.Lookup (photos [len].DefaultVersionUri);
+					FSpot.PixbufCache.CacheEntry entry = icon_view.Cache.Lookup (photos [len].DefaultVersion.Uri);
 	
 					Pixbuf thumbnail = null;
 					if (entry != null) {
@@ -1124,6 +1077,9 @@ namespace FSpot
 					Gtk.Drag.SetIconPixbuf (args.Context, container, 0, 0);
 				container.Dispose ();
 			}
+		}
+
+		void HandleIconViewDragEnd (object sender, DragEndArgs args) {
 		}
 	
 		void HandleIconViewDragDataGet (object sender, DragDataGetArgs args)
@@ -1157,42 +1113,52 @@ namespace FSpot
 	
 		public void ImportUriList (UriList list, bool copy) 
 		{
-			ImportCommand command = new ImportCommand (main_window);
-			if (command.ImportFromPaths (Database.Photos, list.ToLocalPaths (), copy) > 0) {
-				query.RollSet = new RollSet (Database.Rolls.GetRolls (1)[0]);
-				UpdateQuery ();
-			}
+			var controller = new ImportController ();
+			controller.StatusEvent += (evnt) => {
+				ThreadAssist.ProxyToMain (() => {
+					if (evnt == ImportEvent.ImportFinished) {
+						if (controller.PhotosImported > 0) {
+							query.RollSet = new RollSet (Database.Rolls.GetRolls (1));
+						}
+					}
+				});
+			};
+
+			var source = new MultiFileImportSource (list.ToArray ());
+			controller.ActiveSource = source;
+			controller.CopyFiles = copy;
+			controller.DuplicateDetect = true;
+			controller.RecurseSubdirectories = true;
+
+			var import_window = new ImportDialog (controller, Window);
+			import_window.Show ();
+
+			controller.StartImport ();
 		}
-	
-		public void ImportFile (string path)
+
+		void HandleImportCommand (object obj, EventArgs args)
 		{
-			ImportCommand command = new ImportCommand (main_window);
-			if (command.ImportFromFile (Database.Photos, path) > 0) {
-				query.RollSet = new RollSet (Database.Rolls.GetRolls (1)[0]);
-				UpdateQuery ();
-			}
+			StartImport (null);
 		}
 	
-	#if false
-		public void ImportUdi (string udi)
+		public void ImportFile (SafeUri uri)
 		{
-			/* probably a camera we need to contruct on of our gphoto2 uris */
-			Hal.Device dev = new Hal.Device (Core.HalContext, udi);
-			string mount_point = dev.GetPropertyString ("volume.mount_point");
-			int bus = dev.GetPropertyInt ("usb.bus_number");
-			int device = dev.GetPropertyInt ("usb.linux.device_number");
-			System.Console.WriteLine ("dev = {1} exists = {2} mount_point = {0} {3},{4}", mount_point, dev, dev.Exists, bus, device);
-	
-			if (! dev.Exists || mount_point != null) {
-				ImportFile (mount_point);
-			} else {
-				string gphoto_uri = String.Format ("gphoto2:usb:{0},{1}", bus.ToString ("d3") , device.ToString ("d3"));
-				System.Console.WriteLine ("gphoto_uri = {0}", gphoto_uri);
-				ImportCamera (gphoto_uri);
-			} 
-				
+			StartImport (uri);
 		}
-	#endif
+
+		void StartImport (SafeUri uri)
+		{
+			var controller = new ImportController ();
+			controller.StatusEvent += (evnt) => {
+				if (evnt == ImportEvent.ImportFinished) {
+					if (controller.PhotosImported > 0) {
+						query.RollSet = new RollSet (Database.Rolls.GetRolls (1));
+					}
+				}
+			};
+			var import_window = new ImportDialog (controller, Window);
+			import_window.Show ();
+		}
 	
 		void HandleIconViewDragDataReceived (object sender, DragDataReceivedArgs args)
 		{
@@ -1233,7 +1199,6 @@ namespace FSpot
 				return;
 			}
 			
-	#if ENABLE_REPARENTING
 			if (args.Info == DragDropTargets.PhotoListEntry.Info) {
 				int p_item = icon_view.CellAtPosition (args.X + (int) icon_view.Hadjustment.Value, 
 								     args.Y + (int) icon_view.Vadjustment.Value);
@@ -1241,15 +1206,16 @@ namespace FSpot
 				if (p_item >= 0) {
 					if (icon_view.Selection.Contains (p_item)) //We don't want to reparent ourselves!
 						return;
-					PhotoVersionCommands.Reparent cmd = new PhotoVersionCommands.Reparent ();
-					
-					cmd.Execute (Database.Photos, SelectedPhotos(), query.Photos [p_item], GetToplevel (null));
+					PhotoVersionCommands.Reparent cmd = new PhotoVersionCommands.Reparent ();				
+					Photo[] photos_to_reparent = SelectedPhotos ();
+					// Give feedback to user that something happened, and leave the parent selected after reparenting
+					icon_view.Selection.Add (p_item); 
+					cmd.Execute (Database.Photos, photos_to_reparent, query.Photos [p_item], GetToplevel (null));
 					UpdateQuery ();
 				}
 				Gtk.Drag.Finish (args.Context, true, false, args.Time);
 				return;
 			}
-	#endif
 		}
 	
 		//
@@ -1394,7 +1360,6 @@ namespace FSpot
 		void HandlePhotoViewDragDrop (object sender, DragDropArgs args)
 		{
 			//Widget source = Gtk.Drag.GetSourceWidget (args.Context);
-			//Console.WriteLine ("Drag Drop {0}", source == null ? "null" : source.TypeName);
 	
 			args.RetVal = true;
 		}
@@ -1487,84 +1452,6 @@ namespace FSpot
 		// Main menu commands
 		//
 	
-		void HandleImportCommand (object sender, EventArgs e)
-		{
-			Database.Sync = false;
-			ImportCommand command = new ImportCommand (main_window);
-			if (command.ImportFromFile (Database.Photos, null) > 0) {
-				query.RollSet = new RollSet (Database.Rolls.GetRolls (1)[0]);
-				UpdateQuery ();
-			}
-			Database.Sync = true;		
-		}
-	
-		void HandleImportFromCameraCommand (object sender, EventArgs e)
-		{
-			ImportCamera (null);
-		}
-	
-		public void ImportCamera (string camera_device)
-		{
-			Log.Debug ("ImportCamera {0}", camera_device);
-			GPhotoCamera cam = new GPhotoCamera();
-	
-			try {
-				int num_cameras = cam.DetectCameras();
-				int selected_cam = 0;
-	
-				if (num_cameras < 1) {
-					HigMessageDialog md = new HigMessageDialog (main_window, DialogFlags.DestroyWithParent, 
-						MessageType.Warning, ButtonsType.Ok, 
-						Catalog.GetString ("No cameras detected."),
-						Catalog.GetString ("F-Spot was unable to find any cameras attached to this system." + 
-									      "  Double check that the camera is connected and has power")); 
-	
-					md.Run ();
-					md.Destroy ();
-					return;
-				} else if (num_cameras == 1) {
-					selected_cam = 0;
-				} else {
-					bool found = false;
-					if (camera_device != null)
-						for (int i = 0; i < num_cameras; i++) {
-							if (camera_device.IndexOf (cam.CameraList.GetValue(i)) != 0) {
-								selected_cam = i;
-								found = true;
-								break;
-							}
-					}
-					
-					if (!found) {
-						FSpot.CameraSelectionDialog camselect = new FSpot.CameraSelectionDialog (cam.CameraList);
-						selected_cam = camselect.Run ();
-					}
-				}
-	
-				if (selected_cam >= 0) {
-					cam.SelectCamera (selected_cam);	
-					cam.InitializeCamera ();
-	
-					FSpot.CameraFileSelectionDialog selector = new FSpot.CameraFileSelectionDialog (cam, Database);
-					if (selector.Run() > 0)
-						query.RollSet = new RollSet (Database.Rolls.GetRolls (1)[0]);
-					UpdateQuery ();
-				}
-			}
-			catch (GPhotoException ge) {
-				System.Console.WriteLine (ge.ToString ());
-				HigMessageDialog md = new HigMessageDialog (main_window, DialogFlags.DestroyWithParent, 
-					MessageType.Error, ButtonsType.Ok, 
-					Catalog.GetString ("Error connecting to camera"),
-					String.Format (Catalog.GetString ("Received error \"{0}\" while connecting to camera"), 
-					ge.Message));
-	
-				md.Run ();
-				md.Destroy ();
-			} finally {
-				cam.ReleaseGPhotoResources ();
-			}
-		}
 		void HandlePageSetupActivated (object o, EventArgs e)
 		{
 			FSpot.Global.PageSetup = Print.RunPageSetupDialog (this.Window, FSpot.Global.PageSetup, null);
@@ -1588,24 +1475,15 @@ namespace FSpot
 			Mono.Addins.Gui.AddinManagerWindow.Run (main_window);
 		}
 	
-		private void TestDisplay ()
-		{
-			Gtk.Window win = new Gtk.Window ("hello");
-			VBox box = new VBox ();
-			box.PackStart (new FSpot.Widgets.ImageDisplay (new BrowsablePointer (new FSpot.PhotoArray (SelectedPhotos ()), 0)));
-			win.Add (box);
-			win.ShowAll ();
-		}
-	
 		void HandleSendMailCommand (object sender, EventArgs args)
 		{
 			//TestDisplay ();
-			new FSpot.SendEmail (new FSpot.PhotoArray (SelectedPhotos ()), Window);
+			new FSpot.SendEmail (new PhotoList (SelectedPhotos ()), Window);
 		}
 	
 		public static void HandleHelp (object sender, EventArgs args)
 		{
-			GtkBeans.Global.ShowUri (Toplevel.Window.Screen, "ghelp:f-spot");
+			GtkBeans.Global.ShowUri (App.Instance.Organizer.Window.Screen, "ghelp:f-spot");
 		}
 	
 		public static void HandleAbout (object sender, EventArgs args)
@@ -1730,31 +1608,26 @@ namespace FSpot
 		void HandleCreateVersionCommand (object obj, EventArgs args)
 		{
 			PhotoVersionCommands.Create cmd = new PhotoVersionCommands.Create ();
-	
 			cmd.Execute (Database.Photos, CurrentPhoto, GetToplevel (null));
-	//		if (cmd.Execute (db.Photos, CurrentPhoto, GetToplevel (null))) {
-	//			query.MarkChanged (ActiveIndex (), true, false);
-	//		}
 		}
 	
 		void HandleDeleteVersionCommand (object obj, EventArgs args)
 		{
 			PhotoVersionCommands.Delete cmd = new PhotoVersionCommands.Delete ();
-	
 			cmd.Execute (Database.Photos, CurrentPhoto, GetToplevel (null));
-	//		if (cmd.Execute (db.Photos, CurrentPhoto, GetToplevel (null))) {
-	//			query.MarkChanged (ActiveIndex (), true, true);
-	//		}
+		}
+		
+		void HandleDetachVersionCommand (object obj, EventArgs args)
+		{
+			PhotoVersionCommands.Detach cmd = new PhotoVersionCommands.Detach ();
+			cmd.Execute (Database.Photos, CurrentPhoto, GetToplevel (null));
+			UpdateQuery ();
 		}
 	
 		void HandleRenameVersionCommand (object obj, EventArgs args)
 		{
 			PhotoVersionCommands.Rename cmd = new PhotoVersionCommands.Rename ();
-	
 			cmd.Execute (Database.Photos, CurrentPhoto, main_window);
-	//		if (cmd.Execute (db.Photos, CurrentPhoto, main_window)) {
-	//			query.MarkChanged (ActiveIndex (), true, false);
-	//		}
 		}
 		
 		public void HandleCreateTagAndAttach (object sender, EventArgs args)
@@ -1867,7 +1740,7 @@ namespace FSpot
 			System.Array.Sort (tags, new TagRemoveComparer ());
 	
 			foreach (Tag tag in tags) {
-				System.Console.WriteLine ("tag: {0}", tag.Name);
+				Log.Debug ("tag: {0}", tag.Name);
 			}
 	
 			string msg = Catalog.GetString("This operation will merge the selected tags and any sub-tags into a single tag.");
@@ -1907,7 +1780,7 @@ namespace FSpot
 		void HandleAdjustTime (object sender, EventArgs args)
 		{
 			PhotoList list = new PhotoList (Selection.Items);
-			list.Sort (new Photo.CompareDateName ());
+			list.Sort (new IBrowsableItemComparer.CompareDateName ());
 			(new AdjustTimeDialog (Database, list)).Run ();
 		}
 	
@@ -2265,13 +2138,19 @@ namespace FSpot
 		void HandleSelectAllCommand (object sender, EventArgs args)
 		{
 			icon_view.SelectAllCells ();
-			UpdateStatusLabel();
+			UpdateStatusLabel ();
 		}
 	
 		void HandleSelectNoneCommand (object sender, EventArgs args)
 		{
 			icon_view.Selection.Clear ();
-			UpdateStatusLabel();
+			UpdateStatusLabel ();
+		}
+
+		void HandleSelectInvertCommand (object sender, EventArgs args)
+		{
+			icon_view.Selection.SelectionInvert ();
+			UpdateStatusLabel ();
 		}
 	
 		// This ConnectBefore is needed because otherwise the editability of the name
@@ -2283,7 +2162,7 @@ namespace FSpot
 	
 			switch (args.Event.Key) {
 			case Gdk.Key.Delete:
-	 			HandleDeleteSelectedTagCommand (sender, (EventArgs) args);
+				HandleDeleteSelectedTagCommand (sender, (EventArgs) args);
 				break;
 			
 			case Gdk.Key.space:
@@ -2310,7 +2189,7 @@ namespace FSpot
 			System.Array.Sort (tags, new TagRemoveComparer ());
 		
 			//How many pictures are associated to these tags?
-			Db db = MainWindow.Toplevel.Database;
+			Db db = App.Instance.Database;
 			FSpot.PhotoQuery count_query = new FSpot.PhotoQuery(db.Photos);
 			count_query.Terms = FSpot.OrTerm.FromTags(tags);
 			int associated_photos = count_query.Count;
@@ -2342,7 +2221,7 @@ namespace FSpot
 				try { 				
 					db.Photos.Remove (tags);
 				} catch (InvalidTagOperationException e) {
-					System.Console.WriteLine ("this is something or another");
+					Log.Debug ("this is something or another");
 	
 					// A Category is not empty. Can not delete it.
 					string error_msg = Catalog.GetString ("Tag is not empty");
@@ -2366,7 +2245,7 @@ namespace FSpot
 	
 			int [] selected_ids = SelectedIds ();
 			if (command.Execute (SelectedPhotos (selected_ids)))
-				query.MarkChanged (selected_ids, new PhotoChanges {DataChanged = true});
+				query.MarkChanged (selected_ids, InvalidateData.Instance);
 		}
 	
 		public void HandleRotate90Command (object sender, EventArgs args)
@@ -2404,8 +2283,8 @@ namespace FSpot
 						var paths = new List<string> ();
 						var uris = new List<string> ();
 						foreach (Photo p in SelectedPhotos ()) {
-							paths.Add (System.IO.Path.GetFullPath (p.DefaultVersionUri.LocalPath));
-							uris.Add (p.DefaultVersionUri.ToString ());
+							paths.Add (System.IO.Path.GetFullPath (p.DefaultVersion.Uri.LocalPath));
+							uris.Add (p.DefaultVersion.Uri.ToString ());
 						}
 						data.Text = String.Join (" ", paths.ToArray ());
 						data.SetUris (String.Join (" ", uris.ToArray ()));
@@ -2416,7 +2295,7 @@ namespace FSpot
 	
 			var pt = new List<string> ();
 			foreach (Photo p in SelectedPhotos ()) {
-				pt.Add (System.IO.Path.GetFullPath (p.DefaultVersionUri.LocalPath));
+				pt.Add (System.IO.Path.GetFullPath (p.DefaultVersion.Uri.LocalPath));
 			}
 			
 			primary.Text = String.Join (" ", pt.ToArray ());
@@ -2429,7 +2308,7 @@ namespace FSpot
 			if (current == null)
 				return;
 	
-			Desktop.SetBackgroundImage (current.DefaultVersionUri.LocalPath);
+			Desktop.SetBackgroundImage (current.DefaultVersion.Uri.LocalPath);
 		}
 	
 		void HandleSetDateRange (object sender, EventArgs args) {
@@ -2689,18 +2568,6 @@ namespace FSpot
 			}
 		}
 		
-		void HandleFindTagIncluded (Tag t)
-		{
-			ShowQueryWidget ();
-			query_widget.Include (new Tag [] {t});
-	 	}
-		
-		void HandleFindTagRequired (Tag t)
-		{
-			ShowQueryWidget ();
-			query_widget.Require (new Tag [] {t});
-		}
-	
 		//
 		// Handle Main Menu 
 	
@@ -2718,6 +2585,7 @@ namespace FSpot
 	
 				create_version_menu_item.Sensitive = false;
 				delete_version_menu_item.Sensitive = false;
+				detach_version_menu_item.Sensitive = false;
 				rename_version_menu_item.Sensitive = false;
 	
 				sharpen.Sensitive = false;
@@ -2728,9 +2596,11 @@ namespace FSpot
 				
 				if (CurrentPhoto.DefaultVersionId == Photo.OriginalVersionId) {
 					delete_version_menu_item.Sensitive = false;
+					detach_version_menu_item.Sensitive = false;
 					rename_version_menu_item.Sensitive = false;
 				} else {
 					delete_version_menu_item.Sensitive = true;
+					detach_version_menu_item.Sensitive = true;
 					rename_version_menu_item.Sensitive = true;
 				}
 	
@@ -2782,26 +2652,26 @@ namespace FSpot
 			if (rl_button != null) {
 				if (Selection.Count == 0) {
 					rl_button.Sensitive = false;
-					rl_button.SetTooltip (ToolTips, Catalog.GetString (String.Empty), null);
+					rl_button.TooltipText = String.Empty;
 				} else {
 					rl_button.Sensitive = true;
 	
 					string msg = Catalog.GetPluralString ("Rotate selected photo left",
 									      "Rotate selected photos left", Selection.Count);
-					rl_button.SetTooltip (ToolTips, String.Format (msg, Selection.Count), null);
+					rl_button.TooltipText = String.Format (msg, Selection.Count);
 				}
 			}
 			
 			if (rr_button != null) {
 				if (Selection.Count == 0) {
 					rr_button.Sensitive = false;
-					rr_button.SetTooltip (ToolTips, Catalog.GetString (String.Empty), null);
+					rr_button.TooltipText = String.Empty;
 				} else {
 					rr_button.Sensitive = true;
 	
 					string msg = Catalog.GetPluralString ("Rotate selected photo right",
 									      "Rotate selected photos right", Selection.Count);
-					rr_button.SetTooltip (ToolTips, String.Format (msg, Selection.Count), null);
+					rr_button.TooltipText = String.Format (msg, Selection.Count);
 				}
 			}
 	
@@ -2900,7 +2770,7 @@ namespace FSpot
 			if (support_xcf)
 				create_xcf = Preferences.Get<bool> (Preferences.EDIT_CREATE_XCF_VERSION);
 	
-			Console.WriteLine ("XCF ? {0}", create_xcf);
+			Log.DebugFormat ("XCF ? {0}", create_xcf);
 	
 			if (response == Gtk.ResponseType.Cancel)
 				return;
@@ -2919,7 +2789,7 @@ namespace FSpot
 					errors.Add (new EditException (photo, ex));
 				}
 	
-				uri_list.Append (photo.DefaultVersionUri.ToString ());
+				uri_list.Append (photo.DefaultVersion.Uri.ToString ());
 			}
 	
 			// FIXME need to clean up the error dialog here.
@@ -2935,17 +2805,17 @@ namespace FSpot
 			try {
 				application.LaunchUris (uri_list, null);
 			} catch (System.Exception) {
-				Log.Error ("Failed to lauch {0}", application.Name);
+				Log.ErrorFormat ("Failed to lauch {0}", application.Name);
 			}
 		}
 	
 		public void GetWidgetPosition(Widget widget, out int x, out int y)
-	    {
+		{
 			main_window.GdkWindow.GetOrigin(out x, out y);
 			
 			x += widget.Allocation.X;
 			y += widget.Allocation.Y;
-	 	}
+		}
 	
 		// Tag typing ...
 	
@@ -2961,20 +2831,8 @@ namespace FSpot
 			if (Selection.Count == 0 || tagbar.Visible && tag_entry.HasFocus)
 				return;
 	
-	#if !ALLOW_TAG_TYPING_WITHOUT_HOTKEY
 			if (args.Event.Key != Gdk.Key.t)
 				return;
-	#endif
-	
-	#if ALLOW_TAG_TYPING_WITHOUT_HOTKEY
-			char c = System.Convert.ToChar (Gdk.Keyval.ToUnicode ((uint) args.Event.Key));
-			if (! System.Char.IsLetter (c))
-				return;
-	#endif
-			
-	#if ALLOW_TAG_TYPING_WITHOUT_HOTKEY
-			tag_entry.Text += c;
-	#endif
 	
 			tagbar.Show ();
 			UpdateTagEntryFromSelection ();
@@ -3075,7 +2933,7 @@ namespace FSpot
 			foreach (Photo p in SelectedPhotos ()) {
 				string content;
 				try {
-					content = GLib.FileFactory.NewForUri (p.DefaultVersionUri).QueryInfo ("standard::content-type", GLib.FileQueryInfoFlags.None, null).ContentType;
+					content = GLib.FileFactory.NewForUri (p.DefaultVersion.Uri).QueryInfo ("standard::content-type", GLib.FileQueryInfoFlags.None, null).ContentType;
 				} catch (GLib.GException) {
 					content = null;
 				}

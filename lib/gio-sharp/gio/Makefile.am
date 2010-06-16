@@ -12,7 +12,8 @@ CUSTOMS =							\
 	$(srcdir)/AppInfoAdapter.custom				\
 	$(srcdir)/FileAdapter.custom				\
 	$(srcdir)/File.custom					\
-	$(srcdir)/FileEnumerator.custom	
+	$(srcdir)/FileEnumerator.custom	        \
+	$(srcdir)/FileInfo.custom
 
 SNK = 	$(srcdir)/snk
 
@@ -39,7 +40,7 @@ gtk-sharp.snk: $(SNK)
 
 gio-sharp.dll: generated/File.cs $(SRCS) gtk-sharp.snk
 	@echo -e "\n*** Building $@"
-	$(CSC) -target:library -out:$@ $(UNSAFE) $(DEBUG) $(ASSEMBLIES) $(SRCS) generated/*.cs
+	$(CSC) -d:GIO_SHARP_2_22 -target:library -out:$@ $(UNSAFE) $(DEBUG) $(ASSEMBLIES) $(SRCS) generated/*.cs
 
 assemblydir = $(pkglibdir)
 assembly_DATA =			\

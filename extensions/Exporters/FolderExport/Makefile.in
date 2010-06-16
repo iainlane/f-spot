@@ -35,13 +35,22 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(top_srcdir)/Makefile.include
+	$(top_srcdir)/build/build.environment.mk \
+	$(top_srcdir)/build/build.mk \
+	$(top_srcdir)/build/build.rules.mk
+@ENABLE_TESTS_TRUE@am__append_1 = " $(NUNIT_LIBS)"
 subdir = extensions/Exporters/FolderExport
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/build/m4/shave/shave.m4 \
 	$(top_srcdir)/build/m4/shamrock/expansions.m4 \
+	$(top_srcdir)/build/m4/shamrock/gnome-doc.m4 \
 	$(top_srcdir)/build/m4/shamrock/mono.m4 \
+	$(top_srcdir)/build/m4/shamrock/nunit.m4 \
 	$(top_srcdir)/build/m4/shamrock/programs.m4 \
+	$(top_srcdir)/build/m4/f-spot/flickrnet.m4 \
+	$(top_srcdir)/build/m4/f-spot/gnome-keyring-sharp.m4 \
+	$(top_srcdir)/build/m4/f-spot/gtk-sharp.m4 \
+	$(top_srcdir)/build/m4/f-spot/mono-addins.m4 \
 	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
@@ -49,8 +58,6 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-SOURCES =
-DIST_SOURCES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -72,8 +79,9 @@ am__nobase_list = $(am__nobase_strip_setup); \
 am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__installdirs = "$(DESTDIR)$(plugindir)"
-DATA = $(plugin_DATA)
+am__installdirs = "$(DESTDIR)$(moduledir)"
+SCRIPTS = $(module_SCRIPTS)
+DIST_SOURCES =
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 ACLOCAL_AMFLAGS = @ACLOCAL_AMFLAGS@
@@ -119,6 +127,8 @@ EXIF_SOVERSION = @EXIF_SOVERSION@
 F77 = @F77@
 FC = @FC@
 FGREP = @FGREP@
+FLICKRNET_CFLAGS = @FLICKRNET_CFLAGS@
+FLICKRNET_LIBS = @FLICKRNET_LIBS@
 F_CFLAGS = @F_CFLAGS@
 F_LIBS = @F_LIBS@
 GAPI2CODEGEN = @GAPI2CODEGEN@
@@ -132,6 +142,8 @@ GCONF_SHARP_LIBS = @GCONF_SHARP_LIBS@
 GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 GIO_CFLAGS = @GIO_CFLAGS@
 GIO_LIBS = @GIO_LIBS@
+GLIBSHARP_2_12_7_CFLAGS = @GLIBSHARP_2_12_7_CFLAGS@
+GLIBSHARP_2_12_7_LIBS = @GLIBSHARP_2_12_7_LIBS@
 GLIBSHARP_CFLAGS = @GLIBSHARP_CFLAGS@
 GLIBSHARP_LIBS = @GLIBSHARP_LIBS@
 GLIB_CFLAGS = @GLIB_CFLAGS@
@@ -147,6 +159,10 @@ GNOME_SHARP_CFLAGS = @GNOME_SHARP_CFLAGS@
 GNOME_SHARP_LIBS = @GNOME_SHARP_LIBS@
 GOBJECT_QUERY = @GOBJECT_QUERY@
 GREP = @GREP@
+GTKSHARP_A11Y_CFLAGS = @GTKSHARP_A11Y_CFLAGS@
+GTKSHARP_A11Y_LIBS = @GTKSHARP_A11Y_LIBS@
+GTKSHARP_CFLAGS = @GTKSHARP_CFLAGS@
+GTKSHARP_LIBS = @GTKSHARP_LIBS@
 HELP_DIR = @HELP_DIR@
 ICONS_DIRECTORY = @ICONS_DIRECTORY@
 INSTALL = @INSTALL@
@@ -160,14 +176,14 @@ INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
 INTLTOOL_MERGE = @INTLTOOL_MERGE@
 INTLTOOL_PERL = @INTLTOOL_PERL@
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
+KEYRINGSHARP_CFLAGS = @KEYRINGSHARP_CFLAGS@
+KEYRINGSHARP_LIBS = @KEYRINGSHARP_LIBS@
 LCMS_CFLAGS = @LCMS_CFLAGS@
 LCMS_LIBS = @LCMS_LIBS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBEXIF_VERSION_CHECK_CFLAGS = @LIBEXIF_VERSION_CHECK_CFLAGS@
 LIBEXIF_VERSION_CHECK_LIBS = @LIBEXIF_VERSION_CHECK_LIBS@
-LIBGPHOTO2_CFLAGS = @LIBGPHOTO2_CFLAGS@
-LIBGPHOTO2_LIBS = @LIBGPHOTO2_LIBS@
 LIBJPEG = @LIBJPEG@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
@@ -182,6 +198,12 @@ MCS = @MCS@
 MKDIR_P = @MKDIR_P@
 MKINSTALLDIRS = @MKINSTALLDIRS@
 MONO = @MONO@
+MONO_ADDINS_CFLAGS = @MONO_ADDINS_CFLAGS@
+MONO_ADDINS_GUI_CFLAGS = @MONO_ADDINS_GUI_CFLAGS@
+MONO_ADDINS_GUI_LIBS = @MONO_ADDINS_GUI_LIBS@
+MONO_ADDINS_LIBS = @MONO_ADDINS_LIBS@
+MONO_ADDINS_SETUP_CFLAGS = @MONO_ADDINS_SETUP_CFLAGS@
+MONO_ADDINS_SETUP_LIBS = @MONO_ADDINS_SETUP_LIBS@
 MONO_MODULE_CFLAGS = @MONO_MODULE_CFLAGS@
 MONO_MODULE_LIBS = @MONO_MODULE_LIBS@
 MSGFMT = @MSGFMT@
@@ -192,7 +214,6 @@ NDESK_DBUS_LIBS = @NDESK_DBUS_LIBS@
 NM = @NM@
 NMEDIT = @NMEDIT@
 NUNIT_CFLAGS = @NUNIT_CFLAGS@
-NUNIT_DEFINES = @NUNIT_DEFINES@
 NUNIT_LIBS = @NUNIT_LIBS@
 OBJC = @OBJC@
 OBJDUMP = @OBJDUMP@
@@ -284,81 +305,233 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+ASSEMBLY = FSpot.Exporters.FolderExport
+TARGET = library
+LINK = $(REF_FSPOT_EXTENSION_FOLDEREXPORT) $(am__append_1)
+INSTALL_DIR = $(EXTENSIONS_INSTALL_DIR)
+SOURCES = FolderExport.cs
+RESOURCES = \
+	FolderExport.addin.xml \
+	FolderExport.glade \
+	f-spot-simple-white.css \
+	f-spot-simple.css \
+	f-spot.js
+
+
+# Initializers
+MONO_BASE_PATH = 
+MONO_ADDINS_PATH = 
+
+# Install Paths
+DEFAULT_INSTALL_DIR = $(pkglibdir)
+BACKENDS_INSTALL_DIR = $(DEFAULT_INSTALL_DIR)/Backends
+EXTENSIONS_INSTALL_DIR = $(DEFAULT_INSTALL_DIR)/Extensions
 DIR_DOCS = $(top_builddir)/docs
 DIR_EXTENSIONS = $(top_builddir)/extensions
-DIR_GPHOTO2 = $(top_builddir)/lib/libgphoto2-sharp
 DIR_ICONS = $(top_builddir)/icons
 DIR_JPEGTRAN = $(top_builddir)/lib/libjpegtran
-DIR_KEYRING = $(top_builddir)/lib/gnome-keyring-sharp
 DIR_LIBFSPOT = $(top_builddir)/lib/libfspot
 DIR_SEMWEB = $(top_builddir)/lib/semweb
 DIR_SRC = $(top_builddir)/src
 DIR_GIOSHARP = $(top_builddir)/lib/gio-sharp/gio
 DIR_GTKSHARPBEANS = $(top_builddir)/lib/gtk-sharp-beans
 DIR_UNIQUESHARP = $(top_builddir)/lib/unique-sharp/unique
-LINK_KEYRING = -r:$(DIR_KEYRING)/gnome-keyring-sharp.dll
-LINK_GPHOTO2 = -r:$(DIR_GPHOTO2)/libgphoto2-sharp.dll
-LINK_SEMWEB = -r:$(DIR_SEMWEB)/SemWeb.dll
-LINK_GIOSHARP = -r:$(DIR_GIOSHARP)/gio-sharp.dll
-LINK_GTKSHARPBEANS = -r:$(DIR_GTKSHARPBEANS)/gtk-sharp-beans.dll
-LINK_UNIQUESHARP = -r:$(DIR_UNIQUESHARP)/unique-sharp.dll
-CSC_FLAGS = -debug
-CSC = $(MCS) $(CSC_FLAGS) -target:exe
-CSC_LIB = $(MCS) $(CSC_FLAGS) -target:library
-MONO_DEBUGFLAGS = --debug
-RUNTIME = mono $(MONO_DEBUGFLAGS)
-PLUGIN_NAME = FolderExport
-PLUGIN_MANIFEST = $(PLUGIN_NAME).addin.xml
-PLUGIN_ASSEMBLY = $(PLUGIN_NAME).dll
-PLUGIN_SOURCES = \
-	$(srcdir)/FolderExport.cs
+DIR_BIN = $(top_builddir)/bin
 
-REFS = \
-	-r:$(top_builddir)/src/f-spot.exe		\
-	-r:$(top_builddir)/src/FSpot.Core.dll	\
-	-r:$(top_builddir)/src/FSpot.Utils.dll	\
-	$(LINK_SEMWEB)				\
-	$(LINK_GPHOTO2)				\
-	$(LINK_GIOSHARP)				\
-	$(LINK_GTKSHARPBEANS)		\
-	$(LINK_UNIQUESHARP)		\
-	-r:System.Web			\
-	-r:ICSharpCode.SharpZipLib	\
-	-r:Mono.Posix
+# External libraries to link against, generated from configure
+LINK_SYSTEM = -r:System
+LINK_SYSTEMDATA = -r:System.Data
+LINK_SYSTEM_WEB = -r:System.Web
+LINK_MONO_POSIX = -r:Mono.Posix
+LINK_MONO_CAIRO = -r:Mono.Cairo
+LINK_MONO_SIMD = -r:Mono.Simd
+LINK_MONODATA = -r:Mono.Data
+LINK_MONO_DATA_SQLITECLIENT = -r:Mono.Data.SqliteClient
+LINK_ICSHARP_ZIP_LIB = -r:ICSharpCode.SharpZipLib
+LINK_KEYRING = $(KEYRINGSHARP_LIBS)
+LINK_GLIB = $(GLIBSHARP_LIBS)
+LINK_GTK = $(GTKSHARP_LIBS)
+LINK_GNOME = $(GNOME_SHARP_LIBS)
+LINK_GCONF = $(GCONF_SHARP_LIBS)
+LINK_GLADE = -pkg:glade-sharp-2.0
+LINK_FLICKRNET = -pkg:flickrnet
+LINK_DBUS = $(NDESK_DBUS_LIBS) $(NDESK_DBUS_GLIB_LIBS)
+LINK_DBUS_NO_GLIB = $(NDESK_DBUS_LIBS)
+LINK_MONO_ADDINS_DEPS = $(MONO_ADDINS_LIBS)
+LINK_MONO_ADDINS_SETUP_DEPS = $(MONO_ADDINS_SETUP_LIBS)
+LINK_MONO_ADDINS_GUI_DEPS = $(MONO_ADDINS_GUI_LIBS)
 
-PKGS = \
-	-pkg:gnome-vfs-sharp-2.0	\
-	-pkg:gtk-sharp-2.0		\
-	-pkg:glade-sharp-2.0
+# GIO
+REF_GIO = 
+LINK_GIO = -r:$(DIR_GIOSHARP)/gio-sharp.dll
+LINK_GIO_DEPS = $(REF_GIO) $(LINK_GIO)
 
-RESOURCES = \
-	-resource:$(srcdir)/$(PLUGIN_MANIFEST)	\
-	-resource:$(srcdir)/$(PLUGIN_NAME).glade \
-	-resource:$(srcdir)/f-spot-simple-white.css	\
-	-resource:$(srcdir)/f-spot-simple.css		\
-	-resource:$(srcdir)/f-spot.js
+# Gtk Beans
+REF_GTK_BEANS = $(LINK_GIO_DEPS)
+LINK_GTK_BEANS = -r:$(DIR_GTKSHARPBEANS)/gtk-sharp-beans.dll
+LINK_GTK_BEANS_DEPS = $(REF_GTK_BEANS) $(LINK_GTK_BEANS)
 
-plugindir = $(pkglibdir)/extensions
-plugin_DATA = \
-	$(PLUGIN_ASSEMBLY)
+# Uniqe
+REF_UNIQUE = 
+LINK_UNIQUE = -r:$(DIR_UNIQUESHARP)/unique-sharp.dll
+LINK_UNIQUE_DEPS = $(REF_UNIQUE) $(LINK_UNIQUE)
 
-EXTRA_DIST = \
-	$(PLUGIN_SOURCES)	\
-	$(PLUGIN_MANIFEST)	\
-	$(PLUGIN_NAME).glade	\
-	f-spot-simple.css	\
-	f-spot-simple-white.css	\
-	f-spot.js
+# Hyena
+REF_HYENA = $(LINK_SYSTEM) $(LINK_MONO_POSIX)
+LINK_HYENA = -r:$(DIR_BIN)/Hyena.dll
+LINK_HYENA_DEPS = $(REF_HYENA) $(LINK_HYENA)
 
-CLEANFILES = \
-	$(PLUGIN_ASSEMBLY)	\
-	$(PLUGIN_ASSEMBLY).mdb	\
-	*.mpack
+# Semweb
+REF_SEMWEB = $(LINK_SYSTEMDATA) $(LINK_HYENA_DEPS)
+LINK_SEMWEB = -r:$(DIR_BIN)/SemWeb.dll
+LINK_SEMWEB_DEPS = $(REF_SEMWEB) $(LINK_SEMWEB)
 
+# Hyena.Data.Sqlite
+REF_HYENA_DATA_SQLITE = $(LINK_SQLITE)
+LINK_HYENA_DATA_SQLITE = -r:$(DIR_BIN)/Hyena.Data.Sqlite.dll
+LINK_HYENA_DATA_SQLITE_DEPS = $(REF_HYENA_DATA_SQLITE) $(LINK_HYENA_DATA_SQLITE)
+
+# Hyena.Gui
+REF_HYENA_GUI = $(LINK_HYENA_DEPS)
+LINK_HYENA_GUI = -r:$(DIR_BIN)/Hyena.Gui.dll
+LINK_HENA_GUI_DEPS = $(REF_HYENA_GUI) $(LINK_HYENA_GUI)
+
+# FSpot.Cms
+REF_FSPOT_CMS = $(LINK_GTK)
+LINK_FSPOT_CMS = -r:$(DIR_BIN)/FSpot.Cms.dll
+LINK_FSPOT_CMS_DEPS = $(REF_FSPOT_CMS) $(LINK_FSPOT_CMS)
+
+# FSpot.Utils
+REF_FSPOT_UTILS = $(LINK_HYENA_DEPS) $(LINK_GTK) $(LINK_GIO) $(LINK_MONO_CAIRO)
+LINK_FSPOT_UTILS = -r:$(DIR_BIN)/FSpot.Utils.dll
+LINK_FSPOT_UTILS_DEPS = $(REF_FSPOT_UTILS) $(LINK_FSPOT_UTILS)
+
+# FSpot.Core
+REF_FSPOT_CORE = $(LINK_FSPOT_UTILS_DEPS) $(LINK_FSPOT_CMS_DEPS)
+LINK_FSPOT_CORE = -r:$(DIR_BIN)/FSpot.Core.dll
+LINK_FSPOT_CORE_DEPS = $(REF_FSPOT_CORE) $(LINK_FSPOT_CORE)
+
+# FSpot.Query
+REF_FSPOT_QUERY = $(LINK_FSPOT_CORE_DEPS)
+LINK_FSPOT_QUERY = -r:$(DIR_BIN)/FSpot.Query.dll
+LINK_FSPOT_QUERY_DEPS = $(REF_FSPOT_QUERY) $(LINK_FSPOT_QUERY)
+
+# FSpot.JobScheduler
+REF_FSPOT_JOB_SCHEDULER = $(LINK_HYENA_DEPS)
+LINK_FSPOT_JOB_SCHEDULER = -r:$(DIR_BIN)/FSpot.JobScheduler.dll
+LINK_FSPOT_JOB_SCHEDULER_DEPS = $(REF_FSPOT_JOB_SCHEDULER) $(LINK_FSPOT_JOB_SCHEDULER)
+
+# FSpot.Bling
+REF_FSPOT_BLING = $(LINK_GTK_BEANS_DEPS) $(LINK_GLIB)
+LINK_FSPOT_BLING = -r:$(DIR_BIN)/FSpot.Bling.dll
+LINK_FSPOT_BLING_DEPS = $(REF_FSPOT_BLING) $(LINK_FSPOT_BLING)
+
+# FSpot.Platform
+REF_FSPOT_PLATFORM = $(LINK_GCONF) $(LINK_GTK) $(LINK_FSPOT_CORE_DEPS) $(LINK_DBUS)
+LINK_FSPOT_PLATFORM = -r:$(DIR_BIN)/FSpot.Platform.dll
+LINK_FSPOT_PLATFORM_DEPS = $(REF_FSPOT_PLATFORM) $(LINK_FSPOT_PLATFORM)
+
+# FSpot.Widgets
+REF_FSPOT_WIDGETS = $(LINK_FSPOT_CORE_DEPS) $(LINK_FSPOT_BLING_DEPS)
+LINK_FSPOT_WIDGETS = -r:$(DIR_BIN)/FSpot.Widgets.dll
+LINK_FSPOT_WIDGETS_DEPS = $(REF_FSPOT_WIDGETS) $(LINK_FSPOT_WIDGETS)
+
+# FSpot (executable)
+REF_FSPOT = $(LINK_FSPOT_WIDGETS_DEPS) $(LINK_FSPOT_PLATFORM_DEPS) $(LINK_FSPOT_QUERY_DEPS) \
+            $(LINK_GLIB) $(LINK_MONO_ADDINS_DEPS) $(LINK_UNIQUE_DEPS) $(LINK_MONO_ADDINS_SETUP_DEPS) \
+            $(LINK_SEMWEB_DEPS) $(LINK_GLADE) $(LINK_MONODATA) $(LINK_MONO_DATA_SQLITECLIENT) \
+            $(LINK_MONO_ADDINS_GUI_DEPS) $(LINK_FSPOT_JOB_SCHEDULER_DEPS) $(LINK_ICSHARP_ZIP_LIB) \
+            $(LINK_GNOME)
+
+# FIXME: do not link executables
+LINK_FSPOT = -r:$(DIR_BIN)/f-spot.exe
+LINK_FSPOT_DEPS = $(REF_FSPOT) $(LINK_FSPOT)
+
+# Extensions
+REF_FSPOT_EXTENSION_BLACKOUTEDITOR = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_BWEDITOR = $(LINK_FSPOT_DEPS) $(LINK_MONO_SIMD)
+REF_FSPOT_EXTENSION_FLIPEDITOR = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_PIXELATEEDITOR = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_RESIZEEDITOR = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_CDEXPORT = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_FACEBOOKEXPORT = $(LINK_FSPOT_DEPS) $(LINK_KEYRING)
+REF_FSPOT_EXTENSION_FLICKREXPORT = $(LINK_FSPOT_DEPS) $(LINK_FLICKRNET)
+REF_FSPOT_EXTENSION_FOLDEREXPORT = $(LINK_FSPOT_DEPS) $(LINK_SYSTEM_WEB)
+REF_FSPOT_EXTENSION_GALLERYEXPORT = $(LINK_FSPOT_DEPS)
+REF_MONO_GOOGLE = $(LINK_HYENA_DEPS)
+LINK_MONO_GOOGLE = -r:$(DIR_BIN)/Mono.Google.dll
+LINK_MONO_GOOGLE_DEPS = $(REF_MONO_GOOGLE) $(LINK_MONO_GOOGLE)
+REF_FSPOT_EXTENSION_PICASAWEBEXPORT = $(LINK_FSPOT_DEPS) $(LINK_MONO_GOOGLE) $(LINK_KEYRING)
+REF_SMUGMUGNET = $(LINK_FSPOT_DEPS)
+LINK_SMUGMUGNET = -r:$(DIR_BIN)/SmugMugNet.dll
+LINK_SMUGMUGNET_DEPS = $(REF_SMUGMUGNET) $(LINK_SMUGMUGNET)
+REF_FSPOT_EXTENSION_SMUGMUGEXPORT = $(LINK_SMUGMUGNET_DEPS) $(LINK_KEYRING)
+REF_MONO_TABBLO = $(LINK_HYENA_DEPS)
+LINK_MONO_TABBLO = -r:$(DIR_BIN)/Mono.Tabblo.dll
+LINK_MONO_TABBLO_DEPS = $(REF_MONO_TABBLO) $(LINK_MONO_TABBLO)
+REF_FSPOT_EXTENSION_TABBLOEXPORT = $(LINK_FSPOT_DEPS) $(LINK_KEYRING) $(LINK_MONO_TABBLO_DEPS)
+REF_FSPOT_EXTENSION_ZIPEXPORT = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_CHANGEPHOTOPATH = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_DEVELOPINUFRAW = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_HASHJOB = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_LIVEWEBGALLERY = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_MERGEDB = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_RAWPLUSJPEG = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_RETROACTIVEROLL = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_SCREENSAVERCONFIG = $(LINK_FSPOT_DEPS)
+REF_FSPOT_EXTENSION_COVERTRANSITION = $(LINK_FSPOT_DEPS)
+
+# Cute hack to replace a space with something
+colon := :
+empty := 
+space := $(empty) $(empty)
+
+# Build path to allow running uninstalled
+RUN_PATH = $(subst $(space),$(colon), $(MONO_BASE_PATH))
+UNIQUE_FILTER_PIPE = tr [:space:] \\n | sort | uniq
+BUILD_DATA_DIR = $(top_builddir)/bin/share/$(PACKAGE)
+
+# Since all other attempts failed, we currently go this way:
+# This code adds the file specified in ASSEMBLY_INFO_SOURCE to SOURCES_BUILD.
+# If no such file is specified, the default AssemblyInfo.cs is used.
+ASSEMBLY_INFO_SOURCE_REAL = \
+	$(shell if [ "$(ASSEMBLY_INFO_SOURCE)" ]; \
+	then \
+		echo "$(addprefix $(srcdir)/, $(ASSEMBLY_INFO_SOURCE))"; \
+	else \
+		echo "$(top_srcdir)/src/AssemblyInfo.cs"; \
+	fi)
+
+SOURCES_BUILD = $(addprefix $(srcdir)/, $(SOURCES)) \
+	$(ASSEMBLY_INFO_SOURCE_REAL)
+RESOURCES_EXPANDED = $(addprefix $(srcdir)/, $(RESOURCES))
+RESOURCES_BUILD = $(foreach resource, $(RESOURCES_EXPANDED), \
+	-resource:$(resource),$(notdir $(resource)))
+
+INSTALL_ICONS = $(top_srcdir)/build/private-icon-theme-installer "$(mkinstalldirs)" "$(INSTALL_DATA)"
+THEME_ICONS_SOURCE = $(wildcard $(srcdir)/ThemeIcons/*/*/*.png) $(wildcard $(srcdir)/ThemeIcons/scalable/*/*.svg)
+THEME_ICONS_RELATIVE = $(subst $(srcdir)/ThemeIcons/, , $(THEME_ICONS_SOURCE))
+ASSEMBLY_EXTENSION = $(strip $(patsubst library, dll, $(TARGET)))
+ASSEMBLY_FILE = $(top_builddir)/bin/$(ASSEMBLY).$(ASSEMBLY_EXTENSION)
+INSTALL_DIR_RESOLVED = $(firstword $(subst , $(DEFAULT_INSTALL_DIR), $(INSTALL_DIR)))
+@ENABLE_TESTS_TRUE@ENABLE_TESTS_FLAG = "-define:ENABLE_TESTS"
+@ENABLE_ATK_TRUE@ENABLE_ATK_FLAG = "-define:ENABLE_ATK"
+FILTERED_LINK = $(shell echo "$(LINK)" | $(UNIQUE_FILTER_PIPE))
+DEP_LINK = $(shell echo "$(LINK)" | $(UNIQUE_FILTER_PIPE) | sed s,-r:,,g | grep '$(top_builddir)/bin/')
+OUTPUT_FILES = \
+	$(ASSEMBLY_FILE) \
+	$(ASSEMBLY_FILE).mdb
+
+moduledir = $(INSTALL_DIR_RESOLVED)
+module_SCRIPTS = $(OUTPUT_FILES)
+EXTRA_DIST = $(SOURCES_BUILD) $(RESOURCES_EXPANDED) $(THEME_ICONS_SOURCE)
+CLEANFILES = $(OUTPUT_FILES) $(ASSEMBLY_FILE).config
+DISTCLEANFILES = *.pidb
+MAINTAINERCLEANFILES = Makefile.in
 all: all-am
 
 .SUFFIXES:
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am $(top_srcdir)/Makefile.include $(am__configure_deps)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am $(top_srcdir)/build/build.mk $(top_srcdir)/build/build.environment.mk $(top_srcdir)/build/build.rules.mk $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -388,32 +561,46 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
+install-moduleSCRIPTS: $(module_SCRIPTS)
+	@$(NORMAL_INSTALL)
+	test -z "$(moduledir)" || $(MKDIR_P) "$(DESTDIR)$(moduledir)"
+	@list='$(module_SCRIPTS)'; test -n "$(moduledir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  if test -f "$$d$$p"; then echo "$$d$$p"; echo "$$p"; else :; fi; \
+	done | \
+	sed -e 'p;s,.*/,,;n' \
+	    -e 'h;s|.*|.|' \
+	    -e 'p;x;s,.*/,,;$(transform)' | sed 'N;N;N;s,\n, ,g' | \
+	$(AWK) 'BEGIN { files["."] = ""; dirs["."] = 1; } \
+	  { d=$$3; if (dirs[d] != 1) { print "d", d; dirs[d] = 1 } \
+	    if ($$2 == $$4) { files[d] = files[d] " " $$1; \
+	      if (++n[d] == $(am__install_max)) { \
+		print "f", d, files[d]; n[d] = 0; files[d] = "" } } \
+	    else { print "f", d "/" $$4, $$1 } } \
+	  END { for (d in files) print "f", d, files[d] }' | \
+	while read type dir files; do \
+	     if test "$$dir" = .; then dir=; else dir=/$$dir; fi; \
+	     test -z "$$files" || { \
+	       echo " $(INSTALL_SCRIPT) $$files '$(DESTDIR)$(moduledir)$$dir'"; \
+	       $(INSTALL_SCRIPT) $$files "$(DESTDIR)$(moduledir)$$dir" || exit $$?; \
+	     } \
+	; done
+
+uninstall-moduleSCRIPTS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(module_SCRIPTS)'; test -n "$(moduledir)" || exit 0; \
+	files=`for p in $$list; do echo "$$p"; done | \
+	       sed -e 's,.*/,,;$(transform)'`; \
+	test -n "$$list" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(moduledir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(moduledir)" && rm -f $$files
 
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-pluginDATA: $(plugin_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(plugindir)" || $(MKDIR_P) "$(DESTDIR)$(plugindir)"
-	@list='$(plugin_DATA)'; test -n "$(plugindir)" || list=; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(plugindir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(plugindir)" || exit $$?; \
-	done
-
-uninstall-pluginDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(plugin_DATA)'; test -n "$(plugindir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(plugindir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(plugindir)" && rm -f $$files
 tags: TAGS
 TAGS:
 
@@ -453,9 +640,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(DATA)
+all-am: Makefile $(SCRIPTS)
 installdirs:
-	for dir in "$(DESTDIR)$(plugindir)"; do \
+	for dir in "$(DESTDIR)$(moduledir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -480,10 +667,12 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 clean: clean-am
 
 clean-am: clean-generic clean-libtool mostlyclean-am
@@ -504,7 +693,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-pluginDATA
+install-data-am: install-data-local install-moduleSCRIPTS
 
 install-dvi: install-dvi-am
 
@@ -548,30 +737,72 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-pluginDATA
+uninstall-am: uninstall-local uninstall-moduleSCRIPTS
 
 .MAKE: install-am install-strip
 
 .PHONY: all all-am check check-am clean clean-generic clean-libtool \
 	distclean distclean-generic distclean-libtool distdir dvi \
 	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-pluginDATA install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	uninstall uninstall-am uninstall-pluginDATA
+	install-data install-data-am install-data-local install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-moduleSCRIPTS install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+	ps ps-am uninstall uninstall-am uninstall-local \
+	uninstall-moduleSCRIPTS
 
 
-all: $(PLUGIN_ASSEMBLY)
+all: $(ASSEMBLY_FILE) theme-icons
 
-mpack: $(PLUGIN_ASSEMBLY)
-	mautil p $(PLUGIN_ASSEMBLY)
+run: 
+	@pushd $(top_builddir); \
+	make run; \
+	popd;
 
-$(PLUGIN_ASSEMBLY): $(PLUGIN_SOURCES) $(PLUGIN_MANIFEST)
-	$(CSC_LIB) -out:$@ $(PLUGIN_SOURCES) $(REFS) $(PKGS) $(ASSEMBLIES) $(RESOURCES)
+# uncommented for now.
+# tests are currently excuted from Makefile in $(top_builddir)
+#test:
+#	@pushd $(top_builddir)/tests; \
+#	make $(ASSEMBLY); \
+#	popd;
+
+build-debug:
+	@echo $(DEP_LINK)
+
+$(ASSEMBLY_FILE).mdb: $(ASSEMBLY_FILE)
+
+$(ASSEMBLY_FILE): $(SOURCES_BUILD) $(RESOURCES_EXPANDED) $(DEP_LINK)
+	@mkdir -p $(top_builddir)/bin
+	@if [ ! "x$(ENABLE_RELEASE)" = "xyes" ]; then \
+		$(top_srcdir)/build/dll-map-makefile-verifier $(srcdir)/Makefile.am $(srcdir)/$(notdir $@.config) && \
+		$(MONO) $(top_builddir)/build/dll-map-verifier.exe $(srcdir)/$(notdir $@.config) -iwinmm -ilibbanshee -ilibbnpx11 -ilibc -ilibc.so.6 -iintl -ilibmtp.dll -ilibigemacintegration.dylib -iCFRelease $(SOURCES_BUILD); \
+	fi;
+	$(MCS) \
+		$(GMCS_FLAGS) \
+		$(ASSEMBLY_BUILD_FLAGS) \
+		-nowarn:0278 -nowarn:0078 $$warn \
+		-define:HAVE_GTK_2_10 -define:NET_2_0 \
+		-debug -target:$(TARGET) -out:$@ \
+		$(BUILD_DEFINES) $(ENABLE_TESTS_FLAG) $(ENABLE_ATK_FLAG) \
+		$(FILTERED_LINK) $(RESOURCES_BUILD) $(SOURCES_BUILD)
+	@if [ -e $(srcdir)/$(notdir $@.config) ]; then \
+		cp $(srcdir)/$(notdir $@.config) $(top_builddir)/bin; \
+	fi;
+	@if [ ! -z "$(EXTRA_BUNDLE)" ]; then \
+		cp $(EXTRA_BUNDLE) $(top_builddir)/bin; \
+	fi;
+
+theme-icons: $(THEME_ICONS_SOURCE)
+	@$(INSTALL_ICONS) -il "$(BUILD_DATA_DIR)" "$(srcdir)" $(THEME_ICONS_RELATIVE)
+
+install-data-local: $(THEME_ICONS_SOURCE)
+	@$(INSTALL_ICONS) -i "$(DESTDIR)$(pkgdatadir)" "$(srcdir)" $(THEME_ICONS_RELATIVE)
+
+uninstall-local: $(THEME_ICONS_SOURCE)
+	@$(INSTALL_ICONS) -u "$(DESTDIR)$(pkgdatadir)" "$(srcdir)" $(THEME_ICONS_RELATIVE)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

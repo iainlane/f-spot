@@ -23,6 +23,7 @@ using FSpot.Utils;
 using GLib;
 using GFile = GLib.File;
 using GFileInfo = GLib.FileInfo;
+using Hyena;
 
 // FIXME TODO: We want to use something like EClippedLabel here throughout so it handles small sizes
 // gracefully using ellipsis.
@@ -144,7 +145,7 @@ namespace FSpot.Widgets
 
 		private void HandleRatingChanged (object o, EventArgs e)
 		{
-			MainWindow.Toplevel.HandleRatingMenuSelected ((o as Widgets.Rating).Value);
+			App.Instance.Organizer.HandleRatingMenuSelected ((o as Widgets.Rating).Value);
 	 	}
 	
 		private Label CreateRightAlignedLabel (string text)
@@ -275,7 +276,7 @@ namespace FSpot.Widgets
 			rating_view.Changed += HandleRatingChanged;
 			rating_align.Add (rating_view);
 
-			tag_view = new TagView (MainWindow.ToolTips);
+			tag_view = new TagView ();
 			info_table.Attach (tag_view, 0, 2, 9, 10, AttachOptions.Fill, AttachOptions.Fill, TABLE_XPADDING, TABLE_YPADDING);
 
 			info_table.ShowAll ();
@@ -469,8 +470,10 @@ namespace FSpot.Widgets
 			if (Photos == null || Photos.Length == 0) {
 				Hide ();
 			} else if (Photos.Length == 1) {
+				Show ();
 				UpdateSingle ();
 			} else if (Photos.Length > 1) {
+				Show ();
 				UpdateMultiple ();
 			}
 			return false;
@@ -493,13 +496,13 @@ namespace FSpot.Widgets
 			
 			try {
 				//using (new Timer ("building info")) {
-					using (ImageFile img = ImageFile.Create (photo.DefaultVersionUri))
+					using (ImageFile img = ImageFile.Create (photo.DefaultVersion.Uri))
 					{
 						info = new ImageInfo (img);
 					}
 					//}
 			} catch (System.Exception e) {
-				FSpot.Utils.Log.Debug (e.StackTrace);
+				Hyena.Log.Debug (e.StackTrace);
 				info = new ImageInfo (null);			
 			}
 
@@ -568,12 +571,12 @@ namespace FSpot.Widgets
 
 			if (show_file_size) {
 				try {
-					GFile file = FileFactory.NewForUri (photo.DefaultVersionUri);
+					GFile file = FileFactory.NewForUri (photo.DefaultVersion.Uri);
 					GFileInfo file_info = file.QueryInfo ("standard::size", FileQueryInfoFlags.None, null);
 					file_size_value_label.Text = Format.SizeForDisplay (file_info.Size);
 				} catch (GLib.GException e) {
 					file_size_value_label.Text = Catalog.GetString("(File read error)");
-					FSpot.Utils.Log.DebugException (e);
+					Hyena.Log.DebugException (e);
 				}
 			}
 			
@@ -649,18 +652,18 @@ namespace FSpot.Widgets
 			}
 			date_label.Visible = show_date;
 			date_value_label.Visible = show_date;
-			
+
 			if (show_file_size) {
 				long file_size = 0;
 				foreach (Photo photo in Photos) {
 					
 					try {
-						GFile file = FileFactory.NewForUri (photo.DefaultVersionUri);
+						GFile file = FileFactory.NewForUri (photo.DefaultVersion.Uri);
 						GFileInfo file_info = file.QueryInfo ("standard::size", FileQueryInfoFlags.None, null);
 						file_size += file_info.Size;
 					} catch (GLib.GException e) {
 						file_size = -1;
-						FSpot.Utils.Log.DebugException (e);
+						Hyena.Log.DebugException (e);
 						break;
 					}
 				}
@@ -706,14 +709,14 @@ namespace FSpot.Widgets
 
 			try {
 				if (hint == null)
-					using (ImageFile img = ImageFile.Create (photo.DefaultVersionUri))
+					using (ImageFile img = ImageFile.Create (photo.DefaultVersion.Uri))
 						hint = img.Load (256, 256);
 				
 				histogram_image.Pixbuf = histogram.Generate (hint, max);
 				
 				hint.Dispose ();
 			} catch (System.Exception e) {
-				FSpot.Utils.Log.Debug (e.StackTrace);
+				Hyena.Log.Debug (e.StackTrace);
 				using (Gdk.Pixbuf empty = new Gdk.Pixbuf (Gdk.Colorspace.Rgb, true, 8, 256, 256)) {
 					empty.Fill (0x0);
 					histogram_image.Pixbuf = histogram.Generate (empty, max);
@@ -747,7 +750,7 @@ namespace FSpot.Widgets
 	
 		public void HandleMainWindowViewModeChanged (object o, EventArgs args)
 		{
-			MainWindow.ModeType mode = MainWindow.Toplevel.ViewMode;
+			MainWindow.ModeType mode = App.Instance.Organizer.ViewMode;
 			if (mode == MainWindow.ModeType.IconView)
 				Context = ViewContext.Library;
 			else if (mode == MainWindow.ModeType.PhotoView)

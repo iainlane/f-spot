@@ -8,7 +8,7 @@
  */
 
 using FSpot;
-using FSpot.Utils;
+using Hyena;
 using FSpot.Widgets;
 
 using Gdk;
@@ -84,7 +84,7 @@ namespace FSpot.Editors {
 		// A tool can be applied if it doesn't need a selection, or if it has one.
 		public bool CanBeApplied {
 			get {
-				Log.Debug ("{0} can be applied? {1}", this, !NeedsSelection || (NeedsSelection && State.HasSelection));
+				Log.DebugFormat ("{0} can be applied? {1}", this, !NeedsSelection || (NeedsSelection && State.HasSelection));
 				return !NeedsSelection || (NeedsSelection && State.HasSelection);
 			}
 		}
@@ -98,7 +98,7 @@ namespace FSpot.Editors {
 
 		protected void LoadPhoto (Photo photo, out Pixbuf photo_pixbuf, out Cms.Profile photo_profile) {
 			// FIXME: We might get this value from the PhotoImageView.
-			using (ImageFile img = ImageFile.Create (photo.DefaultVersionUri)) {
+			using (ImageFile img = ImageFile.Create (photo.DefaultVersion.Uri)) {
 				photo_pixbuf = img.Load ();
 				photo_profile = img.GetProfile ();
 			}
@@ -205,7 +205,7 @@ namespace FSpot.Editors {
 			Pixbuf previewed = ProcessFast (preview, null);
 			State.PhotoImageView.Pixbuf = previewed;
 			State.PhotoImageView.ZoomFit (false);
-			MainWindow.Toplevel.InfoBox.UpdateHistogram (previewed);
+			App.Instance.Organizer.InfoBox.UpdateHistogram (previewed);
 
 			if (old_preview != null) {
 				old_preview.Dispose ();
@@ -238,7 +238,7 @@ namespace FSpot.Editors {
 				State.PhotoImageView.Pixbuf = original;
 				State.PhotoImageView.ZoomFit (false);
 
-				MainWindow.Toplevel.InfoBox.UpdateHistogram (null);
+				App.Instance.Organizer.InfoBox.UpdateHistogram (null);
 			}
 
 			Reset ();

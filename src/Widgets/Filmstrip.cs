@@ -20,6 +20,7 @@ using Gdk;
 using FSpot.Utils;
 using FSpot.Platform;
 using FSpot.Bling;
+using Hyena;
 
 namespace FSpot.Widgets
 {
@@ -291,7 +292,7 @@ namespace FSpot.Widgets
 		}
 
 		FSpot.BrowsablePointer selection;
-		DisposableCache<Uri, Pixbuf> thumb_cache;
+		DisposableCache<SafeUri, Pixbuf> thumb_cache;
 
 		public Filmstrip (FSpot.BrowsablePointer selection) : this (selection, true)
 		{
@@ -305,8 +306,8 @@ namespace FSpot.Widgets
 			this.selection.Collection.Changed += HandleCollectionChanged;
 			this.selection.Collection.ItemsChanged += HandleCollectionItemsChanged;
 			this.squared_thumbs = squared_thumbs;
-			thumb_cache = new DisposableCache<Uri, Pixbuf> (30);
-			ThumbnailGenerator.Default.OnPixbufLoaded += HandlePixbufLoaded;
+			thumb_cache = new DisposableCache<SafeUri, Pixbuf> (30);
+			ThumbnailLoader.Default.OnPixbufLoaded += HandlePixbufLoaded;
 
 			animation = new DoubleAnimation (0, 0, TimeSpan.FromSeconds (1.5), SetPositionCore, new CubicEase (EasingMode.EaseOut));
 		}
@@ -541,14 +542,14 @@ namespace FSpot.Widgets
 			if (!args.Changes.DataChanged)
 				return;
 			foreach (int item in args.Items)
-				thumb_cache.TryRemove ((selection.Collection [item]).DefaultVersionUri);
+				thumb_cache.TryRemove ((selection.Collection [item]).DefaultVersion.Uri);
 
 			//FIXME call QueueDrawArea
 			QueueDraw ();
 		}
 
-		void HandlePixbufLoaded (ImageLoaderThread pl, Uri uri, int order, Pixbuf p) {
-			if (!thumb_cache.Contains (uri)) {
+		void HandlePixbufLoaded (ImageLoaderThread pl, ImageLoaderThread.RequestItem item) {
+			if (!thumb_cache.Contains (item.Uri)) {
 				return;
 			}
 			
@@ -570,11 +571,11 @@ namespace FSpot.Widgets
 			Gtk.Menu placement_menu = new Gtk.Menu ();
 			GtkUtil.MakeCheckMenuItem (placement_menu, 
 							Mono.Unix.Catalog.GetString ("_Horizontal"), 
-							MainWindow.Toplevel.HandleFilmstripHorizontal, 
+							App.Instance.Organizer.HandleFilmstripHorizontal, 
 							true, Orientation == Orientation.Horizontal, true);
 			GtkUtil.MakeCheckMenuItem (placement_menu, 
 							Mono.Unix.Catalog.GetString ("_Vertical"), 
-							MainWindow.Toplevel.HandleFilmstripVertical, 
+							App.Instance.Organizer.HandleFilmstripVertical, 
 							true, Orientation == Orientation.Vertical, true);
 
 			if (args != null)
@@ -612,7 +613,7 @@ namespace FSpot.Widgets
  		protected virtual Pixbuf GetPixbuf (int i, bool highlighted)
 		{
 			Pixbuf current;
-			Uri uri = (selection.Collection [i]).DefaultVersionUri;
+			SafeUri uri = (selection.Collection [i]).DefaultVersion.Uri;
 			try {
 				current = PixbufUtils.ShallowCopy (thumb_cache.Get (uri));
 			} catch (IndexOutOfRangeException) {
@@ -620,25 +621,19 @@ namespace FSpot.Widgets
 			}
 
 			if (current == null) {
-				try {
-					ThumbnailGenerator.Default.Request ((selection.Collection [i]).DefaultVersionUri, 0, 256, 256);
-
+                var pixbuf = XdgThumbnailSpec.LoadThumbnail (uri, ThumbnailSize.Large, null);
+                if (pixbuf == null) {
+					ThumbnailLoader.Default.Request (uri, ThumbnailSize.Large, 0);
+                    current = FSpot.Global.IconTheme.LoadIcon ("gtk-missing-image", ThumbSize, (Gtk.IconLookupFlags)0);
+                } else {
 					if (SquaredThumbs) {
-						using (Pixbuf p = ThumbnailFactory.LoadThumbnail (uri)) {
-							current = PixbufUtils.IconFromPixbuf (p, ThumbSize);
-						}
-					} else 
-						current = ThumbnailFactory.LoadThumbnail (uri, -1, ThumbSize);
+                        current = PixbufUtils.IconFromPixbuf (pixbuf, ThumbSize);
+                    } else {
+                        current = pixbuf.ScaleSimple (ThumbSize, ThumbSize, InterpType.Nearest);
+                    }
+                    pixbuf.Dispose ();
 					thumb_cache.Add (uri, current);
-				} catch {
-					try {
-						current = FSpot.Global.IconTheme.LoadIcon ("gtk-missing-image", ThumbSize, (Gtk.IconLookupFlags)0);
-					} catch {
-						current = null;
-					}
-					thumb_cache.Add (uri, null);
-				}
-
+                }
 			}
 			
 			//FIXME: we might end up leaking a pixbuf here
@@ -671,7 +666,7 @@ namespace FSpot.Widgets
 
 		~Filmstrip ()
 		{
-			Log.Debug ("Finalizer called on {0}. Should be Disposed", GetType ());		
+			Log.DebugFormat ("Finalizer called on {0}. Should be Disposed", GetType ());
 			Dispose (false);
 		}
 			
@@ -691,7 +686,7 @@ namespace FSpot.Widgets
 				this.selection.Changed -= HandlePointerChanged;
 				this.selection.Collection.Changed -= HandleCollectionChanged;
 				this.selection.Collection.ItemsChanged -= HandleCollectionItemsChanged;
-				ThumbnailGenerator.Default.OnPixbufLoaded -= HandlePixbufLoaded;
+				ThumbnailLoader.Default.OnPixbufLoaded -= HandlePixbufLoaded;
 				if (background_pixbuf != null)
 					background_pixbuf.Dispose ();
 				if (background_tile != null)

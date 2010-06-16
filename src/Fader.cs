@@ -18,15 +18,14 @@ namespace FSpot {
 	public class Fader {
 		bool composited;
 		Gtk.Window win;
-		double target_opacity;
 		DoubleAnimation fadin;
 
-		public Fader (Gtk.Window win, double target, int sec)
+		public Fader (Gtk.Window win, double target, double msec)
 		{
 			this.win = win;
 			win.Mapped += HandleMapped;
 			win.Unmapped += HandleUnmapped;
-			fadin = new DoubleAnimation (0.0, target, new TimeSpan (0, 0, sec), delegate (double opacity) {
+			fadin = new DoubleAnimation (0.0, target, TimeSpan.FromMilliseconds(msec), delegate (double opacity) {
 				CompositeUtils.SetWinOpacity (win, opacity);
 			});	
 		}

@@ -1,3 +1,5 @@
+using Hyena;
+
 using System;
 using System.IO;
 using System.Collections;
@@ -17,24 +19,24 @@ namespace FSpot {
 	}
 
 	public class ImageFile : IDisposable {
-		protected Uri uri;
+		protected SafeUri uri;
 
 		static Hashtable name_table;
 		internal static Hashtable NameTable { get { return name_table; } }
-
-		public ImageFile (string path) 
-		{
-			this.uri = UriUtils.PathToFileUri (path);
-		}
 		
-		public ImageFile (Uri uri)
+		public ImageFile (SafeUri uri)
 		{
 			this.uri = uri;
+		}
+
+		~ImageFile ()
+		{
+			Dispose ();
 		}
 		
 		protected Stream Open ()
 		{
-			Log.Debug ("open uri = {0}", uri.ToString ());
+			Log.DebugFormat ("open uri = {0}", uri.ToString ());
 //			if (uri.IsFile)
 //				return new FileStream (uri.LocalPath, FileMode.Open);
 			return new GLib.GioStream (GLib.FileFactory.NewForUri (uri).Read (null));
@@ -99,7 +101,7 @@ namespace FSpot {
 				}
 		}
 
-		public Uri Uri {
+		public SafeUri Uri {
 			get { return this.uri; }
 		}
 
@@ -129,7 +131,6 @@ namespace FSpot {
 			return rotated;
 		}
 		
-		[Obsolete ("Use an Async way to load the pixbuf")]
 		public virtual Gdk.Pixbuf Load ()
 		{
 			using (Stream stream = PixbufStream ()) {
@@ -138,7 +139,6 @@ namespace FSpot {
 			}
 		}
 		
-		[Obsolete ("Use an Async way to load the pixbuf")]
 		public virtual Gdk.Pixbuf Load (int max_width, int max_height)
 		{
 			System.IO.Stream stream = PixbufStream ();
@@ -169,51 +169,41 @@ namespace FSpot {
 		public virtual System.DateTime Date 
 		{
 			get {
-				// FIXME mono uses the file change time (ctime) incorrectly
-				// as the creation time so we try to work around that slightly
-				GFileInfo info = GLib.FileFactory.NewForUri (uri).QueryInfo ("time::modified,time::created", GLib.FileQueryInfoFlags.None, null);
-				DateTime write = NativeConvert.ToDateTime ((long)info.GetAttributeULong ("time::modified"));
-				DateTime create = NativeConvert.ToDateTime ((long)info.GetAttributeULong ("time::created"));
-
-				if (create < write)
-					return create;
-				else 
-					return write;
+				GFileInfo info = GLib.FileFactory.NewForUri (uri).QueryInfo ("time::modified", GLib.FileQueryInfoFlags.None, null);
+				DateTime create = NativeConvert.ToDateTime ((long)info.GetAttributeULong ("time::modified"));
+				return create;
 			}
 		}
 
-		[Obsolete ("use HasLoader (System.Uri) instead")]
-		public static bool HasLoader (string path)
-		{
-			return HasLoader (UriUtils.PathToFileUri (path));
-		}
-		
-		public static bool HasLoader (Uri uri)
+		public static bool HasLoader (SafeUri uri)
 		{
 			return GetLoaderType (uri) != null;
 		}
 
-		static Type GetLoaderType (Uri uri)
+		static Type GetLoaderType (SafeUri uri)
 		{
-			string path = uri.AbsolutePath;
-			string extension = System.IO.Path.GetExtension (path).ToLower ();
+			string extension = uri.GetExtension ().ToLower ();
+			if (extension == ".thm") {
+				// Ignore video thumbnails.
+				return null;
+			}
+
 			Type t = (Type) name_table [extension];
 
 			if (t == null) {
-				GLib.FileInfo info = GLib.FileFactory.NewForUri (uri).QueryInfo ("standard::type,standard::content-type", GLib.FileQueryInfoFlags.None, null);
-				t = (Type) name_table [info.ContentType];
+				// check if GIO can find the file, which is not the case
+				// with filenames with invalid encoding
+				GLib.File f = GLib.FileFactory.NewForUri (uri);
+				if (f.QueryExists (null)) {
+					GLib.FileInfo info = f.QueryInfo ("standard::type,standard::content-type", GLib.FileQueryInfoFlags.None, null);
+					t = (Type) name_table [info.ContentType];
+				}
 			}
 
 			return t;
 		}
 		
-		[Obsolete ("use Create (System.Uri) instead")]
-		public static ImageFile Create (string path)
-		{
-			return Create (UriUtils.PathToFileUri (path));
-		}
-
-		public static ImageFile Create (Uri uri)
+		public static ImageFile Create (SafeUri uri)
 		{
 			System.Type t = GetLoaderType (uri);
 			ImageFile img;

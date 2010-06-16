@@ -1,11 +1,14 @@
 using Gtk;
+#if GTK_2_16
+using GtkBeans;
+#endif
 using System;
 using FSpot;
 using FSpot.Utils;
+using Hyena;
 
 public class TagMenu : Menu {
 	private TagStore tag_store;
-	private MenuItem parent_item;
 
 	public delegate void TagSelectedHandler (Tag t);
 	public event TagSelectedHandler TagSelected;
@@ -24,8 +27,13 @@ public class TagMenu : Menu {
 		public TagMenuItem (Tag t, string name) : base (name.Replace ("_", "__"))
 		{
 			Value = t;
-			if (t.Icon != null)
+			if (t.Icon != null) {
 				this.Image = new Gtk.Image (t.SizedIcon);
+#if GTK_2_16
+				// override Gnome 2.28+ default setting not to show menuitem icons
+				this.SetAlwaysShowImage (true);
+#endif
+			}
 		}
 
 		public static TagMenuItem IndentedItem (Tag t)
@@ -49,7 +57,6 @@ public class TagMenu : Menu {
 		if (item != null) {
 			item.Submenu = this;
 			item.Activated += HandlePopulate;
-			parent_item = item;
 		}
 
 		tag_store = store;

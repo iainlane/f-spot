@@ -18,11 +18,13 @@
  */
 
 //This should be used to export the selected pics to an original gallery
-//located on a VFS location.
+//located on a GIO location.
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Collections;
+
+using Hyena;
 
 using Mono.Unix;
 
@@ -74,10 +76,9 @@ namespace FSpotFolderExport {
 
 		private Glade.XML xml;
 		private string dialog_name = "folder_export_dialog";
-		Gnome.Vfs.Uri dest;
+		GLib.File dest;
 		Gtk.FileChooserButton uri_chooser;
 
-		int photo_index;
 		bool open;
 		bool scale;
 		bool rotate;
@@ -87,7 +88,7 @@ namespace FSpotFolderExport {
 
 		string description;
 		string gallery_name = "Gallery";
-		// FIME this needs to be a real temp directory
+		// FIXME this needs to be a real temp directory
 		string gallery_path = Path.Combine (Path.GetTempPath (), "f-spot-original-" + System.DateTime.Now.Ticks.ToString ());
 
 		ThreadProgressDialog progress_dialog;
@@ -97,27 +98,6 @@ namespace FSpotFolderExport {
 		{}
 		public void Run (IBrowsableCollection selection)
 		{
-			/*
-			Gnome.Vfs.ModuleCallbackFullAuthentication auth = new Gnome.Vfs.ModuleCallbackFullAuthentication ();
-			auth.Callback += new Gnome.Vfs.ModuleCallbackHandler (HandleAuth);
-			auth.SetDefault ();
-			auth.Push ();
-
-			Gnome.Vfs.ModuleCallbackAuthentication mauth = new Gnome.Vfs.ModuleCallbackAuthentication ();
-			mauth.Callback += new Gnome.Vfs.ModuleCallbackHandler (HandleAuth);
-			mauth.SetDefault ();
-			mauth.Push ();
-
-			Gnome.Vfs.ModuleCallbackSaveAuthentication sauth = new Gnome.Vfs.ModuleCallbackSaveAuthentication ();
-			sauth.Callback += new Gnome.Vfs.ModuleCallbackHandler (HandleAuth);
-			sauth.SetDefault ();
-			sauth.Push ();
-
-			Gnome.Vfs.ModuleCallbackStatusMessage msg = new Gnome.Vfs.ModuleCallbackStatusMessage ();
-			msg.Callback += new Gnome.Vfs.ModuleCallbackHandler (HandleMsg);
-			msg.SetDefault ();
-			msg.Push ();
-			*/
 			this.selection = selection;
 
 			IconView view = (IconView) new IconView (selection);
@@ -143,15 +123,13 @@ namespace FSpotFolderExport {
 			uri_chooser.LocalOnly = false;
 
 			if (!String.IsNullOrEmpty (Preferences.Get<string> (URI_KEY)))
-				uri_chooser.SetUri (Preferences.Get<string> (URI_KEY));
+				uri_chooser.SetCurrentFolderUri (Preferences.Get<string> (URI_KEY));
 			else
 				uri_chooser.SetFilename (uri_path);
 
 			chooser_hbox.PackStart (uri_chooser);
 
 			Dialog.ShowAll ();
-
-			//LoadHistory ();
 			Dialog.Response += HandleResponse;
 
 			LoadPreference (SCALE_KEY);
@@ -183,17 +161,14 @@ namespace FSpotFolderExport {
 		{
 			// FIXME use mkstemp
 
-			Gnome.Vfs.Result result = Gnome.Vfs.Result.Ok;
-
 			try {
-				Dialog.Hide ();
+				Gtk.Application.Invoke (delegate {Dialog.Hide ();});
 
-				Gnome.Vfs.Uri source = new Gnome.Vfs.Uri (Path.Combine (gallery_path, gallery_name));
-				Gnome.Vfs.Uri target = dest.Clone();
-				target = target.AppendFileName(source.ExtractShortName ());
+				GLib.File source = GLib.FileFactory.NewForPath (Path.Combine (gallery_path, gallery_name));
+				GLib.File target = GLib.FileFactory.NewForPath (Path.Combine (dest.Path, source.Basename));
 
-				if (dest.IsLocal)
-					gallery_path = Gnome.Vfs.Uri.GetLocalPathFromUri (dest.ToString ());
+				if (dest.IsNative)
+					gallery_path = dest.Path;
 
 				progress_dialog.Message = Catalog.GetString ("Building Gallery");
 				progress_dialog.Fraction = 0.0;
@@ -208,14 +183,14 @@ namespace FSpotFolderExport {
 				}
 
 				if (scale) {
-					System.Console.WriteLine ("setting scale to {0}", size);
+					Log.DebugFormat ("Resize Photos to {0}.", size);
 					gallery.SetScale (size);
 				} else {
-					System.Console.WriteLine ("Exporting full size image");
+					Log.Debug ("Exporting full size.");
 				}
 
 				if (rotate) {
-					System.Console.WriteLine ("Exporting rotated image");
+					Log.Debug ("Autorotate images.");
 					gallery.SetRotate();
 				}
 
@@ -226,36 +201,36 @@ namespace FSpotFolderExport {
 					gallery.SetExportTagIcons ();
 
 				gallery.Description = description;
-
 				gallery.GenerateLayout ();
+				
 				FilterSet filter_set = new FilterSet ();
 				if (scale)
 					filter_set.Add (new ResizeFilter ((uint) size));
 				else if (rotate)
 					filter_set.Add (new OrientationFilter ());
 				filter_set.Add (new ChmodFilter ());
-				filter_set.Add (new UniqueNameFilter (gallery_path));
+				filter_set.Add (new UniqueNameFilter (new SafeUri (gallery_path)));
 
 				for (int photo_index = 0; photo_index < selection.Count; photo_index++)
 				{
 					try {
-						progress_dialog.Message = System.String.Format (Catalog.GetString ("Uploading picture \"{0}\""), selection[photo_index].Name);
+						progress_dialog.Message = System.String.Format (Catalog.GetString ("Exporting \"{0}\"..."), selection[photo_index].Name);
 						progress_dialog.Fraction = photo_index / (double) selection.Count;
 						gallery.ProcessImage (photo_index, filter_set);
 						progress_dialog.ProgressText = System.String.Format (Catalog.GetString ("{0} of {1}"), (photo_index + 1), selection.Count);
 					}
 					catch (Exception e) {
-						progress_dialog.Message = String.Format (Catalog.GetString ("Error uploading picture \"{0}\" to Gallery:{2}{1}"),
+						Log.Error (e.ToString ());
+						progress_dialog.Message = String.Format (Catalog.GetString ("Error Copying \"{0}\" to Gallery:{2}{1}"),
 							selection[photo_index].Name, e.Message, Environment.NewLine);
 						progress_dialog.ProgressText = Catalog.GetString ("Error");
 
 						if (progress_dialog.PerformRetrySkip ())
 							photo_index--;
 					}
-
 				}
 
-				//create the zip tarballs for original
+				// create the zip tarballs for original
 				if (gallery is OriginalGallery) {
 					bool include_tarballs;
 					try {
@@ -268,32 +243,24 @@ namespace FSpotFolderExport {
 						(gallery as OriginalGallery).CreateZip ();
 				}
 
-				// we've created the structure, now if the destination was local we are done
+				// we've created the structure, now if the destination was local (native) we are done
 				// otherwise we xfer
-				if (!dest.IsLocal) {
-					Console.WriteLine(target);
-					System.Console.WriteLine ("Xfering {0} to {1}", source.ToString (), target.ToString ());
-					result = Gnome.Vfs.Xfer.XferUri (source, target,
-									 Gnome.Vfs.XferOptions.Default,
-									 Gnome.Vfs.XferErrorMode.Abort,
-									 Gnome.Vfs.XferOverwriteMode.Replace,
-									 Progress);
+				if (!dest.IsNative) {
+					Log.DebugFormat ("Transferring \"{0}\" to \"{1}\"", source.Path, target.Path);
+					progress_dialog.Message = String.Format (Catalog.GetString ("Transferring to \"{0}\""), target.Path);
+					progress_dialog.ProgressText = Catalog.GetString ("Transferring...");
+					source.CopyRecursive (target, GLib.FileCopyFlags.Overwrite, new GLib.Cancellable (), Progress);
 				}
-
-				if (result == Gnome.Vfs.Result.Ok) {
-
-					progress_dialog.Message = Catalog.GetString ("Done Sending Photos");
-					progress_dialog.Fraction = 1.0;
-					progress_dialog.ProgressText = Catalog.GetString ("Transfer Complete");
-					progress_dialog.ButtonLabel = Gtk.Stock.Ok;
-
-				} else {
-					progress_dialog.ProgressText = result.ToString ();
-					progress_dialog.Message = Catalog.GetString ("Error While Transferring");
-				}
+				
+				// No need to check result here as if result is not true, an Exception will be thrown before
+				progress_dialog.Message = Catalog.GetString ("Export Complete.");
+				progress_dialog.Fraction = 1.0;
+				progress_dialog.ProgressText = Catalog.GetString ("Exporting Photos Completed.");
+				progress_dialog.ButtonLabel = Gtk.Stock.Ok;
 
 				if (open) {
-					GtkBeans.Global.ShowUri (Dialog.Screen, target.ToString ());
+					Log.DebugFormat (String.Format ("Open URI \"{0}\"", target.Uri.ToString ()));
+					Gtk.Application.Invoke (delegate {GtkBeans.Global.ShowUri (Dialog.Screen, target.Uri.ToString () );});
 				}
 
 				// Save these settings for next time
@@ -306,58 +273,24 @@ namespace FSpotFolderExport {
 				Preferences.Set (METHOD_KEY, static_radio.Active ? "static" : original_radio.Active ? "original" : "folder" );
 				Preferences.Set (URI_KEY, uri_chooser.Uri);
 			} catch (System.Exception e) {
-				// Console.WriteLine (e);
+				Log.Error (e.ToString ());
 				progress_dialog.Message = e.ToString ();
 				progress_dialog.ProgressText = Catalog.GetString ("Error Transferring");
 			} finally {
 				// if the destination isn't local then we want to remove the temp directory we
 				// created.
-				if (!dest.IsLocal)
+				if (!dest.IsNative)
 					System.IO.Directory.Delete (gallery_path, true);
 
 				Gtk.Application.Invoke (delegate { Dialog.Destroy(); });
-
 			}
 		}
 
-		private int Progress (Gnome.Vfs.XferProgressInfo info)
+		private void Progress (long current_num_bytes, long total_num_bytes)
 		{
-			progress_dialog.ProgressText = info.Phase.ToString ();
-
-			if (info.BytesTotal > 0) {
-				progress_dialog.Fraction = info.BytesCopied / (double)info.BytesTotal;
+			if (total_num_bytes > 0) {
+				progress_dialog.Fraction = current_num_bytes / (double)total_num_bytes;
 			}
-
-			switch (info.Status) {
-			case Gnome.Vfs.XferProgressStatus.Vfserror:
-				progress_dialog.Message = Catalog.GetString ("Error: Error while transferring; Aborting");
-				return (int)Gnome.Vfs.XferErrorAction.Abort;
-			case Gnome.Vfs.XferProgressStatus.Overwrite:
-				progress_dialog.ProgressText = Catalog.GetString ("Error: File Already Exists; Aborting");
-				return (int)Gnome.Vfs.XferOverwriteAction.Abort;
-			default:
-				return 1;
-			}
-
-		}
-
-		private void HandleMsg (Gnome.Vfs.ModuleCallback cb)
-		{
-			Gnome.Vfs.ModuleCallbackStatusMessage msg = cb as Gnome.Vfs.ModuleCallbackStatusMessage;
-			System.Console.WriteLine ("{0}", msg.Message);
-		}
-
-		private void HandleAuth (Gnome.Vfs.ModuleCallback cb)
-		{
-			Gnome.Vfs.ModuleCallbackFullAuthentication fcb = cb as Gnome.Vfs.ModuleCallbackFullAuthentication;
-			System.Console.Write ("Enter your username ({0}): ", fcb.Username);
-			string username = System.Console.ReadLine ();
-			System.Console.Write ("Enter your password : ");
-			string passwd = System.Console.ReadLine ();
-
-			if (username.Length > 0)
-				fcb.Username = username;
-			fcb.Password = passwd;
 		}
 
 		private void HandleResponse (object sender, Gtk.ResponseArgs args)
@@ -373,7 +306,7 @@ namespace FSpotFolderExport {
 				return;
 			}
 
-			dest = new Gnome.Vfs.Uri (uri_chooser.Uri);
+			dest = GLib.FileFactory.NewForUri (uri_chooser.Uri);
 			open = open_check.Active;
 			scale = scale_check.Active;
 			rotate = rotate_check.Active;
@@ -389,13 +322,8 @@ namespace FSpotFolderExport {
 				size = size_spin.ValueAsInt;
 
 			command_thread = new System.Threading.Thread (new System.Threading.ThreadStart (Upload));
-			command_thread.Name = Catalog.GetString ("Transferring Pictures");
+			command_thread.Name = Catalog.GetString ("Exporting Photos");
 
-			//FIXME: get the files/dirs count in a cleaner way than (* 5 + 2(zip) + 9)
-			// selection * 5 (original, mq, lq, thumbs, comments)
-			// 2: zipfiles
-			// 9: directories + info.txt + .htaccess
-			// this should actually be 1 anyway, because we transfer just one dir
 			progress_dialog = new ThreadProgressDialog (command_thread, 1);
 			progress_dialog.Start ();
 		}
@@ -514,13 +442,27 @@ namespace FSpotFolderExport {
 
 		protected virtual string ImageName (int image_num)
 		{
-			return System.IO.Path.GetFileName(FileImportBackend.UniqueName(gallery_path, System.IO.Path.GetFileName (collection [image_num].DefaultVersionUri.LocalPath)));
+            var uri = collection [image_num].DefaultVersion.Uri;
+            var dest_uri = new SafeUri (gallery_path);
+
+            // Find an unused name
+            int i = 1;
+            var dest = dest_uri.Append (uri.GetFilename ());
+            var file = GLib.FileFactory.NewForUri (dest);
+            while (file.Exists) {
+                var filename = uri.GetFilenameWithoutExtension ();
+                var extension = uri.GetExtension ();
+                dest = dest_uri.Append (String.Format ("{0}-{1}{2}", filename, i++, extension));
+                file = GLib.FileFactory.NewForUri (dest);
+            }
+
+            return dest.GetFilename ();
 		}
 
 		public void ProcessImage (int image_num, FilterSet filter_set)
 		{
 			IBrowsableItem photo = collection [image_num];
-			string photo_path = photo.DefaultVersionUri.LocalPath;
+			string photo_path = photo.DefaultVersion.Uri.LocalPath;
 			string path;
 			ScaleRequest req;
 
@@ -529,19 +471,19 @@ namespace FSpotFolderExport {
 			MakeDir (SubdirPath (req.Name));
 			path = SubdirPath (req.Name, ImageName (image_num));
 
-			using (FilterRequest request = new FilterRequest (photo.DefaultVersionUri)) {
+			using (FilterRequest request = new FilterRequest (photo.DefaultVersion.Uri)) {
 				filter_set.Convert (request);
 				if (request.Current.LocalPath == path)
 					request.Preserve(request.Current);
 				else
-					File.Copy (request.Current.LocalPath, path, true);
+					System.IO.File.Copy (request.Current.LocalPath, path, true);
 
 				if (photo != null && photo is Photo && App.Instance.Database != null) {
 					App.Instance.Database.Exports.Create ((photo as Photo).Id, (photo as Photo).DefaultVersionId,
 								      ExportStore.FolderExportType,
 								      // FIXME this is wrong, the final path is the one
 								      // after the Xfer.
-								      UriUtils.PathToFileUriEscaped (path).ToString ());
+								      new SafeUri (path).ToString ());
 				}
 
 				using (Exif.ExifData data = new Exif.ExifData (photo_path)) {
@@ -568,7 +510,7 @@ namespace FSpotFolderExport {
 							if (req.Name == "thumbs")
 								req_set.Add (new SharpFilter (0.1, 2, 5));
 						}
-						using (FilterRequest tmp_req = new FilterRequest (photo.DefaultVersionUri)) {
+						using (FilterRequest tmp_req = new FilterRequest (photo.DefaultVersion.Uri)) {
 							req_set.Convert (tmp_req);
 							MakeDir (SubdirPath (req.Name));
 							path = SubdirPath (req.Name, ImageName (image_num));
@@ -585,7 +527,7 @@ namespace FSpotFolderExport {
 			try {
 				Directory.CreateDirectory (path);
 			} catch {
-				Console.WriteLine ("Error in creating directory " + path);
+				Log.ErrorFormat ("Error in creating directory \"{0}\"", path);
 			}
 			return path;
 		}
@@ -698,20 +640,15 @@ namespace FSpotFolderExport {
 			return String.Format ("img-{0}.jpg", photo_index + 1);
 		}
 
-		private string AlternateName (int photo_index, string extension)
-		{
-			return System.IO.Path.GetFileNameWithoutExtension (ImageName (photo_index)) + extension;
-		}
-
 		private void SetTime ()
 		{
 			try {
 				for (int i = 0; i < collection.Count; i++)
-					CreateComments (collection [i].DefaultVersionUri.LocalPath, i);
+					CreateComments (collection [i].DefaultVersion.Uri.LocalPath, i);
 
 				Directory.SetLastWriteTimeUtc(gallery_path, collection [0].Time);
 			} catch (System.Exception e) {
-				System.Console.WriteLine (e.ToString ());
+				Log.Error (e.ToString ());
 			}
 		}
 
@@ -726,7 +663,7 @@ namespace FSpotFolderExport {
 				    CreateZipFile("hq");
 
 			} catch (System.Exception e) {
-				System.Console.WriteLine (e.ToString ());
+				Log.Error (e.ToString ());
 			}
 		}
 
@@ -797,7 +734,6 @@ namespace FSpotFolderExport {
 
 	class HtmlGallery : FolderGallery
 	{
-		int current;
 		int perpage = 16;
 		string stylesheet = "f-spot-simple.css";
 		string altstylesheet = "f-spot-simple-white.css";
@@ -1099,7 +1035,7 @@ namespace FSpotFolderExport {
 
 			writer.Write (Catalog.GetString ("Gallery generated by") + " ");
 
-			writer.AddAttribute ("href", "http://www.gnome.org/projects/f-spot");
+			writer.AddAttribute ("href", "http://f-spot.org");
 			writer.RenderBeginTag ("a");
 			writer.Write (String.Format ("{0} {1}", FSpot.Defines.PACKAGE, FSpot.Defines.VERSION));
 			writer.RenderEndTag ();

@@ -8,7 +8,7 @@
  */
 
 using System;
-using System.IO;
+using Hyena;
 using FSpot.Utils;
 using FSpot.Platform;
 
@@ -16,79 +16,20 @@ using Mono.Unix.Native;
 using GFileInfo = GLib.FileInfo;
 
 namespace FSpot {
-	public class ThumbnailGenerator : ImageLoaderThread {
+    public class ThumbnailLoader : ImageLoaderThread {
 
-		static public ThumbnailGenerator Default = new ThumbnailGenerator ();
-		
-		public const string ThumbMTime = "tEXt::Thumb::MTime";
-		public const string ThumbUri = "tEXt::Thumb::URI";
-		public const string ThumbImageWidth = "tEXt::Thumb::Image::Width";
-		public const string ThumbImageHeight = "tEXt::Thumb::Image::Height"; 
+        static public ThumbnailLoader Default = new ThumbnailLoader ();
 
-		public static Gdk.Pixbuf Create (Uri uri)
-		{
-			try {
-				Gdk.Pixbuf thumb;
+        public void Request (SafeUri uri, ThumbnailSize size, int order)
+        {
+            var pixels = size == ThumbnailSize.Normal ? 128 : 256;
+            Request (uri, order, pixels, pixels);
+        }
 
-				using (ImageFile img = ImageFile.Create (uri)) {
-					thumb = img.Load (256, 256);
-				}
-
-				if (thumb == null)
-					return null;
-
-				try { //Setting the thumb options
-					GFileInfo info = GLib.FileFactory.NewForUri (uri).QueryInfo ("time::modified", GLib.FileQueryInfoFlags.None, null);
-					DateTime mtime = NativeConvert.ToDateTime ((long)info.GetAttributeULong ("time::modified"));
-
-					FSpot.Utils.PixbufUtils.SetOption (thumb, ThumbUri, UriUtils.UriToStringEscaped (uri));
-					FSpot.Utils.PixbufUtils.SetOption (thumb, ThumbMTime, ((uint)GLib.Marshaller.DateTimeTotime_t (mtime)).ToString ());
-				} catch (System.Exception e) {
-					Log.Exception (e);
-				}
-
-				Save (thumb, uri);
-				return thumb;
-			} catch (Exception e) {
-				Log.Exception (e);
-				return null;
-			}
-		}
-		
-		private static void Save (Gdk.Pixbuf image, Uri uri)
-		{
-			try {
-				ThumbnailCache.Default.RemoveThumbnailForUri (uri);
-			} finally {
-				ThumbnailFactory.SaveThumbnail (image, uri);
-			}
-		}
-
-		protected override void EmitLoaded (System.Collections.Queue results)
-		{
-			base.EmitLoaded (results);
-			
-			foreach (RequestItem r in results) {
-				if (r.result != null)
-					r.result.Dispose ();
-			}
-				
-		}
-
-		protected override void ProcessRequest (RequestItem request)
-		{
-			try {
-				base.ProcessRequest (request);
-
-				Gdk.Pixbuf image = request.result;
-				if (image != null)
-					Save (image, request.uri);
-
-				System.Threading.Thread.Sleep (75);
-			} catch (System.Exception e) {
-				System.Console.WriteLine (e.ToString ());
-			}
-		}
-
-	}
+        protected override void ProcessRequest (RequestItem request)
+        {
+            var size = request.Width == 128 ? ThumbnailSize.Normal : ThumbnailSize.Large;
+            request.Result = XdgThumbnailSpec.LoadThumbnail (request.Uri, size);
+        }
+    }
 }

@@ -22,6 +22,7 @@ using System.Threading;
 using Gtk;
 using GtkBeans;
 
+using Hyena;
 using FSpot.Utils;
 using FSpot.Platform;
 using FSpot.UI.Dialog;
@@ -170,7 +171,7 @@ namespace FSpot.Exporter.Facebook
 			StoreCaption ();
 			
 			int old_item = current_item;
-			current_item = thumbnail_iconview.CellAtPosition ((int) args.Event.X, (int) args.Event.Y, false);
+			current_item = thumbnail_iconview.CellAtPosition ((int) args.Event.X, (int) args.Event.Y, false, false);
 
 			if (current_item < 0 || current_item >=  items.Length) {
 				current_item = old_item;
@@ -192,7 +193,7 @@ namespace FSpot.Exporter.Facebook
 				tag_image.Destroy ();
 			}
 
-			using (Gdk.Pixbuf data = PixbufUtils.ScaleToMaxSize (ThumbnailFactory.LoadThumbnail (item.DefaultVersionUri), 400, 400)) {
+			using (Gdk.Pixbuf data = XdgThumbnailSpec.LoadThumbnail (item.DefaultVersion.Uri, ThumbnailSize.Large)) {
 				tag_image_height = data.Height;
 				tag_image_width = data.Width;
 				tag_image = new Gtk.Image (data);
@@ -262,34 +263,36 @@ namespace FSpot.Exporter.Facebook
 							LoginProgress (0.6, Catalog.GetString ("Session established, fetching friend details..."));
 						});
 
-						User[] infos = account.Facebook.GetUserInfo (uids, new string[] { "first_name", "last_name" });
-						friends = new Dictionary<long, User> ();
-	
-						foreach (User user in infos)
-							friends.Add (user.UId, user);
-	
+						if (uids.Length > 0) {
+							User[] infos = account.Facebook.GetUserInfo (uids, new string[] { "first_name", "last_name" });
+							friends = new Dictionary<long, User> ();
+
+							foreach (User user in infos)
+								friends.Add (user.uid, user);
+						}
+
 						Gtk.Application.Invoke (delegate {
 							LoginProgress (0.8, Catalog.GetString ("Session established, fetching photo albums..."));
 						});
 						Album[] albums = account.Facebook.GetAlbums ();
 						Gtk.Application.Invoke (delegate {
-							existing_album_combobox.Model = new AlbumStore (albums);
-							existing_album_combobox.Active = 0;
-	
 							album_info_vbox.Sensitive = true;
 							picture_info_vbox.Sensitive = true;
 							permissions_hbox.Sensitive = true;
 							login_button.Visible = false;
 							logout_button.Visible = true;
 							// Note for translators: {0} and {1} are respectively firstname and surname of the user
-							LoginProgress (1.0, String.Format (Catalog.GetString ("{0} {1} is logged into Facebook"), me.FirstName, me.LastName));
+							LoginProgress (1.0, String.Format (Catalog.GetString ("{0} {1} is logged into Facebook"), me.first_name, me.last_name));
+
+							existing_album_combobox.Model = new AlbumStore (albums);
+							existing_album_combobox.Active = 0;
 						});
-					} catch (FacebookException fe) {
-						Log.DebugException (fe);
+					} catch (Exception e) {
+						Log.DebugException (e);
 						Gtk.Application.Invoke (delegate {
 							HigMessageDialog error = new HigMessageDialog (this, Gtk.DialogFlags.DestroyWithParent | Gtk.DialogFlags.Modal,
 									Gtk.MessageType.Error, Gtk.ButtonsType.Ok, Catalog.GetString ("Facebook Connection Error"),
-									String.Format (Catalog.GetString ("There was an error when downloading your information from Facebook.\n\nFacebook said: {0}"), fe.Message));
+									String.Format (Catalog.GetString ("There was an error when downloading your information from Facebook.\n\nFacebook said: {0}"), e.Message));
 							error.Run ();
 							error.Destroy ();
 						});
@@ -347,10 +350,10 @@ namespace FSpot.Exporter.Facebook
 			bool actual = account.HasPermission (permission);
 			if (desired != actual) {
 				if (desired) {
-					Log.Debug ("Granting {0}", permission);
+					Log.DebugFormat ("Granting {0}", permission);
 					account.GrantPermission (permission, this);
 				} else {
-					Log.Debug ("Revoking {0}", permission);
+					Log.DebugFormat ("Revoking {0}", permission);
 					account.RevokePermission (permission);
 				}
 				/* Double-check that things work... */
@@ -429,7 +432,7 @@ namespace FSpot.Exporter.Facebook
 			_albums = albums;
 
 			foreach (Album album in Albums) {
-				AppendValues (album.Name);
+				AppendValues (album.name);
 			}
 		}
 

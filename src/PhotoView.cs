@@ -21,13 +21,13 @@ using Mono.Unix;
 using FSpot.Xmp;
 using FSpot.Widgets;
 using FSpot.Utils;
+using Hyena;
 using FSpot.UI.Dialog;
 
 namespace FSpot {
 	public class PhotoView : EventBox {
 		FSpot.Delay commit_delay; 
 	
-		private bool has_selection = false;
 		private PhotoImageView photo_view;
 		private ScrolledWindow photo_view_scrolled;
 		private EventBox background;
@@ -40,8 +40,6 @@ namespace FSpot {
 		
 		private Entry description_entry;
 		private Widgets.Rating rating;
-	
-		private uint restore_scrollbars_idle_id;
 	
 		// Public events.
 	
@@ -64,7 +62,7 @@ namespace FSpot {
 			get { return photo_view; }
 		}
 	
-		new public FSpot.BrowsablePointer Item {
+		public FSpot.BrowsablePointer Item {
 			get { return photo_view.Item; }
 		}
 	
@@ -160,20 +158,6 @@ namespace FSpot {
 			PhotoPopup popup = new PhotoPopup ();
 			popup.Activate (this.Toplevel);
 			return true;
-		}
-	
-		private void ShowError (System.Exception e, Photo photo)
-		{
-			string msg = Catalog.GetString ("Error editing photo");
-			string desc = String.Format (Catalog.GetString ("Received exception \"{0}\". Unable to save photo {1}"),
-						     e.Message, photo.Name);
-			
-			HigMessageDialog md = new HigMessageDialog ((Gtk.Window)this.Toplevel, DialogFlags.DestroyWithParent, 
-								    Gtk.MessageType.Error, ButtonsType.Ok, 
-								    msg,
-								    desc);
-			md.Run ();
-			md.Destroy ();
 		}
 	
 		int changed_photo;
@@ -298,8 +282,6 @@ namespace FSpot {
 			set { filmstrip.Visible = value; }
 		}
 	
-		Gtk.Tooltips tips = new Gtk.Tooltips ();
-	
 		public PhotoView (IBrowsableCollection query)
 			: base ()
 		{
@@ -351,7 +333,7 @@ namespace FSpot {
 			HBox lower_hbox = new HBox (false, 2);
 			//inner_hbox.BorderWidth = 6;
 	
-			tag_view = new Widgets.TagView (MainWindow.ToolTips);
+			tag_view = new Widgets.TagView ();
 			lower_hbox.PackStart (tag_view, false, true, 0);
 	
 			Label comment = new Label (Catalog.GetString ("Comment:"));
@@ -376,7 +358,7 @@ namespace FSpot {
 
 		~PhotoView ()
 		{
-			FSpot.Utils.Log.Debug ("Finalizer called on {0}. Should be Disposed", GetType ());		
+			Hyena.Log.DebugFormat ("Finalizer called on {0}. Should be Disposed", GetType ());
 			Dispose (false);	
 		}
 

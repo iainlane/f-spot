@@ -18,7 +18,7 @@ using Unique;
 
 using Mono.Unix;
 
-using FSpot.Utils;
+using Hyena;
 
 namespace FSpot
 {
@@ -104,12 +104,12 @@ namespace FSpot
 			HandleSlideshow (tagname);
 		}
 
-		public void View (Uri uri)
+		public void View (SafeUri uri)
 		{
-			View (new Uri[] {uri});
+			View (new SafeUri[] {uri});
 		}
 
-		public void View (IEnumerable<Uri> uris)
+		public void View (IEnumerable<SafeUri> uris)
 		{
 			var uri_s = from uri in uris select uri.ToString ();
 			View (uri_s);
@@ -169,6 +169,7 @@ namespace FSpot
 #endregion
 
 #region Command Handlers
+
 		void HandleMessageReceived (object sender, MessageReceivedArgs e)
 		{
 			switch ((Command)e.Command) {
@@ -202,12 +203,7 @@ namespace FSpot
 		void HandleImport (string path)
 		{
 			Organizer.Window.Present ();
-			if (path != null && path.StartsWith ("gphoto2:"))
-				Organizer.ImportCamera (path);
-			else if (path != null && path.StartsWith ("file:"))
-				Organizer.ImportFile (Uri.UnescapeDataString ((new Uri(path)).AbsolutePath));
-			else
-				Organizer.ImportFile (path);
+			Organizer.ImportFile (path == null ? null : new SafeUri(path));
 		}
 
 		void HandleOrganize ()
@@ -221,7 +217,7 @@ namespace FSpot
 		void HandleShutdown ()
 		{
 			try {
-				MainWindow.Toplevel.Close ();
+				App.Instance.Organizer.Close ();
 			} catch {
 				System.Environment.Exit (0);
 			}
@@ -238,7 +234,7 @@ namespace FSpot
 			else
 				tag = Database.Tags.GetTagById (Preferences.Get<int> (Preferences.SCREENSAVER_TAG));
 
-			Photo[] photos;
+			IBrowsableItem[] photos;
 			if (tag != null)
 				photos = Database.Photos.Query (new Tag[] {tag});
 			else if (Preferences.Get<int> (Preferences.SCREENSAVER_TAG) == 0)
@@ -254,7 +250,7 @@ namespace FSpot
 			window.ModifyBg (Gtk.StateType.Normal, new Gdk.Color (0, 0, 0));
 
 			if (photos.Length > 0) {
-				Array.Sort (photos, new Photo.RandomSort ());
+				Array.Sort (photos, new IBrowsableItemComparer.RandomSort ());
 				slideshow = new FSpot.Widgets.SlideShow (new BrowsablePointer (new PhotoList (photos), 0), (uint)(delay * 1000), true);
 				slideshow.Transition = new FSpot.Widgets.DissolveTransition ();
 				window.Add (slideshow);
@@ -313,14 +309,14 @@ namespace FSpot
 
 		void HandleView (string[] uris)
 		{
-			List<Uri> ul = new List<Uri> ();
+			List<SafeUri> ul = new List<SafeUri> ();
 			foreach (var u in uris)
-				ul.Add (new Uri (u));
+				ul.Add (new SafeUri (u, true));
 			try {
 				Register (new FSpot.SingleView (ul.ToArray ()).Window);
 			} catch (System.Exception e) {
-				System.Console.WriteLine (e.ToString ());
-				System.Console.WriteLine ("no real valid path to view from");
+				Log.Exception (e);
+				Log.Debug ("no real valid path to view from");
 			} 
 		}
 
@@ -340,7 +336,7 @@ namespace FSpot
 				Log.Information ("Exiting...");
 				Banshee.Kernel.Scheduler.Dispose ();
 				Database.Dispose ();
-				ImageLoaderThread.Cleanup ();
+				ImageLoaderThread.CleanAll ();
 				Gtk.Application.Quit ();
 				System.Environment.Exit (0);
 			}

@@ -1,4 +1,5 @@
 using FSpot.Utils;
+using Hyena;
 
 namespace FSpot.Raf {
 	// This is reverse engineered from looking at the sample files I have
@@ -28,7 +29,7 @@ namespace FSpot.Raf {
                         get { return false; }
                 }
 
-		public RafFile (System.Uri uri) : base (uri)
+		public RafFile (SafeUri uri) : base (uri)
 		{
 		}
 
@@ -37,7 +38,7 @@ namespace FSpot.Raf {
 			get {
 				if (exif_data == null)
 					exif_data = new Exif.ExifData(uri.LocalPath);
-				System.Console.WriteLine ("loading exif data");
+				Log.Debug ("loading exif data");
 				return exif_data;
 			}
 		}
@@ -55,10 +56,6 @@ namespace FSpot.Raf {
 				orientation = PixbufOrientation.TopLeft;
 
 			return orientation;
-		}
-
-		public RafFile (string path) : base (path)
-		{
 		}
 
 		public override System.IO.Stream PixbufStream ()

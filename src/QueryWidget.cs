@@ -18,7 +18,7 @@ using Gtk;
 using FSpot.Utils;
 using FSpot.Query;
 using FSpot.Widgets;
-
+using Hyena;
 
 
 namespace FSpot {
@@ -38,7 +38,6 @@ namespace FSpot {
 		Gtk.HBox warning_box;
 		Gtk.Button clear_button;
 		Gtk.Button refresh_button;
-		Gtk.Tooltips tips = new Gtk.Tooltips ();
 
 		public LogicWidget Logic {
 			get { return logic_widget; }
@@ -49,8 +48,6 @@ namespace FSpot {
 			box = Child as HBox;
 			box.Spacing = 6;
 			box.BorderWidth = 2;
-
-			tips.Enable ();
 
 			this.query = query;
 			query.Changed += HandleChanged;
@@ -100,15 +97,15 @@ namespace FSpot {
 			clear_button.Add (new Gtk.Image ("gtk-close", Gtk.IconSize.Button));
 			clear_button.Clicked += HandleClearButtonClicked;
 			clear_button.Relief = Gtk.ReliefStyle.None;
+			clear_button.TooltipText = Catalog.GetString("Clear search");
 			box.PackEnd (clear_button, false, false, 0);
-			tips.SetTip (clear_button, Catalog.GetString("Clear search"), null);
 			
 			refresh_button = new Gtk.Button ();
 			refresh_button.Add (new Gtk.Image ("gtk-refresh", Gtk.IconSize.Button));
 			refresh_button.Clicked += HandleRefreshButtonClicked;
 			refresh_button.Relief = Gtk.ReliefStyle.None;
+			refresh_button.TooltipText = Catalog.GetString("Refresh search");
 			box.PackEnd (refresh_button, false, false, 0);
-			tips.SetTip (refresh_button, Catalog.GetString("Refresh search"), null);
 
 			Gtk.Label warning = new Gtk.Label (Catalog.GetString ("No matching photos found"));
 			warning_box.PackStart (warning, false, false, 0);
@@ -152,13 +149,11 @@ namespace FSpot {
 		public void ShowBar ()
 		{
 			Show ();
-			((Gtk.Label)MainWindow.Toplevel.FindByTag.Child).TextWithMnemonic = Catalog.GetString ("Hide _Find Bar");
 		}
 
 		public void HideBar ()
 		{
 			Hide ();
-			((Gtk.Label)MainWindow.Toplevel.FindByTag.Child).TextWithMnemonic = Catalog.GetString ("Show _Find Bar");
 		}
 
 		public void HandleChanged (IBrowsableCollection collection) 
@@ -220,7 +215,7 @@ namespace FSpot {
 			return logic_widget.TagRequired (tag);
 		}
 		
-		public void SetFolders (IEnumerable<Uri> uri_list)
+		public void SetFolders (IEnumerable<SafeUri> uri_list)
 		{
 			folder_query_widget.SetFolders (uri_list);
 			query.RequestReload ();

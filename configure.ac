@@ -1,8 +1,8 @@
 dnl Granularly define the version components
 dnl Remember to also update the Display Version
 m4_define([fspot_version_major], [0])
-m4_define([fspot_version_minor], [6])
-m4_define([fspot_version_micro], [2])
+m4_define([fspot_version_minor], [7])
+m4_define([fspot_version_micro], [0])
 
 dnl set to 0 when doing an official release
 m4_define([fspot_version_pre_release], [0])
@@ -23,7 +23,7 @@ m4_define([fspot_version],
 
 dnl this can sometimes differ manually
 m4_define([fspot_display_version],
-	["0.6.2"])
+	["0.7.0"])
 
 m4_define([fspot_api_version],
 	[fspot_version_major.fspot_version_minor])
@@ -38,7 +38,7 @@ AC_INIT([f-spot], fspot_version,
 AM_INIT_AUTOMAKE([1.9 dist-bzip2 tar-ustar dist-zip foreign])
 AM_MAINTAINER_MODE
 AM_CONFIG_HEADER(config.h)
-AC_SUBST([ACLOCAL_AMFLAGS], ["-I build/m4/shamrock -I build/m4/shave \${ACLOCAL_FLAGS}"])
+AC_SUBST([ACLOCAL_AMFLAGS], ["-I build/m4/f-spot -I build/m4/shamrock -I build/m4/shave \${ACLOCAL_FLAGS}"])
 
 IT_PROG_INTLTOOL([0.35.0])
 AC_PROG_LIBTOOL
@@ -58,6 +58,8 @@ SHAMROCK_EXPAND_LIBDIR
 SHAMROCK_EXPAND_BINDIR
 SHAMROCK_EXPAND_DATADIR
 
+dnl User help
+SHAMROCK_CHECK_GNOME_DOC_UTILS(0.17.3)
 
 dnl Mono and gmcs
 SHAMROCK_CHECK_MONO_MODULE(2.2)
@@ -66,14 +68,21 @@ SHAMROCK_FIND_MONO_RUNTIME
 SHAMROCK_CHECK_MONO_2_0_GAC_ASSEMBLIES([
     Mono.Data.SqliteClient
     Mono.Posix
+    Mono.Simd
+    Mono.Data
+    System
     System.Runtime.Remoting
     System.Web
     System.Web.Services
+    System.Data
     Mono.Cairo
+    ICSharpCode.SharpZipLib
 ])
 
-
-
+FSPOT_CHECK_GTK_SHARP
+FSPOT_CHECK_GNOME_KEYRING_SHARP
+FSPOT_CHECK_FLICKRNET
+SHAMROCK_CHECK_NUNIT
 
 
 
@@ -118,11 +127,6 @@ if test ! -x "$GAPI2CODEGEN"; then
 	AC_MSG_ERROR([No gapi code generator found])
 fi
 
-
-dnl -- Initialize docs
-
-GNOME_DOC_INIT
-
 dnl -- Check for mono pc file
 
 AC_MSG_CHECKING([for mono.pc])
@@ -138,20 +142,18 @@ LIBGNOME_REQUIRED=2.2
 LIBGNOMEUI_REQUIRED=2.2
 LIBEXIF_REQUIRED_MIN=0.5.7
 LIBEXIF_REQUIRED_MAX=0.7.0
-GIO_REQUIRED=2.16.0
-GIOSHARP_REQUIRED=2.13.92
+GIO_REQUIRED=2.22.2
 GTKSHARPBEANS_REQUIRED=2.13.92
 GTKSHARP_REQUIRED=2.12.2
 GTK_REQUIRED=2.14
 NDESK_DBUS_REQUIRED=0.4.2
 NDESK_DBUS_GLIB_REQUIRED=0.3.0
-MONO_CAIRO_REQUIRED=1.2.4
+MONO_CAIRO_REQUIRED=1.2.5
 CAIRO_REQUIRED=1.4.0
 LCMS_REQUIRED=1.12
-LIBGPHOTO2_REQUIRED=2.4
 MONOADDINS_REQUIRED=0.3
 
-PKG_CHECK_MODULES(F, libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED libexif >= $LIBEXIF_REQUIRED_MIN libexif < $LIBEXIF_REQUIRED_MAX gtk-sharp-2.0 >= $GTKSHARP_REQUIRED glib-sharp-2.0 >= $GTKSHARP_REQUIRED glade-sharp-2.0 >= $GTKSHARP_REQUIRED gnome-vfs-sharp-2.0 >= $GTKSHARP_REQUIRED gtk+-2.0 >= $GTK_REQUIRED mono-cairo >= $MONO_CAIRO_REQUIRED cairo >= $CAIRO_REQUIRED mono-addins >= $MONOADDINS_REQUIRED mono-addins-gui >= $MONOADDINS_REQUIRED mono-addins-setup >= $MONOADDINS_REQUIRED)
+PKG_CHECK_MODULES(F, libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED libexif >= $LIBEXIF_REQUIRED_MIN libexif < $LIBEXIF_REQUIRED_MAX glade-sharp-2.0 >= $GTKSHARP_REQUIRED gtk+-2.0 >= $GTK_REQUIRED mono-cairo >= $MONO_CAIRO_REQUIRED cairo >= $CAIRO_REQUIRED mono-addins >= $MONOADDINS_REQUIRED mono-addins-gui >= $MONOADDINS_REQUIRED mono-addins-setup >= $MONOADDINS_REQUIRED)
 AC_SUBST(F_CFLAGS)
 AC_SUBST(F_LIBS)
 
@@ -163,10 +165,6 @@ CSC_DEFINES=""
 PKG_CHECK_MODULES(GNOME_SHARP, gnome-sharp-2.0 >= 2.8)
 
 PKG_CHECK_MODULES(GLIBSHARP, glib-sharp-2.0 >= 2.12)
-
-if pkg-config --atleast-version=1.2.5 mono-cairo; then
-   CSC_DEFINES="$CSC_DEFINES -d:CAIRO_1_2_5"
-fi
 
 if pkg-config --atleast-version=2.13.0 gtk-sharp-2.0 && pkg-config --max-version=2.14 gtk-sharp-2.0; then
 	AC_MSG_ERROR([There's a svn version of gtk-sharp 2.13.x installed. Uninstall it.])
@@ -191,37 +189,18 @@ else
   fi
 fi
 
-if pkg-config --at-least-version=2.16 gtk+-2.0; then
+if pkg-config --atleast-version=2.16 gtk+-2.0; then
 	CSC_DEFINES="$CSC_DEFINES -d:GTK_2_16"
 fi
+
+AC_SUBST(CSC_DEFINES)
+
+dnl Mono.Addins libraries
+FSPOT_CHECK_MONO_ADDINS
 
 dnl -- dbus-sharp
 PKG_CHECK_MODULES(NDESK_DBUS, ndesk-dbus-1.0 >= $NDESK_DBUS_REQUIRED ndesk-dbus-glib-1.0 >= $NDESK_DBUS_GLIB_REQUIRED)
 AC_SUBST(NDESK_DBUS_LIBS)
-
-dnl -- nunit
-PKG_CHECK_MODULES(NUNIT, nunit >= $NUNIT_REQUIRED, 
-	do_tests="yes", do_tests="no")
-
-AC_SUBST(NUNIT_LIBS)
-AM_CONDITIONAL(ENABLE_TESTS, test "x$do_tests" = "xyes")
-
-if test "x$do_tests" = "xno"; then
-	PKG_CHECK_MODULES(NUNIT, mono-nunit >= 2.0, 
-		do_tests="yes", do_tests="no")
-	
-	AC_SUBST(NUNIT_LIBS)
-	AM_CONDITIONAL(ENABLE_TESTS, test "x$do_tests" = "xyes")
-
-	if test "x$do_tests" = "xno"; then
-		NUNIT_DEFINES=''
-		AC_MSG_WARN([Could not find nunit: tests will not be available.])
-	else
-		NUNIT_DEFINES='-d:ENABLE_NUNIT'
-	fi
-	AC_SUBST(NUNIT_DEFINES)
-fi
-
 
 dnl --- GConf
 
@@ -244,13 +223,6 @@ PKG_CHECK_MODULES(LCMS, lcms >= $LCMS_REQUIRED, [],
 	AC_CHECK_HEADER(lcms.h, , [AC_MSG_ERROR([liblcms not found])])
 	LCMS_LIBS='-llcms'
 	LCMS_CFLAGS=''])
-
-
-dnl --- libgphoto2
-
-PKG_CHECK_MODULES(LIBGPHOTO2, libgphoto2 >= $LIBGPHOTO2_REQUIRED)
-
-AC_SUBST(CSC_DEFINES)
 
 dnl --- libexif version check
 
@@ -333,38 +305,51 @@ build/Makefile
 build/m4/Makefile
 build/m4/shave/shave
 build/m4/shave/shave-libtool
+build/pkg-config/Makefile
 
-lib/dpap-sharp/Makefile
-lib/dpap-sharp/lib/Makefile
-lib/dpap-sharp/dpap-client/Makefile
-lib/dpap-sharp/dpap-server/Makefile
-lib/dpap-sharp/DPAPService/Makefile
-lib/dpap-sharp/DPAPBrowser/Makefile
+data/Makefile
+data/desktop-files/Makefile
+data/desktop-files/f-spot.desktop.in
+data/desktop-files/f-spot-view.desktop.in
+data/desktop-files/f-spot-import.desktop.in
+
+help/Makefile
+
 lib/GKeyFile/Makefile
 lib/gio-sharp/Makefile
 lib/gio-sharp/gio/Makefile
 lib/gio-sharp/generator/Makefile
-lib/gnome-keyring-sharp/Makefile
 lib/gtk-sharp-beans/Makefile
 lib/libfspot/Makefile
-lib/libgphoto2-sharp/Makefile
-lib/libgphoto2-sharp/libgphoto2-sharp.dll.config
-lib/libgphoto2-sharp/glue/Makefile
 lib/libjpegtran/Makefile
 lib/Makefile
 lib/semweb/Makefile
 lib/unique-sharp/Makefile
 lib/unique-sharp/generator/Makefile
 lib/unique-sharp/unique/Makefile
+lib/Hyena/src/Hyena/Makefile
+lib/Hyena/src/Mono.Data.Sqlite/Makefile
+lib/Hyena/src/Hyena.Data.Sqlite/Makefile
+lib/Hyena/src/Hyena.Gui/Makefile
+
 docs/Makefile
 icons/Makefile
 tools/Makefile
 po/Makefile.in
+src/Cms/FSpot.Cms.dll.config
+src/Cms/Makefile
+src/Utils/Makefile
+src/Bling/Makefile
+src/JobScheduler/Makefile
+src/Query/Makefile
 src/Core/Defines.cs
+src/Core/Makefile
+src/Core/FSpot.Core.dll.config
+src/Widgets/Makefile
+src/Widgets/FSpot.Widgets.dll.config
+src/Platform/Makefile
 src/AssemblyInfo.cs
 src/f-spot.exe.config
-src/Cms.dll.config
-src/FSpot.Widgets.dll.config
 src/Makefile
 extensions/Makefile
 extensions/Editors/Makefile
@@ -376,7 +361,6 @@ extensions/Editors/ResizeEditor/Makefile
 extensions/Exporters/Makefile
 extensions/Exporters/CDExport/Makefile
 extensions/Exporters/FlickrExport/Makefile
-extensions/Exporters/FlickrExport/FlickrNet/Makefile
 extensions/Exporters/GalleryExport/Makefile
 extensions/Exporters/FacebookExport/Makefile
 extensions/Exporters/FolderExport/Makefile
@@ -387,8 +371,6 @@ extensions/Exporters/TabbloExport/Tabblo/Makefile
 extensions/Exporters/PicasaWebExport/Makefile
 extensions/Exporters/PicasaWebExport/google-sharp/Makefile
 extensions/Exporters/ZipExport/Makefile
-extensions/Services/Makefile
-extensions/Services/DBusService/Makefile
 extensions/Tools/Makefile
 extensions/Tools/RawPlusJpeg/Makefile
 extensions/Tools/ChangePhotoPath/Makefile
@@ -401,10 +383,25 @@ extensions/Tools/ScreensaverConfig/Makefile
 extensions/Transitions/Makefile
 extensions/Transitions/CoverTransition/Makefile
 tests/Makefile
-tests/src/Makefile
-f-spot.pc
-f-spot.spec
-f-spot.desktop.in
-f-spot-view.desktop.in
-f-spot-import.desktop.in
 )
+
+cat <<EOF
+
+${PACKAGE}-${VERSION}
+
+  Build Environment
+    Install Prefix:    ${prefix}
+    Datadir:           ${expanded_datadir}
+    Libdir:            ${expanded_libdir}
+
+    C Compiler:        ${CC}
+    Mono C# Compiler:  ${MCS} ${GMCS_FLAGS}
+    Mono Runtime:      ${MONO}
+
+  Build/Development:
+    Unit Tests:        ${do_tests}
+    User Help:         ${HAVE_GNOME_DOC_UTILS} (requires gnome-doc-utils >= 0.17.3)
+
+Run 'make' to build F-Spot.
+
+EOF

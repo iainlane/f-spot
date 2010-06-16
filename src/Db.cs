@@ -6,7 +6,7 @@ using System;
 using Banshee.Database;
 using System.Diagnostics;
 using FSpot;
-using FSpot.Utils;
+using Hyena;
 
 // A Store maps to a SQL table.  We have separate stores (i.e. SQL tables) for tags, photos and imports.
 
@@ -223,7 +223,7 @@ public class Db : IDisposable {
  		meta_store = new MetaStore (Database, new_db);
 
 		// Update the database schema if necessary
-		FSpot.Database.Updater.Run (this);
+		FSpot.Database.Updater.Run (Database);
 
 		Database.BeginTransaction ();
 
@@ -274,7 +274,7 @@ public class Db : IDisposable {
 
 	~Db ()
 	{
-		Log.Debug ("Finalizer called on {0}. Should be Disposed", GetType ());
+		Log.DebugFormat ("Finalizer called on {0}. Should be Disposed", GetType ());
 		Dispose (false);
 	}
 
@@ -315,7 +315,7 @@ public class Db : IDisposable {
 		if (upgrader_path == null)
 			throw new DbException ("Failed to upgrade the f-spot sqlite2 database to sqlite3!\n" + "Unable to find the f-spot-sqlite-upgrade script on your system");
 
-		Console.WriteLine ("Running {0}...", upgrader_path);
+		Log.DebugFormat ("Running {0}...", upgrader_path);
 		ProcessStartInfo updaterInfo = new ProcessStartInfo (upgrader_path);
 		updaterInfo.UseShellExecute = false;
 		updaterInfo.RedirectStandardError = true;

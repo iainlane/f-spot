@@ -18,6 +18,7 @@ using FSpot;
 using FSpot.Png;
 using FSpot.UI.Dialog;
 
+using Hyena;
 using FSpot.Utils;
 
 using Mono.Unix;
@@ -56,19 +57,9 @@ namespace FSpot {
 			done = false;
 		}
 
-		private static void RotateCoefficients (string original_path, RotateDirection direction)
-		{
-			string temporary_path = original_path + ".tmp";	// FIXME make it unique
-			JpegUtils.Transform (original_path, temporary_path, 
-					     direction == RotateDirection.Clockwise ? JpegUtils.TransformType.Rotate90 
-					     : JpegUtils.TransformType.Rotate270);
-			
-			Utils.Unix.Rename (temporary_path, original_path);
-		}
-
 		private static void RotateOrientation (string original_path, RotateDirection direction)
 		{
-			using (FSpot.ImageFile img = FSpot.ImageFile.Create (original_path)) {
+			using (FSpot.ImageFile img = FSpot.ImageFile.Create (new SafeUri (original_path))) {
 				if (img is JpegFile) {
 					FSpot.JpegFile jimg = img as FSpot.JpegFile;
 					PixbufOrientation orientation = direction == RotateDirection.Clockwise
@@ -124,7 +115,7 @@ namespace FSpot {
 			if (done)
 				return false;
 
- 			original_path = item.DefaultVersionUri.LocalPath;
+ 			original_path = item.DefaultVersion.Uri.LocalPath;
  			done = true;
 
 			if ((File.GetAttributes(original_path) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly) {
@@ -133,10 +124,6 @@ namespace FSpot {
 
 			Rotate (original_path, direction);
 
-			Gdk.Pixbuf thumb = FSpot.ThumbnailGenerator.Create (UriUtils.PathToFileUri (original_path));
-			if (thumb != null)
-				thumb.Dispose ();
-		
 			return !done;
 		}
 	}
@@ -219,11 +206,11 @@ public class RotateCommand {
 			} catch (GLib.GException) {
 				readonly_count++;
 			} catch (DirectoryNotFoundException e) {
-				RunGenericError (e, op.Items [op.Index].DefaultVersionUri.LocalPath, Catalog.GetString ("Directory not found"));
+				RunGenericError (e, op.Items [op.Index].DefaultVersion.Uri.LocalPath, Catalog.GetString ("Directory not found"));
 			} catch (FileNotFoundException e) {
-				RunGenericError (e, op.Items [op.Index].DefaultVersionUri.LocalPath, Catalog.GetString ("File not found"));
+				RunGenericError (e, op.Items [op.Index].DefaultVersion.Uri.LocalPath, Catalog.GetString ("File not found"));
 			} catch (Exception e) {
-				RunGenericError (e, op.Items [op.Index].DefaultVersionUri.LocalPath);
+				RunGenericError (e, op.Items [op.Index].DefaultVersion.Uri.LocalPath);
 			}
 			index ++;
 		}

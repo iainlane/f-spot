@@ -1,23 +1,14 @@
 # Note the list below is sorted by alphabet, with the exception of libjpegtran,
-# it needs to be built before libfspot.
-
-UNCONDITIONAL_SUBDIRS = \
+# it needs to be built before libfspot. Dpap-sharp isn't built.
+SUBDIRS = \
 	GKeyFile 			\
 	gio-sharp			\
-	gnome-keyring-sharp	\
 	gtk-sharp-beans		\
+	Hyena/src/Hyena     \
+	Hyena/src/Mono.Data.Sqlite     \
+	Hyena/src/Hyena.Data.Sqlite     \
+	Hyena/src/Hyena.Gui     \
 	libjpegtran			\
 	libfspot			\
-	libgphoto2-sharp	\
 	semweb				\
 	unique-sharp
-
-# dpap-sharp isn't built, but it is shipped.
-
-SUBDIRS = 				\
-	$(UNCONDITIONAL_SUBDIRS)
-
-DIST_SUBDIRS = 			\
-	dpap-sharp			\
-	$(UNCONDITIONAL_SUBDIRS)
-

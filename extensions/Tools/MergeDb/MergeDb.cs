@@ -15,10 +15,10 @@ using Gtk;
 
 using FSpot;
 using FSpot.Extensions;
-using FSpot.Utils;
 using FSpot.Query;
 using FSpot.UI.Dialog;
 using Mono.Unix;
+using Hyena;
 
 namespace MergeDbExtension
 {
@@ -109,7 +109,7 @@ namespace MergeDbExtension
 
 		public static void Merge (string path, Db to_db)
 		{
-			Log.Warning ("Will merge db {0} into main f-spot db {1}", path, FSpot.Global.BaseDirectory + "/photos.db" );
+			Log.WarningFormat ("Will merge db {0} into main f-spot db {1}", path, FSpot.Global.BaseDirectory + "/photos.db" );
 			Db from_db = new Db ();
 			from_db.Init (path, true);
 			//MergeDb mdb = new MergeDb (from_db, to_db);
@@ -187,8 +187,7 @@ namespace MergeDbExtension
 
 		void ImportPhoto (Photo photo, bool copy)
 		{
-			Log.Warning ("Importing {0}", photo.Name);
-			PhotoStore from_store = from_db.Photos;
+			Log.WarningFormat ("Importing {0}", photo.Name);
 			PhotoStore to_store = to_db.Photos;
 
 			string photo_path = photo.VersionUri (Photo.OriginalVersionId).AbsolutePath;
@@ -198,7 +197,7 @@ namespace MergeDbExtension
 				foreach (string key in PathMap.Keys) {
 					string path = photo_path;
 					path = path.Replace (key, PathMap [key]);
-					Log.Debug ("Replaced path {0}", path);
+					Log.DebugFormat ("Replaced path {0}", path);
 					if (System.IO.File.Exists (path)) {
 						photo_path = path;
 						break;;
@@ -218,32 +217,35 @@ namespace MergeDbExtension
 					pfd.Dialog.Destroy ();
 					if (new_folder == null) //Skip
 						return;
-					Log.Debug ("{0} maps to {1}", folder, new_folder);
+					Log.DebugFormat ("{0} maps to {1}", folder, new_folder);
 
 					PathMap[folder] = new_folder;
 
 				} else
-					Console.WriteLine ("point me to the file");
-				Console.WriteLine ("FNF: {0}", photo_path);
+					Log.Debug ("point me to the file");
+				Log.DebugFormat ("FNF: {0}", photo_path);
 
 			}
 
 			string destination;
-			Gdk.Pixbuf pixbuf;
 			Photo newp;
 
 			if (copy)
-				destination = FileImportBackend.ChooseLocation (photo_path, null);
+				destination = FindImportDestination (new SafeUri (photo_path), photo.Time).AbsolutePath;
 			else
 				destination = photo_path;
+			var dest_uri = new SafeUri (photo_path);
 
-			// Don't copy if we are already home
-			if (photo_path == destination)
-				newp = to_store.Create (UriUtils.PathToFileUri (destination), roll_map [photo.RollId], out pixbuf);
-			else {
+			photo.DefaultVersionId = 1;
+			photo.DefaultVersion.Uri = dest_uri;
+
+			if (photo.DefaultVersion.ImportMD5 == String.Empty) {
+				(photo.DefaultVersion as PhotoVersion).ImportMD5 = Photo.GenerateMD5 (photo.DefaultVersion.Uri);
+			}
+
+			if (photo_path != destination) {
 				System.IO.File.Copy (photo_path, destination);
 
-				newp = to_store.Create (UriUtils.PathToFileUri (destination), UriUtils.PathToFileUri (photo_path), roll_map [photo.RollId], out pixbuf);
 				try {
 					File.SetAttributes (destination, File.GetAttributes (destination) & ~FileAttributes.ReadOnly);
 					DateTime create = File.GetCreationTime (photo_path);
@@ -255,18 +257,20 @@ namespace MergeDbExtension
 				}
 			}
 
+			newp = to_store.CreateFrom (photo, roll_map [photo.RollId]);
+
 			if (newp == null)
 				return;
 
 			foreach (Tag t in photo.Tags) {
-				Log.Warning ("Tagging with {0}", t.Name);
+				Log.WarningFormat ("Tagging with {0}", t.Name);
 				newp.AddTag (tag_map [t.Id]);
 			}
 
 			foreach (uint version_id in photo.VersionIds)
 				if (version_id != Photo.OriginalVersionId) {
 					PhotoVersion version = photo.GetVersion (version_id) as PhotoVersion;
-					uint newv = newp.AddVersion (version.Uri, version.Name, version.IsProtected);
+					uint newv = newp.AddVersion (version.BaseUri, version.Filename, version.Name, version.IsProtected);
 					if (version_id == photo.DefaultVersionId)
 						newp.DefaultVersionId = newv;
 				}
@@ -278,5 +282,46 @@ namespace MergeDbExtension
 
 			to_store.Commit (newp);
 		}
+
+        SafeUri FindImportDestination (SafeUri uri, DateTime time)
+        {
+            // Find a new unique location inside the photo folder
+            string name = uri.GetFilename ();
+
+            var dest_uri = FSpot.Global.PhotoUri.Append (time.Year.ToString ())
+                                          .Append (String.Format ("{0:D2}", time.Month))
+                                          .Append (String.Format ("{0:D2}", time.Day));
+            EnsureDirectory (dest_uri);
+
+            // If the destination we'd like to use is the file itself return that
+            if (dest_uri.Append (name) == uri)
+                return uri;
+
+            // Find an unused name
+            int i = 1;
+            var dest = dest_uri.Append (name);
+            var file = GLib.FileFactory.NewForUri (dest);
+            while (file.Exists) {
+                var filename = uri.GetFilenameWithoutExtension ();
+                var extension = uri.GetExtension ();
+                dest = dest_uri.Append (String.Format ("{0}-{1}{2}", filename, i++, extension));
+                file = GLib.FileFactory.NewForUri (dest);
+            }
+
+            return dest;
+        }
+
+        void EnsureDirectory (SafeUri uri)
+        {
+            var parts = uri.AbsolutePath.Split('/');
+            SafeUri current = new SafeUri (uri.Scheme + ":///", true);
+            for (int i = 0; i < parts.Length; i++) {
+                current = current.Append (parts [i]);
+                var file = GLib.FileFactory.NewForUri (current);
+                if (!file.Exists) {
+                    file.MakeDirectory (null);
+                }
+            }
+        }
 	}
 }

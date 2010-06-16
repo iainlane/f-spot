@@ -10,6 +10,7 @@ using FSpot.Filters;
 using FSpot.Widgets;
 using FSpot.Utils;
 using FSpot.UI.Dialog;
+using Hyena;
 
 namespace FSpotFlickrExport {
 	public class TwentyThreeHQExport : FlickrExport
@@ -349,7 +350,7 @@ namespace FSpotFlickrExport {
 						Catalog.GetString ("{0} of {1}"), photo_index,
 						selection.Count);
 
-					info = new FileInfo (photo.DefaultVersionUri.LocalPath);
+					info = new FileInfo (photo.DefaultVersion.Uri.LocalPath);
 					FilterSet stack = new FilterSet ();
 					if (scale)
 						stack.Add (new ResizeFilter ((uint)size));
@@ -368,7 +369,7 @@ namespace FSpotFlickrExport {
 										 current_service.Name,
 										 e.Message);
 					progress_dialog.ProgressText = Catalog.GetString ("Error");
-					System.Console.WriteLine (e);
+					Log.Exception (e);
 
 					if (progress_dialog.PerformRetrySkip ()) {
 						index--;

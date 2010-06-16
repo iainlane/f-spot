@@ -37,20 +37,21 @@ host_triplet = @host@
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
-	$(srcdir)/f-spot-import.desktop.in.in \
-	$(srcdir)/f-spot-view.desktop.in.in \
-	$(srcdir)/f-spot.desktop.in.in $(srcdir)/f-spot.pc.in \
-	$(srcdir)/f-spot.spec.in \
 	$(top_srcdir)/build/m4/shave/shave-libtool.in \
 	$(top_srcdir)/build/m4/shave/shave.in $(top_srcdir)/configure \
-	$(top_srcdir)/src/Core/Defines.cs.in AUTHORS COPYING ChangeLog \
-	NEWS TODO config.guess config.sub depcomp install-sh ltmain.sh \
-	missing
+	AUTHORS COPYING ChangeLog NEWS TODO config.guess config.sub \
+	depcomp install-sh ltmain.sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/build/m4/shave/shave.m4 \
 	$(top_srcdir)/build/m4/shamrock/expansions.m4 \
+	$(top_srcdir)/build/m4/shamrock/gnome-doc.m4 \
 	$(top_srcdir)/build/m4/shamrock/mono.m4 \
+	$(top_srcdir)/build/m4/shamrock/nunit.m4 \
 	$(top_srcdir)/build/m4/shamrock/programs.m4 \
+	$(top_srcdir)/build/m4/f-spot/flickrnet.m4 \
+	$(top_srcdir)/build/m4/f-spot/gnome-keyring-sharp.m4 \
+	$(top_srcdir)/build/m4/f-spot/gtk-sharp.m4 \
+	$(top_srcdir)/build/m4/f-spot/mono-addins.m4 \
 	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
@@ -58,9 +59,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES = build/m4/shave/shave build/m4/shave/shave-libtool \
-	src/Core/Defines.cs f-spot.pc f-spot.spec f-spot.desktop.in \
-	f-spot-view.desktop.in f-spot-import.desktop.in
+CONFIG_CLEAN_FILES = build/m4/shave/shave build/m4/shave/shave-libtool
 CONFIG_CLEAN_VPATH_FILES =
 SOURCES =
 DIST_SOURCES =
@@ -92,9 +91,8 @@ am__nobase_list = $(am__nobase_strip_setup); \
 am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__installdirs = "$(DESTDIR)$(Applicationsdir)" \
-	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(schemadir)"
-DATA = $(Applications_DATA) $(pkgconfig_DATA) $(schema_DATA)
+am__installdirs = "$(DESTDIR)$(schemadir)"
+DATA = $(schema_DATA)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 AM_RECURSIVE_TARGETS = $(RECURSIVE_TARGETS:-recursive=) \
@@ -183,6 +181,8 @@ EXIF_SOVERSION = @EXIF_SOVERSION@
 F77 = @F77@
 FC = @FC@
 FGREP = @FGREP@
+FLICKRNET_CFLAGS = @FLICKRNET_CFLAGS@
+FLICKRNET_LIBS = @FLICKRNET_LIBS@
 F_CFLAGS = @F_CFLAGS@
 F_LIBS = @F_LIBS@
 GAPI2CODEGEN = @GAPI2CODEGEN@
@@ -196,6 +196,8 @@ GCONF_SHARP_LIBS = @GCONF_SHARP_LIBS@
 GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 GIO_CFLAGS = @GIO_CFLAGS@
 GIO_LIBS = @GIO_LIBS@
+GLIBSHARP_2_12_7_CFLAGS = @GLIBSHARP_2_12_7_CFLAGS@
+GLIBSHARP_2_12_7_LIBS = @GLIBSHARP_2_12_7_LIBS@
 GLIBSHARP_CFLAGS = @GLIBSHARP_CFLAGS@
 GLIBSHARP_LIBS = @GLIBSHARP_LIBS@
 GLIB_CFLAGS = @GLIB_CFLAGS@
@@ -211,6 +213,10 @@ GNOME_SHARP_CFLAGS = @GNOME_SHARP_CFLAGS@
 GNOME_SHARP_LIBS = @GNOME_SHARP_LIBS@
 GOBJECT_QUERY = @GOBJECT_QUERY@
 GREP = @GREP@
+GTKSHARP_A11Y_CFLAGS = @GTKSHARP_A11Y_CFLAGS@
+GTKSHARP_A11Y_LIBS = @GTKSHARP_A11Y_LIBS@
+GTKSHARP_CFLAGS = @GTKSHARP_CFLAGS@
+GTKSHARP_LIBS = @GTKSHARP_LIBS@
 HELP_DIR = @HELP_DIR@
 ICONS_DIRECTORY = @ICONS_DIRECTORY@
 INSTALL = @INSTALL@
@@ -224,14 +230,14 @@ INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
 INTLTOOL_MERGE = @INTLTOOL_MERGE@
 INTLTOOL_PERL = @INTLTOOL_PERL@
 INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
+KEYRINGSHARP_CFLAGS = @KEYRINGSHARP_CFLAGS@
+KEYRINGSHARP_LIBS = @KEYRINGSHARP_LIBS@
 LCMS_CFLAGS = @LCMS_CFLAGS@
 LCMS_LIBS = @LCMS_LIBS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBEXIF_VERSION_CHECK_CFLAGS = @LIBEXIF_VERSION_CHECK_CFLAGS@
 LIBEXIF_VERSION_CHECK_LIBS = @LIBEXIF_VERSION_CHECK_LIBS@
-LIBGPHOTO2_CFLAGS = @LIBGPHOTO2_CFLAGS@
-LIBGPHOTO2_LIBS = @LIBGPHOTO2_LIBS@
 LIBJPEG = @LIBJPEG@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
@@ -246,6 +252,12 @@ MCS = @MCS@
 MKDIR_P = @MKDIR_P@
 MKINSTALLDIRS = @MKINSTALLDIRS@
 MONO = @MONO@
+MONO_ADDINS_CFLAGS = @MONO_ADDINS_CFLAGS@
+MONO_ADDINS_GUI_CFLAGS = @MONO_ADDINS_GUI_CFLAGS@
+MONO_ADDINS_GUI_LIBS = @MONO_ADDINS_GUI_LIBS@
+MONO_ADDINS_LIBS = @MONO_ADDINS_LIBS@
+MONO_ADDINS_SETUP_CFLAGS = @MONO_ADDINS_SETUP_CFLAGS@
+MONO_ADDINS_SETUP_LIBS = @MONO_ADDINS_SETUP_LIBS@
 MONO_MODULE_CFLAGS = @MONO_MODULE_CFLAGS@
 MONO_MODULE_LIBS = @MONO_MODULE_LIBS@
 MSGFMT = @MSGFMT@
@@ -256,7 +268,6 @@ NDESK_DBUS_LIBS = @NDESK_DBUS_LIBS@
 NM = @NM@
 NMEDIT = @NMEDIT@
 NUNIT_CFLAGS = @NUNIT_CFLAGS@
-NUNIT_DEFINES = @NUNIT_DEFINES@
 NUNIT_LIBS = @NUNIT_LIBS@
 OBJC = @OBJC@
 OBJDUMP = @OBJDUMP@
@@ -350,8 +361,10 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = \
 	build 		\
+	data 		\
 	lib 		\
 	docs		\
+    help        \
 	icons		\
 	tools		\
 	po			\
@@ -359,54 +372,31 @@ SUBDIRS = \
 	extensions	\
 	tests
 
-desktop_in_files = \
-	f-spot.desktop.in	\
-	f-spot-view.desktop.in	\
-	f-spot-import.desktop.in
-
-desktop_files = $(desktop_in_files:.desktop.in=.desktop)
-pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = f-spot.pc
 schemadir = $(sysconfdir)/gconf/schemas
 schema_in_files = f-spot.schemas.in
 schema_DATA = $(schema_in_files:.schemas.in=.schemas)
-Applicationsdir = $(datadir)/applications
-Applications_DATA = $(desktop_files)
 CLEANFILES = \
-	$(desktop_DATA)		\
 	$(schema_DATA)		\
 	intltool-extract	\
 	intltool-update		\
 	intltool-merge
 
 EXTRA_DIST = \
-	MAINTAINERS		\
+	COPYING				\
+	MAINTAINERS			\
 	intltool-extract.in	\
 	intltool-merge.in	\
 	intltool-update.in	\
-	f-spot.pc.in		\
-	f-spot.spec		\
 	Makefile.include	\
-	Makefile.addins		\
 	gnome-doc-utils.make	\
 	icon-theme-installer	\
-	$(schema_in_files)	\
-        $(desktop_in_files)     \
-        $(desktop_files)
+	$(schema_in_files)
 
 DISTCLEANFILES = \
-        intltool-extract        \
-        intltool-merge          \
-        intltool-update         \
-	gnome-doc-utils.make	\
-        $(desktop_files)
-
-UPDATE_DESKTOP = \
-	if [ -f $(DESTDIR)$(datadir)/applications/defaults.list ] ; then \
-		if which update-desktop-database>/dev/null 2>&1 ; then \
-			update-desktop-database; \
-		fi \
-	fi
+	intltool-extract        \
+	intltool-merge          \
+	intltool-update         \
+	gnome-doc-utils.make
 
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
@@ -467,18 +457,6 @@ build/m4/shave/shave: $(top_builddir)/config.status $(top_srcdir)/build/m4/shave
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 build/m4/shave/shave-libtool: $(top_builddir)/config.status $(top_srcdir)/build/m4/shave/shave-libtool.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-src/Core/Defines.cs: $(top_builddir)/config.status $(top_srcdir)/src/Core/Defines.cs.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-f-spot.pc: $(top_builddir)/config.status $(srcdir)/f-spot.pc.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-f-spot.spec: $(top_builddir)/config.status $(srcdir)/f-spot.spec.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-f-spot.desktop.in: $(top_builddir)/config.status $(srcdir)/f-spot.desktop.in.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-f-spot-view.desktop.in: $(top_builddir)/config.status $(srcdir)/f-spot-view.desktop.in.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-f-spot-import.desktop.in: $(top_builddir)/config.status $(srcdir)/f-spot-import.desktop.in.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -488,46 +466,6 @@ clean-libtool:
 
 distclean-libtool:
 	-rm -f libtool config.lt
-install-ApplicationsDATA: $(Applications_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(Applicationsdir)" || $(MKDIR_P) "$(DESTDIR)$(Applicationsdir)"
-	@list='$(Applications_DATA)'; test -n "$(Applicationsdir)" || list=; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(Applicationsdir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(Applicationsdir)" || exit $$?; \
-	done
-
-uninstall-ApplicationsDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(Applications_DATA)'; test -n "$(Applicationsdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(Applicationsdir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(Applicationsdir)" && rm -f $$files
-install-pkgconfigDATA: $(pkgconfig_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(pkgconfigdir)" || $(MKDIR_P) "$(DESTDIR)$(pkgconfigdir)"
-	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgconfigdir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgconfigdir)" || exit $$?; \
-	done
-
-uninstall-pkgconfigDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	test -n "$$files" || exit 0; \
-	echo " ( cd '$(DESTDIR)$(pkgconfigdir)' && rm -f" $$files ")"; \
-	cd "$(DESTDIR)$(pkgconfigdir)" && rm -f $$files
 install-schemaDATA: $(schema_DATA)
 	@$(NORMAL_INSTALL)
 	test -z "$(schemadir)" || $(MKDIR_P) "$(DESTDIR)$(schemadir)"
@@ -865,7 +803,7 @@ check: check-recursive
 all-am: Makefile $(DATA) config.h
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(Applicationsdir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(schemadir)"; do \
+	for dir in "$(DESTDIR)$(schemadir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -917,10 +855,8 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-ApplicationsDATA install-data-local \
-	install-pkgconfigDATA install-schemaDATA
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
+install-data-am: install-data-local install-schemaDATA
+
 install-dvi: install-dvi-recursive
 
 install-dvi-am:
@@ -965,13 +901,10 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-ApplicationsDATA uninstall-pkgconfigDATA \
-	uninstall-schemaDATA
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+uninstall-am: uninstall-schemaDATA
+
 .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) all \
-	ctags-recursive install-am install-data-am install-strip \
-	tags-recursive uninstall-am
+	ctags-recursive install-am install-strip tags-recursive
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am am--refresh check check-am clean clean-generic \
@@ -980,35 +913,31 @@ uninstall-am: uninstall-ApplicationsDATA uninstall-pkgconfigDATA \
 	distcheck distclean distclean-generic distclean-hdr \
 	distclean-libtool distclean-tags distcleancheck distdir \
 	distuninstallcheck dvi dvi-am html html-am info info-am \
-	install install-ApplicationsDATA install-am install-data \
-	install-data-am install-data-hook install-data-local \
-	install-dvi install-dvi-am install-exec install-exec-am \
-	install-html install-html-am install-info install-info-am \
-	install-man install-pdf install-pdf-am install-pkgconfigDATA \
+	install install-am install-data install-data-am \
+	install-data-local install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-man install-pdf install-pdf-am \
 	install-ps install-ps-am install-schemaDATA install-strip \
 	installcheck installcheck-am installdirs installdirs-am \
 	maintainer-clean maintainer-clean-generic mostlyclean \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags tags-recursive uninstall uninstall-ApplicationsDATA \
-	uninstall-am uninstall-hook uninstall-pkgconfigDATA \
+	tags tags-recursive uninstall uninstall-am \
 	uninstall-schemaDATA
 
-@INTLTOOL_DESKTOP_RULE@
 @INTLTOOL_SCHEMAS_RULE@
 
 install-data-local:
 	-GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(srcdir)/$(schema_DATA)
 
-install-data-hook: 
-	$(UPDATE_DESKTOP)
+run:
+	@pushd bin/; \
+	../src/f-spot --uninstalled --debug; \
+	popd;
 
-uninstall-hook: 
-	$(UPDATE_DESKTOP)
-
-@ENABLE_TESTS_TRUE@test:
-@ENABLE_TESTS_TRUE@	@pushd tests/src/; \
-@ENABLE_TESTS_TRUE@	make test; \
-@ENABLE_TESTS_TRUE@	popd;
+test:
+	@pushd tests; \
+	make test \
+	popd;
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

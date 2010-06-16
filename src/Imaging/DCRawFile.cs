@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.IO;
 using System;
+using Hyena;
 
 namespace FSpot {
 	public class Pipe : System.IO.Stream {
@@ -74,11 +75,7 @@ namespace FSpot {
 	public class DCRawFile : ImageFile {
 		const string dcraw_command = "dcraw";
 
-		public DCRawFile (string path) : base (path)
-		{
-		}
-
-		public DCRawFile (Uri uri) : base (uri)
+		public DCRawFile (SafeUri uri) : base (uri)
 		{
 		}
 
@@ -87,7 +84,7 @@ namespace FSpot {
 			return RawPixbufStream (uri);
 		}
 
-		internal static System.IO.Stream RawPixbufStream (Uri location)
+		internal static System.IO.Stream RawPixbufStream (SafeUri location)
 		{
 			string path = location.LocalPath;
 			string [] args = new string [] { dcraw_command, "-h", "-w", "-c", "-t", "0", path };
@@ -115,7 +112,7 @@ namespace FSpot {
 			// FIXME this filename quoting is super lame
 			args = System.String.Format ("-h -w -c \"{0}\"", path);
 
-			System.Console.WriteLine ("path = {0}, args = \"{1}\"", path, args);
+			Log.DebugFormat ("path = {0}, args = \"{1}\"", path, args);
 			 
 			using (System.Diagnostics.Process process = new System.Diagnostics.Process ()) {
 				process.StartInfo = new System.Diagnostics.ProcessStartInfo (dcraw_command, args);

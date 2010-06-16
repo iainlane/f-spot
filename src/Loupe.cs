@@ -16,6 +16,7 @@ using System;
 using System.Runtime.InteropServices;
 using Mono.Unix;
 using FSpot.Utils;
+using Hyena;
 
 namespace FSpot.Widgets {
 	public class Loupe : Gtk.Window {
@@ -30,7 +31,6 @@ namespace FSpot.Widgets {
 		private double angle = Math.PI / 4;
 		Gdk.Point start;
 		Gdk.Point start_hot;
-		Gdk.Point pos_hot;
 		Gdk.Point hotspot;
 
 		public Loupe (PhotoImageView view) : base ("Loupe")
@@ -190,11 +190,7 @@ namespace FSpot.Widgets {
 							    Allocation.Width, 
 							    Allocation.Height, 1);
 			
-#if CAIRO_1_2_5
 			Context g = CairoHelper.Create (bitmap);
-#else			
-			Context g = CairoUtils.CreateContext (bitmap);
-#endif			
 			DrawShape (g, Allocation.Width, Allocation.Height);
 			
 			((IDisposable)g).Dispose ();
@@ -202,17 +198,13 @@ namespace FSpot.Widgets {
 			if (use_shape_ext)
 				ShapeCombineMask (bitmap, 0, 0);
 			else {
-#if CAIRO_1_2_5			 
 				Cairo.Context rgba = CairoHelper.Create (GdkWindow);
-#else				
-				Context rgba = CairoUtils.CreateContext (GdkWindow);
-#endif				
 				DrawShape (rgba, Allocation.Width, Allocation.Height);
 				((IDisposable)rgba).Dispose ();
 				try {
 					CompositeUtils.InputShapeCombineMask (this, bitmap, 0,0);
 				} catch (EntryPointNotFoundException) {
-					System.Console.WriteLine ("Warning: gtk+ version doesn't support input shapping");
+					Log.Warning ("gtk+ version doesn't support input shapping");
 				}
 			}
 			bitmap.Dispose ();
@@ -281,22 +273,13 @@ namespace FSpot.Widgets {
 			g.Matrix = new Matrix ();
 			g.Translate (cx, cy);
 			if (source != null)
-#if CAIRO_1_2_5			 
 			CairoHelper.SetSourcePixbuf (g, source, -source.Width / 2, -source.Height / 2);
-#else
-			SetSourcePixbuf (g, source, -source.Width / 2, -source.Height / 2);
-#endif								
 
 			g.Arc (0, 0, radius, 0, 2 * Math.PI);
 			g.Fill ();
 
 			if (overlay != null) {
-#if CAIRO_1_2_5			 
 				CairoHelper.SetSourcePixbuf (g, overlay, -overlay.Width / 2, -overlay.Height / 2);
-#else
-				SetSourcePixbuf (g, overlay, -overlay.Width / 2, -overlay.Height / 2);
-
-#endif
 				g.Arc (0, 0, radius, angle, angle + Math.PI);
 				g.ClosePath ();
 				g.FillPreserve ();
@@ -305,27 +288,9 @@ namespace FSpot.Widgets {
 			}
 		}
 
-#if !CAIRO_1_2_5
-		[DllImport("libgdk-2.0-0.dll")] 	 
-	        extern static void gdk_cairo_set_source_pixbuf (IntPtr handle, 	 
-	                                                        IntPtr pixbuf, 	 
-	                                                        double        pixbuf_x, 	 
-	                                                        double        pixbuf_y); 	 
-	  	 
-	        [Obsolete ("use Gdk.CairoHelper.SetSourcePixbuf instead")] 	 
-	        static void SetSourcePixbuf (Context ctx, Gdk.Pixbuf pixbuf, double x, double y) 	 
-	        { 	 
-	                gdk_cairo_set_source_pixbuf (ctx.Handle, pixbuf.Handle, x, y); 	 
-	        }	 
-#endif				
-
 		protected override bool OnExposeEvent (Gdk.EventExpose args)
 		{
-#if CAIRO_1_2_5		 
 			Context g = CairoHelper.Create (GdkWindow);
-#else
-			Context g = CairoUtils.CreateContext (GdkWindow);			
-#endif						
 			
 			DrawShape (g, Allocation.Width, Allocation.Height);
 			//base.OnExposeEvent (args);
@@ -438,7 +403,7 @@ namespace FSpot.Widgets {
 				break;
 			case Gdk.EventType.TwoButtonPress:
 				dragging = false;
-				MainWindow.Toplevel.HideLoupe ();
+				App.Instance.Organizer.HideLoupe ();
 				break;
 			}
 		}
@@ -457,7 +422,7 @@ namespace FSpot.Widgets {
 		{
 			switch (args.Event.Key) {
 			case Gdk.Key.v:
-				MainWindow.Toplevel.HideLoupe ();
+				App.Instance.Organizer.HideLoupe ();
 				args.RetVal = true;
 				break;
 			default:

@@ -11,12 +11,12 @@ using System.Text;
 using Mono.Unix;
 using Gtk;
 using Gdk;
+using Hyena;
 
 namespace FSpot {
 	public abstract class Term {
 		private ArrayList sub_terms = new ArrayList ();
 		private Term parent = null;
-		private string separator;
 
 		protected bool is_negated = false;
 		protected Tag tag = null;
@@ -287,7 +287,7 @@ namespace FSpot {
 				return new OrTerm (parent, after);
 			}
 
-			Console.WriteLine ("Do not have Term for operator {0}", op);
+			Log.DebugFormat ("Do not have Term for operator {0}", op);
 			return null;
 		}
 	}
@@ -433,12 +433,6 @@ namespace FSpot {
 			}
 		}
 
-		public static Tooltips Tips {
-			set {
-				tips = value;
-			}
-		}
-
 		public Tag Tag {
 			get {
 				return tag;
@@ -529,7 +523,7 @@ namespace FSpot {
 				Gtk.Drag.DestSet (container, DestDefaults.All, tag_dest_target_table,
 						  DragAction.Copy | DragAction.Move );
 
-				tips.SetTip (container, tag.Name, null);
+				container.TooltipText = tag.Name;
 
 				label.Show ();
 				image.Show ();
@@ -589,11 +583,11 @@ namespace FSpot {
 			normal_icon = null;
 			negated_icon = null;
 			if (IsNegated) {
-				tips.SetTip (widget, String.Format (Catalog.GetString ("Not {0}"), tag.Name), null);
+				widget.TooltipText = String.Format (Catalog.GetString ("Not {0}"), tag.Name);
 				label.Text = "<s>" + System.Web.HttpUtility.HtmlEncode (tag.Name) + "</s>";
 				image.Pixbuf = NegatedIcon;
 			} else {
-				tips.SetTip (widget, tag.Name, null);
+				widget.TooltipText = tag.Name;
 				label.Text = System.Web.HttpUtility.HtmlEncode (tag.Name);
 				image.Pixbuf = NormalIcon;
 			}
@@ -901,7 +895,6 @@ namespace FSpot {
 		private Widget widget;
 		private Pixbuf negated_icon;
 		private static Pixbuf negated_overlay;
-		private static Tooltips tips;
 		private bool isHoveredOver = false;
 
 		public delegate void NegatedToggleHandler (Literal group);

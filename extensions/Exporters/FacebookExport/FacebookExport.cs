@@ -28,7 +28,7 @@ using Gnome.Keyring;
 using GtkBeans;
 
 using FSpot;
-using FSpot.Utils;
+using Hyena;
 using FSpot.UI.Dialog;
 using FSpot.Extensions;
 using FSpot.Filters;
@@ -132,10 +132,10 @@ namespace FSpot.Exporter.Facebook
 
 			Hashtable attribs = new Hashtable();
 			attribs["name"] = keyring_item_name;
-			attribs["uid"] = info.UId.ToString ();
-			attribs["session_key"] = info.SessionKey;
+			attribs["uid"] = info.uid.ToString ();
+			attribs["session_key"] = info.session_key;
 			try {
-				Ring.CreateItem (keyring, ItemType.GenericSecret, keyring_item_name, attribs, info.Secret, true);
+				Ring.CreateItem (keyring, ItemType.GenericSecret, keyring_item_name, attribs, info.secret, true);
 			} catch (KeyringException e) {
 				Log.DebugException (e);
 				return false;
@@ -247,7 +247,7 @@ namespace FSpot.Exporter.Facebook
 						continue;
 					}
 				}
-				AppendValues (String.Format ("{0} {1}", info.FirstName ?? "", info.LastName ?? ""));
+				AppendValues (String.Format ("{0} {1}", info.first_name ?? "", info.last_name ?? ""));
 			}
 		}
 
@@ -259,11 +259,12 @@ namespace FSpot.Exporter.Facebook
 
 	public class FacebookExport : IExporter
 	{
-		private int size = 604;
+		private int size = 720;
 		private int max_photos_per_album = 200;
 		FacebookExportDialog dialog;
 		ThreadProgressDialog progress_dialog;
 		System.Threading.Thread command_thread;
+		Album album = null;
 
 		public FacebookExport ()
 		{
@@ -284,33 +285,10 @@ namespace FSpot.Exporter.Facebook
 				return;
 			}
 
-
-
 			if (dialog.Run () != (int)ResponseType.Ok) {
 				dialog.Destroy ();
 				return;
 			}
-
-			if (dialog.Account != null) {
-				dialog.Hide ();
-
-				command_thread = new System.Threading.Thread (new System.Threading.ThreadStart (Upload));
-				command_thread.Name = Mono.Unix.Catalog.GetString ("Uploading Pictures");
-
-				progress_dialog = new ThreadProgressDialog (command_thread, selection.Items.Length);
-				progress_dialog.Start ();
-			}
-
-			dialog.Destroy ();
-		}
-
-		void Upload ()
-		{
-			Album album = null;
-
-			IBrowsableItem [] items = dialog.Items;
-			string [] captions = dialog.Captions;
-			dialog.StoreCaption ();
 
 			if (dialog.CreateAlbum) {
 				string name = dialog.AlbumName;
@@ -341,6 +319,25 @@ namespace FSpot.Exporter.Facebook
 				album = dialog.ActiveAlbum;
 			}
 
+			if (dialog.Account != null) {
+				dialog.Hide ();
+
+				command_thread = new System.Threading.Thread (new System.Threading.ThreadStart (Upload));
+				command_thread.Name = Mono.Unix.Catalog.GetString ("Uploading Pictures");
+
+				progress_dialog = new ThreadProgressDialog (command_thread, selection.Items.Length);
+				progress_dialog.Start ();
+			}
+
+			dialog.Destroy ();
+		}
+
+		void Upload ()
+		{
+			IBrowsableItem [] items = dialog.Items;
+			string [] captions = dialog.Captions;
+			dialog.StoreCaption ();
+
 			long sent_bytes = 0;
 
 			FilterSet filters = new FilterSet ();
@@ -352,13 +349,13 @@ namespace FSpot.Exporter.Facebook
 					IBrowsableItem item = items [i];
 
 					FileInfo file_info;
-					Console.WriteLine ("uploading {0}", i);
+					Log.DebugFormat ("uploading {0}", i);
 
 					progress_dialog.Message = String.Format (Catalog.GetString ("Uploading picture \"{0}\" ({1} of {2})"), item.Name, i + 1, items.Length);
 					progress_dialog.ProgressText = string.Empty;
 					progress_dialog.Fraction = i / (double) items.Length;
 
-					FilterRequest request = new FilterRequest (item.DefaultVersionUri);
+					FilterRequest request = new FilterRequest (item.DefaultVersion.Uri);
 					filters.Convert (request);
 
 					file_info = new FileInfo (request.Current.LocalPath);
@@ -370,7 +367,7 @@ namespace FSpot.Exporter.Facebook
 				catch (Exception e) {
 					progress_dialog.Message = String.Format (Catalog.GetString ("Error Uploading To Facebook: {0}"), e.Message);
 					progress_dialog.ProgressText = Catalog.GetString ("Error");
-					Console.WriteLine (e);
+					Log.DebugException (e);
 
 					if (progress_dialog.PerformRetrySkip ())
 						i--;

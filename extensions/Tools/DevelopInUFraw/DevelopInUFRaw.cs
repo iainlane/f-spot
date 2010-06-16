@@ -12,6 +12,7 @@ using System.IO;
 
 using Mono.Unix;
 
+using Hyena;
 using FSpot;
 using FSpot.Utils;
 using FSpot.Extensions;
@@ -29,7 +30,7 @@ namespace DevelopInUFRawExtension
 		{
 			Log.Information ("Executing DevelopInUFRaw extension");
 
-			foreach (Photo p in MainWindow.Toplevel.SelectedPhotos ()) {
+			foreach (Photo p in App.Instance.Organizer.SelectedPhotos ()) {
 				DevelopPhoto (p);
 			}
 		}
@@ -45,11 +46,11 @@ namespace DevelopInUFRawExtension
 		{
 			ProgressDialog pdialog = new ProgressDialog(Catalog.GetString ("Developing photos"),
 														ProgressDialog.CancelButtonType.Cancel,
-														MainWindow.Toplevel.SelectedPhotos ().Length,
-														MainWindow.Toplevel.Window);
+														App.Instance.Organizer.SelectedPhotos ().Length,
+														App.Instance.Organizer.Window);
 			Log.Information ("Executing DevelopInUFRaw extension in batch mode");
 
-			foreach (Photo p in MainWindow.Toplevel.SelectedPhotos ()) {
+			foreach (Photo p in App.Instance.Organizer.SelectedPhotos ()) {
 				bool cancelled = pdialog.Update(String.Format(Catalog.GetString ("Developing {0}"), p.Name));
 				if (cancelled) {
 					break;
@@ -148,7 +149,7 @@ namespace DevelopInUFRawExtension
 				File.Move (Path.ChangeExtension (developed.LocalPath, ".ufraw"), Path.ChangeExtension (raw.Uri.LocalPath, ".ufraw"));
 			}
 
-			p.DefaultVersionId = p.AddVersion (developed, name, true);
+			p.DefaultVersionId = p.AddVersion (new SafeUri (developed).GetBaseUri (),new SafeUri (developed).GetFilename (), name, true);
 			p.Changes.DataChanged = true;
 			App.Instance.Database.Photos.Commit (p);
 		}
@@ -176,8 +177,7 @@ namespace DevelopInUFRawExtension
 
 		private static string DirectoryPath (Photo p)
 		{
-			System.Uri uri = p.VersionUri (Photo.OriginalVersionId);
-			return uri.Scheme + "://" + uri.Host + System.IO.Path.GetDirectoryName (uri.AbsolutePath);
+			return p.VersionUri (Photo.OriginalVersionId).GetBaseUri ();
 		}
 
 		void LoadPreference (string key)

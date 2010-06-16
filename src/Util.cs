@@ -14,17 +14,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System;
+using Hyena;
 
 
 namespace FSpot.Utils
 {
 
-	public class UriList : List<Uri> {
+	public class UriList : List<SafeUri> {
 		public UriList (FSpot.IBrowsableItem [] photos) {
 			foreach (FSpot.IBrowsableItem p in photos) {
-				Uri uri;
+				SafeUri uri;
 				try {
-					uri = p.DefaultVersionUri;
+					uri = p.DefaultVersion.Uri;
 				} catch {
 					continue;
 				}
@@ -41,23 +42,23 @@ namespace FSpot.Utils
 			
 			foreach (String i in items) {
 				if (!i.StartsWith ("#")) {
-					Uri uri;
+					SafeUri uri;
 					String s = i;
 	
 					if (i.EndsWith ("\r")) {
 						s = i.Substring (0, i.Length - 1);
-						Console.WriteLine ("uri = {0}", s);
+						Log.DebugFormat ("uri = {0}", s);
 					}
 					
 					try {
-						uri = new Uri (s);
+						uri = new SafeUri (s);
 					} catch {
 #if true //Workaround to bgo 362016 in gnome-screenshot. Remove this hack when gnome 2.6.18 is widely distributed.
 						if (System.Text.RegularExpressions.Regex.IsMatch (s, "^file:/[^/]")) {
 							try {
 								s = "file:///" + s.Substring(6);
-								uri = new Uri (s);
-								Console.WriteLine ("Converted uri from file:/ to >>{0}<<", s);
+								uri = new SafeUri (s);
+								Log.DebugFormat ("Converted uri from file:/ to >>{0}<<", s);
 							} catch {
 								continue;
 							}
@@ -71,23 +72,15 @@ namespace FSpot.Utils
 				}
 			}
 		}
-	
-	/*	public UriList (string [] uris)
-		{	
-			// FIXME this is so lame do real chacking at some point
-			foreach (string str in uris) {
-				AddUnknown (str);
-			}
-		}
-	*/
+
 		public void AddUnknown (string unknown)
 		{
-			Uri uri;
+			SafeUri uri;
 			
 			if (File.Exists (unknown) || Directory.Exists (unknown))
-				uri = UriUtils.PathToFileUri (unknown);
+				uri = new SafeUri (unknown);
 			else 
-				uri = new Uri (unknown);
+				uri = new SafeUri (unknown);
 			
 			Add (uri);
 		}
@@ -115,13 +108,13 @@ namespace FSpot.Utils
 	
 		public void Add (FSpot.IBrowsableItem item)
 		{
-			Add (item.DefaultVersionUri);
+			Add (item.DefaultVersion.Uri);
 		}
 	
 		public override string ToString () {
 			StringBuilder list = new StringBuilder ();
 	
-			foreach (Uri uri in this) {
+			foreach (SafeUri uri in this) {
 				if (uri == null)
 					break;
 	
@@ -133,14 +126,14 @@ namespace FSpot.Utils
 	
 		public string [] ToLocalPaths () {
 			int count = 0;
-			foreach (Uri uri in this) {
+			foreach (SafeUri uri in this) {
 				if (uri.IsFile)
 					count++;
 			}
 			
 			String [] paths = new String [count];
 			count = 0;
-			foreach (Uri uri in this) {
+			foreach (SafeUri uri in this) {
 				if (uri.IsFile)
 					paths[count++] = uri.LocalPath;
 			}

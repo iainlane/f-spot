@@ -14,33 +14,32 @@ using System.IO;
 using System.Collections;
 using System.Xml;
 
+using Hyena;
 using FSpot.Utils;
+
 namespace FSpot {
-	public class FileBrowsableItem : IBrowsableItem, IDisposable
+	public class FileBrowsableItem : IBrowsableItem
 	{
-		ImageFile img;
-		Uri uri;
-		bool attempted;
+		bool metadata_parsed = false;
 
-		public FileBrowsableItem (Uri uri)
+		public FileBrowsableItem (SafeUri uri)
 		{
-			this.uri = uri;
+			DefaultVersion = new FileBrowsableItemVersion () {
+                Uri = uri
+            };
 		}
 
-		public FileBrowsableItem (string path)
+		private void EnsureMetadataParsed ()
 		{
-			this.uri = UriUtils.PathToFileUri (path);
-		}
+			if (metadata_parsed)
+				return;
 
-		protected ImageFile Image {
-			get {
-				if (!attempted) {
-					img = ImageFile.Create (uri);
-					attempted = true;
-				}
-
-				return img;
+			using (var img = ImageFile.Create (DefaultVersion.Uri)) {
+				time = img.Date;
+				description = img.Description;
 			}
+
+			metadata_parsed = true;
 		}
 
 		public Tag [] Tags {
@@ -49,35 +48,27 @@ namespace FSpot {
 			}
 		}
 
+		private DateTime time;
 		public DateTime Time {
 			get {
-				return Image.Date;
+				EnsureMetadataParsed ();
+				return time;
 			}
 		}
 
-		public Uri DefaultVersionUri {
-			get {
-				return uri;
-			}
-		}
+		public IBrowsableItemVersion DefaultVersion { get; private set; }
 
+		private string description;
 		public string Description {
 			get {
-				try {
-					if (Image != null)
-						return Image.Description;
-
-				} catch (System.Exception e) {
-					System.Console.WriteLine (e);
-				}
-
-				return null;
+				EnsureMetadataParsed ();
+				return description;
 			}
 		}
 
 		public string Name {
 			get {
-				return Path.GetFileName (Image.Uri.AbsolutePath);
+				return DefaultVersion.Uri.GetFilename ();
 			}
 		}
 
@@ -87,10 +78,22 @@ namespace FSpot {
 			}
 		}
 
-		public void Dispose ()
-		{
-			img.Dispose ();
-			GC.SuppressFinalize (this);
+		private class FileBrowsableItemVersion : IBrowsableItemVersion {
+			public string Name { get { return String.Empty; } }
+			public bool IsProtected { get { return true; } }
+
+			public SafeUri BaseUri { get { return Uri.GetBaseUri (); } }
+			public string Filename { get { return Uri.GetFilename (); } }
+			public SafeUri Uri { get; set; }
+
+			private string import_md5 = String.Empty;
+			public string ImportMD5 {
+				get {
+					if (import_md5 == String.Empty)
+						import_md5 = Photo.GenerateMD5 (Uri);
+					return import_md5;
+				}
+			}
 		}
 	}
 }

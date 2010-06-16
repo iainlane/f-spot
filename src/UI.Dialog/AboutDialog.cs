@@ -12,6 +12,7 @@
 using System;
 using System.IO;
 using Mono.Unix;
+using Hyena;
 
 namespace FSpot.UI.Dialog
 {
@@ -28,58 +29,77 @@ namespace FSpot.UI.Dialog
 				"Primary Development",
 				"\tLawrence Ewing",
 				"\tStephane Delcroix",
+				"\tRuben Vermeersch",
 				"",
 				"Active Contributors to this release",
-				"\tChristian Krause",					//0.6.1.3
-				"\tKarl Mikaelsson",					//0.6.1.3
-				"\tIain Lane",						//0.6.1.3
-				"\tLorenzo Milesi",					//0.5.0
+				"\tAnton Keks",
+				"\tBertrand Lorentz",
+				"\tChristian Krause",
+				"\tChristopher Halse Rogers",
+				"\tDaniel Köb",
+				"\tGabriel Burt",
+				"\tIain Churcher",
+				"\tIain Lane",
+				"\tLorenzo Milesi",
 				"\tMike Gem\x00fcnde",
-				"\tRuben Vermeersch",					//0.5.0, 0.6.0
+				"\tNick Van Eeckhout",
+				"\tPaul Lange",
+				"\tPaul Wellner Bou",
+				"\tPeter Goetz",
+				"\tVincent Pomey",
+				"\tWojciech Dzierżanowski",
 				"",
 				"Contributors",
 				"\tAaron Bockover",
 				"\tAlessandro Gervaso",
 				"\tAlex Graveley",
+				"\tAlex Launi",
 				"\tAlvaro del Castillo",
-				"\tAnton Keks",
 				"\tBen Monnahan",
 				"\tBengt Thuree",
 				"\tChad Files",
 				"\tEttore Perazzoli",
 				"\tEwen Cheslack-Postava",
+				"\tJeffrey Finkelstein",
+				"\tJeffrey Stedfast",
 				"\tJoe Shaw",
 				"\tJoerg Buesse",
 				"\tJon Trowbridge",
 				"\tJoshua Tauberer",
-				"\tGabriel Burt",
+				"\tKarl Mikaelsson",
 				"\tGrahm Orr",
 				"\tLaurence Hygate",
 				"\tLee Willis",
 				"\tMartin Willemoes Hansen",
 				"\tMatt Jones",
+				"\tMatt Perry",
+				"\tMichal Nánási",
 				"\tMiguel de Icaza",
 				"\tNat Friedman",
 				"\tPatanjali Somayaji",
+				"\tPascal de Bruijn",
 				"\tPeter Johanson",
 				"\tTambet Ingo",
-				"\tThomas Van Machelen",				//0.5.0
+				"\tThomas Van Machelen",
 				"\tTodd Berman",
-				"\tVasily Kirilichev (Google Summer of Code)",		//0.5.0
+				"\tVasily Kirilichev",
 				"\tVincent Moreau",
 				"\tVladimir Vukicevic",
 				"\tXavier Bouchoux",
+				"\tYann Leprince",
+				"\tYves Kurz",
 				"",
 				"In memory Of",
 				"\tEttore Perazzoli",
 			};
 			Comments = Catalog.GetString ("Photo management for GNOME");
-			Copyright = Catalog.GetString ("Copyright \x00a9 2003-2009 Novell Inc.");
+			Copyright = Catalog.GetString ("Copyright \x00a9 2003-2010 Novell Inc.");
 			Documenters = new string[] {
 				"Aaron Bockover",
 				"Alexandre Prokoudine",	
 				"Bengt Thuree",
 				"Gabriel Burt",
+				"Harold Schreckengost",
 				"Miguel de Icaza",
 				"Stephane Delcroix",
 			};
@@ -92,7 +112,7 @@ namespace FSpot.UI.Dialog
 					s.Close ();
 				}
 			} catch (Exception e) {
-				Console.WriteLine (e);
+				Log.DebugException (e);
 				License = "GPL v2";
 			}
 			Logo = new Gdk.Pixbuf (System.Reflection.Assembly.GetEntryAssembly (), "f-spot-128.png");

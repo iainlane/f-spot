@@ -153,13 +153,6 @@ namespace FSpot {
 		}
 	
 		// Data functions.
-		private static string ToHashColor (Gdk.Color color)
-		{
-			byte r = (byte) (color.Red >> 8);
-			byte g = (byte) (color.Green >> 8);
-			byte b = (byte) (color.Blue >> 8);
-			return String.Format ("#{0:x}{1:x}{2:x}", r, g, b);
-		}
 	
 		private void SetBackground (CellRenderer renderer, Tag tag)
 		{
@@ -491,7 +484,7 @@ namespace FSpot {
 			// Check that the tag doesn't already exist
 			if (String.Compare (args.NewText, tag.Name, true) != 0 &&
 			    tag_store.GetTagByName (args.NewText) != null) {
-				HigMessageDialog md = new HigMessageDialog (MainWindow.Toplevel.Window,
+				HigMessageDialog md = new HigMessageDialog (App.Instance.Organizer.Window,
 					DialogFlags.DestroyWithParent, 
 					MessageType.Warning, ButtonsType.Ok, 
 					Catalog.GetString ("Error renaming tag"),
@@ -533,7 +526,7 @@ namespace FSpot {
 		public TagSelectionWidget (TagStore tag_store)
 			: base (new TreeStore (typeof(uint), typeof(string)))
 		{
-			database = MainWindow.Toplevel.Database;
+			database = App.Instance.Database;
 			
 			HeadersVisible = false;
 	
@@ -706,7 +699,7 @@ namespace FSpot {
 				
 				database.BeginTransaction ();
 				List<Photo> photos = new List<Photo> ();
-				foreach (Uri photo_uri in list) {
+				foreach (var photo_uri in list) {
 					Photo photo = database.Photos.GetByUri (photo_uri);
 					
 					// FIXME - at this point we should import the photo, and then continue
@@ -768,10 +761,10 @@ namespace FSpot {
 	
 			private void OnSelectionChanged ()
 			{
-				Console.WriteLine ("Selection changed:");
+				Log.Debug ("Selection changed:");
 	
 				foreach (Tag t in selection_widget.TagSelection)
-					Console.WriteLine ("\t{0}", t.Name);
+					Log.DebugFormat ("\t{0}", t.Name);
 			}
 	
 			private Test ()

@@ -10,7 +10,9 @@
 using System;
 using System.Collections;
 using System.Threading;
+using Hyena;
 
+using FSpot.Utils;
 using FSpot.Platform;
 
 namespace FSpot {
@@ -33,16 +35,15 @@ namespace FSpot {
 			worker = new Thread (new ThreadStart (WorkerTask));
 			worker.Start ();
 
-			ThumbnailGenerator.Default.OnPixbufLoaded += HandleThumbnailLoaded;
+			ThumbnailLoader.Default.OnPixbufLoaded += HandleThumbnailLoaded;
 		}
 		
-		public void HandleThumbnailLoaded (ImageLoaderThread loader, Uri uri, int order, Gdk.Pixbuf result)
+		public void HandleThumbnailLoaded (ImageLoaderThread loader, ImageLoaderThread.RequestItem result)
 		{
-			if (result != null)
-				Reload (uri);
+            Reload (result.Uri);
 		}
 
-		public void Request (Uri uri, object closure, int width, int height)
+		public void Request (SafeUri uri, object closure, int width, int height)
 		{
 			lock (items) {
 				CacheEntry entry = items[uri] as CacheEntry;
@@ -59,7 +60,7 @@ namespace FSpot {
 			}
 		}
 
-//		public void Update (Uri uri, Gdk.Pixbuf pixbuf)
+//		public void Update (SafeUri uri, Gdk.Pixbuf pixbuf)
 //		{
 //			lock (items) {
 //				CacheEntry entry = (CacheEntry) items [uri];
@@ -89,7 +90,7 @@ namespace FSpot {
 			}
 		}
 
-		public void Reload (Uri uri)
+		public void Reload (SafeUri uri)
 		{
 			CacheEntry entry;
 
@@ -173,7 +174,7 @@ namespace FSpot {
 					ProcessRequest (current);
 					QueueLast (current);
 				} catch (System.Exception e) {
-					System.Console.WriteLine (e);
+					Log.Exception (e);
 					current = null;
 				}
 			}
@@ -183,7 +184,7 @@ namespace FSpot {
 		{
 			Gdk.Pixbuf loaded = null;
 			try {
-				loaded = ThumbnailFactory.LoadThumbnail (entry.Uri);
+				loaded = XdgThumbnailSpec.LoadThumbnail (entry.Uri, ThumbnailSize.Large);
 				this.Update (entry, loaded);
 			} catch (GLib.GException){
 				if (loaded != null)
@@ -221,7 +222,7 @@ namespace FSpot {
 		}
 		       
 
-		private CacheEntry ULookup (Uri uri)
+		private CacheEntry ULookup (SafeUri uri)
 		{
 			CacheEntry entry = (CacheEntry) items [uri];
 			if (entry != null) {
@@ -230,14 +231,14 @@ namespace FSpot {
 			return (CacheEntry) entry;
 		}
 
-		public CacheEntry Lookup (Uri uri)
+		public CacheEntry Lookup (SafeUri uri)
 		{
 			lock (items) {
 				return ULookup (uri);
 			}
 		}
 
-		private void URemove (Uri uri)
+		private void URemove (SafeUri uri)
 		{
 			CacheEntry entry = (CacheEntry) items [uri];
 			if (entry != null) {
@@ -247,7 +248,7 @@ namespace FSpot {
 			}
 		}
 
-		public void Remove (Uri uri)
+		public void Remove (SafeUri uri)
 		{
 			lock (items) {
 				URemove (uri);
@@ -256,14 +257,14 @@ namespace FSpot {
 
 		public class CacheEntry : System.IDisposable {
 			private Gdk.Pixbuf pixbuf;
-			private Uri uri;
+			private SafeUri uri;
 			private int width;
 			private int height;
 			private object data;
 			private bool reload;
 			private PixbufCache cache;
 			
-			public CacheEntry (PixbufCache cache, Uri uri, object closure, int width, int height)
+			public CacheEntry (PixbufCache cache, SafeUri uri, object closure, int width, int height)
 			{
 				this.uri = uri;
 				this.width = width;
@@ -279,7 +280,7 @@ namespace FSpot {
 				set { reload = value; }
 			}
 
-			public Uri Uri {
+			public SafeUri Uri {
 				get { return uri; }
 			}
 

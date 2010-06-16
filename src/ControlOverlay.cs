@@ -21,7 +21,6 @@ namespace FSpot {
 		Window host_toplevel;
 		bool composited;
 		VisibilityType visibility;
-		double target_opacity;
 		int round = 12;
 		Delay hide; 
 		Delay fade;
@@ -204,11 +203,7 @@ namespace FSpot {
 							    Allocation.Width, 
 							    Allocation.Height, 1);
 
-#if CAIRO_1_2_5			
 			Context cr = Gdk.CairoHelper.Create (bitmap);
-#else			
-			Context cr = CairoUtils.CreateContext (bitmap);
-#endif			
 			ShapeCombineMask (bitmap, 0, 0);
 			ShapeSurface (cr, new Color (1, 1, 1));
 			ShapeCombineMask (bitmap, 0, 0);
@@ -220,11 +215,7 @@ namespace FSpot {
 		protected override bool OnExposeEvent (Gdk.EventExpose args)
 		{
 			Gdk.Color c = Style.Background (State);
-#if CAIRO_1_2_5			
 			Context cr = Gdk.CairoHelper.Create (GdkWindow);
-#else
-			Context cr = CairoUtils.CreateContext (GdkWindow);
-#endif						
 
 			ShapeSurface (cr, new Cairo.Color (c.Red / (double) ushort.MaxValue,
 							   c.Blue / (double) ushort.MaxValue, 

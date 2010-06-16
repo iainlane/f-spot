@@ -16,16 +16,18 @@ using FSpot;
 using FSpot.UI.Dialog;
 using FSpot.Extensions;
 
+using Hyena;
+
 namespace RawPlusJpegExtension
 {
 	public class RawPlusJpeg : ICommand
 	{
 		public void Run (object o, EventArgs e)
 		{
-			Console.WriteLine ("EXECUTING RAW PLUS JPEG EXTENSION");
+			Log.Debug ("EXECUTING RAW PLUS JPEG EXTENSION");
 
 			if (ResponseType.Ok != HigMessageDialog.RunHigConfirmation (
-				MainWindow.Toplevel.Window,
+				App.Instance.Organizer.Window,
 				DialogFlags.DestroyWithParent,
 				MessageType.Warning,
 				"Merge Raw+Jpegs",
@@ -34,7 +36,7 @@ namespace RawPlusJpegExtension
 				return;
 
 			Photo [] photos = App.Instance.Database.Photos.Query ((Tag [])null, null, null, null);
-			Array.Sort (photos, new Photo.CompareDirectory ());
+			Array.Sort (photos, new IBrowsableItemComparer.CompareDirectory ());
 
 			Photo raw = null;
 			Photo jpeg = null;
@@ -62,7 +64,7 @@ namespace RawPlusJpegExtension
 			foreach (MergeRequest mr in merge_requests)
 				mr.Merge ();
 
-			MainWindow.Toplevel.UpdateQuery ();
+			App.Instance.Organizer.UpdateQuery ();
 		}
 
 		private static bool SamePlaceAndName (Photo p1, Photo p2)
@@ -74,8 +76,7 @@ namespace RawPlusJpegExtension
 
 		private static string DirectoryPath (Photo p)
 		{
-			System.Uri uri = p.VersionUri (Photo.OriginalVersionId);
-			return uri.Scheme + "://" + uri.Host + System.IO.Path.GetDirectoryName (uri.AbsolutePath);
+			return p.VersionUri (Photo.OriginalVersionId).GetBaseUri ();
 		}
 
 		class MergeRequest
@@ -91,7 +92,7 @@ namespace RawPlusJpegExtension
 
 			public void Merge ()
 			{
-				Console.WriteLine ("Merging {0} and {1}", raw.VersionUri (Photo.OriginalVersionId), jpeg.VersionUri (Photo.OriginalVersionId));
+				Log.DebugFormat ("Merging {0} and {1}", raw.VersionUri (Photo.OriginalVersionId), jpeg.VersionUri (Photo.OriginalVersionId));
 				foreach (uint version_id in jpeg.VersionIds) {
 					string name = jpeg.GetVersion (version_id).Name;
 					try {
@@ -101,7 +102,7 @@ namespace RawPlusJpegExtension
 						else
 							raw.RenameVersion (raw.DefaultVersionId, name);
 					} catch (Exception e) {
-						Console.WriteLine (e);
+						Log.Exception (e);
 					}
 				}
 				raw.AddTag (jpeg.Tags);
@@ -111,7 +112,7 @@ namespace RawPlusJpegExtension
 					try {
 						jpeg.DeleteVersion (version_id, true, true);
 					} catch (Exception e) {
-						Console.WriteLine (e);
+						Log.Exception (e);
 					}
 				}
 				raw.Changes.DataChanged = true;

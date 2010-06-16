@@ -5,6 +5,7 @@ using System.IO;
 using FSpot.Xmp;
 using System.Collections;
 using System.Reflection;
+using Hyena;
 
 namespace FSpot.Png {
 	public class PngFile : ImageFile, SemWeb.StatementSource {
@@ -31,11 +32,7 @@ namespace FSpot.Png {
 			get { return Header.Chunks; }
 		}
 
-		public PngFile (System.Uri uri) : base (uri)
-		{
-		}
-
-		public PngFile (string path) : base (path)
+		public PngFile (SafeUri uri) : base (uri)
 		{
 		}
 
@@ -101,7 +98,7 @@ namespace FSpot.Png {
 							System.DateTime time = System.DateTime.Parse (text.Text);
 							MetadataStore.AddLiteral (sink, "xmp:CreateDate", time.ToString ("yyyy-MM-ddThh:mm:ss"));
 						} catch (System.Exception e) {
-							System.Console.WriteLine (e.ToString ());
+							Log.Exception (e);
 						}
 						break;
 					}
@@ -143,21 +140,9 @@ namespace FSpot.Png {
 				}
 			}
 			
-			byte compression;
-			public byte Compression {
-			        get {
-					return compression;
-				}
-				set {
-					if (compression != 0)
-						throw new System.Exception ("Unknown compression method");
-				}
-			}
-
 			public ZtxtChunk (string keyword, string text) : base ()
 			{
 				Name = "zTXt";
-				Compression = 0;
 				this.keyword = keyword;
 			}
 
@@ -181,7 +166,7 @@ namespace FSpot.Png {
 				int i = 0;
 				keyword = GetString (ref i);
 				i++;
-				Compression = data [i++];
+				i++;
 
 				text_data = Chunk.Inflate (data, i, data.Length - i);
 			}
@@ -318,7 +303,7 @@ namespace FSpot.Png {
 				keyword = GetString (ref i);
 				i++;
 				compressed = (data [i++] != 0);
-				Compression = data [i++];
+				i++;
 				Language = GetString (ref i);
 				i++;
 				LocalizedKeyword = GetString (ref i, System.Text.Encoding.UTF8);
@@ -351,7 +336,7 @@ namespace FSpot.Png {
 					stream.WriteByte (0);
 					
 					stream.WriteByte ((byte)(compressed ? 1 : 0));
-					stream.WriteByte (Compression);
+					stream.WriteByte (0);
 					
 					if (Language != null && Language != System.String.Empty) {
 						tmp = Latin1.GetBytes (Language);
@@ -389,15 +374,10 @@ namespace FSpot.Png {
 				this.Language = language;
 				this.LocalizedKeyword = System.String.Empty;
 				this.compressed = compressed;
-				this.Compression = 0;
 			}
 		}
 
 		public class TimeChunk : Chunk {
-			//public static string Name = "tIME";
-
-			System.DateTime time;
-
 			public System.DateTime Time {
 				get {
 					return new System.DateTime (FSpot.BitConverter.ToUInt16 (data, 0, false),
@@ -873,25 +853,11 @@ namespace FSpot.Png {
 					
 					if (col < width) {
 						inflater.Fill ();
-						System.Console.WriteLine ("short read missing {0} {1} {2}", width - col, row, height);
+						Log.DebugFormat ("short read missing {0} {1} {2}", width - col, row, height);
 					}
 				}
 			}
 			
-			private static byte PaethPredict (byte a, byte b, byte c)
-			{
-				int p = a + b - c;
-				int pa = System.Math.Abs (p - a);
-				int pb = System.Math.Abs (p - b);
-				int pc = System.Math.Abs (p - c);
-				if (pa <= pb && pa <= pc)
-					return a;
-				else if (pb <= pc)
-					return b;
-				else 
-					return c;
-			}
-
 			public void ReconstructRow (int row, int channels)
 			{
 				int offset = row * width;
@@ -1092,7 +1058,7 @@ namespace FSpot.Png {
 			}
 
 			IhdrChunk ihdr = (IhdrChunk) Chunks [0];
-			System.Console.WriteLine ("Attempting to to inflate photo {0}.{1}({2}, {3})", ihdr.Color, ihdr.Depth, ihdr.Width, ihdr.Height);
+			Log.DebugFormat ("Attempting to to inflate photo {0}.{1}({2}, {3})", ihdr.Color, ihdr.Depth, ihdr.Width, ihdr.Height);
 			ScanlineDecoder decoder = new ScanlineDecoder (ci, ihdr.GetScanlineLength (0), ihdr.Height);
 			decoder.Fill ();
 			//Gdk.Pixbuf pixbuf = decoder.GetPixbuf ();
@@ -1213,7 +1179,7 @@ namespace FSpot.Png {
 					if (time != null)
 						System.Console.Write(" Time {0}", time.Time);
 
-					System.Console.WriteLine (System.String.Empty);
+					Log.Debug (System.String.Empty);
 #endif
 					
 					if (chunk.Name == "IEND")
@@ -1328,7 +1294,7 @@ namespace FSpot.Png {
 				try {
 					return new Profile (icc.Profile);
 				} catch (System.Exception ex) {
-					System.Console.WriteLine ("Error trying to decode embedded profile" + ex.ToString ());
+					Log.Error ("Error trying to decode embedded profile" + ex.ToString ());
 				}
 			}
 

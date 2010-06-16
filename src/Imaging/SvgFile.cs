@@ -1,4 +1,5 @@
 using System;
+using Hyena;
 
 namespace FSpot.Svg {
 	public class SvgFile : ImageFile // SemWeb.StatementSource 
@@ -10,11 +11,7 @@ namespace FSpot.Svg {
                         get { return false; }
                 }
 
-		public SvgFile (Uri uri) : base (uri)
-		{
-		}
-
-		public SvgFile (string path) : base (path) 
+		public SvgFile (SafeUri uri) : base (uri)
 		{
 		}
 
@@ -37,7 +34,7 @@ namespace FSpot.Svg {
 				store.Dump ();
 
 			} catch (System.Exception e) {
-				System.Console.WriteLine (e.ToString ());
+				Log.Error (e.ToString ());
 			}
 		}
 

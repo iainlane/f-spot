@@ -17,6 +17,7 @@ using GLib;
 using FSpot;
 using FSpot.Utils;
 
+using Hyena;
 using Mono.Unix;
 
 namespace FSpot.Widgets
@@ -58,7 +59,7 @@ namespace FSpot.Widgets
 				TreePath[] selected_rows = Selection.GetSelectedRows ();
 				
 				foreach (TreePath row in selected_rows)
-					list.Add (folder_tree_model.GetUriByPath (row));
+					list.Add (new SafeUri (folder_tree_model.GetUriByPath (row)));
 				
 				return list;
 			}
@@ -69,7 +70,10 @@ namespace FSpot.Widgets
 			CellRendererPixbuf renderer = cell as CellRendererPixbuf;
 			
 			string stock;
-			File file = FileFactory.NewForUri (folder_tree_model.GetUriByIter (iter));
+			var uri = folder_tree_model.GetUriByIter (iter);
+			if (uri == null)
+				return;
+			File file = FileFactory.NewForUri (uri);
 			try {
 				FileInfo info =
 					file.QueryInfo ("standard::icon", FileQueryInfoFlags.None, null);
@@ -128,15 +132,6 @@ namespace FSpot.Widgets
 			}
 		}
 			
-		private string GetStock (string scheme)
-		{
-			/* not very usefull at the moment */
-			if (scheme == Uri.UriSchemeFile)
-				return "gtk-directory";
-		
-			return "gtk-directory";
-		}
-		
 		private static TargetEntry [] folder_tree_source_target_table =
 			new TargetEntry [] {
 				DragDropTargets.UriQueryEntry,
@@ -163,7 +158,7 @@ namespace FSpot.Widgets
 		
 		protected override void OnRowActivated (Gtk.TreePath path, Gtk.TreeViewColumn column)
 		{
-			MainWindow.Toplevel.SetFolderQuery (SelectedUris);	
+			App.Instance.Organizer.SetFolderQuery (SelectedUris);	
 		}
 
 	}
