@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="ratings">
+  <info>
+    <link type="guide" xref="index#basic-functions" group="rate"/>
+    <desc>Bewerten Sie Ihre Fotos mit einem bis fünf Sternen</desc>
+  </info>
+
+  <title>Bewerten Ihrer Fotos</title>
+  <p><app>F-Spot</app> ermöglicht Ihnen die Bewertung Ihrer Fotos mit einem bis fünf Sternen. Es gibt zwei Möglichkeiten, Fotos zu bewerten.</p>
+  <p>Erste Methode:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie mittels Doppelklick das Foto aus, das Sie bewerten wollen.</p>
+    </item>
+    <item>
+      <p>In der unteren rechten Ecke sehen Sie fünf Punkte, die sich auf die zu vergebende Bewertung beziehen. Um beispielsweise einen Stern zu vergeben, klicken Sie auf den ersten Punkt.</p>
+    </item>
+  </steps>
+  <p>Zweite Methode:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie das/die Foto(s) zur Bewertung aus.</p>
+    </item>
+    <item>
+      <p>Klicken Sie mit der rechten Maustaste auf das oder die zu bewertenden Foto(s) und wählen Sie eine Bewertung unten im Kontextmenü aus, indem Sie auf den entsprechenden Punkt klicken.</p>
+    </item>
+  </steps>
+</page>

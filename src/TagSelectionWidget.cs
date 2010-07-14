@@ -24,6 +24,7 @@ using FSpot;
 using FSpot.Utils;
 using FSpot.Widgets;
 using FSpot.UI.Dialog;
+using Hyena.Widgets;
 
 
 
@@ -522,6 +523,8 @@ namespace FSpot {
 		TreeViewColumn complete_column;
 		CellRendererText text_render;
 	
+		protected TagSelectionWidget (IntPtr raw) : base (raw) { }
+
 		// Constructor.
 		public TagSelectionWidget (TagStore tag_store)
 			: base (new TreeStore (typeof(uint), typeof(string)))

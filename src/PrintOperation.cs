@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using Mono.Unix;
 
 using FSpot.Widgets;
+using FSpot.Imaging;
 using Hyena;
 
 namespace FSpot
@@ -110,7 +111,7 @@ namespace FSpot
 						DrawCropMarks (cr, x*w, y*h, w*.1);
 					if (x == ppx || y == ppy || p_index >= selected_photos.Length)
 						continue;
-					using (ImageFile img = new ImageFile (selected_photos[p_index].DefaultVersion.Uri))
+					using (var img = ImageFile.Create (selected_photos[p_index].DefaultVersion.Uri))
 					{
 						Gdk.Pixbuf pixbuf;
 						try {

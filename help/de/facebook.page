@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="facebook">
+
+  <info>
+    <link type="guide" xref="upload-to-web"/>
+    <desc>Fotos zu Facebook übertragen</desc>
+  </info>
+
+  <title>Facebook</title>
+
+  <p>Um Fotos zu Facebook hochzuladen, benötigen Sie ein Facebook-Konto sowie einen aktiven Internetzugang. Außerdem muss die Facebook-<link xref="extensions">Erweiterung</link> installiert und aktiviert sein.</p>
+
+  <p>So senden Sie die gewählten Fotos an Facebook:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie <guiseq><gui>Foto</gui><gui>Exportieren nach</gui><gui>Facebook</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Anmelden</gui>. Ein Browser-Fenster wird geöffnet. Melden Sie sich bei Facebook an und klicken Sie dort auf »Zulassen«, um F-Spot zu erlauben, auf Ihr Facebook-Profil zuzugreifen.</p>
+    </item>
+    <item>
+      <p>Wählen Sie, ob ein neues Album erstellt werden soll oder zu einem vorhandenen Album hinzugefügt werden soll. Wenn Sie ein neues Album erstellen, dann geben Sie die erforderlichen Informationen ein.</p>
+    </item>
+    <item>
+      <p>Bearbeiten Sie die Beschriftung für jedes Foto, falls gewünscht.</p>
+    </item>
+    <item>
+      <p>Sobald Sie fertig sind, klicken Sie auf <gui>Hinzufügen</gui>.</p>
+    </item>
+  </steps>
+</page>

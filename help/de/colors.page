@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="colors">
+  <info>
+    <link type="guide" xref="index#editing" group="colors"/>
+    <desc>Bearbeiten der Farben Ihrer Fotos</desc>
+  </info>
+
+  <title>Bearbeiten von Farben</title>
+  <p><app>F-Spot</app> unterstützt verschiedene Modi der Farbanpassung.</p>
+  <terms>
+    <item>
+      <title>Entsättigen</title>
+      <p>Dieser Modus entfernt die Farben, wodurch ein farbiges Bild in ein Schwarzweißbild umgewandelt wird.</p>
+    </item>
+    <item>
+      <title>Sepiafarben</title>
+      <p>Dieser Modus simuliert ein Foto, das mit Sepia-Tönung erstellt wurde.</p>
+    </item>
+    <item>
+      <title>Automatischer Farbabgleich</title>
+      <p>Dieser Modus gleicht die Farben automatisch mit einem gesetzten Profil ab.</p>
+    </item>
+  </terms>
+</page>

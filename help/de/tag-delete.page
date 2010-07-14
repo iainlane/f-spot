@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-delete">
+  <info>
+    <link type="guide" xref="tags#tag-functions" group="delete"/>
+    <desc>Löschen von Markierungen aus dem System</desc>
+  </info>
+
+  <title>Löschen</title>
+  <p>Das Löschen von Markierungen entfernt diese vollständig aus dem System, aber lässt die Fotos zurück, denen diese Markierung zugeordnet ist.</p>
+  <p>So löschen Sie eine Markierung:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie die zu entfernende Markierung in der Markierungsleiste aus.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <guiseq><gui>Markierungen</gui><gui>Ausgewählte Markierung löschen</gui></guiseq>. Wahlweise können Sie mit der rechten Maustaste in die Markierungsleiste klicken. Anschließend klicken Sie auf <gui>Markierung löschen</gui>.</p>
+    </item>
+  </steps>
+</page>

@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using Mono.Unix;
 
-using FSpot.Xmp;
 using FSpot.Widgets;
 using FSpot.Utils;
 using Hyena;
@@ -205,6 +204,7 @@ namespace FSpot {
 
 		public void UpdateTagView ()
 		{
+			tag_view.DrawTags ();
 			tag_view.QueueDraw ();
 		}
 	
@@ -336,7 +336,7 @@ namespace FSpot {
 			tag_view = new Widgets.TagView ();
 			lower_hbox.PackStart (tag_view, false, true, 0);
 	
-			Label comment = new Label (Catalog.GetString ("Comment:"));
+			Label comment = new Label (Catalog.GetString ("Description:"));
 			lower_hbox.PackStart (comment, false, false, 0);
 			description_entry = new Entry ();
 			lower_hbox.PackStart (description_entry, true, true, 0);
@@ -389,6 +389,14 @@ namespace FSpot {
 			GtkUtil.ModifyColors (background);
 			GtkUtil.ModifyColors (photo_view_scrolled);
 			GtkUtil.ModifyColors (rating);
+
+			Gdk.Color dark = Style.Dark (Gtk.StateType.Normal);
+			filmstrip.ModifyBg (Gtk.StateType.Normal, dark);
+			tag_view.ModifyBg (Gtk.StateType.Normal, dark);
+			photo_view.ModifyBg (Gtk.StateType.Normal, dark);
+			background.ModifyBg (Gtk.StateType.Normal, dark);
+			photo_view_scrolled.ModifyBg (Gtk.StateType.Normal, dark);
+			rating.ModifyBg (Gtk.StateType.Normal, dark);
 		}
 	
 		protected override void OnStyleSet (Style previous)

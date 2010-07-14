@@ -18,6 +18,7 @@ using Mono.Addins;
 using Mono.Unix;
 
 using Hyena;
+using Hyena.Widgets;
 using Banshee.Kernel;
 
 using FSpot;
@@ -46,11 +47,11 @@ namespace FSpot
 	
 		[GtkBeans.Builder.Object] Gtk.VBox toolbar_vbox;
 	
-		[GtkBeans.Builder.Object] ScrolledWindow icon_view_scrolled;
+		[GtkBeans.Builder.Object] Gtk.ScrolledWindow icon_view_scrolled;
 		[GtkBeans.Builder.Object] Box photo_box;
 		[GtkBeans.Builder.Object] Notebook view_notebook;
 		
-		ScrolledWindow tag_selection_scrolled;
+		Gtk.ScrolledWindow tag_selection_scrolled;
 	
 		[GtkBeans.Builder.Object] Label status_label;
 	
@@ -339,7 +340,7 @@ namespace FSpot
 			ViewModeChanged += Sidebar.HandleMainWindowViewModeChanged;
 			sidebar_vbox.Add (Sidebar);
 	
-			tag_selection_scrolled = new ScrolledWindow ();
+			tag_selection_scrolled = new Gtk.ScrolledWindow ();
 			tag_selection_scrolled.ShadowType = ShadowType.In;
 			
 			tag_selection_widget = new TagSelectionWidget (Database.Tags);
@@ -356,7 +357,7 @@ namespace FSpot
 	
 			InfoBox = new InfoBox ();
 			ViewModeChanged += InfoBox.HandleMainWindowViewModeChanged;
-			InfoBox.VersionIdChanged += delegate (InfoBox box, uint version_id) { UpdateForVersionIdChange (version_id);};
+			InfoBox.VersionChanged += delegate (InfoBox box, IBrowsableItemVersion version) { UpdateForVersionChange (version);};
 			sidebar_vbox.PackEnd (InfoBox, false, false, 0);
 	
 			InfoBox.Context = ViewContext.Library;
@@ -1129,6 +1130,7 @@ namespace FSpot
 			controller.CopyFiles = copy;
 			controller.DuplicateDetect = true;
 			controller.RecurseSubdirectories = true;
+			controller.RemoveOriginals = false;
 
 			var import_window = new ImportDialog (controller, Window);
 			import_window.Show ();
@@ -1516,6 +1518,8 @@ namespace FSpot
 			
 			if (old_size != TagsIconSize) {
 				tag_selection_widget.ColumnsAutosize();
+				if (photo_view != null)
+					photo_view.UpdateTagView ();
 				Preferences.Set (Preferences.TAG_ICON_SIZE, TagsIconSize);
 			}
 		}
@@ -2137,6 +2141,11 @@ namespace FSpot
 	
 		void HandleSelectAllCommand (object sender, EventArgs args)
 		{
+			if (Window.Focus is Editable) {
+				(Window.Focus as Editable).SelectRegion (0, -1); // select all in text box
+				return;
+			}
+
 			icon_view.SelectAllCells ();
 			UpdateStatusLabel ();
 		}
@@ -2274,6 +2283,11 @@ namespace FSpot
 		{
 			Clipboard primary = Clipboard.Get (Atom.Intern ("PRIMARY", false));
 			Clipboard clipboard = Clipboard.Get (Atom.Intern ("CLIPBOARD", false));
+
+			if (Window.Focus is Editable) {
+				(Window.Focus as Editable).CopyClipboard ();
+				return;
+			}
 
 			clipboard.SetWithData (new TargetEntry[] {
 						DragDropTargets.PlainTextEntry,
@@ -2472,10 +2486,14 @@ namespace FSpot
 	
 		// Version Id updates.
 	
-		void UpdateForVersionIdChange (uint version_id)
+		void UpdateForVersionChange (IBrowsableItemVersion version)
 		{
-			CurrentPhoto.DefaultVersionId = version_id;
-			query.Commit (ActiveIndex ());
+			IBrowsableItemVersionable versionable = CurrentPhoto as IBrowsableItemVersionable;
+
+			if (versionable != null) {
+				versionable.SetDefaultVersion (version);
+				query.Commit (ActiveIndex ());
+			}
 		}
 	
 		// Queries.
@@ -2605,7 +2623,7 @@ namespace FSpot
 				}
 	
 				versions_submenu = new PhotoVersionMenu (CurrentPhoto);
-				versions_submenu.VersionIdChanged += delegate (PhotoVersionMenu menu) { UpdateForVersionIdChange (menu.VersionId);};
+				versions_submenu.VersionChanged += delegate (PhotoVersionMenu menu) { UpdateForVersionChange (menu.Version);};
 				version_menu_item.Submenu = versions_submenu;
 	
 				sharpen.Sensitive = (ViewMode == ModeType.IconView ? false : true);

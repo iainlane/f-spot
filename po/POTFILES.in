@@ -51,7 +51,6 @@ extensions/Tools/MergeDb/PickFolderDialog.cs
 extensions/Tools/ScreensaverConfig/ScreensaverConfig.addin.xml
 [type: gettext/glade]extensions/Tools/ScreensaverConfig/ScreensaverConfigDialog.ui
 f-spot.schemas.in
-lib/libfspot/f-jpeg-utils.c
 src/Core/App.cs
 src/Core/Photo.cs
 src/Editors/AutoStretchEditor.cs
@@ -68,14 +67,13 @@ src/FSpot.addin.xml
 src/f-spot.glade
 src/FullScreenView.cs
 src/GroupSelector.cs
-src/Imaging/Exif.cs
 src/Imaging/ImageFile.cs
-src/Imaging/IptcFile.cs
 src/Import/ImportController.cs
+src/Import/MetadataImporter.cs
 src/ItemAction.cs
+src/Jobs/SyncMetadataJob.cs
 src/Loupe.cs
 src/MainWindow.cs
-src/MetadataStore.cs
 src/PhotoPopup.cs
 src/PhotoStore.cs
 src/PhotoTagMenu.cs
@@ -110,14 +108,19 @@ src/UI.Dialog/RepairDbDialog.cs
 src/UI.Dialog/SelectionRatioDialog.cs
 src/UI.Dialog/ThreadProgressDialog.cs
 [type: gettext/glade]src/UI.Dialog/ui/AdjustTimeDialog.ui
+[type: gettext/glade]src/UI.Dialog/ui/CreateTagDialog.ui
 [type: gettext/glade]src/UI.Dialog/ui/DateRangeDialog.ui
 [type: gettext/glade]src/UI.Dialog/ui/EditTagDialog.ui
 [type: gettext/glade]src/UI.Dialog/ui/EditTagIconDialog.ui
+[type: gettext/glade]src/UI.Dialog/ui/LastImportRollFilterDialog.ui
 [type: gettext/glade]src/UI.Dialog/ui/PreferenceDialog.ui
 [type: gettext/glade]src/UI.Dialog/ui/RatingFilterDialog.ui
+[type: gettext/glade]src/UI.Dialog/ui/RepairDialog.ui
 [type: gettext/glade]src/ui/import.ui
 [type: gettext/glade]src/ui/mail_dialog.ui
 [type: gettext/glade]src/ui/main_window.ui
+[type: gettext/glade]src/ui/single_view.ui
+[type: gettext/glade]src/ui/viewer_preferences.ui
 src/Updater.cs
 src/Util.cs
 src/Utils/Unix.cs
@@ -133,5 +136,4 @@ src/Widgets/OpenWithMenu.cs
 src/Widgets/RatingMenuItem.cs
 src/Widgets/Sidebar.cs
 src/Widgets/TagMenu.cs
-src/XmpTagsImporter.cs
 tools/f-spot-screensaver.desktop.in

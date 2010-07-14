@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="folder">
+
+  <info>
+    <link type="guide" xref="index#sharing"/>
+    <desc>Fotos an einen Ordner senden</desc>
+  </info>
+
+  <title>Ordner-Export</title>
+
+  <p><app>F-Spot</app> ermöglicht Ihnen den Export in einen Ordner. Dazu muss die Ordner-Export-<link xref="extensions">Erweiterung</link> installiert und aktiviert sein.</p>
+  <p>So exportieren Sie Fotos in einen Ordner:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie <guiseq><gui>Foto</gui><gui>Exportieren nach</gui><gui>Ordner …</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Wählen Sie einen Ordner.</p>
+    </item>
+    <item>
+      <p>Benennen Sie die Galerie und versehen Sie sie mit einer Beschreibung.</p>
+    </item>
+    <item>
+      <p>Wählen Sie eine Exportmethode. <gui>Eigenständige Web-Galerie anlegen</gui> erstellt einen Ordner, der inhaltlich direkt auf einen Webserver geladen und als Web-Galerie dargestellt werden kann. <gui>Nur die Dateien speichern</gui> kopiert die Fotos in den gewählten Ordner. <gui>Galerie unter Verwendung von »Original« anlegen</gui> erstellt einen Ordner, dessen Inhalt für die Nutzung mit der originalen Fotogalerie geeignet ist.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Exportieren</gui>.</p>
+    </item>
+  </steps>
+</page>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="date-search">
+
+  <info>
+    <link type="guide" xref="index#searching"/>
+    <desc>Durchsuchen von Fotos anhand des Datums</desc>
+  </info>
+
+  <title>Suchen nach Datum</title>
+
+  <p>So suchen Sie anhand des Datums:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie <guiseq><gui>Suchen</gui><gui>Nach Datum</gui><gui>Datumsbereich einstellen …</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Wählen Sie einen Zeitabschnitt, aus dem Sie Fotos betrachten wollen. Wählen Sie hierzu einen gesetzten Zeitabschnitt aus oder verwenden Sie Datumsangaben.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>OK</gui>.</p>
+    </item>
+  </steps>
+  <p>Alternativ können Sie die Zeitlinie verwenden. So verwenden Sie die Zeitlinie:</p>
+  <steps>
+    <item>
+      <p>Stellen Sie sicher, dass die Zeitlinie aktiviert ist. Wählen Sie <guiseq><gui>Ansicht</gui><gui>Komponenten</gui></guiseq> und überprüfen Sie, ob das Ankreuzfeld <gui>Zeitlinie</gui> aktiviert ist.</p>
+    </item>
+    <item>
+      <p>Klicken Sie in der Zeitlinie auf den Balken des Zeitabschnitts, den Sie betrachten wollen.</p>
+    </item>
+  </steps>
+  <p>So beenden Sie die Suche nach Datum:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie <guiseq><gui>Suchen</gui><gui>Nach Datum</gui><gui>Datumsspanne zurücksetzen</gui></guiseq>.</p>
+    </item>
+  </steps>
+</page>

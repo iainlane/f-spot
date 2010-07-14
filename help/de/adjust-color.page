@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="adjust-color">
+  <info>
+    <link type="guide" xref="colors"/>
+    <desc>Anpassen der Farben eines Fotos</desc>
+  </info>
+
+  <title>Farbe einstellen</title>
+  <p>Von den Bearbeitungswerkzeugen in F-Spot ist die Farbanpassung wohl das mächtigste Werkzeug. Die Farbanpassung ermöglicht Ihnen Folgendes:</p>
+  <terms>
+    <item>
+      <title>Belichtung</title>
+      <p>Hierdurch wird die Verlängerung oder Verkürzung der Belichtungszeit simuliert.</p>
+    </item>
+    <item>
+      <title>Sättigung</title>
+      <p>Diese Einstellung erlaubt das Anpassen der Farbintensität in einem Bild. Verschieben nach links verringert die Farben bis hin zum Schwarzweißbild, wogegen Verschieben nach rechts die Farben intensiviert.</p>
+    </item>
+    <item>
+      <title>Helligkeit</title>
+      <p>Diese Einstellung verstärkt die Helligkeit der Farben. Ein zu hoher Wert lässt Farben »verwaschen« erscheinen, während ein zu geringer Wert das Bild zu dunkel und kontrastarm darstellt.</p>
+    </item>
+    <item>
+      <title>Farbton</title>
+      <p>Diese Einstellung lässt Farben entlang des Farbrades »rotieren«.</p>
+    </item>
+    <item>
+      <title>Kontrast</title>
+      <p>Diese Einstellung passt das Kontrastverhältnis an, also den Unterschied zwischen den hellen und den dunklen Bildpunkten. Verschieben nach links verringert den Kontrast, während Verschieben nach rechts den Kontrast erhöht.</p>
+    </item>
+    <item>
+      <title>Temp</title>
+      <p>Diese Einstellung ändert die Farbtemperatur, gemessen in Kelvin.</p>
+    </item>
+    <item>
+      <title>Farbton</title>
+      <p>Diese Einstellung ermöglicht Ihnen die Tönung Ihrer Fotos mit einer Farbe.</p>
+    </item>
+  </terms>
+</page>

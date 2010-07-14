@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="tag-search">
+
+  <info>
+    <link type="guide" xref="index#searching"/>
+    <desc>Fotos anhand von Markierungen durchsuchen</desc>
+  </info>
+
+  <title>Nach Markierungen suchen</title>
+
+  <p>Es gibt verschiedene Methoden, nach Markierungen zu suchen.</p>
+  <p>Erste Methode: Doppelklicken Sie auf die Markierungen, nach denen Sie suchen wollen.</p>
+  <p>Zweite Methode:</p>
+  <steps>
+    <item>
+      <p>Aktivieren Sie das Suchfeld mittels <guiseq><gui>Suchen</gui><gui>Suchfeld anzeigen</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Ziehen Sie die Markierungen, nach denen Sie suchen wollen, in das soeben aktivierte Suchfeld.</p>
+    </item>
+  <p>Um eine Markierung aus Ihrer Suche zu entfernen, klicken Sie mit der rechten Maustaste in das Suchfeld und klicken Sie auf <gui>Aus der Suche entfernen</gui>.</p>
+  </steps>
+  <p>So schließen Sie eine Markierung von Ihrer Suche aus:</p>
+  <steps>
+    <item>
+      <p>Doppelklicken Sie in der Markierungsleiste auf die Markierung, die Sie ausschließen wollen. Dadurch wird sie zunächst zur Suchleiste hinzugefügt.</p>
+    </item>
+    <item>
+      <p>Doppelklicken Sie anschließend in der Suchleiste auf die Markierung, die Sie ausschließen wollen.</p>
+    </item>
+  </steps>
+</page>

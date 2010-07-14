@@ -16,8 +16,7 @@
 using Gtk;
 using System;
 using System.IO;
-using FSpot;
-using SemWeb;
+using FSpot.Imaging;
 using Mono.Unix;
 using FSpot.Utils;
 using GLib;
@@ -33,8 +32,8 @@ namespace FSpot.Widgets
 	public class InfoBox : VBox {
 		Delay update_delay;
 	
-		private Photo [] photos = new Photo[0];
-		public Photo [] Photos {
+		private IBrowsableItem [] photos = new IBrowsableItem [0];
+		public IBrowsableItem [] Photos {
 			set {
 				photos = value;
 				update_delay.Start ();
@@ -44,10 +43,10 @@ namespace FSpot.Widgets
 			}
 		}
 
-		public Photo Photo {
+		public IBrowsableItem Photo {
 			set {
 				if (value != null) {
-					Photos = new Photo[] { value };
+					Photos = new IBrowsableItem [] { value };
 				}
 			}
 		}
@@ -77,8 +76,8 @@ namespace FSpot.Widgets
 			}
 		}
 
-		public delegate void VersionIdChangedHandler (InfoBox info_box, uint version_id);
-		public event VersionIdChangedHandler VersionIdChanged;
+		public delegate void VersionChangedHandler (InfoBox info_box, IBrowsableItemVersion version);
+		public event VersionChangedHandler VersionChanged;
 	
 		private Expander info_expander;
 		private Expander histogram_expander;
@@ -252,7 +251,7 @@ namespace FSpot.Widgets
 			size_value_label = AttachLabel (info_table, 3, name_value_label);
 			exposure_value_label = AttachLabel (info_table, 4, name_value_label);
 			
-			version_list = new ListStore (typeof (uint), typeof (string), typeof (bool));
+			version_list = new ListStore (typeof (IBrowsableItemVersion), typeof (string), typeof (bool));
 			version_combo = new ComboBox ();
 			CellRendererText version_name_cell = new CellRendererText ();
 			version_name_cell.Ellipsize = Pango.EllipsizeMode.End;
@@ -290,125 +289,60 @@ namespace FSpot.Widgets
 			rating_label.Visible = show_rating;
 			rating_view.Visible = show_rating;
 		}
-	
-		private class ImageInfo : StatementSink {
-			string width;
-			string height;
-			string aperture;
-			string fnumber;
-			string exposure;
-			string iso_speed;
-			string focal_length;
-			string camera_model;
-			bool add = true;
-			Resource iso_anon;
-	
-			MemoryStore store;
-			
-	#if USE_EXIF_DATE
-			DateTime date;
-	#endif
-			public ImageInfo (ImageFile img) 
-			{
-				// FIXME We use the memory store to hold the anonymous statements
-				// as they are added so that we can query for them later to 
-				// resolve anonymous nodes.
-				store = new MemoryStore ();
-	
-				if (img == null) 
-					return;
-	
-				if (img is StatementSource) {
-					SemWeb.StatementSource source = (SemWeb.StatementSource)img;
-					source.Select (this);
-	
-					// If we couldn't find the ISO speed because of the ordering
-					// search the memory store for the values
-					if (iso_speed == null && iso_anon != null) {
-						add = false;
-						store.Select (this);
-					}
-				}
-	
-				if (img is JpegFile) {
-					int real_width;
-					int real_height;
-	
-					JpegUtils.GetSize (img.Uri.LocalPath, out real_width, out real_height);
-					width = real_width.ToString ();
-					height = real_height.ToString ();
-				}
-	#if USE_EXIF_DATE
-				date = img.Date;
-	#endif
-			}
-	
-			public bool Add (SemWeb.Statement stmt)
-			{
-				if (stmt.Predicate == MetadataStore.Namespaces.Resolve ("tiff:ImageWidth")) {
-					if (width == null)
-						width = ((SemWeb.Literal)stmt.Object).Value;
-					} else if (stmt.Predicate == MetadataStore.Namespaces.Resolve ("tiff:ImageLength")) {
-					if (height == null)
-						height = ((SemWeb.Literal)stmt.Object).Value;
-				} else if (stmt.Predicate == MetadataStore.Namespaces.Resolve ("exif:PixelXDimension"))
-					width = ((SemWeb.Literal)stmt.Object).Value;						      
-				else if (stmt.Predicate == MetadataStore.Namespaces.Resolve ("exif:PixelYDimension"))
-					height = ((SemWeb.Literal)stmt.Object).Value;
-				else if (stmt.Predicate == MetadataStore.Namespaces.Resolve ("exif:ExposureTime"))
-					exposure = ((SemWeb.Literal)stmt.Object).Value;
-				else if (stmt.Predicate == MetadataStore.Namespaces.Resolve ("exif:ApertureValue"))
-					aperture = ((SemWeb.Literal)stmt.Object).Value;
-				else if (stmt.Predicate == MetadataStore.Namespaces.Resolve ("exif:FNumber"))
-					fnumber = ((SemWeb.Literal)stmt.Object).Value;
-				else if (stmt.Predicate == MetadataStore.Namespaces.Resolve ("exif:ISOSpeedRatings"))
-					iso_anon = stmt.Object;
-				else if (stmt.Predicate == MetadataStore.Namespaces.Resolve ("exif:FocalLength"))
-					focal_length = ((SemWeb.Literal)stmt.Object).Value;
-				else if (stmt.Predicate == MetadataStore.Namespaces.Resolve ("tiff:Model"))
-					camera_model = ((SemWeb.Literal)stmt.Object).Value;
-				else if (stmt.Subject == iso_anon && stmt.Predicate == MetadataStore.Namespaces.Resolve ("rdf:li"))
-					iso_speed = ((SemWeb.Literal)stmt.Object).Value;
-				else if (add && stmt.Subject.Uri == null)
-					store.Add (stmt);
 
-				if (width == null || height == null || exposure == null || aperture == null 
-				    || iso_speed == null || focal_length == null || camera_model == null)
-					return true;
-				else
-					return false;
+        // FIXME: We should pull this info directly out of IBrowsableItem
+		private class ImageInfo {
+			int width;
+			int height;
+			double? fnumber;
+			double? exposure_time;
+			uint? iso_speed;
+			double? focal_length;
+			string camera_model;
+
+			public ImageInfo (IImageFile img)
+			{
+				if (img == null)
+					return;
+
+				using (var metadata = Metadata.Parse (img.Uri)) {
+					width = metadata.Properties.PhotoWidth;
+					height = metadata.Properties.PhotoHeight;
+					fnumber = metadata.ImageTag.FNumber;
+					exposure_time = metadata.ImageTag.ExposureTime;
+					iso_speed = metadata.ImageTag.ISOSpeedRatings;
+					focal_length = metadata.ImageTag.FocalLength;
+					camera_model = metadata.ImageTag.Model;
+				}
 			}
-	
+
 			public string ExposureInfo {
 				get {
 					string info = String.Empty;
-	
-					if  (fnumber != null && fnumber != String.Empty) {
+
+					if (fnumber.HasValue && fnumber.Value != 0.0) {
 						try {
-							FSpot.Tiff.Rational rat = new FSpot.Tiff.Rational (fnumber);
-							info += String.Format ("f/{0:.0} ", rat.Value);
+							info += String.Format ("f/{0:.0} ", fnumber.Value);
 						} catch (FormatException) {
 							return Catalog.GetString("(wrong format)");
 						}
-					} else if (aperture != null && aperture != String.Empty) {
-						try {
-							// Convert from APEX to fnumber
-							FSpot.Tiff.Rational rat = new FSpot.Tiff.Rational (aperture);
-							info += String.Format ("f/{0:.0} ", Math.Pow (2, rat.Value / 2));
-						} catch (FormatException) {
-							return Catalog.GetString ("(wrong format)");
+					}
+
+					if (exposure_time.HasValue) {
+						if (Math.Abs (exposure_time.Value) >= 1.0) {
+							info += String.Format ("{0} sec ", exposure_time.Value);
+						} else {
+							info += String.Format ("1/{0} sec ", (int) (1 / exposure_time.Value));
 						}
 					}
-	
-					if (exposure != null && exposure != String.Empty)
-						info += exposure + " sec ";
-	
-					if (iso_speed != null && iso_speed != String.Empty)
-						info += Environment.NewLine + "ISO " + iso_speed;
-					
+
+					if (iso_speed.HasValue) {
+						info += String.Format ("{0}ISO {1}", Environment.NewLine, iso_speed.Value);
+					}
+
 					if (info == String.Empty)
 						return Catalog.GetString ("(None)");
-					
+
 					return info;
 				}
 			}
@@ -418,25 +352,13 @@ namespace FSpot.Widgets
 					if (focal_length == null)
 						return Catalog.GetString ("(Unknown)");
 
-					string fl = focal_length;
-
-					if (focal_length.Contains("/")) {
-						string[] strings = focal_length.Split('/');
-						try {
-							if (strings.Length == 2)
-								fl = (double.Parse (strings[0]) / double.Parse (strings[1])).ToString ();
-						} catch (FormatException) {
-							return Catalog.GetString ("(wrong format)");
-						}
-					}
-
-					return fl + " mm";
+					return String.Format ("{0} mm", focal_length.Value);
 				}
 			}
 
 			public string CameraModel {
 				get {
-					if (focal_length != null)
+					if (camera_model != String.Empty)
 						return camera_model;
 					else
 						return Catalog.GetString ("(Unknown)");
@@ -446,22 +368,12 @@ namespace FSpot.Widgets
 	
 			public string Dimensions {
 				get {
-					if (width != null && height != null)
+					if (width != 0 && height != 0)
 						return String.Format ("{0}x{1}", width, height);
 					else 
 						return Catalog.GetString ("(Unknown)");
 				}
 			}
-	#if USE_EXIF_DATE
-			public string Date {
-				get {
-					if (date > DateTime.MinValue && date < DateTime.MaxValue)
-						return date.ToShortDateString () + Environment.NewLine + date.ToShortTimeString ();
-					else 
-						return Catalog.GetString ("(Unknown)");
-				}
-			}
-	#endif
 		}
 			
 	
@@ -483,7 +395,7 @@ namespace FSpot.Widgets
 		{
 			ImageInfo info;
 
-			Photo photo = Photos[0];
+			IBrowsableItem photo = Photos [0];
 
 			histogram_expander.Visible = true;
 			UpdateHistogram ();
@@ -495,12 +407,10 @@ namespace FSpot.Widgets
 			name_value_label.Visible = show_name;
 			
 			try {
-				//using (new Timer ("building info")) {
-					using (ImageFile img = ImageFile.Create (photo.DefaultVersion.Uri))
-					{
-						info = new ImageInfo (img);
-					}
-					//}
+				using (var img = ImageFile.Create (photo.DefaultVersion.Uri))
+				{
+					info = new ImageInfo (img);
+				}
 			} catch (System.Exception e) {
 				Hyena.Log.Debug (e.StackTrace);
 				info = new ImageInfo (null);			
@@ -522,16 +432,12 @@ namespace FSpot.Widgets
 			size_value_label.Visible = show_size;
 
 			if (show_date) {
-	#if USE_EXIF_DATE
-				date_value_label.Text = info.Date;
-	#else
 				DateTime local_time = photo.Time;
 				date_value_label.Text = String.Format ("{0}{2}{1}",
 				                                       local_time.ToShortDateString (),
 				                                       local_time.ToShortTimeString (),
 				                                       Environment.NewLine
 				                                       );
-	#endif
 			}
 			date_label.Visible = show_date;
 			date_value_label.Visible = show_date;
@@ -551,21 +457,21 @@ namespace FSpot.Widgets
 			version_list.Clear ();
 			version_combo.Changed -= OnVersionComboChanged;
 			
-			bool hasVersions = photo.VersionIds.Length > 1;
-			version_combo.Sensitive = hasVersions;
-			if (hasVersions) {
-				int i = 0;
-				foreach (uint version_id in photo.VersionIds) {
-					version_list.AppendValues (version_id, (photo.GetVersion (version_id) as PhotoVersion).Name, true);
-					if (version_id == photo.DefaultVersionId)
-						version_combo.Active = i;
-					i++;
-				}
-				version_combo.TooltipText = String.Format (Catalog.GetPluralString ("(One Edit)", "({0} Edits)", i - 1), i - 1);
-			} else {
-				version_list.AppendValues (photo.DefaultVersionId, photo.DefaultVersion.Name + " " + Catalog.GetString ("(No Edits)"), true);
-				version_combo.Active = 0;
+			int count = 0;
+			foreach (IBrowsableItemVersion version in photo.Versions) {
+				version_list.AppendValues (version, version.Name, true);
+				if (version == photo.DefaultVersion)
+					version_combo.Active = count;
+				count++;
+			}
+			
+			if (count <= 1) {
+				version_combo.Sensitive = false;
 				version_combo.TooltipText = Catalog.GetString ("(No Edits)");
+			} else {
+				version_combo.Sensitive = true;
+				version_combo.TooltipText =
+					String.Format (Catalog.GetPluralString ("(One Edit)", "({0} Edits)", count - 1), count - 1);
 			}
 			version_combo.Changed += OnVersionComboChanged;
 
@@ -612,7 +518,7 @@ namespace FSpot.Widgets
 			TreeIter iter;
 
 			if (combo.GetActiveIter (out iter))
-				VersionIdChanged (this, (uint)version_list.GetValue (iter, 0));
+				VersionChanged (this, (IBrowsableItemVersion)version_list.GetValue (iter, 0));
 		}
 
 		private void UpdateMultiple ()
@@ -636,8 +542,8 @@ namespace FSpot.Widgets
 			camera_value_label.Visible = false;
 
 			if (show_date) {
-				Photo first = Photos[Photos.Length-1];
-				Photo last = Photos[0];
+				IBrowsableItem first = Photos[Photos.Length-1];
+				IBrowsableItem last = Photos [0];
 				if (first.Time.Date == last.Time.Date) {
 					//Note for translators: {0} is a date, {1} and {2} are times.
 					date_value_label.Text = String.Format(Catalog.GetString("On {0} between \n{1} and {2}"), 
@@ -655,7 +561,7 @@ namespace FSpot.Widgets
 
 			if (show_file_size) {
 				long file_size = 0;
-				foreach (Photo photo in Photos) {
+				foreach (IBrowsableItem photo in Photos) {
 					
 					try {
 						GFile file = FileFactory.NewForUri (photo.DefaultVersion.Uri);
@@ -701,7 +607,7 @@ namespace FSpot.Widgets
 			if (Photos.Length == 0)
 				return false;
 
-			Photo photo = Photos[0];
+			IBrowsableItem photo = Photos [0];
 
 			Gdk.Pixbuf hint = histogram_hint;
 			histogram_hint = null;
@@ -709,7 +615,7 @@ namespace FSpot.Widgets
 
 			try {
 				if (hint == null)
-					using (ImageFile img = ImageFile.Create (photo.DefaultVersion.Uri))
+					using (var img = ImageFile.Create (photo.DefaultVersion.Uri))
 						hint = img.Load (256, 256);
 				
 				histogram_image.Pixbuf = histogram.Generate (hint, max);

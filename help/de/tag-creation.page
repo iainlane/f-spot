@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-creation">
+  <info>
+    <link type="guide" xref="tags#tag-functions" group="create"/>
+    <desc>Erstellen von Markierungen, die Fotos zugeordnet werden können</desc>
+  </info>
+
+  <title>Erstellen</title>
+  <p>Um überhaupt Markierungen benutzen zu können, müssen Sie zunächst eine Reihe von Markierungen erstellen. Es gibt drei grundlegende Methoden zum Erstellen von Markierungen.</p>
+  <p>Erste Methode:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie <guiseq><gui>Markierungen</gui><gui>Neue Markierung erstellen …</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Wählen Sie eine übergeordnete Markierung, unter der die neue Markierung eingeordnet werden soll, wie beispielsweise »Personen« oder »Ereignisse«. Falls Sie eine neue Markierung ohne übergeordnete Markierung erstellen wollen, wählen Sie <gui>(Keine)</gui>.</p>
+    </item>
+    <item>
+      <p>Benennen Sie die Markierung.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Erstellen</gui>.</p>
+    </item>
+  </steps>
+  <p>Zweite Methode:</p>
+  <steps>
+    <item>
+      <p>Klicken Sie mit der rechten Maustaste in die Markierungsleiste und wählen Sie <gui>Neue Markierung erstellen …</gui></p>
+    </item>
+    <item>
+      <p>Wählen Sie eine übergeordnete Markierung, unter der die neue Markierung eingeordnet werden soll, wie beispielsweise »Personen« oder »Ereignisse«. Falls Sie eine neue Markierung ohne übergeordnete Markierung erstellen wollen, wählen Sie <gui>(Keine)</gui>.</p>
+    </item>
+    <item>
+      <p>Benennen Sie die Markierung.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Erstellen</gui>.</p>
+    </item>
+  </steps>
+  <p>Die dritte Methode hat den Vorteil, dass die neue Markierung auch zu den gewählten Fotos <link xref="tag-attach">hinzugefügt</link> wird. Gehen Sie folgendermaßen vor:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie die Fotos aus, denen Sie die neue Markierung zuordnen wollen.</p>
+    </item>
+    <item>
+      <p>Klicken Sie mit der rechten Maustaste auf die Fotos und wählen Sie <guiseq><gui>Markierung hinzufügen</gui><gui>Neue Markierung erstellen …</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Wählen Sie eine übergeordnete Markierung, unter der die neue Markierung eingeordnet werden soll, wie beispielsweise »Personen« oder »Ereignisse«. Falls Sie eine neue Markierung ohne übergeordnete Markierung erstellen wollen, wählen Sie <gui>(Keine)</gui>.</p>
+    </item>
+    <item>
+      <p>Benennen Sie die Markierung.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Erstellen</gui>.</p>
+    </item>
+  </steps>
+</page>

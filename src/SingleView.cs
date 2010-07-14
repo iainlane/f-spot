@@ -15,35 +15,41 @@ using FSpot.Platform;
 
 namespace FSpot {
 	public class SingleView {
-		[Glade.Widget] Gtk.HBox toolbar_hbox;
-		[Glade.Widget] Gtk.VBox info_vbox;
-		[Glade.Widget] Gtk.ScrolledWindow image_scrolled;
-		[Glade.Widget] Gtk.HPaned info_hpaned;
+		[GtkBeans.Builder.Object]  Gtk.HBox toolbar_hbox;
+		[GtkBeans.Builder.Object]  Gtk.VBox info_vbox;
+		[GtkBeans.Builder.Object]  Gtk.ScrolledWindow image_scrolled;
+		[GtkBeans.Builder.Object]  Gtk.HPaned info_hpaned;
 
 		Gtk.ScrolledWindow directory_scrolled;
 
-		[Glade.Widget] Gtk.CheckMenuItem side_pane_item;
-		[Glade.Widget] Gtk.CheckMenuItem toolbar_item;
-		[Glade.Widget] Gtk.CheckMenuItem filenames_item;
+		[GtkBeans.Builder.Object]  Gtk.CheckMenuItem side_pane_item;
+		[GtkBeans.Builder.Object]  Gtk.CheckMenuItem toolbar_item;
+		[GtkBeans.Builder.Object]  Gtk.CheckMenuItem filenames_item;
 		
-		[Glade.Widget] Gtk.MenuItem zoom_in;
-		[Glade.Widget] Gtk.MenuItem zoom_out;
+		[GtkBeans.Builder.Object]  Gtk.MenuItem zoom_in;
+		[GtkBeans.Builder.Object]  Gtk.MenuItem zoom_out;
 
-		[Glade.Widget] Gtk.MenuItem export;
+		[GtkBeans.Builder.Object]  Gtk.MenuItem export;
 
-		[Glade.Widget] Gtk.Scale zoom_scale;
+		[GtkBeans.Builder.Object]  Gtk.Scale zoom_scale;
 
-		[Glade.Widget] Label status_label;
+		[GtkBeans.Builder.Object]  Label status_label;
 
-		[Glade.Widget] ImageMenuItem rotate_left;
-		[Glade.Widget] ImageMenuItem rotate_right;
+		[GtkBeans.Builder.Object]  ImageMenuItem rotate_left;
+		[GtkBeans.Builder.Object]  ImageMenuItem rotate_right;
 
 		ToolButton rr_button, rl_button;
 
 		Sidebar sidebar;
 
-		protected Glade.XML xml;
-		private Gtk.Window window;
+		[GtkBeans.Builder.Object] private Gtk.Window single_view;
+
+		public Gtk.Window Window {
+			get { 
+				return single_view;
+			}
+		}
+
 		PhotoImageView image_view;
 		FSpot.Widgets.IconView directory_view;
 		private SafeUri uri;
@@ -54,12 +60,11 @@ namespace FSpot {
 
 		public SingleView (SafeUri [] uris)
 		{
-			string glade_name = "single_view";
 			this.uri = uris [0];
+			Log.Debug ("uri: " + this.uri);
 			
-			xml = new Glade.XML (null, "f-spot.glade", glade_name, "f-spot");
-			xml.Autoconnect (this);
-			window = (Gtk.Window) xml.GetWidget (glade_name);
+			GtkBeans.Builder builder = new GtkBeans.Builder ("single_view.ui");
+			builder.Autoconnect (this);
 		
 			LoadPreference (Preferences.VIEWER_WIDTH);
 			LoadPreference (Preferences.VIEWER_MAXIMIZED);
@@ -147,7 +152,7 @@ namespace FSpot {
 			LoadPreference (Preferences.VIEWER_SHOW_FILENAMES);
 
 			Preferences.SettingChanged += OnPreferencesChanged;
-			window.DeleteEvent += HandleDeleteEvent;
+			Window.DeleteEvent += HandleDeleteEvent;
 			
 			collection.Changed += HandleCollectionChanged;
 
@@ -342,7 +347,7 @@ namespace FSpot {
 				title = Catalog.GetString ("Select Folder");
 
 			FileChooserDialog chooser = new FileChooserDialog (title,
-									   window,
+									   Window,
 									   action);
 
 			chooser.AddButton (Stock.Cancel, ResponseType.Cancel);
@@ -363,7 +368,7 @@ namespace FSpot {
 			if (fsview != null)
 				fsview.Destroy ();
 
-			fsview = new FSpot.FullScreenView (collection, window);
+			fsview = new FSpot.FullScreenView (collection, Window);
 			fsview.Destroyed += HandleFullScreenViewDestroy;
 
 			fsview.View.Item.Index = image_view.Item.Index;
@@ -420,8 +425,8 @@ namespace FSpot {
 			Gtk.Menu popup_menu = new Gtk.Menu ();
 			bool has_item = image_view.Item.Current != null;
 
-			GtkUtil.MakeMenuItem (popup_menu, Catalog.GetString ("Rotate _Left"), "object-rotate-left", delegate { HandleRotate270Command(window, null); }, has_item);
-			GtkUtil.MakeMenuItem (popup_menu, Catalog.GetString ("Rotate _Right"), "object-rotate-right", delegate { HandleRotate90Command (window, null); }, has_item);
+			GtkUtil.MakeMenuItem (popup_menu, Catalog.GetString ("Rotate _Left"), "object-rotate-left", delegate { HandleRotate270Command(Window, null); }, has_item);
+			GtkUtil.MakeMenuItem (popup_menu, Catalog.GetString ("Rotate _Right"), "object-rotate-right", delegate { HandleRotate90Command (Window, null); }, has_item);
 			GtkUtil.MakeMenuSeparator (popup_menu);
 			GtkUtil.MakeMenuItem (popup_menu, Catalog.GetString ("Set as Background"), HandleSetAsBackgroundCommand, has_item);
 
@@ -475,9 +480,9 @@ namespace FSpot {
 		private void SavePreferences  ()
 		{
 			int width, height;
-			window.GetSize (out width, out height);
+			Window.GetSize (out width, out height);
 		
-			bool maximized = ((window.GdkWindow.State & Gdk.WindowState.Maximized) > 0);
+			bool maximized = ((Window.GdkWindow.State & Gdk.WindowState.Maximized) > 0);
 			Preferences.Set (Preferences.VIEWER_MAXIMIZED, maximized);
 		
 			if (!maximized) {
@@ -518,17 +523,23 @@ namespace FSpot {
 			switch (key) {
 			case Preferences.VIEWER_MAXIMIZED:
 				if (Preferences.Get<bool> (key))
-					window.Maximize ();
+					Window.Maximize ();
 				else
-					window.Unmaximize ();
+					Window.Unmaximize ();
 				break;
 
 			case Preferences.VIEWER_WIDTH:
 			case Preferences.VIEWER_HEIGHT:
-				window.SetDefaultSize(Preferences.Get<int> (Preferences.VIEWER_WIDTH),
-						      Preferences.Get<int> (Preferences.VIEWER_HEIGHT));
+				int width, height;
+				width = Preferences.Get<int> (Preferences.VIEWER_WIDTH);
+				height = Preferences.Get<int> (Preferences.VIEWER_HEIGHT);
 
-				window.ReshowWithInitialSize();
+				if( width == 0 || height == 0 )
+					break;
+
+				Window.SetDefaultSize(width, height);
+
+				Window.ReshowWithInitialSize();
 				break;
 			
 			case Preferences.VIEWER_SHOW_TOOLBAR:
@@ -566,26 +577,20 @@ namespace FSpot {
 			}
 		}
 
-		public Gtk.Window Window {
-			get { 
-				return window;
-			}
-		}
+		public class PreferenceDialog : BuilderDialog {
+			[GtkBeans.Builder.Object] private CheckButton interpolation_check;
+			[GtkBeans.Builder.Object] private ColorButton color_button;
+			[GtkBeans.Builder.Object] private RadioButton as_background_radio;
+			[GtkBeans.Builder.Object] private RadioButton as_check_radio;
+			[GtkBeans.Builder.Object] private RadioButton as_color_radio;
 
-		public class PreferenceDialog : GladeDialog {
-			[Glade.Widget] private CheckButton interpolation_check;
-			[Glade.Widget] private ColorButton color_button;
-			[Glade.Widget] private RadioButton as_background_radio;
-			[Glade.Widget] private RadioButton as_check_radio;
-			[Glade.Widget] private RadioButton as_color_radio;
-
-			public PreferenceDialog () : base ("viewer_preferences")
+			public PreferenceDialog () : base ("viewer_preferences.ui", "viewer_preferences")
 			{
 				this.LoadPreference (Preferences.VIEWER_INTERPOLATION);
 				this.LoadPreference (Preferences.VIEWER_TRANSPARENCY);
 				this.LoadPreference (Preferences.VIEWER_TRANS_COLOR);
 				Preferences.SettingChanged += OnPreferencesChanged;
-				this.Dialog.Destroyed += HandleDestroyed;
+				this.Destroyed += HandleDestroyed;
 			}
 
 			void InterpolationToggled (object sender, System.EventArgs args)
@@ -618,7 +623,7 @@ namespace FSpot {
 				if (prefs == null)
 					prefs = new PreferenceDialog ();
 				
-				prefs.Dialog.Present ();
+				prefs.Present ();
 			}
 
 			void OnPreferencesChanged (object sender, NotifyEventArgs args)
@@ -628,7 +633,7 @@ namespace FSpot {
 
 			void HandleClose (object sender, EventArgs args)
 			{
-				this.Dialog.Destroy ();
+				this.Destroy ();
 			}
 
 			private void HandleDestroyed (object sender, EventArgs args)

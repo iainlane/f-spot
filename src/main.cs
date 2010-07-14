@@ -12,8 +12,10 @@ using Mono.Addins.Setup;
 using FSpot.Utils;
 using FSpot.UI.Dialog;
 using FSpot.Extensions;
+using FSpot.Imaging;
 using Hyena;
 using Hyena.CommandLine;
+using Hyena.Gui;
 
 namespace FSpot
 {
@@ -133,19 +135,22 @@ namespace FSpot
 		{
 			args = FixArgs (args);
 
-			Unix.SetProcessName (Defines.PACKAGE);
+			ApplicationContext.ApplicationName = "F-Spot";
+			ApplicationContext.TrySetProcessName (Defines.PACKAGE);
 
+			Paths.ApplicationName = "f-spot";
 			ThreadAssist.InitializeMainThread ();
 			ThreadAssist.ProxyToMainHandler = RunIdle;
 			XdgThumbnailSpec.DefaultLoader = (uri) => {
 				using (var file = ImageFile.Create (uri))
 					return file.Load ();
 			};
+
 			// Options and Option parsing
 			bool shutdown = false;
 			bool view = false;
 			bool slideshow = false;
-			string import_uri = null;
+			bool import = false;
 
 			GLib.GType.Init ();
 			Catalog.Init ("f-spot", Defines.LOCALE_DIR);
@@ -205,31 +210,11 @@ namespace FSpot
 				}
 			}
 
-			if (ApplicationContext.CommandLine.Contains ("import")) {
-				string dir = ApplicationContext.CommandLine ["import"];
+			if (ApplicationContext.CommandLine.Contains ("import"))
+				import = true;
 
-				if (!string.IsNullOrEmpty (dir))
-				{
-					import_uri = dir;
-				} else {
-					Log.Error ("f-spot: -import option takes one argument");
-					return 1;
-				}
-			}
-
-			List <string> uris = new List <string> ();
-			if (ApplicationContext.CommandLine.Contains ("view")) {
+			if (ApplicationContext.CommandLine.Contains ("view"))
 				view = true;
-				var items = ApplicationContext.CommandLine.Files;
-
-				if (items.Count > 0)
-				{
-					uris = new List<string> (items);
-				} else {
-					Log.Error ("f-spot: -view option takes at least one argument");
-					return 1;
-				}
-			}
 
 			if (ApplicationContext.CommandLine.Contains ("debug")) {
 				Log.Debugging = true;
@@ -250,28 +235,15 @@ namespace FSpot
 			}
 
 			// Validate command line options
-			if ( (import_uri != null && (view || shutdown || slideshow)) ||
+			if ((import && (view || shutdown || slideshow)) ||
 				(view && (shutdown || slideshow)) ||
-				(shutdown && slideshow) )
+				(shutdown && slideshow))
 			{
 				Log.Error ("Can't mix -import, -view, -shutdown or -slideshow");
 				return 1;
 			}
 
-			// Initialize Mono.Addins
-			uint timer = Log.InformationTimerStart ("Initializing Mono.Addins");
-			AddinManager.Initialize (FSpot.Global.BaseDirectory);
-			AddinManager.Registry.Update (null);
-			SetupService setupService = new SetupService (AddinManager.Registry);
-			string maj_version = String.Join (".", Defines.VERSION.Split ('.'), 0, 3);
-			foreach (AddinRepository repo in setupService.Repositories.GetRepositories ())
-				if (repo.Url.StartsWith ("http://addins.f-spot.org/") && !repo.Url.StartsWith ("http://addins.f-spot.org/" + maj_version)) {
-					Log.InformationFormat ("Unregistering {0}", repo.Url);
-					setupService.Repositories.RemoveRepository (repo.Url);
-				}
-			setupService.Repositories.RegisterRepository (null, "http://addins.f-spot.org/" + maj_version, false);
-			Log.DebugTimerPrint (timer, "Mono.Addins Initialization took {0}");
-
+			InitializeAddins ();
 
 			// Gtk initialization
 			Gtk.Application.Init (Defines.PACKAGE, ref args);
@@ -297,41 +269,63 @@ namespace FSpot
 				};
 			} catch {}
 
-			try {
-				if (slideshow == true) {
-					App.Instance.Slideshow (null);
-				} else if (shutdown) {
-					try {
-						App.Instance.Shutdown ();
-					} catch (System.Exception) { // trap errors
-					}
-					System.Environment.Exit (0);
-				} else if (view) {
-					UriList list = new UriList ();
-					foreach (string s in uris)
-						list.AddUnknown (s);
-					if (list.Count == 0) {
-						ShowHelp ();
-						return 1;
-					}
-					App.Instance.View (list);
-				} else if (import_uri != null) {
-					App.Instance.Import (import_uri);
-				} else {
-					App.Instance.Organize ();
-				}
-	
-				if (App.Instance.IsRunning)
-					return 0;
-				Gtk.Application.Run ();
-			} catch (System.Exception e) {
-				Log.Exception (e);
-				ExceptionDialog dlg = new ExceptionDialog(e);
-				dlg.Run();
-				dlg.Destroy();
-				System.Environment.Exit(1);
-			}
+			CleanRoomStartup.Startup (Startup);
+
 			return 0;
+		}
+
+		static void InitializeAddins ()
+		{
+			uint timer = Log.InformationTimerStart ("Initializing Mono.Addins");
+			AddinManager.Initialize (FSpot.Global.BaseDirectory);
+			AddinManager.Registry.Update (null);
+			SetupService setupService = new SetupService (AddinManager.Registry);
+			foreach (AddinRepository repo in setupService.Repositories.GetRepositories ()) {
+				if (repo.Url.StartsWith ("http://addins.f-spot.org/")) {
+					Log.InformationFormat ("Unregistering {0}", repo.Url);
+					setupService.Repositories.RemoveRepository (repo.Url);
+				}
+			}
+			Log.DebugTimerPrint (timer, "Mono.Addins Initialization took {0}");
+		}
+
+		static void Startup ()
+		{
+			if (ApplicationContext.CommandLine.Contains ("slideshow"))
+				App.Instance.Slideshow (null);
+			else if (ApplicationContext.CommandLine.Contains ("shutdown"))
+				App.Instance.Shutdown ();
+			else if (ApplicationContext.CommandLine.Contains ("view")) {
+				if (ApplicationContext.CommandLine.Files.Count == 0) {
+					Log.Error ("f-spot: -view option takes at least one argument");
+					System.Environment.Exit (1);
+				}
+
+				var list = new UriList ();
+
+				foreach (var f in ApplicationContext.CommandLine.Files)
+					list.AddUnknown (f);
+
+				if (list.Count == 0) {
+					ShowHelp ();
+					System.Environment.Exit (1);
+				}
+
+				App.Instance.View (list);
+			} else if (ApplicationContext.CommandLine.Contains ("import")) {
+				string dir = ApplicationContext.CommandLine ["import"];
+
+				if (string.IsNullOrEmpty (dir)) {
+					Log.Error ("f-spot: -import option takes one argument");
+					System.Environment.Exit (1);
+				}
+
+				App.Instance.Import (dir);
+			} else
+				App.Instance.Organize ();
+
+			if (!App.Instance.IsRunning)
+				Gtk.Application.Run ();
 		}
 
 		public static void RunIdle (InvokeHandler handler)

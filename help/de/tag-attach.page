@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-attach">
+  <info>
+    <link type="guide" xref="tags#tag-functions" group="attach"/>
+    <desc>Zuordnen von Markierungen zu Fotos</desc>
+  </info>
+
+  <title>Zuordnen</title>
+  <p>Das Hinzufügen von <link xref="tag-creation">erstellten</link> Markierungen erleichtert das Durchsuchen Ihrer Fotos. Wie beim Erstellen von Markierungen gibt es mehrere Methoden, diese Markierungen zu Fotos hinzuzufügen.</p>
+  <p>Erste Methode:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie Fotos aus, denen Sie eine Markierung zuordnen wollen.</p>
+    </item>
+    <item>
+      <p>Wählen Sie in der Markierungsleiste eine Markierung aus, die Sie zu den gewählten Fotos hinzufügen wollen.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <guiseq><gui>Markierungen</gui><gui>Markierung zur Auswahl hinzufügen</gui></guiseq> oder drücken Sie Strg+T.</p>
+    </item>
+  </steps>
+  <p>Zweite Methode:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie Fotos aus, denen Sie eine Markierung zuordnen wollen.</p>
+    </item>
+    <item>
+      <p>Klicken Sie mit der rechten Maustaste auf die Fotos.</p>
+    </item>
+    <item>
+      <p>Wählen Sie <gui>Markierung hinzufügen</gui> und wählen Sie die Markierung aus, die Sie hinzufügen wollen.</p>
+    </item>
+  </steps>
+</page>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="rate-search">
+
+  <info>
+    <link type="guide" xref="index#searching"/>
+    <desc>Suchen nach Fotos anhand von Bewertungssternen</desc>
+  </info>
+
+  <title>Suche nach Bewertung</title>
+
+  <p>So suchen Sie nach Fotos anhand von Bewertungssternen:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie <guiseq><gui>Suchen</gui><gui>Nach Bewertung</gui><gui>Bewertungsfilter setzen</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Wählen Sie den Bereich der Bewertungen der zu betrachtenden Fotos.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>OK</gui>.</p>
+    </item>
+  </steps>
+  <p>So halten Sie die Suche nach Bewertungssternen an:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie <guiseq><gui>Suchen</gui><gui>Nach Bewertung</gui><gui>Bewertungsfilter setzen</gui></guiseq>.</p>
+    </item>
+  </steps>
+</page>

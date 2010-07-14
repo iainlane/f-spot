@@ -15,6 +15,7 @@ using Gdk;
 using Mono.Addins;
 using FSpot.Bling;
 using FSpot.Extensions;
+using FSpot.Imaging;
 
 namespace FSpot.Widgets
 {
@@ -113,7 +114,7 @@ namespace FSpot.Widgets
 				if (item == null || item.Current == null)
 					return;
 
-				using (ImageFile img = ImageFile.Create (item.Current.DefaultVersion.Uri)) {
+				using (var img = ImageFile.Create (item.Current.DefaultVersion.Uri)) {
 					try {
 						using (var pb =  img.Load ()) {
 							double scale = Math.Min ((double)Allocation.Width/(double)pb.Width, (double)Allocation.Height/(double)pb.Height);

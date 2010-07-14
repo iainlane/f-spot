@@ -124,9 +124,6 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-EXIF_CFLAGS = @EXIF_CFLAGS@
-EXIF_LIBS = @EXIF_LIBS@
-EXIF_SOVERSION = @EXIF_SOVERSION@
 F77 = @F77@
 FC = @FC@
 FGREP = @FGREP@
@@ -155,6 +152,8 @@ GLIB_LIBS = @GLIB_LIBS@
 GLIB_MKENUMS = @GLIB_MKENUMS@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
+GNOME_DOC_UTILS_CFLAGS = @GNOME_DOC_UTILS_CFLAGS@
+GNOME_DOC_UTILS_LIBS = @GNOME_DOC_UTILS_LIBS@
 GNOME_ICON_THEME_PREFIX = @GNOME_ICON_THEME_PREFIX@
 GNOME_SCREENSAVER_SAVERDIR = @GNOME_SCREENSAVER_SAVERDIR@
 GNOME_SCREENSAVER_THEMESDIR = @GNOME_SCREENSAVER_THEMESDIR@
@@ -185,8 +184,6 @@ LCMS_CFLAGS = @LCMS_CFLAGS@
 LCMS_LIBS = @LCMS_LIBS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
-LIBEXIF_VERSION_CHECK_CFLAGS = @LIBEXIF_VERSION_CHECK_CFLAGS@
-LIBEXIF_VERSION_CHECK_LIBS = @LIBEXIF_VERSION_CHECK_LIBS@
 LIBJPEG = @LIBJPEG@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
@@ -315,38 +312,30 @@ CSC = $(MCS) $(CSC_FLAGS) -target:exe
 CSC_LIB = $(MCS) $(CSC_FLAGS) -target:library
 MONO_DEBUGFLAGS = --debug
 RUNTIME = mono $(MONO_DEBUGFLAGS)
-ASSEMBLY_NAME = gkeyfile-sharp
-ASSEMBLY_SOURCES = 
-ASSEMBLY_CUSTOMS = \
+CUSTOMS = \
 	$(srcdir)/GKeyFile.custom
 
-GENERATED = \
-	$(srcdir)/generated/Error.cs	\
-	$(srcdir)/generated/Flags.cs	\
-	$(srcdir)/generated/GKeyFile.cs
-
-REFS = 
-PKGS = \
+ASSEMBLIES = \
 	-pkg:glib-sharp-2.0
 
-ASSEMBLY = $(ASSEMBLY_NAME).dll
 assemblydir = $(pkglibdir)
 assembly_DATA = \
-	$(ASSEMBLY)
+	gkeyfile-sharp.dll
+
+CLEANFILES = \
+	gkeyfile-sharp.dll		\
+	gkeyfile-sharp.dll.mdb	\
+	gkeyfile-api.xml
+
+DISTCLEANFILES = \
+	generated/*.cs
 
 EXTRA_DIST = \
-	$(ASSEMBLY_SOURCES)		\
-	$(ASSEMBLY_CUSTOMS)		\
-	$(ASSEMBLY_NAME)-sources.xml	\
+	$(CUSTOMS)			\
 	gkeyfile-api.raw		\
 	GKeyFile.metadata		\
 	gkeyfile-api.xml		\
-	.generated_timestamp		\
-	$(GENERATED)
-
-CLEANFILES = \
-	$(ASSEMBLY)		\
-	$(ASSEMBLY).mdb
+	gkeyfile-sharp-sources.xml
 
 all: all-am
 
@@ -473,6 +462,7 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -558,20 +548,23 @@ uninstall-am: uninstall-assemblyDATA
 	uninstall uninstall-am uninstall-assemblyDATA
 
 
-all: $(ASSEMBLY)
+all: gkeyfile-sharp.dll
 
 gkeyfile-api.raw: gkeyfile-sharp-sources.xml
 	$(GAPI2PARSER) gkeyfile-sharp-sources.xml
 
 gkeyfile-api.xml: gkeyfile-api.raw GKeyFile.metadata
+	@echo -e "\n*** Massaging the raw api into $@"
 	cp gkeyfile-api.raw gkeyfile-api.xml
+	chmod +w gkeyfile-api.xml
 	$(GAPI2FIXUP) --api=gkeyfile-api.xml --metadata=GKeyFile.metadata
 
-.generated_timestamp: gkeyfile-api.xml $(CUSTOMS)
-	$(GAPI2CODEGEN) --outdir=generated --customdir=$(srcdir) --generate gkeyfile-api.xml
-	touch $@
-$(ASSEMBLY): .generated_timestamp $(ASSEMBLY_SOURCES) $(ASSEMBLY_CUSTOMS)
-	$(CSC_LIB) -unsafe -out:$@ $(PKGS) $(REFS) $(ASSEMBLY_SOURCES) $(srcdir)/generated/*.cs
+generated/GKeyFile.cs: gkeyfile-api.xml $(CUSTOMS) $(GAPI2CODEGEN)
+	@echo -e "\n*** Generating C# code"
+	$(GAPI2CODEGEN) --outdir=generated --customdir=$(srcdir) --generate $(srcdir)/gkeyfile-api.xml
+
+gkeyfile-sharp.dll: generated/GKeyFile.cs $(CUSTOMS)
+	$(CSC_LIB) -unsafe -out:$@ $(PKGS) $(ASSEMBLIES) $(builddir)/generated/*.cs
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

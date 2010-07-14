@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="file-management">
+
+  <info>
+    <link type="guide" xref="index#basic-functions" group="management"/>
+    <desc>Verwalten bereits importierter Dateien</desc>
+  </info>
+
+  <title>Dateiverwaltung</title>
+
+  <p><app>F-Spot</app> ermöglicht Ihnen, den Inhalt des Kataloges zu bearbeiten. Dazu zählt das Entfernen aus dem Katalog oder auch das Löschen von Dateien.</p>
+  <p>So löschen Sie Dateien aus Ihrem Katalog:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie die Fotos, die Sie aus dem Katalog entfernen wollen.</p>
+    </item>
+    <item>
+      <p>Klicken Sie mit der rechten Maustaste auf die Fotos und wählen Sie <gui>Aus dem Katalog entfernen</gui>. Alternativ wählen Sie <guiseq><gui>Bearbeiten</gui><gui>Aus dem Katalog entfernen</gui></guiseq> oder drücken Sie die Entf-Taste auf Ihrer Tastatur.</p>
+    </item>
+  </steps>
+  <p>So löschen Sie Fotos von Ihrem Rechner:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie die Fotos, die Sie löschen wollen.</p>
+    </item>
+    <item>
+      <p>Klicken Sie mit der rechten Maustaste auf die Fotos und wählen Sie <gui>Vom Laufwerk löschen</gui>. Alternativ wählen Sie <guiseq><gui>Bearbeiten</gui><gui>Vom Laufwerk löschen</gui></guiseq> oder drücken Sie Umschalttaste+Entf auf Ihrer Tastatur.</p>
+    </item>
+  </steps>
+</page>

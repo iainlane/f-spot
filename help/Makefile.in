@@ -119,9 +119,6 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-EXIF_CFLAGS = @EXIF_CFLAGS@
-EXIF_LIBS = @EXIF_LIBS@
-EXIF_SOVERSION = @EXIF_SOVERSION@
 F77 = @F77@
 FC = @FC@
 FGREP = @FGREP@
@@ -150,6 +147,8 @@ GLIB_LIBS = @GLIB_LIBS@
 GLIB_MKENUMS = @GLIB_MKENUMS@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
+GNOME_DOC_UTILS_CFLAGS = @GNOME_DOC_UTILS_CFLAGS@
+GNOME_DOC_UTILS_LIBS = @GNOME_DOC_UTILS_LIBS@
 GNOME_ICON_THEME_PREFIX = @GNOME_ICON_THEME_PREFIX@
 GNOME_SCREENSAVER_SAVERDIR = @GNOME_SCREENSAVER_SAVERDIR@
 GNOME_SCREENSAVER_THEMESDIR = @GNOME_SCREENSAVER_THEMESDIR@
@@ -180,8 +179,6 @@ LCMS_CFLAGS = @LCMS_CFLAGS@
 LCMS_LIBS = @LCMS_LIBS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
-LIBEXIF_VERSION_CHECK_CFLAGS = @LIBEXIF_VERSION_CHECK_CFLAGS@
-LIBEXIF_VERSION_CHECK_LIBS = @LIBEXIF_VERSION_CHECK_LIBS@
 LIBJPEG = @LIBJPEG@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
@@ -303,162 +300,162 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-@ENABLE_GNOME_DOCS_TRUE@_clean_doc_header = $(if $(DOC_H_FILE),clean-doc-header)
-@ENABLE_GNOME_DOCS_TRUE@_DOC_REAL_FORMATS = $(if $(DOC_USER_FORMATS),$(DOC_USER_FORMATS),$(DOC_FORMATS))
-@ENABLE_GNOME_DOCS_TRUE@_DOC_REAL_LINGUAS = $(if $(filter environment,$(origin LINGUAS)),		\
-@ENABLE_GNOME_DOCS_TRUE@	$(filter $(LINGUAS),$(DOC_LINGUAS)),					\
-@ENABLE_GNOME_DOCS_TRUE@	$(DOC_LINGUAS))
+@HAVE_GNOME_DOC_UTILS_TRUE@_clean_doc_header = $(if $(DOC_H_FILE),clean-doc-header)
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_REAL_FORMATS = $(if $(DOC_USER_FORMATS),$(DOC_USER_FORMATS),$(DOC_FORMATS))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_REAL_LINGUAS = $(if $(filter environment,$(origin LINGUAS)),		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(filter $(LINGUAS),$(DOC_LINGUAS)),					\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(DOC_LINGUAS))
 
-@ENABLE_GNOME_DOCS_TRUE@_DOC_ABS_SRCDIR = @abs_srcdir@
-@ENABLE_GNOME_DOCS_TRUE@_xml2po_mode = $(if $(DOC_ID),mallard,docbook)
-@ENABLE_GNOME_DOCS_TRUE@@ENABLE_SK_TRUE@_ENABLE_SK = true
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_ABS_SRCDIR = @abs_srcdir@
+@HAVE_GNOME_DOC_UTILS_TRUE@_xml2po_mode = $(if $(DOC_ID),mallard,docbook)
+@ENABLE_SK_TRUE@@HAVE_GNOME_DOC_UTILS_TRUE@_ENABLE_SK = true
 
 ################################################################################
-@ENABLE_GNOME_DOCS_TRUE@db2omf_args = \
-@ENABLE_GNOME_DOCS_TRUE@	--stringparam db2omf.basename $(DOC_MODULE)				\
-@ENABLE_GNOME_DOCS_TRUE@	--stringparam db2omf.format $(3)					\
-@ENABLE_GNOME_DOCS_TRUE@	--stringparam db2omf.dtd						\
-@ENABLE_GNOME_DOCS_TRUE@	$(shell xmllint --format $(2) | grep -h PUBLIC | head -n 1 		\
-@ENABLE_GNOME_DOCS_TRUE@		| sed -e 's/.*PUBLIC \(\"[^\"]*\"\).*/\1/')			\
-@ENABLE_GNOME_DOCS_TRUE@	--stringparam db2omf.lang $(notdir $(patsubst %/$(notdir $(2)),%,$(2)))	\
-@ENABLE_GNOME_DOCS_TRUE@	--stringparam db2omf.omf_dir "$(OMF_DIR)"				\
-@ENABLE_GNOME_DOCS_TRUE@	--stringparam db2omf.help_dir "$(HELP_DIR)"				\
-@ENABLE_GNOME_DOCS_TRUE@	--stringparam db2omf.omf_in "$(_DOC_OMF_IN)"				\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(_ENABLE_SK),							\
-@ENABLE_GNOME_DOCS_TRUE@	  --stringparam db2omf.scrollkeeper_cl "$(_skcontentslist)")		\
-@ENABLE_GNOME_DOCS_TRUE@	$(_db2omf) $(2)
+@HAVE_GNOME_DOC_UTILS_TRUE@db2omf_args = \
+@HAVE_GNOME_DOC_UTILS_TRUE@	--stringparam db2omf.basename $(DOC_MODULE)				\
+@HAVE_GNOME_DOC_UTILS_TRUE@	--stringparam db2omf.format $(3)					\
+@HAVE_GNOME_DOC_UTILS_TRUE@	--stringparam db2omf.dtd						\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(shell xmllint --format $(2) | grep -h PUBLIC | head -n 1 		\
+@HAVE_GNOME_DOC_UTILS_TRUE@		| sed -e 's/.*PUBLIC \(\"[^\"]*\"\).*/\1/')			\
+@HAVE_GNOME_DOC_UTILS_TRUE@	--stringparam db2omf.lang $(notdir $(patsubst %/$(notdir $(2)),%,$(2)))	\
+@HAVE_GNOME_DOC_UTILS_TRUE@	--stringparam db2omf.omf_dir "$(OMF_DIR)"				\
+@HAVE_GNOME_DOC_UTILS_TRUE@	--stringparam db2omf.help_dir "$(HELP_DIR)"				\
+@HAVE_GNOME_DOC_UTILS_TRUE@	--stringparam db2omf.omf_in "$(_DOC_OMF_IN)"				\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(_ENABLE_SK),							\
+@HAVE_GNOME_DOC_UTILS_TRUE@	  --stringparam db2omf.scrollkeeper_cl "$(_skcontentslist)")		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_db2omf) $(2)
 
-@ENABLE_GNOME_DOCS_TRUE@_DOC_OMF_IN = $(if $(DOC_MODULE),$(wildcard $(_DOC_ABS_SRCDIR)/$(DOC_MODULE).omf.in))
-@ENABLE_GNOME_DOCS_TRUE@_DOC_OMF_DB = $(if $(_DOC_OMF_IN),						\
-@ENABLE_GNOME_DOCS_TRUE@	$(foreach lc,C $(_DOC_REAL_LINGUAS),$(DOC_MODULE)-$(lc).omf))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_OMF_IN = $(if $(DOC_MODULE),$(wildcard $(_DOC_ABS_SRCDIR)/$(DOC_MODULE).omf.in))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_OMF_DB = $(if $(_DOC_OMF_IN),						\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(foreach lc,C $(_DOC_REAL_LINGUAS),$(DOC_MODULE)-$(lc).omf))
 
-@ENABLE_GNOME_DOCS_TRUE@_DOC_OMF_HTML = $(if $(_DOC_OMF_IN),						\
-@ENABLE_GNOME_DOCS_TRUE@	$(foreach lc,C $(_DOC_REAL_LINGUAS),$(DOC_MODULE)-html-$(lc).omf))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_OMF_HTML = $(if $(_DOC_OMF_IN),						\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(foreach lc,C $(_DOC_REAL_LINGUAS),$(DOC_MODULE)-html-$(lc).omf))
 
 
 # FIXME
-@ENABLE_GNOME_DOCS_TRUE@_DOC_OMF_ALL = \
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(filter docbook,$(_DOC_REAL_FORMATS)),$(_DOC_OMF_DB))		\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(filter html HTML,$(_DOC_REAL_FORMATS)),$(_DOC_OMF_HTML))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_OMF_ALL = \
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(filter docbook,$(_DOC_REAL_FORMATS)),$(_DOC_OMF_DB))		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(filter html HTML,$(_DOC_REAL_FORMATS)),$(_DOC_OMF_HTML))
 
 
 ################################################################################
-@ENABLE_GNOME_DOCS_TRUE@_DOC_C_MODULE = $(if $(DOC_MODULE),C/$(DOC_MODULE).xml)
-@ENABLE_GNOME_DOCS_TRUE@_DOC_C_PAGES = $(foreach page,$(DOC_PAGES),C/$(page))
-@ENABLE_GNOME_DOCS_TRUE@_DOC_C_ENTITIES = $(foreach ent,$(DOC_ENTITIES),C/$(ent))
-@ENABLE_GNOME_DOCS_TRUE@_DOC_C_INCLUDES = $(foreach inc,$(DOC_INCLUDES),C/$(inc))
-@ENABLE_GNOME_DOCS_TRUE@_DOC_C_DOCS = \
-@ENABLE_GNOME_DOCS_TRUE@	$(_DOC_C_ENTITIES)	$(_DOC_C_INCLUDES)			\
-@ENABLE_GNOME_DOCS_TRUE@	$(_DOC_C_PAGES)		$(_DOC_C_MODULE)
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_C_MODULE = $(if $(DOC_MODULE),C/$(DOC_MODULE).xml)
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_C_PAGES = $(foreach page,$(DOC_PAGES),C/$(page))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_C_ENTITIES = $(foreach ent,$(DOC_ENTITIES),C/$(ent))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_C_INCLUDES = $(foreach inc,$(DOC_INCLUDES),C/$(inc))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_C_DOCS = \
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_DOC_C_ENTITIES)	$(_DOC_C_INCLUDES)			\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_DOC_C_PAGES)		$(_DOC_C_MODULE)
 
-@ENABLE_GNOME_DOCS_TRUE@_DOC_C_DOCS_NOENT = \
-@ENABLE_GNOME_DOCS_TRUE@	$(_DOC_C_MODULE)	$(_DOC_C_INCLUDES)			\
-@ENABLE_GNOME_DOCS_TRUE@	$(_DOC_C_PAGES)
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_C_DOCS_NOENT = \
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_DOC_C_MODULE)	$(_DOC_C_INCLUDES)			\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_DOC_C_PAGES)
 
-@ENABLE_GNOME_DOCS_TRUE@_DOC_C_FIGURES = $(if $(DOC_FIGURES),					\
-@ENABLE_GNOME_DOCS_TRUE@	$(foreach fig,$(DOC_FIGURES),C/$(fig)),				\
-@ENABLE_GNOME_DOCS_TRUE@	$(patsubst $(srcdir)/%,%,$(wildcard $(srcdir)/C/figures/*.png)))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_C_FIGURES = $(if $(DOC_FIGURES),					\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(foreach fig,$(DOC_FIGURES),C/$(fig)),				\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(patsubst $(srcdir)/%,%,$(wildcard $(srcdir)/C/figures/*.png)))
 
 
 # FIXME: probably have to shell escape to determine the file names
-@ENABLE_GNOME_DOCS_TRUE@_DOC_C_HTML = $(foreach f,						\
-@ENABLE_GNOME_DOCS_TRUE@	$(shell xsltproc --xinclude 					\
-@ENABLE_GNOME_DOCS_TRUE@	  --stringparam db.chunk.basename "$(DOC_MODULE)"		\
-@ENABLE_GNOME_DOCS_TRUE@	  $(_chunks) "C/$(DOC_MODULE).xml"),				\
-@ENABLE_GNOME_DOCS_TRUE@	C/$(f).xhtml)
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_C_HTML = $(foreach f,						\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(shell xsltproc --xinclude 					\
+@HAVE_GNOME_DOC_UTILS_TRUE@	  --stringparam db.chunk.basename "$(DOC_MODULE)"		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	  $(_chunks) "C/$(DOC_MODULE).xml"),				\
+@HAVE_GNOME_DOC_UTILS_TRUE@	C/$(f).xhtml)
 
 
 ###############################################################################
-@ENABLE_GNOME_DOCS_TRUE@_DOC_POFILES = $(if $(DOC_MODULE)$(DOC_ID),					\
-@ENABLE_GNOME_DOCS_TRUE@	$(foreach lc,$(_DOC_REAL_LINGUAS),$(lc)/$(lc).po))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_POFILES = $(if $(DOC_MODULE)$(DOC_ID),					\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(foreach lc,$(_DOC_REAL_LINGUAS),$(lc)/$(lc).po))
 
-@ENABLE_GNOME_DOCS_TRUE@_DOC_MOFILES = $(patsubst %.po,%.mo,$(_DOC_POFILES))
-@ENABLE_GNOME_DOCS_TRUE@_DOC_LC_MODULES = $(if $(DOC_MODULE),						\
-@ENABLE_GNOME_DOCS_TRUE@	$(foreach lc,$(_DOC_REAL_LINGUAS),$(lc)/$(DOC_MODULE).xml))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_MOFILES = $(patsubst %.po,%.mo,$(_DOC_POFILES))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_LC_MODULES = $(if $(DOC_MODULE),						\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(foreach lc,$(_DOC_REAL_LINGUAS),$(lc)/$(DOC_MODULE).xml))
 
-@ENABLE_GNOME_DOCS_TRUE@_DOC_LC_PAGES = \
-@ENABLE_GNOME_DOCS_TRUE@	$(foreach lc,$(_DOC_REAL_LINGUAS),$(foreach page,$(_DOC_C_PAGES),	\
-@ENABLE_GNOME_DOCS_TRUE@		$(lc)/$(notdir $(page)) ))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_LC_PAGES = \
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(foreach lc,$(_DOC_REAL_LINGUAS),$(foreach page,$(_DOC_C_PAGES),	\
+@HAVE_GNOME_DOC_UTILS_TRUE@		$(lc)/$(notdir $(page)) ))
 
-@ENABLE_GNOME_DOCS_TRUE@_DOC_LC_INCLUDES = \
-@ENABLE_GNOME_DOCS_TRUE@	$(foreach lc,$(_DOC_REAL_LINGUAS),$(foreach inc,$(_DOC_C_INCLUDES),	\
-@ENABLE_GNOME_DOCS_TRUE@		$(lc)/$(notdir $(inc)) ))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_LC_INCLUDES = \
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(foreach lc,$(_DOC_REAL_LINGUAS),$(foreach inc,$(_DOC_C_INCLUDES),	\
+@HAVE_GNOME_DOC_UTILS_TRUE@		$(lc)/$(notdir $(inc)) ))
 
 
 # FIXME: probably have to shell escape to determine the file names
-@ENABLE_GNOME_DOCS_TRUE@_DOC_LC_HTML = \
-@ENABLE_GNOME_DOCS_TRUE@	$(foreach lc,$(_DOC_REAL_LINGUAS),$(foreach doc,$(_DOC_C_HTML),		\
-@ENABLE_GNOME_DOCS_TRUE@		$(lc)/$(notdir $(doc)) ))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_LC_HTML = \
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(foreach lc,$(_DOC_REAL_LINGUAS),$(foreach doc,$(_DOC_C_HTML),		\
+@HAVE_GNOME_DOC_UTILS_TRUE@		$(lc)/$(notdir $(doc)) ))
 
-@ENABLE_GNOME_DOCS_TRUE@_DOC_LC_DOCS = \
-@ENABLE_GNOME_DOCS_TRUE@	$(_DOC_LC_MODULES)	$(_DOC_LC_INCLUDES)	$(_DOC_LC_PAGES)	\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(filter html HTML,$(_DOC_REAL_FORMATS)),$(_DOC_LC_HTML))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_LC_DOCS = \
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_DOC_LC_MODULES)	$(_DOC_LC_INCLUDES)	$(_DOC_LC_PAGES)	\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(filter html HTML,$(_DOC_REAL_FORMATS)),$(_DOC_LC_HTML))
 
-@ENABLE_GNOME_DOCS_TRUE@_DOC_LC_FIGURES = $(foreach lc,$(_DOC_REAL_LINGUAS),				\
-@ENABLE_GNOME_DOCS_TRUE@	$(patsubst C/%,$(lc)/%,$(_DOC_C_FIGURES)) )
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_LC_FIGURES = $(foreach lc,$(_DOC_REAL_LINGUAS),				\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(patsubst C/%,$(lc)/%,$(_DOC_C_FIGURES)) )
 
-@ENABLE_GNOME_DOCS_TRUE@_DOC_SRC_FIGURES = \
-@ENABLE_GNOME_DOCS_TRUE@	$(foreach fig,$(_DOC_C_FIGURES), $(foreach lc,C $(_DOC_REAL_LINGUAS),	\
-@ENABLE_GNOME_DOCS_TRUE@		$(wildcard $(srcdir)/$(lc)/$(patsubst C/%,%,$(fig))) ))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_SRC_FIGURES = \
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(foreach fig,$(_DOC_C_FIGURES), $(foreach lc,C $(_DOC_REAL_LINGUAS),	\
+@HAVE_GNOME_DOC_UTILS_TRUE@		$(wildcard $(srcdir)/$(lc)/$(patsubst C/%,%,$(fig))) ))
 
-@ENABLE_GNOME_DOCS_TRUE@_DOC_POT = $(if $(DOC_MODULE),$(DOC_MODULE).pot)
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_POT = $(if $(DOC_MODULE),$(DOC_MODULE).pot)
 
 ################################################################################
-@ENABLE_GNOME_DOCS_TRUE@_DOC_HTML_ALL = $(if $(filter html HTML,$(_DOC_REAL_FORMATS)), \
-@ENABLE_GNOME_DOCS_TRUE@	$(_DOC_C_HTML) $(_DOC_LC_HTML))
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_HTML_ALL = $(if $(filter html HTML,$(_DOC_REAL_FORMATS)), \
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_DOC_C_HTML) $(_DOC_LC_HTML))
 
-@ENABLE_GNOME_DOCS_TRUE@_DOC_HTML_TOPS = $(foreach lc,C $(_DOC_REAL_LINGUAS),$(lc)/$(DOC_MODULE).xhtml)
-@ENABLE_GNOME_DOCS_TRUE@_clean_omf = $(if $(_DOC_OMF_IN),clean-doc-omf)
-@ENABLE_GNOME_DOCS_TRUE@_clean_dsk = $(if $(_DOC_DSK_IN),clean-doc-dsk)
-@ENABLE_GNOME_DOCS_TRUE@_clean_lc = $(if $(_DOC_REAL_LINGUAS),clean-doc-lc)
-@ENABLE_GNOME_DOCS_TRUE@_clean_dir = $(if $(DOC_MODULE)$(DOC_ID),clean-doc-dir)
-@ENABLE_GNOME_DOCS_TRUE@_doc_install_dir = $(if $(DOC_ID),$(DOC_ID),$(DOC_MODULE))
-@ENABLE_GNOME_DOCS_TRUE@DOC_ID = f-spot
-@ENABLE_GNOME_DOCS_TRUE@DOC_INCLUDES = 
-@ENABLE_GNOME_DOCS_TRUE@DOC_PAGES = \
-@ENABLE_GNOME_DOCS_TRUE@    23hq.page \
-@ENABLE_GNOME_DOCS_TRUE@    adjust-color.page \
-@ENABLE_GNOME_DOCS_TRUE@    cd.page \
-@ENABLE_GNOME_DOCS_TRUE@    colors.page \
-@ENABLE_GNOME_DOCS_TRUE@    date-search.page \
-@ENABLE_GNOME_DOCS_TRUE@    enhancements.page \
-@ENABLE_GNOME_DOCS_TRUE@    extensions.page \
-@ENABLE_GNOME_DOCS_TRUE@    facebook.page \
-@ENABLE_GNOME_DOCS_TRUE@    file-management.page \
-@ENABLE_GNOME_DOCS_TRUE@    flickr.page \
-@ENABLE_GNOME_DOCS_TRUE@    folder.page \
-@ENABLE_GNOME_DOCS_TRUE@    general-editing.page \
-@ENABLE_GNOME_DOCS_TRUE@    import-photos.page \
-@ENABLE_GNOME_DOCS_TRUE@    import-roll-search.page \
-@ENABLE_GNOME_DOCS_TRUE@    index.page \
-@ENABLE_GNOME_DOCS_TRUE@    introduction.page \
-@ENABLE_GNOME_DOCS_TRUE@    picasa.page \
-@ENABLE_GNOME_DOCS_TRUE@    rate-search.page \
-@ENABLE_GNOME_DOCS_TRUE@    ratings.page \
-@ENABLE_GNOME_DOCS_TRUE@    smugmug.page \
-@ENABLE_GNOME_DOCS_TRUE@    tag-attach.page \
-@ENABLE_GNOME_DOCS_TRUE@    tag-creation.page \
-@ENABLE_GNOME_DOCS_TRUE@    tag-delete.page \
-@ENABLE_GNOME_DOCS_TRUE@    tag-remove.page \
-@ENABLE_GNOME_DOCS_TRUE@    tag-search.page \
-@ENABLE_GNOME_DOCS_TRUE@    tags.page \
-@ENABLE_GNOME_DOCS_TRUE@    upload-to-web.page \
-@ENABLE_GNOME_DOCS_TRUE@    versioning.page \
-@ENABLE_GNOME_DOCS_TRUE@    zooomr.page
+@HAVE_GNOME_DOC_UTILS_TRUE@_DOC_HTML_TOPS = $(foreach lc,C $(_DOC_REAL_LINGUAS),$(lc)/$(DOC_MODULE).xhtml)
+@HAVE_GNOME_DOC_UTILS_TRUE@_clean_omf = $(if $(_DOC_OMF_IN),clean-doc-omf)
+@HAVE_GNOME_DOC_UTILS_TRUE@_clean_dsk = $(if $(_DOC_DSK_IN),clean-doc-dsk)
+@HAVE_GNOME_DOC_UTILS_TRUE@_clean_lc = $(if $(_DOC_REAL_LINGUAS),clean-doc-lc)
+@HAVE_GNOME_DOC_UTILS_TRUE@_clean_dir = $(if $(DOC_MODULE)$(DOC_ID),clean-doc-dir)
+@HAVE_GNOME_DOC_UTILS_TRUE@_doc_install_dir = $(if $(DOC_ID),$(DOC_ID),$(DOC_MODULE))
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_ID = f-spot
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_INCLUDES = 
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_PAGES = \
+@HAVE_GNOME_DOC_UTILS_TRUE@    23hq.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    adjust-color.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    cd.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    colors.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    date-search.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    enhancements.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    extensions.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    facebook.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    file-management.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    flickr.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    folder.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    general-editing.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    import-photos.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    import-roll-search.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    index.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    introduction.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    picasa.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    rate-search.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    ratings.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    smugmug.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    tag-attach.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    tag-creation.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    tag-delete.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    tag-remove.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    tag-search.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    tags.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    upload-to-web.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    versioning.page \
+@HAVE_GNOME_DOC_UTILS_TRUE@    zooomr.page
 
-@ENABLE_GNOME_DOCS_TRUE@DOC_FIGURES = \
-@ENABLE_GNOME_DOCS_TRUE@    figures/f-spot-adjust-colors.png \
-@ENABLE_GNOME_DOCS_TRUE@    figures/f-spot-autocolor.png \
-@ENABLE_GNOME_DOCS_TRUE@    figures/f-spot-crop.png \
-@ENABLE_GNOME_DOCS_TRUE@    figures/f-spot-desaturate.png \
-@ENABLE_GNOME_DOCS_TRUE@    figures/f-spot-fullscreen.png \
-@ENABLE_GNOME_DOCS_TRUE@    figures/f-spot-red-eye.png \
-@ENABLE_GNOME_DOCS_TRUE@    figures/f-spot-sepia.png \
-@ENABLE_GNOME_DOCS_TRUE@    figures/f-spot-slideshow.png \
-@ENABLE_GNOME_DOCS_TRUE@    figures/f-spot-soft-focus.png \
-@ENABLE_GNOME_DOCS_TRUE@    figures/f-spot-straighten.png
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_FIGURES = \
+@HAVE_GNOME_DOC_UTILS_TRUE@    figures/f-spot-adjust-colors.png \
+@HAVE_GNOME_DOC_UTILS_TRUE@    figures/f-spot-autocolor.png \
+@HAVE_GNOME_DOC_UTILS_TRUE@    figures/f-spot-crop.png \
+@HAVE_GNOME_DOC_UTILS_TRUE@    figures/f-spot-desaturate.png \
+@HAVE_GNOME_DOC_UTILS_TRUE@    figures/f-spot-fullscreen.png \
+@HAVE_GNOME_DOC_UTILS_TRUE@    figures/f-spot-red-eye.png \
+@HAVE_GNOME_DOC_UTILS_TRUE@    figures/f-spot-sepia.png \
+@HAVE_GNOME_DOC_UTILS_TRUE@    figures/f-spot-slideshow.png \
+@HAVE_GNOME_DOC_UTILS_TRUE@    figures/f-spot-soft-focus.png \
+@HAVE_GNOME_DOC_UTILS_TRUE@    figures/f-spot-straighten.png
 
-@ENABLE_GNOME_DOCS_TRUE@DOC_LINGUAS = 
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_LINGUAS = de
 all: all-am
 
 .SUFFIXES:
@@ -504,7 +501,7 @@ TAGS:
 ctags: CTAGS
 CTAGS:
 
-@ENABLE_GNOME_DOCS_FALSE@dist-hook:
+@HAVE_GNOME_DOC_UTILS_FALSE@dist-hook:
 
 distdir: $(DISTFILES)
 	@srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
@@ -568,12 +565,12 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-@ENABLE_GNOME_DOCS_FALSE@uninstall-local:
-@ENABLE_GNOME_DOCS_FALSE@distclean-local:
-@ENABLE_GNOME_DOCS_FALSE@install-data-local:
-@ENABLE_GNOME_DOCS_FALSE@maintainer-clean-local:
-@ENABLE_GNOME_DOCS_FALSE@mostlyclean-local:
-@ENABLE_GNOME_DOCS_FALSE@clean-local:
+@HAVE_GNOME_DOC_UTILS_FALSE@uninstall-local:
+@HAVE_GNOME_DOC_UTILS_FALSE@distclean-local:
+@HAVE_GNOME_DOC_UTILS_FALSE@install-data-local:
+@HAVE_GNOME_DOC_UTILS_FALSE@maintainer-clean-local:
+@HAVE_GNOME_DOC_UTILS_FALSE@mostlyclean-local:
+@HAVE_GNOME_DOC_UTILS_FALSE@clean-local:
 clean: clean-am
 
 clean-am: clean-generic clean-libtool clean-local mostlyclean-am
@@ -658,421 +655,421 @@ uninstall-am: uninstall-local
 	pdf-am ps ps-am uninstall uninstall-am uninstall-local
 
 
-@ENABLE_GNOME_DOCS_TRUE@DOC_H_FILE ?=
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_H_FILE ?=
 
-@ENABLE_GNOME_DOCS_TRUE@DOC_H_DOCS ?=
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_H_DOCS ?=
 
-@ENABLE_GNOME_DOCS_TRUE@$(DOC_H_FILE): $(DOC_H_DOCS);
-@ENABLE_GNOME_DOCS_TRUE@	@rm -f $@.tmp; touch $@.tmp;
-@ENABLE_GNOME_DOCS_TRUE@	echo 'const gchar* documentation_credits[] = {' >> $@.tmp
-@ENABLE_GNOME_DOCS_TRUE@	list='$(DOC_H_DOCS)'; for doc in $$list; do \
-@ENABLE_GNOME_DOCS_TRUE@	  xmlpath="`echo $$doc | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`:$(srcdir)/`echo $$doc | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`"; \
-@ENABLE_GNOME_DOCS_TRUE@	  if ! test -f "$$doc"; then doc="$(srcdir)/$$doc"; fi; \
-@ENABLE_GNOME_DOCS_TRUE@	  xsltproc --path "$$xmlpath" $(_credits) $$doc; \
-@ENABLE_GNOME_DOCS_TRUE@	done | sort | uniq \
-@ENABLE_GNOME_DOCS_TRUE@	  | awk 'BEGIN{s=""}{n=split($$0,w,"<");if(s!=""&&s!=substr(w[1],1,length(w[1])-1)){print s};if(n>1){print $$0;s=""}else{s=$$0}};END{if(s!=""){print s}}' \
-@ENABLE_GNOME_DOCS_TRUE@	  | sed -e 's/\\/\\\\/' -e 's/"/\\"/' -e 's/\(.*\)/\t"\1",/' >> $@.tmp
-@ENABLE_GNOME_DOCS_TRUE@	echo '	NULL' >> $@.tmp
-@ENABLE_GNOME_DOCS_TRUE@	echo '};' >> $@.tmp
-@ENABLE_GNOME_DOCS_TRUE@	echo >> $@.tmp
-@ENABLE_GNOME_DOCS_TRUE@	list='$(DOC_H_DOCS)'; for doc in $$list; do \
-@ENABLE_GNOME_DOCS_TRUE@	  xmlpath="`echo $$doc | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`:$(srcdir)/`echo $$doc | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`"; \
-@ENABLE_GNOME_DOCS_TRUE@	  if ! test -f "$$doc"; then doc="$(srcdir)/$$doc"; fi; \
-@ENABLE_GNOME_DOCS_TRUE@	  docid=`echo "$$doc" | sed -e 's/.*\/\([^/]*\)\.xml/\1/' \
-@ENABLE_GNOME_DOCS_TRUE@	    | sed -e 's/[^a-zA-Z_]/_/g' | tr 'a-z' 'A-Z'`; \
-@ENABLE_GNOME_DOCS_TRUE@	  echo $$xmlpath; \
-@ENABLE_GNOME_DOCS_TRUE@	  ids=`xsltproc --xinclude --path "$$xmlpath" $(_ids) $$doc`; \
-@ENABLE_GNOME_DOCS_TRUE@	  for id in $$ids; do \
-@ENABLE_GNOME_DOCS_TRUE@	    echo '#define HELP_'`echo $$docid`'_'`echo $$id \
-@ENABLE_GNOME_DOCS_TRUE@	      | sed -e 's/[^a-zA-Z_]/_/g' | tr 'a-z' 'A-Z'`' "'$$id'"' >> $@.tmp; \
-@ENABLE_GNOME_DOCS_TRUE@	  done; \
-@ENABLE_GNOME_DOCS_TRUE@	  echo >> $@.tmp; \
-@ENABLE_GNOME_DOCS_TRUE@	done;
-@ENABLE_GNOME_DOCS_TRUE@	cp $@.tmp $@ && rm -f $@.tmp
+@HAVE_GNOME_DOC_UTILS_TRUE@$(DOC_H_FILE): $(DOC_H_DOCS);
+@HAVE_GNOME_DOC_UTILS_TRUE@	@rm -f $@.tmp; touch $@.tmp;
+@HAVE_GNOME_DOC_UTILS_TRUE@	echo 'const gchar* documentation_credits[] = {' >> $@.tmp
+@HAVE_GNOME_DOC_UTILS_TRUE@	list='$(DOC_H_DOCS)'; for doc in $$list; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  xmlpath="`echo $$doc | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`:$(srcdir)/`echo $$doc | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  if ! test -f "$$doc"; then doc="$(srcdir)/$$doc"; fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  xsltproc --path "$$xmlpath" $(_credits) $$doc; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done | sort | uniq \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  | awk 'BEGIN{s=""}{n=split($$0,w,"<");if(s!=""&&s!=substr(w[1],1,length(w[1])-1)){print s};if(n>1){print $$0;s=""}else{s=$$0}};END{if(s!=""){print s}}' \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  | sed -e 's/\\/\\\\/' -e 's/"/\\"/' -e 's/\(.*\)/\t"\1",/' >> $@.tmp
+@HAVE_GNOME_DOC_UTILS_TRUE@	echo '	NULL' >> $@.tmp
+@HAVE_GNOME_DOC_UTILS_TRUE@	echo '};' >> $@.tmp
+@HAVE_GNOME_DOC_UTILS_TRUE@	echo >> $@.tmp
+@HAVE_GNOME_DOC_UTILS_TRUE@	list='$(DOC_H_DOCS)'; for doc in $$list; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  xmlpath="`echo $$doc | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`:$(srcdir)/`echo $$doc | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  if ! test -f "$$doc"; then doc="$(srcdir)/$$doc"; fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  docid=`echo "$$doc" | sed -e 's/.*\/\([^/]*\)\.xml/\1/' \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    | sed -e 's/[^a-zA-Z_]/_/g' | tr 'a-z' 'A-Z'`; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo $$xmlpath; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  ids=`xsltproc --xinclude --path "$$xmlpath" $(_ids) $$doc`; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  for id in $$ids; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    echo '#define HELP_'`echo $$docid`'_'`echo $$id \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      | sed -e 's/[^a-zA-Z_]/_/g' | tr 'a-z' 'A-Z'`' "'$$id'"' >> $@.tmp; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  done; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo >> $@.tmp; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done;
+@HAVE_GNOME_DOC_UTILS_TRUE@	cp $@.tmp $@ && rm -f $@.tmp
 
-@ENABLE_GNOME_DOCS_TRUE@dist-check-gdu:
-@ENABLE_GNOME_DOCS_TRUE@@HAVE_GNOME_DOC_UTILS_FALSE@	@echo "*** GNOME Doc Utils must be installed in order to make dist"
-@ENABLE_GNOME_DOCS_TRUE@@HAVE_GNOME_DOC_UTILS_FALSE@	@false
+@HAVE_GNOME_DOC_UTILS_TRUE@dist-check-gdu:
+#	@echo "*** GNOME Doc Utils must be installed in order to make dist"
+#	@false
 
-@ENABLE_GNOME_DOCS_TRUE@.PHONY: dist-doc-header
-@ENABLE_GNOME_DOCS_TRUE@dist-doc-header: $(DOC_H_FILE)
-@ENABLE_GNOME_DOCS_TRUE@	@if test -f "$(DOC_H_FILE)"; then d=; else d="$(srcdir)/"; fi; \
-@ENABLE_GNOME_DOCS_TRUE@	echo "$(INSTALL_DATA) $${d}$(DOC_H_FILE) $(distdir)/$(DOC_H_FILE)"; \
-@ENABLE_GNOME_DOCS_TRUE@	$(INSTALL_DATA) "$${d}$(DOC_H_FILE)" "$(distdir)/$(DOC_H_FILE)";
+@HAVE_GNOME_DOC_UTILS_TRUE@.PHONY: dist-doc-header
+@HAVE_GNOME_DOC_UTILS_TRUE@dist-doc-header: $(DOC_H_FILE)
+@HAVE_GNOME_DOC_UTILS_TRUE@	@if test -f "$(DOC_H_FILE)"; then d=; else d="$(srcdir)/"; fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	echo "$(INSTALL_DATA) $${d}$(DOC_H_FILE) $(distdir)/$(DOC_H_FILE)"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(INSTALL_DATA) "$${d}$(DOC_H_FILE)" "$(distdir)/$(DOC_H_FILE)";
 
-@ENABLE_GNOME_DOCS_TRUE@doc-dist-hook: dist-check-gdu $(if $(DOC_H_FILE),dist-doc-header)
+@HAVE_GNOME_DOC_UTILS_TRUE@doc-dist-hook: dist-check-gdu $(if $(DOC_H_FILE),dist-doc-header)
 
-@ENABLE_GNOME_DOCS_TRUE@.PHONY: clean-doc-header
-@ENABLE_GNOME_DOCS_TRUE@clean-local: $(_clean_doc_header)
-@ENABLE_GNOME_DOCS_TRUE@distclean-local: $(_clean_doc_header)
-@ENABLE_GNOME_DOCS_TRUE@mostlyclean-local: $(_clean_doc_header)
-@ENABLE_GNOME_DOCS_TRUE@maintainer-clean-local: $(_clean_doc_header)
-@ENABLE_GNOME_DOCS_TRUE@clean-doc-header:
-@ENABLE_GNOME_DOCS_TRUE@	rm -f $(DOC_H_FILE)
+@HAVE_GNOME_DOC_UTILS_TRUE@.PHONY: clean-doc-header
+@HAVE_GNOME_DOC_UTILS_TRUE@clean-local: $(_clean_doc_header)
+@HAVE_GNOME_DOC_UTILS_TRUE@distclean-local: $(_clean_doc_header)
+@HAVE_GNOME_DOC_UTILS_TRUE@mostlyclean-local: $(_clean_doc_header)
+@HAVE_GNOME_DOC_UTILS_TRUE@maintainer-clean-local: $(_clean_doc_header)
+@HAVE_GNOME_DOC_UTILS_TRUE@clean-doc-header:
+@HAVE_GNOME_DOC_UTILS_TRUE@	rm -f $(DOC_H_FILE)
 
-@ENABLE_GNOME_DOCS_TRUE@all: $(DOC_H_FILE)
-
-################################################################################
-
-@ENABLE_GNOME_DOCS_TRUE@DOC_MODULE ?=
-
-@ENABLE_GNOME_DOCS_TRUE@DOC_ID ?=
-
-@ENABLE_GNOME_DOCS_TRUE@DOC_PAGES ?=
-
-@ENABLE_GNOME_DOCS_TRUE@DOC_ENTITIES ?=
-
-@ENABLE_GNOME_DOCS_TRUE@DOC_INCLUDES ?=
-
-@ENABLE_GNOME_DOCS_TRUE@DOC_FIGURES ?=
-
-@ENABLE_GNOME_DOCS_TRUE@DOC_FORMATS ?= docbook
-
-@ENABLE_GNOME_DOCS_TRUE@DOC_LINGUAS ?=
+@HAVE_GNOME_DOC_UTILS_TRUE@all: $(DOC_H_FILE)
 
 ################################################################################
 
-@ENABLE_GNOME_DOCS_TRUE@_xml2po ?= `which xml2po`
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_MODULE ?=
 
-@ENABLE_GNOME_DOCS_TRUE@_db2html ?= `$(PKG_CONFIG) --variable db2html gnome-doc-utils`
-@ENABLE_GNOME_DOCS_TRUE@_db2omf  ?= `$(PKG_CONFIG) --variable db2omf gnome-doc-utils`
-@ENABLE_GNOME_DOCS_TRUE@_malrng  ?= `$(PKG_CONFIG) --variable malrng gnome-doc-utils`
-@ENABLE_GNOME_DOCS_TRUE@_chunks  ?= `$(PKG_CONFIG) --variable xmldir gnome-doc-utils`/gnome/xslt/docbook/utils/chunks.xsl
-@ENABLE_GNOME_DOCS_TRUE@_credits ?= `$(PKG_CONFIG) --variable xmldir gnome-doc-utils`/gnome/xslt/docbook/utils/credits.xsl
-@ENABLE_GNOME_DOCS_TRUE@_ids ?= `$(PKG_CONFIG) --variable xmldir gnome-doc-utils`/gnome/xslt/docbook/utils/ids.xsl
-@ENABLE_GNOME_DOCS_TRUE@@ENABLE_SK_TRUE@_skpkgdatadir ?= `scrollkeeper-config --pkgdatadir`
-@ENABLE_GNOME_DOCS_TRUE@@ENABLE_SK_TRUE@_sklocalstatedir ?= `scrollkeeper-config --pkglocalstatedir`
-@ENABLE_GNOME_DOCS_TRUE@@ENABLE_SK_TRUE@_skcontentslist ?= $(_skpkgdatadir)/Templates/C/scrollkeeper_cl.xml
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_ID ?=
 
-@ENABLE_GNOME_DOCS_TRUE@$(_DOC_OMF_DB) : $(_DOC_OMF_IN)
-@ENABLE_GNOME_DOCS_TRUE@$(_DOC_OMF_DB) : $(DOC_MODULE)-%.omf : %/$(DOC_MODULE).xml
-@ENABLE_GNOME_DOCS_TRUE@	@test "x$(_ENABLE_SK)" != "xtrue" -o -f "$(_skcontentslist)" || {	\
-@ENABLE_GNOME_DOCS_TRUE@	  echo "The file '$(_skcontentslist)' does not exist." >&2;		\
-@ENABLE_GNOME_DOCS_TRUE@	  echo "Please check your ScrollKeeper installation." >&2;		\
-@ENABLE_GNOME_DOCS_TRUE@	  exit 1; }
-@ENABLE_GNOME_DOCS_TRUE@	xsltproc -o $@ $(call db2omf_args,$@,$<,'docbook') || { rm -f "$@"; exit 1; }
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_PAGES ?=
 
-@ENABLE_GNOME_DOCS_TRUE@$(_DOC_OMF_HTML) : $(_DOC_OMF_IN)
-@ENABLE_GNOME_DOCS_TRUE@$(_DOC_OMF_HTML) : $(DOC_MODULE)-html-%.omf : %/$(DOC_MODULE).xml
-@ENABLE_GNOME_DOCS_TRUE@@ENABLE_SK_TRUE@	@test "x$(_ENABLE_SK)" != "xtrue" -o -f "$(_skcontentslist)" || {	\
-@ENABLE_GNOME_DOCS_TRUE@@ENABLE_SK_TRUE@	  echo "The file '$(_skcontentslist)' does not exist" >&2;		\
-@ENABLE_GNOME_DOCS_TRUE@@ENABLE_SK_TRUE@	  echo "Please check your ScrollKeeper installation." >&2;		\
-@ENABLE_GNOME_DOCS_TRUE@@ENABLE_SK_TRUE@	  exit 1; }
-@ENABLE_GNOME_DOCS_TRUE@	xsltproc -o $@ $(call db2omf_args,$@,$<,'xhtml') || { rm -f "$@"; exit 1; }
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_ENTITIES ?=
 
-@ENABLE_GNOME_DOCS_TRUE@.PHONY: omf
-@ENABLE_GNOME_DOCS_TRUE@omf: $(_DOC_OMF_ALL)
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_INCLUDES ?=
 
-@ENABLE_GNOME_DOCS_TRUE@.PHONY: po
-@ENABLE_GNOME_DOCS_TRUE@po: $(_DOC_POFILES)
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_FIGURES ?=
 
-@ENABLE_GNOME_DOCS_TRUE@.PHONY: mo
-@ENABLE_GNOME_DOCS_TRUE@mo: $(_DOC_MOFILES)
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_FORMATS ?= docbook
 
-@ENABLE_GNOME_DOCS_TRUE@$(_DOC_POFILES):
-@ENABLE_GNOME_DOCS_TRUE@	@if ! test -d $(dir $@); then \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "mkdir $(dir $@)"; \
-@ENABLE_GNOME_DOCS_TRUE@	  mkdir "$(dir $@)"; \
-@ENABLE_GNOME_DOCS_TRUE@	fi
-@ENABLE_GNOME_DOCS_TRUE@	@if test ! -f $@ -a -f $(srcdir)/$@; then \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "cp $(srcdir)/$@ $@"; \
-@ENABLE_GNOME_DOCS_TRUE@	  cp "$(srcdir)/$@" "$@"; \
-@ENABLE_GNOME_DOCS_TRUE@	fi;
-@ENABLE_GNOME_DOCS_TRUE@	@docs=; \
-@ENABLE_GNOME_DOCS_TRUE@	list='$(_DOC_C_DOCS_NOENT)'; for doc in $$list; do \
-@ENABLE_GNOME_DOCS_TRUE@	  docs="$$docs $(_DOC_ABS_SRCDIR)/$$doc"; \
-@ENABLE_GNOME_DOCS_TRUE@	done; \
-@ENABLE_GNOME_DOCS_TRUE@	if ! test -f $@; then \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "(cd $(dir $@) && \
-@ENABLE_GNOME_DOCS_TRUE@	    $(_xml2po) -m $(_xml2po_mode) -e $$docs > $(notdir $@).tmp && \
-@ENABLE_GNOME_DOCS_TRUE@	    cp $(notdir $@).tmp $(notdir $@) && rm -f $(notdir $@).tmp)"; \
-@ENABLE_GNOME_DOCS_TRUE@	  (cd $(dir $@) && \
-@ENABLE_GNOME_DOCS_TRUE@	    $(_xml2po) -m $(_xml2po_mode) -e $$docs > $(notdir $@).tmp && \
-@ENABLE_GNOME_DOCS_TRUE@	    cp $(notdir $@).tmp $(notdir $@) && rm -f $(notdir $@).tmp); \
-@ENABLE_GNOME_DOCS_TRUE@	else \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "(cd $(dir $@) && \
-@ENABLE_GNOME_DOCS_TRUE@	    $(_xml2po) -m $(_xml2po_mode) -e -u $(notdir $@) $$docs)"; \
-@ENABLE_GNOME_DOCS_TRUE@	  (cd $(dir $@) && \
-@ENABLE_GNOME_DOCS_TRUE@	    $(_xml2po) -m $(_xml2po_mode) -e -u $(notdir $@) $$docs); \
-@ENABLE_GNOME_DOCS_TRUE@	fi
+@HAVE_GNOME_DOC_UTILS_TRUE@DOC_LINGUAS ?=
 
-@ENABLE_GNOME_DOCS_TRUE@$(_DOC_MOFILES): %.mo: %.po
-@ENABLE_GNOME_DOCS_TRUE@	@if ! test -d $(dir $@); then \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "mkdir $(dir $@)"; \
-@ENABLE_GNOME_DOCS_TRUE@	  mkdir "$(dir $@)"; \
-@ENABLE_GNOME_DOCS_TRUE@	fi
-@ENABLE_GNOME_DOCS_TRUE@	msgfmt -o $@ $<
+################################################################################
+
+@HAVE_GNOME_DOC_UTILS_TRUE@_xml2po ?= `which xml2po`
+
+@HAVE_GNOME_DOC_UTILS_TRUE@_db2html ?= `$(PKG_CONFIG) --variable db2html gnome-doc-utils`
+@HAVE_GNOME_DOC_UTILS_TRUE@_db2omf  ?= `$(PKG_CONFIG) --variable db2omf gnome-doc-utils`
+@HAVE_GNOME_DOC_UTILS_TRUE@_malrng  ?= `$(PKG_CONFIG) --variable malrng gnome-doc-utils`
+@HAVE_GNOME_DOC_UTILS_TRUE@_chunks  ?= `$(PKG_CONFIG) --variable xmldir gnome-doc-utils`/gnome/xslt/docbook/utils/chunks.xsl
+@HAVE_GNOME_DOC_UTILS_TRUE@_credits ?= `$(PKG_CONFIG) --variable xmldir gnome-doc-utils`/gnome/xslt/docbook/utils/credits.xsl
+@HAVE_GNOME_DOC_UTILS_TRUE@_ids ?= `$(PKG_CONFIG) --variable xmldir gnome-doc-utils`/gnome/xslt/docbook/utils/ids.xsl
+@ENABLE_SK_TRUE@@HAVE_GNOME_DOC_UTILS_TRUE@_skpkgdatadir ?= `scrollkeeper-config --pkgdatadir`
+@ENABLE_SK_TRUE@@HAVE_GNOME_DOC_UTILS_TRUE@_sklocalstatedir ?= `scrollkeeper-config --pkglocalstatedir`
+@ENABLE_SK_TRUE@@HAVE_GNOME_DOC_UTILS_TRUE@_skcontentslist ?= $(_skpkgdatadir)/Templates/C/scrollkeeper_cl.xml
+
+@HAVE_GNOME_DOC_UTILS_TRUE@$(_DOC_OMF_DB) : $(_DOC_OMF_IN)
+@HAVE_GNOME_DOC_UTILS_TRUE@$(_DOC_OMF_DB) : $(DOC_MODULE)-%.omf : %/$(DOC_MODULE).xml
+@HAVE_GNOME_DOC_UTILS_TRUE@	@test "x$(_ENABLE_SK)" != "xtrue" -o -f "$(_skcontentslist)" || {	\
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "The file '$(_skcontentslist)' does not exist." >&2;		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "Please check your ScrollKeeper installation." >&2;		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	  exit 1; }
+@HAVE_GNOME_DOC_UTILS_TRUE@	xsltproc -o $@ $(call db2omf_args,$@,$<,'docbook') || { rm -f "$@"; exit 1; }
+
+@HAVE_GNOME_DOC_UTILS_TRUE@$(_DOC_OMF_HTML) : $(_DOC_OMF_IN)
+@HAVE_GNOME_DOC_UTILS_TRUE@$(_DOC_OMF_HTML) : $(DOC_MODULE)-html-%.omf : %/$(DOC_MODULE).xml
+@ENABLE_SK_TRUE@@HAVE_GNOME_DOC_UTILS_TRUE@	@test "x$(_ENABLE_SK)" != "xtrue" -o -f "$(_skcontentslist)" || {	\
+@ENABLE_SK_TRUE@@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "The file '$(_skcontentslist)' does not exist" >&2;		\
+@ENABLE_SK_TRUE@@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "Please check your ScrollKeeper installation." >&2;		\
+@ENABLE_SK_TRUE@@HAVE_GNOME_DOC_UTILS_TRUE@	  exit 1; }
+@HAVE_GNOME_DOC_UTILS_TRUE@	xsltproc -o $@ $(call db2omf_args,$@,$<,'xhtml') || { rm -f "$@"; exit 1; }
+
+@HAVE_GNOME_DOC_UTILS_TRUE@.PHONY: omf
+@HAVE_GNOME_DOC_UTILS_TRUE@omf: $(_DOC_OMF_ALL)
+
+@HAVE_GNOME_DOC_UTILS_TRUE@.PHONY: po
+@HAVE_GNOME_DOC_UTILS_TRUE@po: $(_DOC_POFILES)
+
+@HAVE_GNOME_DOC_UTILS_TRUE@.PHONY: mo
+@HAVE_GNOME_DOC_UTILS_TRUE@mo: $(_DOC_MOFILES)
+
+@HAVE_GNOME_DOC_UTILS_TRUE@$(_DOC_POFILES):
+@HAVE_GNOME_DOC_UTILS_TRUE@	@if ! test -d $(dir $@); then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "mkdir $(dir $@)"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  mkdir "$(dir $@)"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	fi
+@HAVE_GNOME_DOC_UTILS_TRUE@	@if test ! -f $@ -a -f $(srcdir)/$@; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "cp $(srcdir)/$@ $@"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  cp "$(srcdir)/$@" "$@"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	fi;
+@HAVE_GNOME_DOC_UTILS_TRUE@	@docs=; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	list='$(_DOC_C_DOCS_NOENT)'; for doc in $$list; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  docs="$$docs $(_DOC_ABS_SRCDIR)/$$doc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	if ! test -f $@; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "(cd $(dir $@) && \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    $(_xml2po) -m $(_xml2po_mode) -e $$docs > $(notdir $@).tmp && \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    cp $(notdir $@).tmp $(notdir $@) && rm -f $(notdir $@).tmp)"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  (cd $(dir $@) && \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    $(_xml2po) -m $(_xml2po_mode) -e $$docs > $(notdir $@).tmp && \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    cp $(notdir $@).tmp $(notdir $@) && rm -f $(notdir $@).tmp); \
+@HAVE_GNOME_DOC_UTILS_TRUE@	else \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "(cd $(dir $@) && \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    $(_xml2po) -m $(_xml2po_mode) -e -u $(notdir $@) $$docs)"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  (cd $(dir $@) && \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    $(_xml2po) -m $(_xml2po_mode) -e -u $(notdir $@) $$docs); \
+@HAVE_GNOME_DOC_UTILS_TRUE@	fi
+
+@HAVE_GNOME_DOC_UTILS_TRUE@$(_DOC_MOFILES): %.mo: %.po
+@HAVE_GNOME_DOC_UTILS_TRUE@	@if ! test -d $(dir $@); then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "mkdir $(dir $@)"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  mkdir "$(dir $@)"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	fi
+@HAVE_GNOME_DOC_UTILS_TRUE@	msgfmt -o $@ $<
 
 # FIXME: fix the dependancy
 # FIXME: hook xml2po up
-@ENABLE_GNOME_DOCS_TRUE@$(_DOC_LC_DOCS) : $(_DOC_MOFILES)
-@ENABLE_GNOME_DOCS_TRUE@$(_DOC_LC_DOCS) : $(_DOC_C_DOCS)
-@ENABLE_GNOME_DOCS_TRUE@	if ! test -d $(dir $@); then mkdir $(dir $@); fi
-@ENABLE_GNOME_DOCS_TRUE@	if [ -f "C/$(notdir $@)" ]; then d="../"; else d="$(_DOC_ABS_SRCDIR)/"; fi; \
-@ENABLE_GNOME_DOCS_TRUE@	mo="$(dir $@)$(patsubst %/$(notdir $@),%,$@).mo"; \
-@ENABLE_GNOME_DOCS_TRUE@	if [ -f "$${mo}" ]; then mo="../$${mo}"; else mo="$(_DOC_ABS_SRCDIR)/$${mo}"; fi; \
-@ENABLE_GNOME_DOCS_TRUE@	(cd $(dir $@) && \
-@ENABLE_GNOME_DOCS_TRUE@	  $(_xml2po) -m $(_xml2po_mode) -e -t "$${mo}" \
-@ENABLE_GNOME_DOCS_TRUE@	    "$${d}C/$(notdir $@)" > $(notdir $@).tmp && \
-@ENABLE_GNOME_DOCS_TRUE@	    cp $(notdir $@).tmp $(notdir $@) && rm -f $(notdir $@).tmp)
-@ENABLE_GNOME_DOCS_TRUE@.PHONY: pot
-@ENABLE_GNOME_DOCS_TRUE@pot: $(_DOC_POT)
-@ENABLE_GNOME_DOCS_TRUE@$(_DOC_POT): $(_DOC_C_DOCS_NOENT)
-@ENABLE_GNOME_DOCS_TRUE@	$(_xml2po) -m $(_xml2po_mode) -e -o $@ $^
+@HAVE_GNOME_DOC_UTILS_TRUE@$(_DOC_LC_DOCS) : $(_DOC_MOFILES)
+@HAVE_GNOME_DOC_UTILS_TRUE@$(_DOC_LC_DOCS) : $(_DOC_C_DOCS)
+@HAVE_GNOME_DOC_UTILS_TRUE@	if ! test -d $(dir $@); then mkdir $(dir $@); fi
+@HAVE_GNOME_DOC_UTILS_TRUE@	if [ -f "C/$(notdir $@)" ]; then d="../"; else d="$(_DOC_ABS_SRCDIR)/"; fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	mo="$(dir $@)$(patsubst %/$(notdir $@),%,$@).mo"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	if [ -f "$${mo}" ]; then mo="../$${mo}"; else mo="$(_DOC_ABS_SRCDIR)/$${mo}"; fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	(cd $(dir $@) && \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  $(_xml2po) -m $(_xml2po_mode) -e -t "$${mo}" \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    "$${d}C/$(notdir $@)" > $(notdir $@).tmp && \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    cp $(notdir $@).tmp $(notdir $@) && rm -f $(notdir $@).tmp)
+@HAVE_GNOME_DOC_UTILS_TRUE@.PHONY: pot
+@HAVE_GNOME_DOC_UTILS_TRUE@pot: $(_DOC_POT)
+@HAVE_GNOME_DOC_UTILS_TRUE@$(_DOC_POT): $(_DOC_C_DOCS_NOENT)
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_xml2po) -m $(_xml2po_mode) -e -o $@ $^
 
-@ENABLE_GNOME_DOCS_TRUE@$(_DOC_HTML_TOPS): $(_DOC_C_DOCS) $(_DOC_LC_DOCS)
-@ENABLE_GNOME_DOCS_TRUE@	xsltproc -o $@ --xinclude --param db.chunk.chunk_top "false()" --stringparam db.chunk.basename "$(DOC_MODULE)" --stringparam db.chunk.extension ".xhtml" $(_db2html) $(patsubst %.xhtml,%.xml,$@)
-
-################################################################################
-
-@ENABLE_GNOME_DOCS_TRUE@all:							\
-@ENABLE_GNOME_DOCS_TRUE@	$(_DOC_C_DOCS)		$(_DOC_LC_DOCS)		\
-@ENABLE_GNOME_DOCS_TRUE@	$(_DOC_OMF_ALL)		$(_DOC_DSK_ALL)		\
-@ENABLE_GNOME_DOCS_TRUE@	$(_DOC_HTML_ALL)	$(_DOC_POFILES)
+@HAVE_GNOME_DOC_UTILS_TRUE@$(_DOC_HTML_TOPS): $(_DOC_C_DOCS) $(_DOC_LC_DOCS)
+@HAVE_GNOME_DOC_UTILS_TRUE@	xsltproc -o $@ --xinclude --param db.chunk.chunk_top "false()" --stringparam db.chunk.basename "$(DOC_MODULE)" --stringparam db.chunk.extension ".xhtml" $(_db2html) $(patsubst %.xhtml,%.xml,$@)
 
 ################################################################################
 
-@ENABLE_GNOME_DOCS_TRUE@.PHONY: clean-doc-omf clean-doc-dsk clean-doc-lc clean-doc-dir
+@HAVE_GNOME_DOC_UTILS_TRUE@all:							\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_DOC_C_DOCS)		$(_DOC_LC_DOCS)		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_DOC_OMF_ALL)		$(_DOC_DSK_ALL)		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_DOC_HTML_ALL)	$(_DOC_POFILES)
 
-@ENABLE_GNOME_DOCS_TRUE@clean-doc-omf: ; rm -f $(_DOC_OMF_DB) $(_DOC_OMF_HTML)
-@ENABLE_GNOME_DOCS_TRUE@clean-doc-dsk: ; rm -f $(_DOC_DSK_DB) $(_DOC_DSK_HTML)
-@ENABLE_GNOME_DOCS_TRUE@clean-doc-lc:
-@ENABLE_GNOME_DOCS_TRUE@	rm -f $(_DOC_LC_DOCS)
-@ENABLE_GNOME_DOCS_TRUE@	rm -f $(_DOC_MOFILES)
-@ENABLE_GNOME_DOCS_TRUE@	@list='$(_DOC_POFILES)'; for po in $$list; do \
-@ENABLE_GNOME_DOCS_TRUE@	  if ! test "$$po" -ef "$(srcdir)/$$po"; then \
-@ENABLE_GNOME_DOCS_TRUE@	    echo "rm -f $$po"; \
-@ENABLE_GNOME_DOCS_TRUE@	    rm -f "$$po"; \
-@ENABLE_GNOME_DOCS_TRUE@	  fi; \
-@ENABLE_GNOME_DOCS_TRUE@	done
+################################################################################
+
+@HAVE_GNOME_DOC_UTILS_TRUE@.PHONY: clean-doc-omf clean-doc-dsk clean-doc-lc clean-doc-dir
+
+@HAVE_GNOME_DOC_UTILS_TRUE@clean-doc-omf: ; rm -f $(_DOC_OMF_DB) $(_DOC_OMF_HTML)
+@HAVE_GNOME_DOC_UTILS_TRUE@clean-doc-dsk: ; rm -f $(_DOC_DSK_DB) $(_DOC_DSK_HTML)
+@HAVE_GNOME_DOC_UTILS_TRUE@clean-doc-lc:
+@HAVE_GNOME_DOC_UTILS_TRUE@	rm -f $(_DOC_LC_DOCS)
+@HAVE_GNOME_DOC_UTILS_TRUE@	rm -f $(_DOC_MOFILES)
+@HAVE_GNOME_DOC_UTILS_TRUE@	@list='$(_DOC_POFILES)'; for po in $$list; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  if ! test "$$po" -ef "$(srcdir)/$$po"; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    echo "rm -f $$po"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    rm -f "$$po"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
 #	.xml2.po.mo cleaning is obsolete as of 0.18.1 and could be removed in 0.20.x
-@ENABLE_GNOME_DOCS_TRUE@	@for lc in C $(_DOC_REAL_LINGUAS); do \
-@ENABLE_GNOME_DOCS_TRUE@	  if test -f "$$lc/.xml2po.mo"; then \
-@ENABLE_GNOME_DOCS_TRUE@	    echo "rm -f $$lc/.xml2po.mo"; \
-@ENABLE_GNOME_DOCS_TRUE@	    rm -f "$$lc/.xml2po.mo"; \
-@ENABLE_GNOME_DOCS_TRUE@	  fi; \
-@ENABLE_GNOME_DOCS_TRUE@	done
-@ENABLE_GNOME_DOCS_TRUE@clean-doc-dir: clean-doc-lc
-@ENABLE_GNOME_DOCS_TRUE@	@for lc in C $(_DOC_REAL_LINGUAS); do \
-@ENABLE_GNOME_DOCS_TRUE@	  for dir in `find $$lc -depth -type d`; do \
-@ENABLE_GNOME_DOCS_TRUE@	    if ! test $$dir -ef $(srcdir)/$$dir; then \
-@ENABLE_GNOME_DOCS_TRUE@	      echo "rmdir $$dir"; \
-@ENABLE_GNOME_DOCS_TRUE@	      rmdir "$$dir"; \
-@ENABLE_GNOME_DOCS_TRUE@	   fi; \
-@ENABLE_GNOME_DOCS_TRUE@	  done; \
-@ENABLE_GNOME_DOCS_TRUE@	done
+@HAVE_GNOME_DOC_UTILS_TRUE@	@for lc in C $(_DOC_REAL_LINGUAS); do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  if test -f "$$lc/.xml2po.mo"; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    echo "rm -f $$lc/.xml2po.mo"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    rm -f "$$lc/.xml2po.mo"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
+@HAVE_GNOME_DOC_UTILS_TRUE@clean-doc-dir: clean-doc-lc
+@HAVE_GNOME_DOC_UTILS_TRUE@	@for lc in C $(_DOC_REAL_LINGUAS); do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  for dir in `find $$lc -depth -type d`; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    if ! test $$dir -ef $(srcdir)/$$dir; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      echo "rmdir $$dir"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      rmdir "$$dir"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	   fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  done; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
 
-@ENABLE_GNOME_DOCS_TRUE@clean-local:						\
-@ENABLE_GNOME_DOCS_TRUE@	$(_clean_omf)		$(_clean_dsk)		\
-@ENABLE_GNOME_DOCS_TRUE@	$(_clean_lc)		$(_clean_dir)
-@ENABLE_GNOME_DOCS_TRUE@distclean-local:					\
-@ENABLE_GNOME_DOCS_TRUE@	$(_clean_omf)		$(_clean_dsk)		\
-@ENABLE_GNOME_DOCS_TRUE@	$(_clean_lc)		$(_clean_dir)
-@ENABLE_GNOME_DOCS_TRUE@mostlyclean-local:					\
-@ENABLE_GNOME_DOCS_TRUE@	$(_clean_omf)		$(_clean_dsk)		\
-@ENABLE_GNOME_DOCS_TRUE@	$(_clean_lc)		$(_clean_dir)
-@ENABLE_GNOME_DOCS_TRUE@maintainer-clean-local:					\
-@ENABLE_GNOME_DOCS_TRUE@	$(_clean_omf)		$(_clean_dsk)		\
-@ENABLE_GNOME_DOCS_TRUE@	$(_clean_lc)		$(_clean_dir)
+@HAVE_GNOME_DOC_UTILS_TRUE@clean-local:						\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_clean_omf)		$(_clean_dsk)		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_clean_lc)		$(_clean_dir)
+@HAVE_GNOME_DOC_UTILS_TRUE@distclean-local:					\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_clean_omf)		$(_clean_dsk)		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_clean_lc)		$(_clean_dir)
+@HAVE_GNOME_DOC_UTILS_TRUE@mostlyclean-local:					\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_clean_omf)		$(_clean_dsk)		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_clean_lc)		$(_clean_dir)
+@HAVE_GNOME_DOC_UTILS_TRUE@maintainer-clean-local:					\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_clean_omf)		$(_clean_dsk)		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(_clean_lc)		$(_clean_dir)
 
 ################################################################################
 
-@ENABLE_GNOME_DOCS_TRUE@.PHONY: dist-doc-docs dist-doc-pages dist-doc-figs dist-doc-omf dist-doc-dsk
-@ENABLE_GNOME_DOCS_TRUE@doc-dist-hook: 						\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(DOC_MODULE)$(DOC_ID),dist-doc-docs)	\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(_DOC_C_FIGURES),dist-doc-figs)		\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(_DOC_OMF_IN),dist-doc-omf)
+@HAVE_GNOME_DOC_UTILS_TRUE@.PHONY: dist-doc-docs dist-doc-pages dist-doc-figs dist-doc-omf dist-doc-dsk
+@HAVE_GNOME_DOC_UTILS_TRUE@doc-dist-hook: 						\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(DOC_MODULE)$(DOC_ID),dist-doc-docs)	\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(_DOC_C_FIGURES),dist-doc-figs)		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(_DOC_OMF_IN),dist-doc-omf)
 #	$(if $(_DOC_DSK_IN),dist-doc-dsk)
 
-@ENABLE_GNOME_DOCS_TRUE@dist-doc-docs: $(_DOC_C_DOCS) $(_DOC_LC_DOCS) $(_DOC_POFILES)
-@ENABLE_GNOME_DOCS_TRUE@	@for lc in C $(_DOC_REAL_LINGUAS); do \
-@ENABLE_GNOME_DOCS_TRUE@	  echo " $(mkinstalldirs) $(distdir)/$$lc"; \
-@ENABLE_GNOME_DOCS_TRUE@	  $(mkinstalldirs) "$(distdir)/$$lc"; \
-@ENABLE_GNOME_DOCS_TRUE@	done
-@ENABLE_GNOME_DOCS_TRUE@	@list='$(_DOC_C_DOCS) $(_DOC_LC_DOCS) $(_DOC_POFILES)'; \
-@ENABLE_GNOME_DOCS_TRUE@	for doc in $$list; do \
-@ENABLE_GNOME_DOCS_TRUE@	  if test -f "$$doc"; then d=; else d="$(srcdir)/"; fi; \
-@ENABLE_GNOME_DOCS_TRUE@	    docdir=`echo $$doc | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`; \
-@ENABLE_GNOME_DOCS_TRUE@	    if ! test -d "$(distdir)/$$docdir"; then \
-@ENABLE_GNOME_DOCS_TRUE@	      echo "$(mkinstalldirs) $(distdir)/$$docdir"; \
-@ENABLE_GNOME_DOCS_TRUE@	      $(mkinstalldirs) "$(distdir)/$$docdir"; \
-@ENABLE_GNOME_DOCS_TRUE@	    fi; \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "$(INSTALL_DATA) $$d$$doc $(distdir)/$$doc"; \
-@ENABLE_GNOME_DOCS_TRUE@	  $(INSTALL_DATA) "$$d$$doc" "$(distdir)/$$doc"; \
-@ENABLE_GNOME_DOCS_TRUE@	done
+@HAVE_GNOME_DOC_UTILS_TRUE@dist-doc-docs: $(_DOC_C_DOCS) $(_DOC_LC_DOCS) $(_DOC_POFILES)
+@HAVE_GNOME_DOC_UTILS_TRUE@	@for lc in C $(_DOC_REAL_LINGUAS); do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo " $(mkinstalldirs) $(distdir)/$$lc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  $(mkinstalldirs) "$(distdir)/$$lc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
+@HAVE_GNOME_DOC_UTILS_TRUE@	@list='$(_DOC_C_DOCS) $(_DOC_LC_DOCS) $(_DOC_POFILES)'; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	for doc in $$list; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  if test -f "$$doc"; then d=; else d="$(srcdir)/"; fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    docdir=`echo $$doc | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    if ! test -d "$(distdir)/$$docdir"; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      echo "$(mkinstalldirs) $(distdir)/$$docdir"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      $(mkinstalldirs) "$(distdir)/$$docdir"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "$(INSTALL_DATA) $$d$$doc $(distdir)/$$doc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  $(INSTALL_DATA) "$$d$$doc" "$(distdir)/$$doc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
 
-@ENABLE_GNOME_DOCS_TRUE@dist-doc-figs: $(_DOC_SRC_FIGURES)
-@ENABLE_GNOME_DOCS_TRUE@	@list='$(_DOC_C_FIGURES) $(_DOC_LC_FIGURES)'; \
-@ENABLE_GNOME_DOCS_TRUE@	for fig in $$list; do \
-@ENABLE_GNOME_DOCS_TRUE@	  if test -f "$$fig"; then d=; else d="$(srcdir)/"; fi; \
-@ENABLE_GNOME_DOCS_TRUE@	  if test -f "$$d$$fig"; then \
-@ENABLE_GNOME_DOCS_TRUE@	    figdir=`echo $$fig | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`; \
-@ENABLE_GNOME_DOCS_TRUE@	    if ! test -d "$(distdir)/$$figdir"; then \
-@ENABLE_GNOME_DOCS_TRUE@	      echo "$(mkinstalldirs) $(distdir)/$$figdir"; \
-@ENABLE_GNOME_DOCS_TRUE@	      $(mkinstalldirs) "$(distdir)/$$figdir"; \
-@ENABLE_GNOME_DOCS_TRUE@	    fi; \
-@ENABLE_GNOME_DOCS_TRUE@	    echo "$(INSTALL_DATA) $$d$$fig $(distdir)/$$fig"; \
-@ENABLE_GNOME_DOCS_TRUE@	    $(INSTALL_DATA) "$$d$$fig" "$(distdir)/$$fig"; \
-@ENABLE_GNOME_DOCS_TRUE@	  fi; \
-@ENABLE_GNOME_DOCS_TRUE@	done;
+@HAVE_GNOME_DOC_UTILS_TRUE@dist-doc-figs: $(_DOC_SRC_FIGURES)
+@HAVE_GNOME_DOC_UTILS_TRUE@	@list='$(_DOC_C_FIGURES) $(_DOC_LC_FIGURES)'; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	for fig in $$list; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  if test -f "$$fig"; then d=; else d="$(srcdir)/"; fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  if test -f "$$d$$fig"; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    figdir=`echo $$fig | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    if ! test -d "$(distdir)/$$figdir"; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      echo "$(mkinstalldirs) $(distdir)/$$figdir"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      $(mkinstalldirs) "$(distdir)/$$figdir"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    echo "$(INSTALL_DATA) $$d$$fig $(distdir)/$$fig"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    $(INSTALL_DATA) "$$d$$fig" "$(distdir)/$$fig"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done;
 
-@ENABLE_GNOME_DOCS_TRUE@dist-doc-omf:
-@ENABLE_GNOME_DOCS_TRUE@	@if test -f "$(_DOC_OMF_IN)"; then d=; else d="$(srcdir)/"; fi; \
-@ENABLE_GNOME_DOCS_TRUE@	echo "$(INSTALL_DATA) $$d$(_DOC_OMF_IN) $(distdir)/$(notdir $(_DOC_OMF_IN))"; \
-@ENABLE_GNOME_DOCS_TRUE@	$(INSTALL_DATA) "$$d$(_DOC_OMF_IN)" "$(distdir)/$(notdir $(_DOC_OMF_IN))"
+@HAVE_GNOME_DOC_UTILS_TRUE@dist-doc-omf:
+@HAVE_GNOME_DOC_UTILS_TRUE@	@if test -f "$(_DOC_OMF_IN)"; then d=; else d="$(srcdir)/"; fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	echo "$(INSTALL_DATA) $$d$(_DOC_OMF_IN) $(distdir)/$(notdir $(_DOC_OMF_IN))"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(INSTALL_DATA) "$$d$(_DOC_OMF_IN)" "$(distdir)/$(notdir $(_DOC_OMF_IN))"
 
-@ENABLE_GNOME_DOCS_TRUE@dist-doc-dsk:
-@ENABLE_GNOME_DOCS_TRUE@	@if test -f "$(_DOC_DSK_IN)"; then d=; else d="$(srcdir)/"; fi; \
-@ENABLE_GNOME_DOCS_TRUE@	echo "$(INSTALL_DATA) $$d$(_DOC_DSK_IN) $(distdir)/$(notdir $(_DOC_DSK_IN))"; \
-@ENABLE_GNOME_DOCS_TRUE@	$(INSTALL_DATA) "$$d$(_DOC_DSK_IN)" "$(distdir)/$(notdir $(_DOC_DSK_IN))"
-
-################################################################################
-
-@ENABLE_GNOME_DOCS_TRUE@.PHONY: check-doc-docs check-doc-omf
-@ENABLE_GNOME_DOCS_TRUE@check:							\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(DOC_MODULE),check-doc-docs)		\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(DOC_ID),check-doc-pages)			\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(_DOC_OMF_IN),check-doc-omf)
-
-@ENABLE_GNOME_DOCS_TRUE@check-doc-docs: $(_DOC_C_DOCS) $(_DOC_LC_DOCS)
-@ENABLE_GNOME_DOCS_TRUE@	@for lc in C $(_DOC_REAL_LINGUAS); do \
-@ENABLE_GNOME_DOCS_TRUE@	  if test -f "$$lc"; \
-@ENABLE_GNOME_DOCS_TRUE@	    then d=; \
-@ENABLE_GNOME_DOCS_TRUE@	    xmlpath="$$lc"; \
-@ENABLE_GNOME_DOCS_TRUE@	  else \
-@ENABLE_GNOME_DOCS_TRUE@	    d="$(srcdir)/"; \
-@ENABLE_GNOME_DOCS_TRUE@	    xmlpath="$$lc:$(srcdir)/$$lc"; \
-@ENABLE_GNOME_DOCS_TRUE@	  fi; \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "xmllint --noout --noent --path $$xmlpath --xinclude --postvalid $$d$$lc/$(DOC_MODULE).xml"; \
-@ENABLE_GNOME_DOCS_TRUE@	  xmllint --noout --noent --path "$$xmlpath" --xinclude --postvalid "$$d$$lc/$(DOC_MODULE).xml"; \
-@ENABLE_GNOME_DOCS_TRUE@	done
-
-@ENABLE_GNOME_DOCS_TRUE@check-doc-pages: $(_DOC_C_PAGES) $(_DOC_LC_PAGES)
-@ENABLE_GNOME_DOCS_TRUE@	for lc in C $(_DOC_REAL_LINGUAS); do \
-@ENABLE_GNOME_DOCS_TRUE@	  if test -f "$$lc"; \
-@ENABLE_GNOME_DOCS_TRUE@	    then d=; \
-@ENABLE_GNOME_DOCS_TRUE@	    xmlpath="$$lc"; \
-@ENABLE_GNOME_DOCS_TRUE@	  else \
-@ENABLE_GNOME_DOCS_TRUE@	    d="$(srcdir)/"; \
-@ENABLE_GNOME_DOCS_TRUE@	    xmlpath="$$lc:$(srcdir)/$$lc"; \
-@ENABLE_GNOME_DOCS_TRUE@	  fi; \
-@ENABLE_GNOME_DOCS_TRUE@	  for page in $(DOC_PAGES); do \
-@ENABLE_GNOME_DOCS_TRUE@	    echo "xmllint --noout --noent --path $$xmlpath --xinclude --relaxng $(_malrng) $$d$$lc/$$page"; \
-@ENABLE_GNOME_DOCS_TRUE@	    xmllint --noout --noent --path "$$xmlpath" --xinclude --relaxng "$(_malrng)" "$$d$$lc/$$page"; \
-@ENABLE_GNOME_DOCS_TRUE@	  done; \
-@ENABLE_GNOME_DOCS_TRUE@	done
-
-@ENABLE_GNOME_DOCS_TRUE@check-doc-omf: $(_DOC_OMF_ALL)
-@ENABLE_GNOME_DOCS_TRUE@	@list='$(_DOC_OMF_ALL)'; for omf in $$list; do \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "xmllint --noout --xinclude --dtdvalid 'http://scrollkeeper.sourceforge.net/dtds/scrollkeeper-omf-1.0/scrollkeeper-omf.dtd' $$omf"; \
-@ENABLE_GNOME_DOCS_TRUE@	  xmllint --noout --xinclude --dtdvalid 'http://scrollkeeper.sourceforge.net/dtds/scrollkeeper-omf-1.0/scrollkeeper-omf.dtd' $$omf; \
-@ENABLE_GNOME_DOCS_TRUE@	done
+@HAVE_GNOME_DOC_UTILS_TRUE@dist-doc-dsk:
+@HAVE_GNOME_DOC_UTILS_TRUE@	@if test -f "$(_DOC_DSK_IN)"; then d=; else d="$(srcdir)/"; fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	echo "$(INSTALL_DATA) $$d$(_DOC_DSK_IN) $(distdir)/$(notdir $(_DOC_DSK_IN))"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(INSTALL_DATA) "$$d$(_DOC_DSK_IN)" "$(distdir)/$(notdir $(_DOC_DSK_IN))"
 
 ################################################################################
 
-@ENABLE_GNOME_DOCS_TRUE@.PHONY: install-doc-docs install-doc-html install-doc-figs install-doc-omf install-doc-dsk
+@HAVE_GNOME_DOC_UTILS_TRUE@.PHONY: check-doc-docs check-doc-omf
+@HAVE_GNOME_DOC_UTILS_TRUE@check:							\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(DOC_MODULE),check-doc-docs)		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(DOC_ID),check-doc-pages)			\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(_DOC_OMF_IN),check-doc-omf)
 
-@ENABLE_GNOME_DOCS_TRUE@install-data-local:					\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(DOC_MODULE)$(DOC_ID),install-doc-docs)	\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(_DOC_HTML_ALL),install-doc-html)		\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(_DOC_C_FIGURES),install-doc-figs)	\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(_DOC_OMF_IN),install-doc-omf)
+@HAVE_GNOME_DOC_UTILS_TRUE@check-doc-docs: $(_DOC_C_DOCS) $(_DOC_LC_DOCS)
+@HAVE_GNOME_DOC_UTILS_TRUE@	@for lc in C $(_DOC_REAL_LINGUAS); do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  if test -f "$$lc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    then d=; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    xmlpath="$$lc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  else \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    d="$(srcdir)/"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    xmlpath="$$lc:$(srcdir)/$$lc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "xmllint --noout --noent --path $$xmlpath --xinclude --postvalid $$d$$lc/$(DOC_MODULE).xml"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  xmllint --noout --noent --path "$$xmlpath" --xinclude --postvalid "$$d$$lc/$(DOC_MODULE).xml"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
+
+@HAVE_GNOME_DOC_UTILS_TRUE@check-doc-pages: $(_DOC_C_PAGES) $(_DOC_LC_PAGES)
+@HAVE_GNOME_DOC_UTILS_TRUE@	for lc in C $(_DOC_REAL_LINGUAS); do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  if test -f "$$lc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    then d=; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    xmlpath="$$lc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  else \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    d="$(srcdir)/"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    xmlpath="$$lc:$(srcdir)/$$lc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  for page in $(DOC_PAGES); do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    echo "xmllint --noout --noent --path $$xmlpath --xinclude --relaxng $(_malrng) $$d$$lc/$$page"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    xmllint --noout --noent --path "$$xmlpath" --xinclude --relaxng "$(_malrng)" "$$d$$lc/$$page"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  done; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
+
+@HAVE_GNOME_DOC_UTILS_TRUE@check-doc-omf: $(_DOC_OMF_ALL)
+@HAVE_GNOME_DOC_UTILS_TRUE@	@list='$(_DOC_OMF_ALL)'; for omf in $$list; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "xmllint --noout --xinclude --dtdvalid 'http://scrollkeeper.sourceforge.net/dtds/scrollkeeper-omf-1.0/scrollkeeper-omf.dtd' $$omf"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  xmllint --noout --xinclude --dtdvalid 'http://scrollkeeper.sourceforge.net/dtds/scrollkeeper-omf-1.0/scrollkeeper-omf.dtd' $$omf; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
+
+################################################################################
+
+@HAVE_GNOME_DOC_UTILS_TRUE@.PHONY: install-doc-docs install-doc-html install-doc-figs install-doc-omf install-doc-dsk
+
+@HAVE_GNOME_DOC_UTILS_TRUE@install-data-local:					\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(DOC_MODULE)$(DOC_ID),install-doc-docs)	\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(_DOC_HTML_ALL),install-doc-html)		\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(_DOC_C_FIGURES),install-doc-figs)	\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(_DOC_OMF_IN),install-doc-omf)
 #	$(if $(_DOC_DSK_IN),install-doc-dsk)
 
-@ENABLE_GNOME_DOCS_TRUE@install-doc-docs:
-@ENABLE_GNOME_DOCS_TRUE@	@for lc in C $(_DOC_REAL_LINGUAS); do \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "$(mkinstalldirs) $(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$lc"; \
-@ENABLE_GNOME_DOCS_TRUE@	  $(mkinstalldirs) $(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$lc; \
-@ENABLE_GNOME_DOCS_TRUE@	done
-@ENABLE_GNOME_DOCS_TRUE@	@list='$(_DOC_C_DOCS) $(_DOC_LC_DOCS)'; for doc in $$list; do \
-@ENABLE_GNOME_DOCS_TRUE@	  if test -f "$$doc"; then d=; else d="$(srcdir)/"; fi; \
-@ENABLE_GNOME_DOCS_TRUE@	  docdir="$$lc/"`echo $$doc | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`; \
-@ENABLE_GNOME_DOCS_TRUE@	  docdir="$(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$docdir"; \
-@ENABLE_GNOME_DOCS_TRUE@	  if ! test -d "$$docdir"; then \
-@ENABLE_GNOME_DOCS_TRUE@	    echo "$(mkinstalldirs) $$docdir"; \
-@ENABLE_GNOME_DOCS_TRUE@	    $(mkinstalldirs) "$$docdir"; \
-@ENABLE_GNOME_DOCS_TRUE@	  fi; \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "$(INSTALL_DATA) $$d$$doc $(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$doc"; \
-@ENABLE_GNOME_DOCS_TRUE@	  $(INSTALL_DATA) $$d$$doc $(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$doc; \
-@ENABLE_GNOME_DOCS_TRUE@	done
+@HAVE_GNOME_DOC_UTILS_TRUE@install-doc-docs:
+@HAVE_GNOME_DOC_UTILS_TRUE@	@for lc in C $(_DOC_REAL_LINGUAS); do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "$(mkinstalldirs) $(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$lc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  $(mkinstalldirs) $(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$lc; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
+@HAVE_GNOME_DOC_UTILS_TRUE@	@list='$(_DOC_C_DOCS) $(_DOC_LC_DOCS)'; for doc in $$list; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  if test -f "$$doc"; then d=; else d="$(srcdir)/"; fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  docdir="$$lc/"`echo $$doc | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  docdir="$(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$docdir"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  if ! test -d "$$docdir"; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    echo "$(mkinstalldirs) $$docdir"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    $(mkinstalldirs) "$$docdir"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "$(INSTALL_DATA) $$d$$doc $(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$doc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  $(INSTALL_DATA) $$d$$doc $(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$doc; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
 
-@ENABLE_GNOME_DOCS_TRUE@install-doc-figs:
-@ENABLE_GNOME_DOCS_TRUE@	@list='$(patsubst C/%,%,$(_DOC_C_FIGURES))'; for fig in $$list; do \
-@ENABLE_GNOME_DOCS_TRUE@	  for lc in C $(_DOC_REAL_LINGUAS); do \
-@ENABLE_GNOME_DOCS_TRUE@	    figsymlink=false; \
-@ENABLE_GNOME_DOCS_TRUE@	    if test -f "$$lc/$$fig"; then \
-@ENABLE_GNOME_DOCS_TRUE@	      figfile="$$lc/$$fig"; \
-@ENABLE_GNOME_DOCS_TRUE@	    elif test -f "$(srcdir)/$$lc/$$fig"; then \
-@ENABLE_GNOME_DOCS_TRUE@	      figfile="$(srcdir)/$$lc/$$fig"; \
-@ENABLE_GNOME_DOCS_TRUE@	    else \
-@ENABLE_GNOME_DOCS_TRUE@	      figsymlink=true; \
-@ENABLE_GNOME_DOCS_TRUE@	    fi; \
-@ENABLE_GNOME_DOCS_TRUE@	    figdir="$$lc/"`echo $$fig | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`; \
-@ENABLE_GNOME_DOCS_TRUE@	    figdir="$(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$figdir"; \
-@ENABLE_GNOME_DOCS_TRUE@	    if ! test -d "$$figdir"; then \
-@ENABLE_GNOME_DOCS_TRUE@	      echo "$(mkinstalldirs) $$figdir"; \
-@ENABLE_GNOME_DOCS_TRUE@	      $(mkinstalldirs) "$$figdir"; \
-@ENABLE_GNOME_DOCS_TRUE@	    fi; \
-@ENABLE_GNOME_DOCS_TRUE@	    figbase=`echo $$fig | sed -e 's/^.*\///'`; \
-@ENABLE_GNOME_DOCS_TRUE@	    if $$figsymlink; then \
-@ENABLE_GNOME_DOCS_TRUE@	      echo "cd $$figdir && $(LN_S) -f ../../C/$$fig $$figbase"; \
-@ENABLE_GNOME_DOCS_TRUE@	      ( cd "$$figdir" && $(LN_S) -f "../../C/$$fig" "$$figbase" ); \
-@ENABLE_GNOME_DOCS_TRUE@	    else \
-@ENABLE_GNOME_DOCS_TRUE@	      echo "$(INSTALL_DATA) $$figfile $$figdir$$figbase"; \
-@ENABLE_GNOME_DOCS_TRUE@	      $(INSTALL_DATA) "$$figfile" "$$figdir$$figbase"; \
-@ENABLE_GNOME_DOCS_TRUE@	    fi; \
-@ENABLE_GNOME_DOCS_TRUE@	  done; \
-@ENABLE_GNOME_DOCS_TRUE@	done
+@HAVE_GNOME_DOC_UTILS_TRUE@install-doc-figs:
+@HAVE_GNOME_DOC_UTILS_TRUE@	@list='$(patsubst C/%,%,$(_DOC_C_FIGURES))'; for fig in $$list; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  for lc in C $(_DOC_REAL_LINGUAS); do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    figsymlink=false; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    if test -f "$$lc/$$fig"; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      figfile="$$lc/$$fig"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    elif test -f "$(srcdir)/$$lc/$$fig"; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      figfile="$(srcdir)/$$lc/$$fig"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    else \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      figsymlink=true; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    figdir="$$lc/"`echo $$fig | sed -e 's/^\(.*\/\).*/\1/' -e '/\//!s/.*//'`; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    figdir="$(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$figdir"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    if ! test -d "$$figdir"; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      echo "$(mkinstalldirs) $$figdir"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      $(mkinstalldirs) "$$figdir"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    figbase=`echo $$fig | sed -e 's/^.*\///'`; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    if $$figsymlink; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      echo "cd $$figdir && $(LN_S) -f ../../C/$$fig $$figbase"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      ( cd "$$figdir" && $(LN_S) -f "../../C/$$fig" "$$figbase" ); \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    else \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      echo "$(INSTALL_DATA) $$figfile $$figdir$$figbase"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	      $(INSTALL_DATA) "$$figfile" "$$figdir$$figbase"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  done; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
 
-@ENABLE_GNOME_DOCS_TRUE@install-doc-html:
-@ENABLE_GNOME_DOCS_TRUE@	echo install-html
+@HAVE_GNOME_DOC_UTILS_TRUE@install-doc-html:
+@HAVE_GNOME_DOC_UTILS_TRUE@	echo install-html
 
-@ENABLE_GNOME_DOCS_TRUE@install-doc-omf:
-@ENABLE_GNOME_DOCS_TRUE@	$(mkinstalldirs) $(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)
-@ENABLE_GNOME_DOCS_TRUE@	@list='$(_DOC_OMF_ALL)'; for omf in $$list; do \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "$(INSTALL_DATA) $$omf $(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)/$$omf"; \
-@ENABLE_GNOME_DOCS_TRUE@	  $(INSTALL_DATA) $$omf $(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)/$$omf; \
-@ENABLE_GNOME_DOCS_TRUE@	done
-@ENABLE_GNOME_DOCS_TRUE@	@if test "x$(_ENABLE_SK)" = "xtrue"; then \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "scrollkeeper-update -p $(DESTDIR)$(_sklocalstatedir) -o $(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)"; \
-@ENABLE_GNOME_DOCS_TRUE@	  scrollkeeper-update -p "$(DESTDIR)$(_sklocalstatedir)" -o "$(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)"; \
-@ENABLE_GNOME_DOCS_TRUE@	fi;
+@HAVE_GNOME_DOC_UTILS_TRUE@install-doc-omf:
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(mkinstalldirs) $(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)
+@HAVE_GNOME_DOC_UTILS_TRUE@	@list='$(_DOC_OMF_ALL)'; for omf in $$list; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "$(INSTALL_DATA) $$omf $(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)/$$omf"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  $(INSTALL_DATA) $$omf $(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)/$$omf; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
+@HAVE_GNOME_DOC_UTILS_TRUE@	@if test "x$(_ENABLE_SK)" = "xtrue"; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "scrollkeeper-update -p $(DESTDIR)$(_sklocalstatedir) -o $(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  scrollkeeper-update -p "$(DESTDIR)$(_sklocalstatedir)" -o "$(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	fi;
 
-@ENABLE_GNOME_DOCS_TRUE@install-doc-dsk:
-@ENABLE_GNOME_DOCS_TRUE@	echo install-dsk
+@HAVE_GNOME_DOC_UTILS_TRUE@install-doc-dsk:
+@HAVE_GNOME_DOC_UTILS_TRUE@	echo install-dsk
 
 ################################################################################
 
-@ENABLE_GNOME_DOCS_TRUE@.PHONY: uninstall-doc-docs uninstall-doc-html uninstall-doc-figs uninstall-doc-omf uninstall-doc-dsk
-@ENABLE_GNOME_DOCS_TRUE@uninstall-local:					\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(DOC_MODULE)$(DOC_ID),uninstall-doc-docs)	\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(_DOC_HTML_ALL),uninstall-doc-html)	\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(_DOC_C_FIGURES),uninstall-doc-figs)	\
-@ENABLE_GNOME_DOCS_TRUE@	$(if $(_DOC_OMF_IN),uninstall-doc-omf)
+@HAVE_GNOME_DOC_UTILS_TRUE@.PHONY: uninstall-doc-docs uninstall-doc-html uninstall-doc-figs uninstall-doc-omf uninstall-doc-dsk
+@HAVE_GNOME_DOC_UTILS_TRUE@uninstall-local:					\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(DOC_MODULE)$(DOC_ID),uninstall-doc-docs)	\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(_DOC_HTML_ALL),uninstall-doc-html)	\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(_DOC_C_FIGURES),uninstall-doc-figs)	\
+@HAVE_GNOME_DOC_UTILS_TRUE@	$(if $(_DOC_OMF_IN),uninstall-doc-omf)
 #	$(if $(_DOC_DSK_IN),uninstall-doc-dsk)
 
-@ENABLE_GNOME_DOCS_TRUE@uninstall-doc-docs:
-@ENABLE_GNOME_DOCS_TRUE@	@list='$(_DOC_C_DOCS) $(_DOC_LC_DOCS)'; for doc in $$list; do \
-@ENABLE_GNOME_DOCS_TRUE@	  echo " rm -f $(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$doc"; \
-@ENABLE_GNOME_DOCS_TRUE@	  rm -f "$(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$doc"; \
-@ENABLE_GNOME_DOCS_TRUE@	done
+@HAVE_GNOME_DOC_UTILS_TRUE@uninstall-doc-docs:
+@HAVE_GNOME_DOC_UTILS_TRUE@	@list='$(_DOC_C_DOCS) $(_DOC_LC_DOCS)'; for doc in $$list; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo " rm -f $(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$doc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  rm -f "$(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$doc"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
 
-@ENABLE_GNOME_DOCS_TRUE@uninstall-doc-figs:
-@ENABLE_GNOME_DOCS_TRUE@	@list='$(_DOC_C_FIGURES) $(_DOC_LC_FIGURES)'; for fig in $$list; do \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "rm -f $(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$fig"; \
-@ENABLE_GNOME_DOCS_TRUE@	  rm -f "$(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$fig"; \
-@ENABLE_GNOME_DOCS_TRUE@	done;
+@HAVE_GNOME_DOC_UTILS_TRUE@uninstall-doc-figs:
+@HAVE_GNOME_DOC_UTILS_TRUE@	@list='$(_DOC_C_FIGURES) $(_DOC_LC_FIGURES)'; for fig in $$list; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "rm -f $(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$fig"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  rm -f "$(DESTDIR)$(HELP_DIR)/$(_doc_install_dir)/$$fig"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done;
 
-@ENABLE_GNOME_DOCS_TRUE@uninstall-doc-omf:
-@ENABLE_GNOME_DOCS_TRUE@	@list='$(_DOC_OMF_ALL)'; for omf in $$list; do \
-@ENABLE_GNOME_DOCS_TRUE@	  if test "x$(_ENABLE_SK)" = "xtrue"; then \
-@ENABLE_GNOME_DOCS_TRUE@	    echo "scrollkeeper-uninstall -p $(_sklocalstatedir) $(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)/$$omf"; \
-@ENABLE_GNOME_DOCS_TRUE@	    scrollkeeper-uninstall -p "$(_sklocalstatedir)" "$(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)/$$omf"; \
-@ENABLE_GNOME_DOCS_TRUE@	  fi; \
-@ENABLE_GNOME_DOCS_TRUE@	  echo "rm -f $(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)/$$omf"; \
-@ENABLE_GNOME_DOCS_TRUE@	  rm -f "$(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)/$$omf"; \
-@ENABLE_GNOME_DOCS_TRUE@	done
-@ENABLE_GNOME_DOCS_TRUE@dist-hook: doc-dist-hook
+@HAVE_GNOME_DOC_UTILS_TRUE@uninstall-doc-omf:
+@HAVE_GNOME_DOC_UTILS_TRUE@	@list='$(_DOC_OMF_ALL)'; for omf in $$list; do \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  if test "x$(_ENABLE_SK)" = "xtrue"; then \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    echo "scrollkeeper-uninstall -p $(_sklocalstatedir) $(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)/$$omf"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	    scrollkeeper-uninstall -p "$(_sklocalstatedir)" "$(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)/$$omf"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  fi; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  echo "rm -f $(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)/$$omf"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	  rm -f "$(DESTDIR)$(OMF_DIR)/$(_doc_install_dir)/$$omf"; \
+@HAVE_GNOME_DOC_UTILS_TRUE@	done
+@HAVE_GNOME_DOC_UTILS_TRUE@dist-hook: doc-dist-hook
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

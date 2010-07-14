@@ -3,7 +3,9 @@ using System;
 using System.Threading;
 using System.Collections.Generic;
 using FSpot.Utils;
+using FSpot.Imaging;
 using Gtk;
+using Mono.Unix.Native;
 
 namespace FSpot.Import
 {
@@ -138,52 +140,13 @@ namespace FSpot.Import
         }
     }
 
-    internal class FileImportInfo : IBrowsableItem {
-		bool metadata_parsed = false;
-
-        public FileImportInfo (SafeUri original)
+    internal class FileImportInfo : FileBrowsableItem {
+        public FileImportInfo (SafeUri original) : base (original)
         {
-            DefaultVersion = new ImportInfoVersion () {
-                BaseUri = original.GetBaseUri (),
-                Filename = original.GetFilename ()
-            };
         }
 
-		private void EnsureMetadataParsed ()
-		{
-			if (metadata_parsed)
-				return;
 
-			using (var img = ImageFile.Create (DefaultVersion.Uri)) {
-				time = img.Date;
-				description = img.Description;
-			}
-
-			metadata_parsed = true;
-		}
-
-        public IBrowsableItemVersion DefaultVersion { get; private set; }
         public SafeUri DestinationUri { get; set; }
-
-        private DateTime time;
-        public System.DateTime Time {
-			get {
-				EnsureMetadataParsed ();
-				return time;
-			}
-        }
-
-		private string description;
-		public string Description {
-			get {
-				EnsureMetadataParsed ();
-				return description;
-			}
-		}
-
-        public Tag [] Tags { get { throw new NotImplementedException (); } }
-        public string Name { get { throw new NotImplementedException (); } }
-        public uint Rating { get { return 0; } }
 
         internal uint PhotoId { get; set; }
     }

@@ -11,6 +11,7 @@ SOURCES = \
 	Delay.cs \
 	Tag.cs \
 	Global.cs \
+	FileBrowsableItem.cs \
 	IBrowsableItem.cs \
 	IBrowsableItemChanges.cs \
 	IBrowsableItemComparer.cs \
@@ -18,6 +19,7 @@ SOURCES = \
 	IBrowsableItemVersion.cs \
 	IBrowsableItemVersionable.cs \
 	IBrowsableCollection.cs \
+	ILoadable.cs \
 	PhotoChanges.cs \
 	PhotosChanges.cs \
 	Roll.cs \

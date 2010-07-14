@@ -2,7 +2,7 @@ dnl Granularly define the version components
 dnl Remember to also update the Display Version
 m4_define([fspot_version_major], [0])
 m4_define([fspot_version_minor], [7])
-m4_define([fspot_version_micro], [0])
+m4_define([fspot_version_micro], [1])
 
 dnl set to 0 when doing an official release
 m4_define([fspot_version_pre_release], [0])
@@ -23,7 +23,7 @@ m4_define([fspot_version],
 
 dnl this can sometimes differ manually
 m4_define([fspot_display_version],
-	["0.7.0"])
+	["0.7.1"])
 
 m4_define([fspot_api_version],
 	[fspot_version_major.fspot_version_minor])
@@ -86,6 +86,8 @@ SHAMROCK_CHECK_NUNIT
 
 
 
+AM_CONDITIONAL(HYENA_PKG_CONFIG, false)
+
 
 AC_CONFIG_SRCDIR(src/main.cs)
 
@@ -140,9 +142,7 @@ dnl --- Required libraries
 
 LIBGNOME_REQUIRED=2.2
 LIBGNOMEUI_REQUIRED=2.2
-LIBEXIF_REQUIRED_MIN=0.5.7
-LIBEXIF_REQUIRED_MAX=0.7.0
-GIO_REQUIRED=2.22.2
+GIO_REQUIRED=2.22.0
 GTKSHARPBEANS_REQUIRED=2.13.92
 GTKSHARP_REQUIRED=2.12.2
 GTK_REQUIRED=2.14
@@ -153,7 +153,7 @@ CAIRO_REQUIRED=1.4.0
 LCMS_REQUIRED=1.12
 MONOADDINS_REQUIRED=0.3
 
-PKG_CHECK_MODULES(F, libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED libexif >= $LIBEXIF_REQUIRED_MIN libexif < $LIBEXIF_REQUIRED_MAX glade-sharp-2.0 >= $GTKSHARP_REQUIRED gtk+-2.0 >= $GTK_REQUIRED mono-cairo >= $MONO_CAIRO_REQUIRED cairo >= $CAIRO_REQUIRED mono-addins >= $MONOADDINS_REQUIRED mono-addins-gui >= $MONOADDINS_REQUIRED mono-addins-setup >= $MONOADDINS_REQUIRED)
+PKG_CHECK_MODULES(F, libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED glade-sharp-2.0 >= $GTKSHARP_REQUIRED gtk+-2.0 >= $GTK_REQUIRED mono-cairo >= $MONO_CAIRO_REQUIRED cairo >= $CAIRO_REQUIRED mono-addins >= $MONOADDINS_REQUIRED mono-addins-gui >= $MONOADDINS_REQUIRED mono-addins-setup >= $MONOADDINS_REQUIRED)
 AC_SUBST(F_CFLAGS)
 AC_SUBST(F_LIBS)
 
@@ -223,17 +223,6 @@ PKG_CHECK_MODULES(LCMS, lcms >= $LCMS_REQUIRED, [],
 	AC_CHECK_HEADER(lcms.h, , [AC_MSG_ERROR([liblcms not found])])
 	LCMS_LIBS='-llcms'
 	LCMS_CFLAGS=''])
-
-dnl --- libexif version check
-
-LIBEXIF_API_CHANGE=0.6.0
-PKG_CHECK_MODULES(EXIF, libexif >= $LIBEXIF_API_CHANGE)
-AC_SUBST(EXIF_CFLAGS)
-AC_SUBST(EXIF_LIBS)
-
-	 
-PKG_CHECK_MODULES(LIBEXIF_VERSION_CHECK, libexif >= 0.6.12, EXIF_SOVERSION=12, EXIF_SOVERSION=10)
-AC_SUBST(EXIF_SOVERSION)
 
 dnl --- libunique check
 PKG_CHECK_MODULES(UNIQUE, unique-1.0 >= 1.0)
@@ -321,16 +310,19 @@ lib/gio-sharp/gio/Makefile
 lib/gio-sharp/generator/Makefile
 lib/gtk-sharp-beans/Makefile
 lib/libfspot/Makefile
-lib/libjpegtran/Makefile
 lib/Makefile
-lib/semweb/Makefile
 lib/unique-sharp/Makefile
 lib/unique-sharp/generator/Makefile
 lib/unique-sharp/unique/Makefile
-lib/Hyena/src/Hyena/Makefile
-lib/Hyena/src/Mono.Data.Sqlite/Makefile
-lib/Hyena/src/Hyena.Data.Sqlite/Makefile
-lib/Hyena/src/Hyena.Gui/Makefile
+lib/Hyena/Makefile
+lib/Hyena/build/Makefile
+lib/Hyena/build/pkg-config/Makefile
+lib/Hyena/build/m4/Makefile
+lib/Hyena/Hyena/Makefile
+lib/Hyena/Mono.Data.Sqlite/Makefile
+lib/Hyena/Hyena.Data.Sqlite/Makefile
+lib/Hyena/Hyena.Gui/Makefile
+lib/TagLib/Makefile
 
 docs/Makefile
 icons/Makefile
@@ -400,7 +392,7 @@ ${PACKAGE}-${VERSION}
 
   Build/Development:
     Unit Tests:        ${do_tests}
-    User Help:         ${HAVE_GNOME_DOC_UTILS} (requires gnome-doc-utils >= 0.17.3)
+    User Help:         ${enable_user_help} (requires gnome-doc-utils >= 0.17.3)
 
 Run 'make' to build F-Spot.
 

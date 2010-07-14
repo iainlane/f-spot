@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="guide" id="index">
+
+  <info>
+    <title type="link">F-Spot Fotoverwaltung</title>
+    <title type="text">F-Spot Fotoverwaltung</title>
+  </info>
+
+  <title>F-Spot Fotoverwaltung</title>
+
+  <section id="basic-functions" style="2column" groups="import tag rate management">
+    <title>Grundlegende Funktionen</title>
+  </section>
+
+  <section id="searching" style="2column">
+    <title>Suchen</title>
+  </section>
+
+  <section id="editing" style="2column" groups="general colors enhancements">
+    <title>Fotobearbeitung</title>
+  </section>
+
+  <section id="sharing" style="2column">
+    <title>Freigeben</title>
+  </section>
+
+  <section id="advanced" style="2column">
+    <title>Erweiterte Optionen</title>
+  </section>
+</page>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="introduction">
+  <info>
+    <link type="guide" xref="index"/>
+    <desc>Eine kurze Einführung in F-Spot</desc>
+  </info>
+
+  <title>Einführung</title>
+  <p><app>F-Spot</app> ist eine umfassend ausgestattete Fotoverwaltung für die GNOME-Arbeitsumgebung. Es ermöglicht Ihnen das Markieren, Bewerten und Datieren von Fotos und die Bearbeitung von Metadaten. Darüber hinaus enthält F-Spot ein einfaches eingebautes Bildbearbeitungsprogramm.</p>
+  <p>Hilfe beim Einstieg in <app>F-Spot</app> erhalten Sie im Abschnitt <link xref="index#basic-functions">Grundlegende Funktionen</link> der Hilfe.</p>
+</page>

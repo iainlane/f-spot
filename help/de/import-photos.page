@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="import-photos">
+  <info>
+    <link type="guide" xref="index#basic-functions" group="import"/>
+    <desc>Importieren zu verwaltender Fotos</desc>
+  </info>
+
+  <title>Importieren von Fotos</title>
+  <p>Als erstes werden Sie vermutlich Fotos importieren wollen.</p>
+  <p>So importieren Sie Fotos:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie <guiseq><gui>Foto</gui><gui>Importieren …</gui></guiseq>. Wahlweise können Sie auch auf den <gui>Import</gui>-Knopf klicken.</p>
+    </item>
+    <item>
+      <p>Wählen Sie eine Quelle für den Import aus, wie ein Gerät oder einen Ordner.</p>
+     </item>
+     <item>
+       <p>F-Spot kann eine gewisse Zeit brauchen, um die Dateien zu indizieren. Wenn die Indizierung abgeschlossen ist, werden Ihnen die Fotos präsentiert. Nun können Sie <link xref="tags">Markierungen</link> zu den Fotos hinzufügen. Dies ist jedoch später auch noch möglich.</p>
+    </item>
+    <item>
+      <p>Wenn Sie bereit zum Importieren der Fotos sind, klicken Sie auf <gui>Importieren</gui>.</p>
+    </item>
+  </steps>
+</page>

@@ -162,9 +162,6 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-EXIF_CFLAGS = @EXIF_CFLAGS@
-EXIF_LIBS = @EXIF_LIBS@
-EXIF_SOVERSION = @EXIF_SOVERSION@
 F77 = @F77@
 FC = @FC@
 FGREP = @FGREP@
@@ -193,6 +190,8 @@ GLIB_LIBS = @GLIB_LIBS@
 GLIB_MKENUMS = @GLIB_MKENUMS@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
+GNOME_DOC_UTILS_CFLAGS = @GNOME_DOC_UTILS_CFLAGS@
+GNOME_DOC_UTILS_LIBS = @GNOME_DOC_UTILS_LIBS@
 GNOME_ICON_THEME_PREFIX = @GNOME_ICON_THEME_PREFIX@
 GNOME_SCREENSAVER_SAVERDIR = @GNOME_SCREENSAVER_SAVERDIR@
 GNOME_SCREENSAVER_THEMESDIR = @GNOME_SCREENSAVER_THEMESDIR@
@@ -223,8 +222,6 @@ LCMS_CFLAGS = @LCMS_CFLAGS@
 LCMS_LIBS = @LCMS_LIBS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
-LIBEXIF_VERSION_CHECK_CFLAGS = @LIBEXIF_VERSION_CHECK_CFLAGS@
-LIBEXIF_VERSION_CHECK_LIBS = @LIBEXIF_VERSION_CHECK_LIBS@
 LIBJPEG = @LIBJPEG@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
@@ -361,7 +358,6 @@ TARGET = exe
 LINK = $(REF_FSPOT) $(am__append_1)
 ASSEMBLY_BUILD_FLAGS = -unsafe
 SOURCES = \
-	BlockProcessor.cs \
 	BitConverter.cs \
 	PhotoList.cs \
 	ColorAdjustment/Adjustment.cs \
@@ -403,13 +399,11 @@ SOURCES = \
 	Extensions/TransitionNode.cs \
 	Extensions/ViewModeCondition.cs \
 	Fader.cs \
-	FileBrowsableItem.cs \
 	Filters/ChmodFilter.cs \
 	Filters/FilterRequest.cs \
 	Filters/FilterSet.cs \
 	Filters/IFilter.cs \
 	Filters/JpegFilter.cs \
-	Filters/OrientationFilter.cs \
 	Filters/ResizeFilter.cs \
 	Filters/SharpFilter.cs \
 	Filters/UniqueNameFilter.cs \
@@ -429,27 +423,15 @@ SOURCES = \
 	Import/ImportController.cs \
 	Import/ImportSource.cs \
 	Import/FileImportSource.cs \
+	Import/MetadataImporter.cs \
 	InfoOverlay.cs \
-	InternalProcess.cs \
-	IOChannel.cs \
 	ItemAction.cs \
 	Imaging/DCRawFile.cs \
-	Imaging/Bim.cs \
 	Imaging/Ciff.cs \
-	Imaging/Exif.cs \
 	Imaging/ImageFile.cs \
-	Imaging/IptcFile.cs \
-	Imaging/JpegFile.cs \
-	Imaging/JpegHeader.cs \
-	Imaging/JpegUtils.cs \
-	Imaging/MrwFile.cs \
-	Imaging/OrderedWriter.cs \
-	Imaging/PngFile.cs \
-	Imaging/PnmFile.cs \
+	Imaging/InternalProcess.cs \
+	Imaging/IOChannel.cs \
 	Imaging/RafFile.cs \
-	Imaging/SvgFile.cs \
-	Imaging/X3fFile.cs \
-	Imaging/XmpFile.cs \
 	Imaging/Tiff.cs \
 	JobStore.cs \
 	Jobs/SyncMetadataJob.cs \
@@ -458,7 +440,6 @@ SOURCES = \
 	MainWindow.cs \
 	MemorySurface.cs \
 	MetaStore.cs \
-	MetadataStore.cs \
 	PhotoEventArgs.cs \
 	PhotoImageView.cs \
 	PhotoLoader.cs \
@@ -471,7 +452,6 @@ SOURCES = \
 	PhotoView.cs \
 	PixbufUtils.cs \
 	PixbufCache.cs \
-	PixelBuffer.cs \
 	Preferences.cs  \
 	PrintOperation.cs \
 	ProgressItem.cs \
@@ -503,13 +483,13 @@ SOURCES = \
 	UI.Dialog/EditTagIconDialog.cs \
 	UI.Dialog/ExceptionDialog.cs \
 	UI.Dialog/GladeDialog.cs \
-	UI.Dialog/HigMessageDialog.cs \
 	UI.Dialog/ImportDialog.cs \
 	UI.Dialog/LastRollDialog.cs \
 	UI.Dialog/PreferenceDialog.cs \
 	UI.Dialog/ProgressDialog.cs \
 	UI.Dialog/RatingFilterDialog.cs \
 	UI.Dialog/RepairDbDialog.cs \
+	UI.Dialog/RepairDialog.cs \
 	UI.Dialog/SelectionRatioDialog.cs \
 	UI.Dialog/TagSelectionDialog.cs \
 	UI.Dialog/ThreadProgressDialog.cs \
@@ -533,7 +513,6 @@ SOURCES = \
 	Widgets/IEffect.cs \
 	Widgets/ITransition.cs \
 	Widgets/IconView.cs \
-	Widgets/ImageDisplay.cs \
 	Widgets/ImageInfo.cs \
 	Widgets/InfoBox.cs \
 	Widgets/MetadataDisplay.cs \
@@ -552,8 +531,8 @@ SOURCES = \
 	Widgets/TrayView.cs \
 	Widgets/ViewContext.cs \
 	Widgets/Wipe.cs \
-	XmpTagsImporter.cs \
 	main.cs \
+	Tests/ImageFileTests.cs \
 	Tests/UpdaterTests.cs
 
 RESOURCES = \
@@ -561,18 +540,22 @@ RESOURCES = \
 	../icons/f-spot-not.png \
 	../icons/f-spot-128.png \
 	../icons/flower.png \
-	dces.rdf \
 	f-spot.glade \
-	ui/main_window.ui \
-	ui/version_name_dialog.ui \
 	ui/import.ui \
 	ui/mail_dialog.ui \
+	ui/main_window.ui \
+	ui/single_view.ui \
+	ui/version_name_dialog.ui \
+	ui/viewer_preferences.ui \
 	UI.Dialog/ui/AdjustTimeDialog.ui \
 	UI.Dialog/ui/DateRangeDialog.ui \
 	UI.Dialog/ui/EditTagDialog.ui \
 	UI.Dialog/ui/EditTagIconDialog.ui \
 	UI.Dialog/ui/PreferenceDialog.ui \
 	UI.Dialog/ui/RatingFilterDialog.ui \
+	UI.Dialog/ui/CreateTagDialog.ui \
+	UI.Dialog/ui/LastImportRollFilterDialog.ui \
+	UI.Dialog/ui/RepairDialog.ui \
 	FSpot.addin.xml
 
 
@@ -587,13 +570,12 @@ EXTENSIONS_INSTALL_DIR = $(DEFAULT_INSTALL_DIR)/Extensions
 DIR_DOCS = $(top_builddir)/docs
 DIR_EXTENSIONS = $(top_builddir)/extensions
 DIR_ICONS = $(top_builddir)/icons
-DIR_JPEGTRAN = $(top_builddir)/lib/libjpegtran
 DIR_LIBFSPOT = $(top_builddir)/lib/libfspot
-DIR_SEMWEB = $(top_builddir)/lib/semweb
 DIR_SRC = $(top_builddir)/src
 DIR_GIOSHARP = $(top_builddir)/lib/gio-sharp/gio
 DIR_GTKSHARPBEANS = $(top_builddir)/lib/gtk-sharp-beans
 DIR_UNIQUESHARP = $(top_builddir)/lib/unique-sharp/unique
+DIR_TAGLIB = $(top_builddir)/lib/TagLib
 DIR_BIN = $(top_builddir)/bin
 
 # External libraries to link against, generated from configure
@@ -639,10 +621,10 @@ REF_HYENA = $(LINK_SYSTEM) $(LINK_MONO_POSIX)
 LINK_HYENA = -r:$(DIR_BIN)/Hyena.dll
 LINK_HYENA_DEPS = $(REF_HYENA) $(LINK_HYENA)
 
-# Semweb
-REF_SEMWEB = $(LINK_SYSTEMDATA) $(LINK_HYENA_DEPS)
-LINK_SEMWEB = -r:$(DIR_BIN)/SemWeb.dll
-LINK_SEMWEB_DEPS = $(REF_SEMWEB) $(LINK_SEMWEB)
+# TagLib
+REF_TAGLIB = 
+LINK_TAGLIB = -r:$(DIR_BIN)/TagLib.dll
+LINK_TAGLIB_DEPS = $(REF_TAGLIB) $(LINK_TAGLIB)
 
 # Hyena.Data.Sqlite
 REF_HYENA_DATA_SQLITE = $(LINK_SQLITE)
@@ -652,7 +634,7 @@ LINK_HYENA_DATA_SQLITE_DEPS = $(REF_HYENA_DATA_SQLITE) $(LINK_HYENA_DATA_SQLITE)
 # Hyena.Gui
 REF_HYENA_GUI = $(LINK_HYENA_DEPS)
 LINK_HYENA_GUI = -r:$(DIR_BIN)/Hyena.Gui.dll
-LINK_HENA_GUI_DEPS = $(REF_HYENA_GUI) $(LINK_HYENA_GUI)
+LINK_HYENA_GUI_DEPS = $(REF_HYENA_GUI) $(LINK_HYENA_GUI)
 
 # FSpot.Cms
 REF_FSPOT_CMS = $(LINK_GTK)
@@ -660,7 +642,7 @@ LINK_FSPOT_CMS = -r:$(DIR_BIN)/FSpot.Cms.dll
 LINK_FSPOT_CMS_DEPS = $(REF_FSPOT_CMS) $(LINK_FSPOT_CMS)
 
 # FSpot.Utils
-REF_FSPOT_UTILS = $(LINK_HYENA_DEPS) $(LINK_GTK) $(LINK_GIO) $(LINK_MONO_CAIRO)
+REF_FSPOT_UTILS = $(LINK_HYENA_DEPS) $(LINK_GTK) $(LINK_GIO) $(LINK_MONO_CAIRO) $(LINK_TAGLIB)
 LINK_FSPOT_UTILS = -r:$(DIR_BIN)/FSpot.Utils.dll
 LINK_FSPOT_UTILS_DEPS = $(REF_FSPOT_UTILS) $(LINK_FSPOT_UTILS)
 
@@ -692,14 +674,14 @@ LINK_FSPOT_PLATFORM_DEPS = $(REF_FSPOT_PLATFORM) $(LINK_FSPOT_PLATFORM)
 # FSpot.Widgets
 REF_FSPOT_WIDGETS = $(LINK_FSPOT_CORE_DEPS) $(LINK_FSPOT_BLING_DEPS)
 LINK_FSPOT_WIDGETS = -r:$(DIR_BIN)/FSpot.Widgets.dll
-LINK_FSPOT_WIDGETS_DEPS = $(REF_FSPOT_WIDGETS) $(LINK_FSPOT_WIDGETS)
+LINK_FSPOT_WIDGETS_DEPS = $(REF_FSPOT_WIDGETS) $(LINK_FSPOT_WIDGETS) $(LINK_HENA_GUI_DEPS)
 
 # FSpot (executable)
 REF_FSPOT = $(LINK_FSPOT_WIDGETS_DEPS) $(LINK_FSPOT_PLATFORM_DEPS) $(LINK_FSPOT_QUERY_DEPS) \
             $(LINK_GLIB) $(LINK_MONO_ADDINS_DEPS) $(LINK_UNIQUE_DEPS) $(LINK_MONO_ADDINS_SETUP_DEPS) \
-            $(LINK_SEMWEB_DEPS) $(LINK_GLADE) $(LINK_MONODATA) $(LINK_MONO_DATA_SQLITECLIENT) \
+            $(LINK_GLADE) $(LINK_MONODATA) $(LINK_MONO_DATA_SQLITECLIENT) \
             $(LINK_MONO_ADDINS_GUI_DEPS) $(LINK_FSPOT_JOB_SCHEDULER_DEPS) $(LINK_ICSHARP_ZIP_LIB) \
-            $(LINK_GNOME)
+            $(LINK_GNOME) $(LINK_HYENA_GUI_DEPS) $(LINK_TAGLIB)
 
 # FIXME: do not link executables
 LINK_FSPOT = -r:$(DIR_BIN)/f-spot.exe
@@ -1249,7 +1231,7 @@ $(ASSEMBLY_FILE): $(SOURCES_BUILD) $(RESOURCES_EXPANDED) $(DEP_LINK)
 		-nowarn:0278 -nowarn:0078 $$warn \
 		-define:HAVE_GTK_2_10 -define:NET_2_0 \
 		-debug -target:$(TARGET) -out:$@ \
-		$(BUILD_DEFINES) $(ENABLE_TESTS_FLAG) $(ENABLE_ATK_FLAG) \
+		$(BUILD_DEFINES) $(CSC_DEFINES) $(ENABLE_TESTS_FLAG) $(ENABLE_ATK_FLAG) \
 		$(FILTERED_LINK) $(RESOURCES_BUILD) $(SOURCES_BUILD)
 	@if [ -e $(srcdir)/$(notdir $@.config) ]; then \
 		cp $(srcdir)/$(notdir $@.config) $(top_builddir)/bin; \

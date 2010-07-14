@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="smugmug">
+
+  <info>
+    <link type="guide" xref="upload-to-web"/>
+    <desc>Fotos zu SmugMug übertragen</desc>
+  </info>
+
+  <title>SmugMug</title>
+
+  <p>Um Fotos zu SmugMug hochzuladen, benötigen Sie ein SmugMug-Konto sowie einen aktiven Internetzugang. Außerdem muss die SmugMug-<link xref="extensions">Erweiterung</link> installiert und aktiviert sein.</p>
+</page>

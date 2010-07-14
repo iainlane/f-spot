@@ -612,10 +612,12 @@ namespace FSpot.Widgets
 
  		protected virtual Pixbuf GetPixbuf (int i, bool highlighted)
 		{
-			Pixbuf current;
+			Pixbuf current = null;
 			SafeUri uri = (selection.Collection [i]).DefaultVersion.Uri;
 			try {
-				current = PixbufUtils.ShallowCopy (thumb_cache.Get (uri));
+				var pixbuf = thumb_cache.Get (uri);
+				if (pixbuf != null)
+					current = pixbuf.ShallowCopy ();
 			} catch (IndexOutOfRangeException) {
 				current = null;
 			}
@@ -654,14 +656,17 @@ namespace FSpot.Widgets
 				return current;
 
 			Pixbuf highlight = new Pixbuf (Gdk.Colorspace.Rgb, true, 8, current.Width, current.Height);
-			Gdk.Color color = Style.Background (StateType.Selected);
-			uint ucol = (uint)((uint)color.Red / 256 << 24 ) + ((uint)color.Green / 256 << 16) + ((uint)color.Blue / 256 << 8) + 255;
-			highlight.Fill (ucol);
+
+			highlight.Fill (ColorToInt (Style.Light (StateType.Selected)));
 
 			// Add a two pixel highlight around the thumbnail
 			current.CopyArea (2, 2, current.Width - 4, current.Height - 4, highlight, 2, 2);
 
 			return highlight;
+		}
+
+		private static uint ColorToInt(Gdk.Color color) {
+			return (uint)((uint)color.Red / 256 << 24 ) + ((uint)color.Green / 256 << 16) + ((uint)color.Blue / 256 << 8) + 255;
 		}
 
 		~Filmstrip ()

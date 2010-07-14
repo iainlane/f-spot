@@ -4,6 +4,7 @@ using System;
 using Mono.Unix;
 using FSpot;
 using Hyena;
+using Hyena.Widgets;
 using FSpot.UI.Dialog;
 
 public class PhotoVersionCommands
@@ -67,6 +68,7 @@ public class PhotoVersionCommands
 				break;
 			}
 
+			version_name_entry.Changed += HandleVersionNameEntryChanged;
 			version_name_entry.ActivatesDefault = true;
 
 			this.TransientFor = parent_window;

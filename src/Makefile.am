@@ -14,7 +14,6 @@ LINK = $(REF_FSPOT)
 ASSEMBLY_BUILD_FLAGS = -unsafe
 
 SOURCES = \
-	BlockProcessor.cs \
 	BitConverter.cs \
 	PhotoList.cs \
 	ColorAdjustment/Adjustment.cs \
@@ -56,13 +55,11 @@ SOURCES = \
 	Extensions/TransitionNode.cs \
 	Extensions/ViewModeCondition.cs \
 	Fader.cs \
-	FileBrowsableItem.cs \
 	Filters/ChmodFilter.cs \
 	Filters/FilterRequest.cs \
 	Filters/FilterSet.cs \
 	Filters/IFilter.cs \
 	Filters/JpegFilter.cs \
-	Filters/OrientationFilter.cs \
 	Filters/ResizeFilter.cs \
 	Filters/SharpFilter.cs \
 	Filters/UniqueNameFilter.cs \
@@ -82,27 +79,15 @@ SOURCES = \
 	Import/ImportController.cs \
 	Import/ImportSource.cs \
 	Import/FileImportSource.cs \
+	Import/MetadataImporter.cs \
 	InfoOverlay.cs \
-	InternalProcess.cs \
-	IOChannel.cs \
 	ItemAction.cs \
 	Imaging/DCRawFile.cs \
-	Imaging/Bim.cs \
 	Imaging/Ciff.cs \
-	Imaging/Exif.cs \
 	Imaging/ImageFile.cs \
-	Imaging/IptcFile.cs \
-	Imaging/JpegFile.cs \
-	Imaging/JpegHeader.cs \
-	Imaging/JpegUtils.cs \
-	Imaging/MrwFile.cs \
-	Imaging/OrderedWriter.cs \
-	Imaging/PngFile.cs \
-	Imaging/PnmFile.cs \
+	Imaging/InternalProcess.cs \
+	Imaging/IOChannel.cs \
 	Imaging/RafFile.cs \
-	Imaging/SvgFile.cs \
-	Imaging/X3fFile.cs \
-	Imaging/XmpFile.cs \
 	Imaging/Tiff.cs \
 	JobStore.cs \
 	Jobs/SyncMetadataJob.cs \
@@ -111,7 +96,6 @@ SOURCES = \
 	MainWindow.cs \
 	MemorySurface.cs \
 	MetaStore.cs \
-	MetadataStore.cs \
 	PhotoEventArgs.cs \
 	PhotoImageView.cs \
 	PhotoLoader.cs \
@@ -124,7 +108,6 @@ SOURCES = \
 	PhotoView.cs \
 	PixbufUtils.cs \
 	PixbufCache.cs \
-	PixelBuffer.cs \
 	Preferences.cs  \
 	PrintOperation.cs \
 	ProgressItem.cs \
@@ -156,13 +139,13 @@ SOURCES = \
 	UI.Dialog/EditTagIconDialog.cs \
 	UI.Dialog/ExceptionDialog.cs \
 	UI.Dialog/GladeDialog.cs \
-	UI.Dialog/HigMessageDialog.cs \
 	UI.Dialog/ImportDialog.cs \
 	UI.Dialog/LastRollDialog.cs \
 	UI.Dialog/PreferenceDialog.cs \
 	UI.Dialog/ProgressDialog.cs \
 	UI.Dialog/RatingFilterDialog.cs \
 	UI.Dialog/RepairDbDialog.cs \
+	UI.Dialog/RepairDialog.cs \
 	UI.Dialog/SelectionRatioDialog.cs \
 	UI.Dialog/TagSelectionDialog.cs \
 	UI.Dialog/ThreadProgressDialog.cs \
@@ -186,7 +169,6 @@ SOURCES = \
 	Widgets/IEffect.cs \
 	Widgets/ITransition.cs \
 	Widgets/IconView.cs \
-	Widgets/ImageDisplay.cs \
 	Widgets/ImageInfo.cs \
 	Widgets/InfoBox.cs \
 	Widgets/MetadataDisplay.cs \
@@ -205,8 +187,8 @@ SOURCES = \
 	Widgets/TrayView.cs \
 	Widgets/ViewContext.cs \
 	Widgets/Wipe.cs \
-	XmpTagsImporter.cs \
 	main.cs \
+	Tests/ImageFileTests.cs \
 	Tests/UpdaterTests.cs
 
 
@@ -215,18 +197,22 @@ RESOURCES = \
 	../icons/f-spot-not.png \
 	../icons/f-spot-128.png \
 	../icons/flower.png \
-	dces.rdf \
 	f-spot.glade \
-	ui/main_window.ui \
-	ui/version_name_dialog.ui \
 	ui/import.ui \
 	ui/mail_dialog.ui \
+	ui/main_window.ui \
+	ui/single_view.ui \
+	ui/version_name_dialog.ui \
+	ui/viewer_preferences.ui \
 	UI.Dialog/ui/AdjustTimeDialog.ui \
 	UI.Dialog/ui/DateRangeDialog.ui \
 	UI.Dialog/ui/EditTagDialog.ui \
 	UI.Dialog/ui/EditTagIconDialog.ui \
 	UI.Dialog/ui/PreferenceDialog.ui \
 	UI.Dialog/ui/RatingFilterDialog.ui \
+	UI.Dialog/ui/CreateTagDialog.ui \
+	UI.Dialog/ui/LastImportRollFilterDialog.ui \
+	UI.Dialog/ui/RepairDialog.ui \
 	FSpot.addin.xml
 
 include $(top_srcdir)/build/build.mk

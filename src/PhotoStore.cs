@@ -126,7 +126,7 @@ public class PhotoStore : DbStore<Photo> {
 					time = item.Time;
 				}
 
-				if (reader["time"].ToString () == DbUtils.UnixTimeFromDateTime (time.Value).ToString ()) {
+				if (reader["time"].ToString () == DateTimeUtil.FromDateTime (time.Value).ToString ()) {
 					Log.Debug ("Skipping duplicate", uri);
 					
 					// Schedule a hash calculation job on the existing file.
@@ -145,8 +145,8 @@ public class PhotoStore : DbStore<Photo> {
 	{
 		Photo photo;
 
-		long unix_time = DbUtils.UnixTimeFromDateTime (item.Time);
-		string description = item.Description;
+		long unix_time = DateTimeUtil.FromDateTime (item.Time);
+		string description = item.Description ?? String.Empty;
 
 		uint id = (uint) Database.Execute (
 			new DbCommand (
@@ -155,7 +155,7 @@ public class PhotoStore : DbStore<Photo> {
 				"time", unix_time,
 				"base_uri", item.DefaultVersion.BaseUri.ToString (),
 				"filename", item.DefaultVersion.Filename,
-				"description", description ?? String.Empty,
+				"description", description,
 				"roll_id", roll_id,
 				"default_version_id", Photo.OriginalVersionId,
 				"rating", "0"
@@ -437,7 +437,7 @@ public class PhotoStore : DbStore<Photo> {
 					"WHERE id = :id ",
 					"description", photo.Description,
 					"default_version_id", photo.DefaultVersionId,
-					"time", DbUtils.UnixTimeFromDateTime (photo.Time),
+					"time", DateTimeUtil.FromDateTime (photo.Time),
 					"base_uri", photo.VersionUri (Photo.OriginalVersionId).GetBaseUri ().ToString (),
 					"filename", photo.VersionUri (Photo.OriginalVersionId).GetFilename (),
 					"rating", String.Format ("{0}", photo.Rating),
@@ -501,7 +501,7 @@ public class PhotoStore : DbStore<Photo> {
 			if (version.ImportMD5 != String.Empty && version.ImportMD5 != null)
 				continue;
 
-			string version_md5_sum = Photo.GenerateMD5 (version.Uri);
+			string version_md5_sum = HashUtils.GenerateMD5 (version.Uri);
 			version.ImportMD5 = version_md5_sum;
 			photo.Changes.ChangeVersion (version_id);
 		}
@@ -552,7 +552,7 @@ public class PhotoStore : DbStore<Photo> {
 	{
 		string query = String.Format ("SELECT ROWID AS row_id FROM {0} WHERE time {2} {1} ORDER BY time {3} LIMIT 1",
 				table_name,
-				DbUtils.UnixTimeFromDateTime (time),
+				DateTimeUtil.FromDateTime (time),
 				asc ? ">=" : "<=",
 				asc ? "ASC" : "DESC");
 		return IndexOf (query);
@@ -864,8 +864,8 @@ public class PhotoStore : DbStore<Photo> {
 		
 		if (range != null) {
 			where_clauses.Add (String.Format ("time >= {0} AND time <= {1}",
-							  DbUtils.UnixTimeFromDateTime (range.Start), 
-							  DbUtils.UnixTimeFromDateTime (range.End)));
+							  DateTimeUtil.FromDateTime (range.Start),
+							  DateTimeUtil.FromDateTime (range.End)));
 
 		}
 

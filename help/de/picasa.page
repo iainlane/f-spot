@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="picasa">
+
+  <info>
+    <link type="guide" xref="upload-to-web"/>
+    <desc>Hochladen Ihrer Bilder zum PicasaWeb-Bilderdienst</desc>
+  </info>
+
+  <title>Picasa</title>
+
+  <p>Um Fotos zu Picasa hochzuladen, benötigen Sie ein Picasa-Konto sowie einen aktiven Internetzugang. Außerdem muss die Picasa-<link xref="extensions">Erweiterung</link> installiert und aktiviert sein.</p>
+  <steps><item>
+      <p>Wählen Sie die Fotos aus, die Sie hochladen wollen.</p>
+    </item><item>
+      <p>Klicken Sie auf <guiseq><gui>Foto</gui><gui>Exportieren nach</gui><gui>PicasaWeb …</gui></guiseq>.</p>
+    </item><item>
+      <p>Fügen Sie eine Galerie hinzu, indem Sie auf <gui>Hinzufügen</gui> klicken und einen Benutzernamen und ein Passwort angeben.</p>
+    </item>j <item>
+      <p>Wählen Sie eine Galerie für den Export aus oder klicken Sie auf <gui>Hinzufügen</gui>, um eine neue Galerie zu erstellen.</p>
+    </item><item>
+      <p>Klicken Sie auf <gui>Exportieren</gui>.</p>
+    </item></steps>
+</page>

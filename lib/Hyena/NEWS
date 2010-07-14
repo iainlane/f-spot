@@ -1,0 +1,26 @@
+==========================
+Version 0.3 - May 6, 2010
+==========================
+
+Synced with Banshee
+
+==========================
+Version 0.2 - Sept 9, 2009
+==========================
+
+Contributors:
+Romain Tartière
+
+Bugs Fixed:
+* Build fix for *bsd
+* Fix dll mappings for *bsd
+
+==========================
+Version 0.1 - Aug 18, 2009
+==========================
+
+* Initial release
+* Hyena, Hyena.Gui, and Hyena.Data.Sqlite built as
+  separate assemblies and each with their own .pc
+  file for convenient copying into your project.
+  See README for details on using Hyena in your app.

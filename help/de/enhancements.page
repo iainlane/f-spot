@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="enhancements">
+  <info>
+    <link type="guide" xref="index#editing" group="enhancements"/>
+    <desc>Einfache Verbesserungen für Ihre Fotos</desc>
+  </info>
+
+  <title>Verbesserungen</title>
+
+  <p>Im Wesentlichen unterstützt <app>F-Spot</app> derzeit zwei Verbesserungsmöglichkeiten: die Entfernung roter Augen und die automatische Farbanpassung.</p>
+  <p>So entfernen Sie rote Augen:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie mittels Doppelklick das Foto aus, welches Sie mit dem Rote-Augen-Entfernungswerkzeug bearbeiten wollen.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Rote-Augen-Reduzierung</gui> in der Bearbeitungsleiste.</p>
+    </item>
+    <item>
+      <p>Wählen Sie den Bereich aus, in dem Sie rote Augen entfernen wollen. Falls der Bereich viele rote Bereiche enthält, müssen Sie möglicherweise jedes Auge einzeln auswählen.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Korrigieren!</gui>.</p>
+    </item>
+  </steps>
+  <p>So verbessern Sie automatisch die Farben eines Fotos:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie mittels Doppelklick das Foto aus, das Sie verbessern wollen.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Automatischer Farbabgleich</gui>.</p>
+    </item>
+  </steps>
+</page>

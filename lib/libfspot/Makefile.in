@@ -79,11 +79,9 @@ am__installdirs = "$(DESTDIR)$(fspotlibdir)"
 LTLIBRARIES = $(fspotlib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 libfspot_la_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) \
-	$(top_builddir)/lib/libjpegtran/libfspotjpegtran.la
-am_libfspot_la_OBJECTS = f-image-surface.lo f-jpeg-utils.lo \
-	f-pixbuf-save.lo f-pixbuf-utils.lo f-pixbuf-unsharp.lo \
-	f-marshal.lo f-screen-utils.lo f-utils.lo
+	$(am__DEPENDENCIES_1)
+am_libfspot_la_OBJECTS = f-image-surface.lo f-pixbuf-unsharp.lo \
+	f-screen-utils.lo
 libfspot_la_OBJECTS = $(am_libfspot_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -141,9 +139,6 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
-EXIF_CFLAGS = @EXIF_CFLAGS@
-EXIF_LIBS = @EXIF_LIBS@
-EXIF_SOVERSION = @EXIF_SOVERSION@
 F77 = @F77@
 FC = @FC@
 FGREP = @FGREP@
@@ -172,6 +167,8 @@ GLIB_LIBS = @GLIB_LIBS@
 GLIB_MKENUMS = @GLIB_MKENUMS@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
+GNOME_DOC_UTILS_CFLAGS = @GNOME_DOC_UTILS_CFLAGS@
+GNOME_DOC_UTILS_LIBS = @GNOME_DOC_UTILS_LIBS@
 GNOME_ICON_THEME_PREFIX = @GNOME_ICON_THEME_PREFIX@
 GNOME_SCREENSAVER_SAVERDIR = @GNOME_SCREENSAVER_SAVERDIR@
 GNOME_SCREENSAVER_THEMESDIR = @GNOME_SCREENSAVER_THEMESDIR@
@@ -202,8 +199,6 @@ LCMS_CFLAGS = @LCMS_CFLAGS@
 LCMS_LIBS = @LCMS_LIBS@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
-LIBEXIF_VERSION_CHECK_CFLAGS = @LIBEXIF_VERSION_CHECK_CFLAGS@
-LIBEXIF_VERSION_CHECK_LIBS = @LIBEXIF_VERSION_CHECK_LIBS@
 LIBJPEG = @LIBJPEG@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
@@ -344,33 +339,17 @@ fspotlib_LTLIBRARIES = libfspot.la
 libfspot_la_SOURCES = \
 	f-image-surface.c			\
 	f-image-surface.h			\
-	f-jpeg-utils.c				\
-	f-jpeg-utils.h				\
-	f-pixbuf-save.c				\
-	f-pixbuf-utils.c			\
-	f-pixbuf-utils.h			\
 	f-pixbuf-unsharp.c			\
-	f-marshal.c				\
-	f-marshal.h				\
-	f-screen-utils.c			\
-	f-utils.c				\
-	f-utils.h
+	f-screen-utils.c
 
 libfspot_la_LIBADD = \
+	-lX11						\
+	$(F_LIBS)					\
 	$(LCMS_LIBS)					\
 	$(EXIF_LIBS)					\
-	$(GIO_LIBS)					\
-	$(top_builddir)/lib/libjpegtran/libfspotjpegtran.la	
+	$(GIO_LIBS)
 
-MARSHAL_GENERATED = f-marshal.c f-marshal.h
-
-#
-BUILT_SOURCES = $(MARSHAL_GENERATED)
-EXTRA_DIST = \
-	f-marshal.list
-
-all: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) all-am
+all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
@@ -445,13 +424,8 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/f-image-surface.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/f-jpeg-utils.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/f-marshal.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/f-pixbuf-save.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/f-pixbuf-unsharp.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/f-pixbuf-utils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/f-screen-utils.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/f-utils.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -563,15 +537,13 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) check-am
+check: check-am
 all-am: Makefile $(LTLIBRARIES)
 installdirs:
 	for dir in "$(DESTDIR)$(fspotlibdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) install-am
+install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -596,7 +568,6 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-fspotlibLTLIBRARIES clean-generic clean-libtool \
@@ -668,7 +639,7 @@ ps-am:
 
 uninstall-am: uninstall-fspotlibLTLIBRARIES
 
-.MAKE: all check install install-am install-strip
+.MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean \
 	clean-fspotlibLTLIBRARIES clean-generic clean-libtool ctags \
@@ -685,18 +656,6 @@ uninstall-am: uninstall-fspotlibLTLIBRARIES
 	pdf pdf-am ps ps-am tags uninstall uninstall-am \
 	uninstall-fspotlibLTLIBRARIES
 
-
-# GLib marshalling cruft
-
-f-marshal.h: f-marshal.list
-	( @GLIB_GENMARSHAL@ --prefix=f_marshal $(srcdir)/f-marshal.list --header > f-marshal.tmp \
-	&& mv f-marshal.tmp f-marshal.h ) \
-	|| ( rm -f f-marshal.tmp && exit 1 )
-
-f-marshal.c: f-marshal.h
-	( @GLIB_GENMARSHAL@ --prefix=f_marshal $(srcdir)/f-marshal.list --body > f-marshal.tmp \
-	&& mv f-marshal.tmp f-marshal.c ) \
-	|| ( rm -f f-marshal.tmp && exit 1 )
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

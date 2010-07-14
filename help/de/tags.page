@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="tags">
+  <info>
+    <link type="guide" xref="index#basic-functions" group="tag"/>
+    <desc>Eine kurze Einführung in die Möglichkeiten der Markierung mit F-Spot</desc>
+  </info>
+
+  <title>Markierungen</title>
+  <p>Wie von anderen Fotoverwaltungen bereits bekannt, können Sie auch in <app>F-Spot</app> Ihre Fotos mit Markierungen versehen, wodurch inhaltsbasiertes Durchsuchen Ihrer Fotos erleichtert wird. Sie können Personen, Ereignisse, Orte, Vorlieben als Markierungen nutzen oder auch Ihre eigenen Markierungsgruppen erstellen.</p>
+  <section id="tag-functions" style="2column" groups="create attach remove delete">
+    <title>Arbeiten mit Markierungen</title>
+  </section>
+</page>

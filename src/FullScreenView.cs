@@ -22,7 +22,6 @@ namespace FSpot {
 		private PhotoImageView view;
 		private Notebook notebook;
 		private ControlOverlay controls;
-		//		private ImageDisplay display;
 		private SlideShow display;
 		private ToolButton play_pause_button;
 		private ToggleToolButton info_button;
@@ -58,7 +57,7 @@ namespace FSpot {
 					new ActionEntry (HideToolbar, Stock.Close, 
 							 Catalog.GetString ("Hide"), 
 							 null, 
-							 Catalog.GetString ("Hide Toolbar"), 
+							 Catalog.GetString ("Hide toolbar"), 
 							 HideToolbarAction)});
 
 				actions.Add (new ToggleActionEntry [] {
@@ -66,7 +65,7 @@ namespace FSpot {
 							       Stock.Info,
 							       Catalog.GetString ("Info"),
 							       null,
-							       Catalog.GetString ("Image Information"),
+							       Catalog.GetString ("Image information"),
 							       InfoAction,
 							       false)});
 

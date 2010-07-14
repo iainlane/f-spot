@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="general-editing">
+  <info>
+    <link type="guide" xref="index#editing" group="general"/>
+    <desc>Einfache Bearbeitungsmöglichkeiten für Ihre Fotos</desc>
+  </info>
+
+  <title>Allgemeine Bearbeitung</title>
+
+  <p><app>F-Spot</app> ermöglicht Ihnen einfache Bearbeitungen Ihrer Fotos, wie Begradigen, Zuschneiden oder Drehen.</p>
+  <p>Sie haben drei Möglichkeiten zum Drehen eines ausgewählten Fotos:</p>
+  <steps>
+    <item>
+      <p>Klicken Sie auf den entsprechenden Drehungsknopf rechts neben dem Importknopf.</p>
+    </item>
+    <item>
+      <p>Wählen Sie die entsprechende Option im <gui>Bearbeiten</gui>-Menü.</p>
+    </item>
+    <item>
+      <p>Verwenden Sie die Klammer-Tasten, um das Foto zu drehen.</p>
+    </item>
+  </steps>
+  <p>So begradigen Sie ein gewähltes Foto:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie <app>Begradigung</app> im Bearbeitungsfenster.</p>
+    </item>
+    <item>
+      <p>Wählen Sie den Drehwinkel im Bereich von -45 bis 45 Grad.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Begradigung</gui>.</p>
+    </item>
+  </steps>
+  <p>So schneiden Sie ein gewähltes Foto zu:</p>
+  <steps>
+    <item>
+      <p>Klicken Sie auf den <gui>Zuschneiden</gui>-Knopf in der Bearbeitungsleiste.</p>
+    </item>
+    <item>
+      <p>Wählen Sie ein Seitenverhältnis, also ein Verhältnis zwischen Höhe und Breite, dem das neue Foto entsprechen soll. Beispiele für Seitenverhältnisse sind 4x3, 4x6 und 5x7.</p>
+    </item>
+    <item>
+      <p>Klicken und ziehen Sie, um den zu erhaltenden Bereich zu wählen. Dieses Rechteck können Sie noch als Ganzes verschieben, nachdem die Größe gewählt wurde.</p>
+    </item>
+    <item>
+      <p>Wenn Sie den gewünschten Bereich zum Zuschneiden gewählt haben, klicken Sie auf <gui>Zuschneiden</gui>.</p>
+    </item>
+  </steps>
+</page>

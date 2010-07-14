@@ -1,6 +1,7 @@
 using System;
 
 using FSpot.Platform;
+using FSpot.Imaging;
 using Hyena;
 
 namespace FSpot {
@@ -20,7 +21,7 @@ namespace FSpot {
 
 		static public Gdk.Pixbuf Load (IBrowsableItem item) 
 		{
-			using (ImageFile img = ImageFile.Create (item.DefaultVersion.Uri)) {
+			using (var img = ImageFile.Create (item.DefaultVersion.Uri)) {
 				Gdk.Pixbuf pixbuf = img.Load ();
 				return pixbuf;
 			}
@@ -28,7 +29,7 @@ namespace FSpot {
 
 		static public Gdk.Pixbuf LoadAtMaxSize (IBrowsableItem item, int width, int height) 
 		{
-			using (ImageFile img = ImageFile.Create (item.DefaultVersion.Uri)) {
+			using (var img = ImageFile.Create (item.DefaultVersion.Uri)) {
 				Gdk.Pixbuf pixbuf = img.Load (width, height);
 				return pixbuf;
 			}

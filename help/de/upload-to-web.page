@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="guide" id="upload-to-web">
+
+  <info>
+    <link type="guide" xref="index#sharing"/>
+    <desc>Übertragen von Fotos zu verschiedenen Bilderdiensten</desc>
+  </info>
+
+  <title>Übertragen zu Bilderdiensten</title>
+  <p><app>F-Spot</app> ermöglicht Ihnen das Hochladen von Fotos zu populären Webdiensten wie PicasaWeb von Google oder Flickr.</p>
+</page>

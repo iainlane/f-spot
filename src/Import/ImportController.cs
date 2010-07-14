@@ -1,6 +1,5 @@
 using Hyena;
 using FSpot.Utils;
-using FSpot.Xmp;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -35,12 +34,18 @@ namespace FSpot.Import
 #region Import Preferences
 
         private bool copy_files;
+        private bool remove_originals;
         private bool recurse_subdirectories;
         private bool duplicate_detect;
 
         public bool CopyFiles {
             get { return copy_files; }
             set { copy_files = value; SavePreferences (); }
+        }
+
+        public bool RemoveOriginals {
+            get { return remove_originals; }
+            set { remove_originals = value; SavePreferences (); }
         }
 
         public bool RecurseSubdirectories {
@@ -58,6 +63,7 @@ namespace FSpot.Import
             copy_files = Preferences.Get<bool> (Preferences.IMPORT_COPY_FILES);
             recurse_subdirectories = Preferences.Get<bool> (Preferences.IMPORT_INCLUDE_SUBFOLDERS);
             duplicate_detect = Preferences.Get<bool> (Preferences.IMPORT_CHECK_DUPLICATES);
+            remove_originals = Preferences.Get<bool> (Preferences.IMPORT_REMOVE_ORIGINALS);
         }
 
         void SavePreferences ()
@@ -65,6 +71,7 @@ namespace FSpot.Import
             Preferences.Set(Preferences.IMPORT_COPY_FILES, copy_files);
             Preferences.Set(Preferences.IMPORT_INCLUDE_SUBFOLDERS, recurse_subdirectories);
             Preferences.Set(Preferences.IMPORT_CHECK_DUPLICATES, duplicate_detect);
+            Preferences.Set(Preferences.IMPORT_REMOVE_ORIGINALS, remove_originals);
         }
 
 #endregion
@@ -82,12 +89,17 @@ namespace FSpot.Import
 
         List<ImportSource> ScanSources ()
         {
-		    var monitor = GLib.VolumeMonitor.Default;
+            var monitor = GLib.VolumeMonitor.Default;
             var sources = new List<ImportSource> ();
             foreach (var mount in monitor.Mounts) {
                 var root = new SafeUri (mount.Root.Uri, true);
-                var icon = (mount.Icon as GLib.ThemedIcon).Names [0];
-                sources.Add (new FileImportSource (root, mount.Name, icon));
+
+                var themed_icon = (mount.Icon as GLib.ThemedIcon);
+                if (themed_icon != null && themed_icon.Names.Length > 0) {
+                    sources.Add (new FileImportSource (root, mount.Name, themed_icon.Names [0]));
+                } else {
+                    sources.Add (new FileImportSource (root, mount.Name, null));
+                }
             }
             return sources;
         }
@@ -196,10 +208,11 @@ namespace FSpot.Import
         Stack<SafeUri> created_directories;
         List<uint> imported_photos;
         List<SafeUri> copied_files;
+        List<SafeUri> original_files;
         PhotoStore store = App.Instance.Database.Photos;
         RollStore rolls = App.Instance.Database.Rolls;
         volatile bool photo_scan_running;
-        XmpTagsImporter xmp_importer;
+        MetadataImporter metadata_importer;
         volatile bool import_cancelled = false;
 
         void DoImport ()
@@ -213,7 +226,8 @@ namespace FSpot.Import
             created_directories = new Stack<SafeUri> ();
             imported_photos = new List<uint> ();
             copied_files = new List<SafeUri> ();
-            xmp_importer = new XmpTagsImporter (store, App.Instance.Database.Tags);
+            original_files = new List<SafeUri> ();
+            metadata_importer = new MetadataImporter ();
             CreatedRoll = rolls.Create ();
 
             EnsureDirectory (Global.PhotoUri);
@@ -256,6 +270,17 @@ namespace FSpot.Import
 
         void FinishImport ()
         {
+            if (RemoveOriginals) {
+                foreach (var uri in original_files) {
+                    try {
+                        var file = GLib.FileFactory.NewForUri (uri);
+                        file.Delete (null);
+                    } catch (Exception) {
+                        Log.WarningFormat ("Failed to remove original file: {0}", uri);
+                    }
+                }
+            }
+
             ImportThread = null;
             FireEvent (ImportEvent.ImportFinished);
         }
@@ -283,10 +308,10 @@ namespace FSpot.Import
             }
 
             // Clean created tags
-            xmp_importer.Cancel();
+            metadata_importer.Cancel();
 
             // Remove created roll
-		    rolls.Remove (CreatedRoll);
+            rolls.Remove (CreatedRoll);
         }
 
         void ImportPhoto (IBrowsableItem item, Roll roll)
@@ -299,13 +324,7 @@ namespace FSpot.Import
             }
 
             // Copy into photo folder.
-			if (!item.DefaultVersion.Uri.Equals (destination)) {
-				var file = GLib.FileFactory.NewForUri (item.DefaultVersion.Uri);
-				var new_file = GLib.FileFactory.NewForUri (destination);
-				file.Copy (new_file, GLib.FileCopyFlags.AllMetadata, null, null);
-                copied_files.Add (destination);
-                item.DefaultVersion.Uri = destination;
-            }
+            CopyIfNeeded (item, destination);
 
             // Import photo
             var photo = store.CreateFrom (item, roll.Id);
@@ -319,7 +338,7 @@ namespace FSpot.Import
             }
 
             // Import XMP metadata
-            needs_commit |= xmp_importer.Import (photo, destination, item.DefaultVersion.Uri);
+            needs_commit |= metadata_importer.Import (photo, item);
 
             if (needs_commit) {
                 store.Commit (photo);
@@ -329,6 +348,31 @@ namespace FSpot.Import
             ThumbnailLoader.Default.Request (destination, ThumbnailSize.Large, 10);
 
             imported_photos.Add (photo.Id);
+        }
+
+        void CopyIfNeeded (IBrowsableItem item, SafeUri destination)
+        {
+            if (item.DefaultVersion.Uri.Equals (destination))
+                return;
+
+            // Copy image
+            var file = GLib.FileFactory.NewForUri (item.DefaultVersion.Uri);
+            var new_file = GLib.FileFactory.NewForUri (destination);
+            file.Copy (new_file, GLib.FileCopyFlags.AllMetadata, null, null);
+            copied_files.Add (destination);
+            original_files.Add (item.DefaultVersion.Uri);
+            item.DefaultVersion.Uri = destination;
+
+            // Copy XMP sidecar
+            var xmp_original = item.DefaultVersion.Uri.ReplaceExtension(".xmp");
+            var xmp_file = GLib.FileFactory.NewForUri (xmp_original);
+            if (xmp_file.Exists) {
+                var xmp_destination = destination.ReplaceExtension (".xmp");
+                var new_xmp_file = GLib.FileFactory.NewForUri (xmp_destination);
+                xmp_file.Copy (new_xmp_file, GLib.FileCopyFlags.AllMetadata, null, null);
+                copied_files.Add (xmp_destination);
+                original_files.Add (xmp_original);
+            }
         }
 
         SafeUri FindImportDestination (IBrowsableItem item)

@@ -19,6 +19,7 @@ using FSpot.Query;
 using FSpot.UI.Dialog;
 using Mono.Unix;
 using Hyena;
+using Hyena.Widgets;
 
 namespace MergeDbExtension
 {
@@ -240,7 +241,7 @@ namespace MergeDbExtension
 			photo.DefaultVersion.Uri = dest_uri;
 
 			if (photo.DefaultVersion.ImportMD5 == String.Empty) {
-				(photo.DefaultVersion as PhotoVersion).ImportMD5 = Photo.GenerateMD5 (photo.DefaultVersion.Uri);
+				(photo.DefaultVersion as PhotoVersion).ImportMD5 = HashUtils.GenerateMD5 (photo.DefaultVersion.Uri);
 			}
 
 			if (photo_path != destination) {

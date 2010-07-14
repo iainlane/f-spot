@@ -15,10 +15,10 @@ using Gtk;
 using Gdk;
 
 using FSpot;
-using FSpot.Png;
 using FSpot.UI.Dialog;
 
 using Hyena;
+using Hyena.Widgets;
 using FSpot.Utils;
 
 using Mono.Unix;
@@ -59,51 +59,21 @@ namespace FSpot {
 
 		private static void RotateOrientation (string original_path, RotateDirection direction)
 		{
-			using (FSpot.ImageFile img = FSpot.ImageFile.Create (new SafeUri (original_path))) {
-				if (img is JpegFile) {
-					FSpot.JpegFile jimg = img as FSpot.JpegFile;
-					PixbufOrientation orientation = direction == RotateDirection.Clockwise
-						? FSpot.Utils.PixbufUtils.Rotate90 (img.Orientation)
-						: FSpot.Utils.PixbufUtils.Rotate270 (img.Orientation);
-				
-					jimg.SetOrientation (orientation);
-					jimg.SaveMetaData (original_path);
-				} else if (img is PngFile) {
-					PngFile png = img as PngFile;
-					bool supported = false;
+            try {
+                using (var metadata = Metadata.Parse (new SafeUri (original_path))) {
+                    var tag = metadata.ImageTag;
+                    var orientation = direction == RotateDirection.Clockwise
+                        ? FSpot.Utils.PixbufUtils.Rotate90 (tag.Orientation)
+                        : FSpot.Utils.PixbufUtils.Rotate270 (tag.Orientation);
 
-					//FIXME there isn't much png specific here except the check
-					//the pixbuf is an accurate representation of the real file
-					//by checking the depth.  The check should be abstracted and
-					//this code made generic.
-					foreach (PngFile.Chunk c in png.Chunks) {
-						PngFile.IhdrChunk ihdr = c as PngFile.IhdrChunk;
-					
-						if (ihdr != null && ihdr.Depth == 8)
-							supported = true;
-					}
-
-					if (!supported) {
-						throw new RotateException (Catalog.GetString ("Unable to rotate this type of photo"), original_path);
-					}
-
-					string backup = ImageFile.TempPath (original_path);
-					using (Stream stream = File.Open (backup, FileMode.Truncate, FileAccess.Write)) {
-						using (Pixbuf pixbuf = img.Load ()) {
-							PixbufOrientation fake = (direction == RotateDirection.Clockwise) ? PixbufOrientation.RightTop : PixbufOrientation.LeftBottom;
-							using (Pixbuf rotated = FSpot.Utils.PixbufUtils.TransformOrientation (pixbuf, fake)) {
-								img.Save (rotated, stream);
-							}
-						}
-					}
-					File.Copy (backup, original_path, true);
-					File.Delete (backup);
-				} else {
-					throw new RotateException (Catalog.GetString ("Unable to rotate this type of photo"), original_path);
-				}
-			}
+                    tag.Orientation = orientation;
+                    metadata.Save ();
+                }
+            } catch (Exception e) {
+                throw new RotateException (Catalog.GetString ("Unable to rotate this type of photo"), original_path);
+            }
 		}
-		       
+
 		private void Rotate (string original_path, RotateDirection dir)
 		{
 			RotateOrientation (original_path, dir);

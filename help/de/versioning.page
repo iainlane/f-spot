@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="versions">
+
+  <info>
+    <link type="guide" xref="index#advanced"/>
+    <desc>Verschiedene Versionen Ihrer Fotos bewahren</desc>
+  </info>
+
+  <title>Versionierung</title>
+  <p><app>F-Spot</app> ermöglicht es Ihnen, verschiedene Versionen Ihrer Bilder zu bewahren. Dies ist insbesondere beim Bearbeiten von Fotos nützlich, da Sie auf diese Weise schnell die Unterschiede zwischen der bearbeiteten Version und dem Original erkennen können.</p>
+  <p>So wechseln Sie zwischen verschiedenen Versionen bei der Bearbeitung:</p>
+  <steps>
+    <item>
+      <p>Doppelklicken Sie auf das Foto, das Sie bearbeiten wollen.</p>
+    </item>
+    <item>
+      <p>In der Seitenleiste finden Sie ein Auswahlfeld mit der Beschriftung <gui>Version:</gui>. Um eine anzuzeigende Version auszuwählen, wählen Sie sie in der Auswahlliste aus.</p>
+    </item>
+  </steps>
+</page>

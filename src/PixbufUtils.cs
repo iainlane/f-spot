@@ -16,9 +16,11 @@ using System;
 using System.IO;
 using FSpot;
 using FSpot.Utils;
+using FSpot.Imaging;
 using Hyena;
+using TagLib.Image;
 
-public class PixbufUtils {
+public static class PixbufUtils {
 	static Pixbuf error_pixbuf = null;
 	public static Pixbuf ErrorPixbuf {
 		get {
@@ -76,7 +78,7 @@ public class PixbufUtils {
 		Gdk.PixbufLoader loader = new Gdk.PixbufLoader ();
 		int max_width;
 		int max_height;
-		PixbufOrientation orientation;
+		ImageOrientation orientation;
 
 		public AspectLoader (int max_width, int max_height) 
 		{
@@ -88,10 +90,10 @@ public class PixbufUtils {
 		private void HandleSizePrepared (object obj, SizePreparedArgs args)
 		{
 			switch (orientation) {
-			case PixbufOrientation.LeftTop:
-			case PixbufOrientation.LeftBottom:
-			case PixbufOrientation.RightTop:
-			case PixbufOrientation.RightBottom:	
+			case ImageOrientation.LeftTop:
+			case ImageOrientation.LeftBottom:
+			case ImageOrientation.RightTop:
+			case ImageOrientation.RightBottom:
 				int tmp = max_width;
 				max_width = max_height;
 				max_height = tmp;
@@ -109,7 +111,7 @@ public class PixbufUtils {
 				loader.SetSize (scale_width, scale_height);
 		}
 
-		public Pixbuf Load (System.IO.Stream stream, PixbufOrientation orientation)
+		public Pixbuf Load (System.IO.Stream stream, ImageOrientation orientation)
 		{
 			int count;
 			byte [] data = new byte [8192];
@@ -131,7 +133,7 @@ public class PixbufUtils {
 		{
 			try {
 				orientation = GetOrientation (path);
-				using (FileStream fs = File.OpenRead (path)) {
+				using (FileStream fs = System.IO.File.OpenRead (path)) {
 					return Load (fs, orientation);
 				}
 			} catch (Exception) {
@@ -139,14 +141,6 @@ public class PixbufUtils {
 				return null;
 			} 
 		}
-	}
-
-	public static Pixbuf ShallowCopy (Pixbuf pixbuf)
-	{
-		if (pixbuf == null)
-			return null;
-		Pixbuf result = new Pixbuf (pixbuf, 0, 0, pixbuf.Width, pixbuf.Height);
-		return result;
 	}
 
 	public static Pixbuf ScaleToMaxSize (Pixbuf pixbuf, int width, int height)
@@ -171,51 +165,16 @@ public class PixbufUtils {
 		
 	static public void GetSize (string path, out int width, out int height)
 	{
-#if true
 		using (Gdk.Pixbuf pixbuf = new Gdk.Pixbuf (path)) {
 			width = pixbuf.Width;
 			height = pixbuf.Height;
 		}
-#else //yes, the pixbuf loader hack is smarter, but it leaks like an old women
-		Gdk.PixbufLoader loader = new Gdk.PixbufLoader ();
-		int orig_width = 0;
-		int orig_height = 0;
-		bool done = false;
-
-		loader.SizePrepared += delegate (object obj, SizePreparedArgs args) {
-			orig_width = args.Width;
-			orig_height = args.Height;
-			done = true;
-		};
-		
-		using (Stream stream = File.OpenRead (path)) {
-			byte [] data = new byte [4096];
-			int count;
-
-			while (((count = stream.Read (data, 0, data.Length)) > 0) && loader.Write (data, (ulong)count)) {
-				if (done)
-					break;
-			}
-		}
-		
-		width = orig_width;
-		height = orig_height;
-#endif
 	}
 
 	static public Pixbuf LoadAtMaxSize (string path, int max_width, int max_height)
 	{
-#if true
 		PixbufUtils.AspectLoader loader = new AspectLoader (max_width, max_height);
 		return loader.LoadFromFile (path);
-#else
-		int width, height;
-		JpegUtils.GetSize (path, out width, out height);
-		PixbufUtils.Fit (width, height, max_width, max_height, false, out width, out height);
-		Gdk.Pixbuf image = JpegUtils.LoadScaled (path, width, height);
-		
-		return image;
-#endif
 	}
 
 	static public Pixbuf LoadFromStream (System.IO.Stream input)
@@ -232,65 +191,10 @@ public class PixbufUtils {
 		return loader.Pixbuf;
 		
 	}
-	
 
-	public static void Save (Gdk.Pixbuf pixbuf, System.IO.Stream stream, string type, string [] options, string [] values)
-	{
-		byte [] data;
-
-		data = PixbufUtils.Save (pixbuf, type, options, values);
-		stream.Write (data, 0, data.Length);
-	}
-
-	static string [] NullTerminateArray (string [] options)
-	{
-		string [] terminated_options = options;
-
-		if (options != null && options [ options.Length - 1 ] != null) {
-			terminated_options = new string [options.Length + 1];
-			Array.Copy (options, terminated_options, options.Length);
-		}
-		
-		return terminated_options;
-	}
-
-	[DllImport("libgdk_pixbuf-2.0-0.dll")]
-	static extern bool gdk_pixbuf_save_to_bufferv (IntPtr raw, out IntPtr data, out IntPtr length, 
-						       string type, 
-						       string [] keys, string [] values, out IntPtr error);
-
-					
-	public static byte [] Save (Gdk.Pixbuf pixbuf, string type, string [] options, string [] values)
-	{
-		IntPtr error = IntPtr.Zero;
-		IntPtr data;
-		IntPtr length;
-
-		bool success = gdk_pixbuf_save_to_bufferv (pixbuf.Handle, 
-							   out data, 
-							   out length, 
-							   type,
-							   NullTerminateArray (options),
-							   NullTerminateArray (values),
-							   out error);
-		
-		if (error != IntPtr.Zero) 
-			throw new GLib.GException (error);
-
-		if (!success)
-			throw new ApplicationException ("Unknown error while saving file");
-
-		byte [] content = new byte [(int)length];
-		Marshal.Copy (data, content, 0, (int)length);
-
-		GLib.Marshaller.Free (data);
-
-		return content;
-	}
-	
 	public static Pixbuf TagIconFromPixbuf (Pixbuf source)
 	{
-		return IconFromPixbuf (source, (int) Tag.IconSize.Large);
+		return IconFromPixbuf (source, (int) FSpot.Tag.IconSize.Large);
 	}
 
 	public static Pixbuf IconFromPixbuf (Pixbuf source, int size)
@@ -313,61 +217,14 @@ public class PixbufUtils {
 		
 		return icon;
 	}
-		
-	static public Pixbuf LoadFromScreen (Gdk.Window win) {
-		Gdk.Screen screen = win.Screen;
-		Drawable d = screen.RootWindow;
-		int monitor = screen.GetMonitorAtWindow (win);
-		Gdk.Rectangle geom = screen.GetMonitorGeometry (monitor);
-		
-		//
-		// We use the screen width and height because that reflects
-		// the current resolution, the RootWindow can actually be different.
-		//
 
-		Pixbuf buf = new Pixbuf (Colorspace.Rgb, false, 8, geom.Width, geom.Height);
-		
-		return buf.GetFromDrawable (d,
-					    d.Colormap, geom.X, geom.Y, 0, 0, 
-					    geom.Width, geom.Height);
-	}
-
-	static public Pixbuf LoadFromScreen () {
-		Screen screen = Display.Default.GetScreen (0);
-		Drawable d = screen.RootWindow;
-		int width = screen.Width;
-		int height = screen.Height;
-		
-		//
-		// We use the screen width and height because that reflects
-		// the current resolution, the RootWindow can actually be different.
-		//
-
-		Pixbuf buf = new Pixbuf (Colorspace.Rgb, false, 8, width, height);
-		
-		return buf.GetFromDrawable (d,
-					    d.Colormap, 0, 0, 0, 0, 
-					    width, height);
-	}
-
-	static public Pixbuf LoadFromAssembly (string resource)
+	static Pixbuf LoadFromAssembly (string resource)
 	{
 		try {
 			return new Pixbuf (System.Reflection.Assembly.GetEntryAssembly (), resource);
 		} catch {
 			return null;
 		}
-	}
-
-	[DllImport ("libc")]
-	static extern int rename (string oldpath, string newpath);
-
-	public static void SaveAtomic (Gdk.Pixbuf src, string filename, string type, string [] keys, string [] values)
-	{
-			string tmpname = filename + ".tmp";
-			src.Savev (tmpname, type, NullTerminateArray (keys), NullTerminateArray (values));
-			if (rename (tmpname, filename) < 0)
-				throw new Exception ("Error renaming file");
 	}
 
 	public static Gdk.Pixbuf ScaleToAspect (Gdk.Pixbuf orig, int width, int height)
@@ -404,75 +261,6 @@ public class PixbufUtils {
 		return flattened;
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct FPixbufJpegMarker {
-		public int type;
-		public byte *data;
-		public int length;
-	}
-
-	[DllImport ("libfspot")]
-	static extern bool f_pixbuf_save_jpeg (IntPtr src, string path, int quality, FPixbufJpegMarker [] markers, int num_markers);
-
-	public static void SaveJpeg (Pixbuf pixbuf, string path, int quality, Exif.ExifData exif_data)
-	{
-		Pixbuf temp = null;
-		if (pixbuf.HasAlpha) {
-			temp = Flatten (pixbuf);
-			pixbuf = temp;
-		}
-
-		// The DCF spec says thumbnails should be 160x120 always
-		Pixbuf thumbnail = ScaleToAspect (pixbuf, 160, 120);
-		byte [] thumb_data = Save (thumbnail, "jpeg", null, null);
-		thumbnail.Dispose ();
-
-		byte [] data = new byte [0]; 
-		FPixbufJpegMarker [] marker = new FPixbufJpegMarker [0];
-		bool result = false;
-
-		if (exif_data != null && exif_data.Handle.Handle != IntPtr.Zero) {
-			exif_data.Data = thumb_data;
-
-			// Most of the things we will set will be in the 0th ifd
-			Exif.ExifContent content = exif_data.GetContents (Exif.Ifd.Zero);
-
-			// reset the orientation tag the default is top/left
-			content.GetEntry (Exif.Tag.Orientation).Reset ();
-
-			// set the write time in the datetime tag
-			content.GetEntry (Exif.Tag.DateTime).Reset ();
-
-			// set the software tag
-			content.GetEntry (Exif.Tag.Software).SetData (FSpot.Defines.PACKAGE + " version " + FSpot.Defines.VERSION);
-
-			data = exif_data.Save ();
-		}
-
-		unsafe {
-			if (data.Length > 0) {
-				
-				fixed (byte *p = data) {
-					marker = new FPixbufJpegMarker [1];
-					marker [0].type = 0xe1; // APP1 marker
-					marker [0].data = p;
-					marker [0].length = data.Length;
-					
-					result = f_pixbuf_save_jpeg (pixbuf.Handle, path, quality, marker, marker.Length);
-				}					
-			} else
-				result = f_pixbuf_save_jpeg (pixbuf.Handle, path, quality, marker, marker.Length);
-			
-		}
-
-		if (temp != null)
-			temp.Dispose ();
-		
-		if (result == false)
-			throw new System.Exception ("Error Saving File");
-	}
-
-
 	[DllImport ("libfspot")]
 	static extern IntPtr f_pixbuf_unsharp_mask (IntPtr src, double radius, double amount, double threshold);
 
@@ -481,7 +269,7 @@ public class PixbufUtils {
 		IntPtr raw_ret = f_pixbuf_unsharp_mask (src.Handle, radius, amount, threshold);
  		Gdk.Pixbuf ret = (Gdk.Pixbuf) GLib.Object.GetObject(raw_ret, true);
 		return ret;
-	}	
+	}
 	
 	[DllImport ("libfspot")]
 	static extern IntPtr f_pixbuf_blur (IntPtr src, double radius);
@@ -638,48 +426,15 @@ public class PixbufUtils {
 		}
 	}
 
-	public static Gdk.Pixbuf GetThumbnail (Exif.ExifData data)
+	public static ImageOrientation GetOrientation (SafeUri uri)
 	{
-		byte [] thumb_data = data.Data;
-		if (thumb_data.Length > 0) {
-			PixbufOrientation orientation = GetOrientation (data);
-			
-			using (MemoryStream mem = new MemoryStream (thumb_data)) {
-				Gdk.Pixbuf thumb = new Gdk.Pixbuf (mem);
-				Gdk.Pixbuf rotated;
-
-				using (thumb)
-					rotated = FSpot.Utils.PixbufUtils.TransformOrientation (thumb, orientation);
-				
-				return rotated;
-			}			
-		}
-		return null;
-	}
-
-	public static PixbufOrientation GetOrientation (Exif.ExifData data)
-	{
-		PixbufOrientation orientation = PixbufOrientation.TopLeft;
-		
-		Exif.ExifEntry e = data.GetContents (Exif.Ifd.Zero).Lookup (Exif.Tag.Orientation);
-
-		if (e != null) {
-			ushort [] value = e.GetDataUShort ();
-			orientation = (PixbufOrientation) value [0];
-		}
-
-		return orientation;
-	}
-
-	public static PixbufOrientation GetOrientation (SafeUri uri)
-	{
-		using (FSpot.ImageFile img = FSpot.ImageFile.Create (uri)) {
+		using (var img = ImageFile.Create (uri)) {
 			return img.Orientation;
 		}	
 	}
 	
 	[Obsolete ("Use GetOrientation (SafeUri) instead")]
-	public static PixbufOrientation GetOrientation (string path)
+	public static ImageOrientation GetOrientation (string path)
 	{
         return GetOrientation (new SafeUri (path));
 	}
@@ -698,33 +453,80 @@ public class PixbufUtils {
 		return ret;
 	}
 
-	// Bindings from libf.
+    public static void CreateDerivedVersion (SafeUri source, SafeUri destination)
+    {
+        CreateDerivedVersion (source, destination, 95);
+    }
 
-	[DllImport ("libfspot")]
-	static extern IntPtr f_pixbuf_copy_apply_brightness_and_contrast (IntPtr src, float brightness, float contrast);
+    public static void CreateDerivedVersion (SafeUri source, SafeUri destination, uint jpeg_quality)
+    {
+        if (source.GetExtension () == destination.GetExtension ()) {
+            // Simple copy will do!
+            var file_from = GLib.FileFactory.NewForUri (source);
+            var file_to = GLib.FileFactory.NewForUri (destination);
+            file_from.Copy (file_to, GLib.FileCopyFlags.AllMetadata | GLib.FileCopyFlags.Overwrite, null, null);
+            return;
+        }
 
-	public static Pixbuf ApplyBrightnessAndContrast (Pixbuf src, float brightness, float contrast)
-	{
-		return new Pixbuf (f_pixbuf_copy_apply_brightness_and_contrast (src.Handle, brightness, contrast));
-	}
+        // Else make a derived copy with metadata copied
+        using (var img = ImageFile.Create (source)) {
+            using (var pixbuf = img.Load ()) {
+                CreateDerivedVersion (source, destination, jpeg_quality, pixbuf);
+            }
+        }
+    }
 
-	[DllImport ("libfspot")]
-	static extern bool f_pixbuf_save_jpeg_atomic (IntPtr pixbuf, string filename, int quality, out IntPtr error);
+    public static void CreateDerivedVersion (SafeUri source, SafeUri destination, uint jpeg_quality, Pixbuf pixbuf)
+    {
+        SaveToSuitableFormat (destination, pixbuf, jpeg_quality);
 
-	public static void SaveAsJpegAtomically (Pixbuf pixbuf, string filename, int quality)
-	{
-		IntPtr error = IntPtr.Zero;
+        using (var metadata_from = Metadata.Parse (source)) {
+            using (var metadata_to = Metadata.Parse (destination)) {
+                metadata_to.CopyFrom (metadata_from);
+                metadata_to.Save ();
+            }
+        }
+    }
 
-		if (! f_pixbuf_save_jpeg_atomic (pixbuf.Handle, filename, quality, out error)) {
-			throw new GLib.GException (error);
-		}
-	}
+    private static void SaveToSuitableFormat (SafeUri destination, Pixbuf pixbuf, uint jpeg_quality)
+    {
+        // FIXME: this needs to work on streams rather than filenames. Do that when we switch to
+        // newer GDK.
+        var extension = destination.GetExtension ().ToLower ();
+        if (extension == ".png") {
+            pixbuf.Save (destination.LocalPath, "png");
+        } else if (extension == ".jpg" || extension == ".jpeg") {
+            pixbuf.Save (destination.LocalPath, "jpeg", jpeg_quality);
+        } else {
+            throw new NotImplementedException ("Saving this file format is not supported");
+        }
+    }
 
-//	[DllImport ("libfspot")]
-//	static extern void f_pixbuf_copy_with_orientation (IntPtr src, IntPtr dest, int orientation);
-//
-//	public static void CopyWithOrientation (Gdk.Pixbuf src, Gdk.Pixbuf dest, PixbufOrientation orientation)
-//	{
-//		f_pixbuf_copy_with_orientation (src.Handle, dest.Handle, (int)orientation);
-//	}
+#region Gdk hackery
+
+    // This hack below is needed because there is no wrapped version of
+    // Save which allows specifying the variable arguments (it's not
+    // possible with p/invoke).
+
+    [DllImport("libgdk_pixbuf-2.0-0.dll")]
+    static extern bool gdk_pixbuf_save(IntPtr raw, IntPtr filename, IntPtr type, out IntPtr error,
+            IntPtr optlabel1, IntPtr optvalue1, IntPtr dummy);
+
+    private static bool Save (this Pixbuf pixbuf, string filename, string type, uint jpeg_quality)
+    {
+        IntPtr error = IntPtr.Zero;
+        IntPtr nfilename = GLib.Marshaller.StringToPtrGStrdup (filename);
+        IntPtr ntype = GLib.Marshaller.StringToPtrGStrdup (type);
+        IntPtr optlabel1 = GLib.Marshaller.StringToPtrGStrdup ("quality");
+        IntPtr optvalue1 = GLib.Marshaller.StringToPtrGStrdup (jpeg_quality.ToString ());
+        bool ret = gdk_pixbuf_save(pixbuf.Handle, nfilename, ntype, out error, optlabel1, optvalue1, IntPtr.Zero);
+        GLib.Marshaller.Free (nfilename);
+        GLib.Marshaller.Free (ntype);
+        GLib.Marshaller.Free (optlabel1);
+        GLib.Marshaller.Free (optvalue1);
+        if (error != IntPtr.Zero) throw new GLib.GException (error);
+        return ret;
+    }
+
+#endregion
 }

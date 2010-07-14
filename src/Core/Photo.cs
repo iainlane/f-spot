@@ -21,6 +21,7 @@ using Mono.Unix;
 
 using FSpot.Utils;
 using FSpot.Platform;
+using FSpot.Imaging;
 
 namespace FSpot
 {
@@ -213,13 +214,23 @@ namespace FSpot
 			}
 		}
 
+		public void SetDefaultVersion (IBrowsableItemVersion version)
+		{
+			PhotoVersion photo_version = version as PhotoVersion;
+			if (photo_version == null)
+				throw new ArgumentException ("Not a valid version for this photo");
+
+			DefaultVersionId = photo_version.VersionId;
+		}
+
+
 		//FIXME: won't work on non file uris
 		public uint SaveVersion (Gdk.Pixbuf buffer, bool create_version)
 		{
 			uint version = DefaultVersionId;
-			using (ImageFile img = ImageFile.Create (DefaultVersion.Uri)) {
+			using (var img = ImageFile.Create (DefaultVersion.Uri)) {
 				// Always create a version if the source is not a jpeg for now.
-				create_version = create_version || !(img is FSpot.JpegFile);
+				create_version = create_version || ImageFile.IsJpeg (DefaultVersion.Uri);
 	
 				if (buffer == null)
 					throw new ApplicationException ("invalid (null) image");
@@ -230,10 +241,8 @@ namespace FSpot
 				try {
 					var versionUri = VersionUri (version);
 
-					using (Stream stream = System.IO.File.OpenWrite (versionUri.LocalPath)) {
-						img.Save (buffer, stream);
-					}
-					(GetVersion (version) as PhotoVersion).ImportMD5 = GenerateMD5 (VersionUri (version));
+					PixbufUtils.CreateDerivedVersion (DefaultVersion.Uri, versionUri, 95, buffer);
+					(GetVersion (version) as PhotoVersion).ImportMD5 = HashUtils.GenerateMD5 (VersionUri (version));
 					DefaultVersionId = version;
 				} catch (System.Exception e) {
 					Log.Exception (e);
@@ -501,20 +510,11 @@ namespace FSpot
 				md5_cache.Clear (); 
 		}
 
-		public static string GenerateMD5 (SafeUri uri)
-		{
-			var file = GLib.FileFactory.NewForUri (uri);
-			var stream = new GLib.GioStream (file.Read (null));
-			var hash = CryptoUtil.Md5EncodeStream (stream);
-			stream.Close ();
-			return hash;
-		}
-
 		// Constructor
 		public Photo (uint id, long unix_time)
 			: base (id)
 		{
-			time = DbUtils.DateTimeFromUnixTime (unix_time);
+			time = DateTimeUtil.ToDateTime (unix_time);
 	
 			description = String.Empty;
 			rating = 0;

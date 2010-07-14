@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="import-roll-search">
+
+  <info>
+    <link type="guide" xref="index#searching"/>
+    <desc>Suchen anhand des Importdatums</desc>
+  </info>
+
+  <title>Suchen anhand von importierten Rollen</title>
+
+  <p>Importierte Rollen sind »Stapel« von importierten Fotos. Unabhängig vom eigentlichen Aufnahmedatum des Bildes ist hier der Zeitstempel des Imports der Fotos entscheidend.</p>
+  <p>So suchen Sie nach der neuesten importierten Rolle:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie <guiseq><gui>Suchen</gui><gui>Nach Importen</gui><gui>Letzter Import</gui></guiseq>.</p>
+    </item>
+  </steps>
+  <p>So wählen Sie einen früheren Import:</p>
+  <steps>
+    <item>
+      <p>Wählen Sie <guiseq><gui>Suchen</gui><gui>Nach Importen</gui><gui>Importe auswählen</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Wählen Sie einen zu durchsuchenden Import aus oder wählen Sie mit <gui>zwischen</gui> einen Datumsbereich aus, in welchem die Suche ausgeführt werden soll.</p>
+    </item>
+  </steps>
+  <p>Um die Suche nach Importen zu beenden, wählen Sie <guiseq><gui>Suchen</gui><gui>Nach Importen</gui><gui>Importfilter zurücksetzen</gui></guiseq>.</p>
+</page>

@@ -16,6 +16,8 @@ using System;
 
 using Hyena;
 
+using FSpot.Utils;
+using FSpot.Imaging;
 
 public class ImageLoaderThread {
 
@@ -31,7 +33,10 @@ public class ImageLoaderThread {
 		/* The pixbuf obtained from the operation.  */
         private Pixbuf result;
 		public Pixbuf Result {
-            get { return PixbufUtils.ShallowCopy (result); }
+            get {
+				if (result == null) return null;
+				return result.ShallowCopy ();
+			}
             set { result = value; }
         }
 
@@ -135,6 +140,9 @@ public class ImageLoaderThread {
 	{
 		should_cancel = true;
 		if (worker_thread != null) {
+			lock (queue) { 
+				Monitor.Pulse (queue); 
+			}
 			worker_thread.Join ();
 		}
 		worker_thread = null;
@@ -176,7 +184,7 @@ public class ImageLoaderThread {
 	{
 		Pixbuf orig_image;
 		try {
-			using (FSpot.ImageFile img = FSpot.ImageFile.Create (request.Uri)) {
+			using (var img = ImageFile.Create (request.Uri)) {
 				if (request.Width > 0) {
 					orig_image = img.Load (request.Width, request.Height);
 				} else {
@@ -251,8 +259,11 @@ public class ImageLoaderThread {
 	
 				lock (queue) {
 					
-					while (queue.Count == 0 || block_count > 0)
+					while ((queue.Count == 0 || block_count > 0) && !should_cancel)
 						Monitor.Wait (queue);
+
+					if (should_cancel)
+						return;
 					
 					int pos = queue.Count - 1;
 	

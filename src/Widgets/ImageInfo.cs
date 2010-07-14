@@ -11,6 +11,7 @@ using Cairo;
 using Gdk;
 using Gtk;
 using FSpot.Utils;
+using FSpot.Imaging;
 using Hyena;
 
 namespace FSpot.Widgets {
@@ -20,7 +21,7 @@ namespace FSpot.Widgets {
 		
 		public ImageInfo (SafeUri uri)
 		{
-				using (ImageFile img = ImageFile.Create (uri)) {
+				using (var img = ImageFile.Create (uri)) {
 					Pixbuf pixbuf = img.Load ();
 					SetPixbuf (pixbuf);
 					pixbuf.Dispose ();

@@ -1,7 +1,8 @@
 using FSpot.Utils;
 using Hyena;
+using TagLib.Image;
 
-namespace FSpot.Raf {
+namespace FSpot.Imaging.Raf {
 	// This is reverse engineered from looking at the sample files I have
 	// from what I can tell the file is always BigEndian, although the embedded jpeg may not be
 	// and there is a start long offset at 0x54 (or possibly 0x56 if it is a short) that points to
@@ -12,50 +13,11 @@ namespace FSpot.Raf {
 	// completely figured out yet.  More to follow.
 
 	// ALL the sample files I have begin with "FUJIFILMCCD-RAW "
-
 	
-	public class WhiteBalance {
-		// see dcraw parse_fuli
-		public WhiteBalance (System.IO.Stream stream)
-		{
-
-		}
-	}
-	
-	public class RafFile : ImageFile, SemWeb.StatementSource {
-
-                // false seems a safe default
-                public bool Distinct {
-                        get { return false; }
-                }
+	public class RafFile : BaseImageFile {
 
 		public RafFile (SafeUri uri) : base (uri)
 		{
-		}
-
-		private Exif.ExifData exif_data;
-		public Exif.ExifData ExifData {
-			get {
-				if (exif_data == null)
-					exif_data = new Exif.ExifData(uri.LocalPath);
-				Log.Debug ("loading exif data");
-				return exif_data;
-			}
-		}
-		
-		public override PixbufOrientation GetOrientation (){
-			PixbufOrientation orientation = PixbufOrientation.TopLeft;
-
-			Exif.ExifEntry e = this.ExifData.GetContents (Exif.Ifd.Zero).Lookup (Exif.Tag.Orientation);
-			if (e != null) {
-				ushort [] value = e.GetDataUShort ();
-				orientation = (PixbufOrientation) value [0];
-			}
-
-			if (orientation < PixbufOrientation.TopLeft || orientation > PixbufOrientation.LeftBottom)
-				orientation = PixbufOrientation.TopLeft;
-
-			return orientation;
 		}
 
 		public override System.IO.Stream PixbufStream ()
@@ -65,36 +27,12 @@ namespace FSpot.Raf {
 			if (data != null)
 				return new System.IO.MemoryStream (data);
 			else
-				return DCRawFile.RawPixbufStream (uri);
-		}
- 
-		public override Gdk.Pixbuf Load ()
-		{
-			return new Gdk.Pixbuf (PixbufStream ());
-		}
-
-		public override Gdk.Pixbuf Load (int width, int height)
-		{
-			Gdk.Pixbuf full = this.Load ();
-			Gdk.Pixbuf rotated = FSpot.Utils.PixbufUtils.TransformOrientation (full, this.GetOrientation());
-			Gdk.Pixbuf scaled  = PixbufUtils.ScaleToMaxSize (rotated, width, height);
-			full.Dispose ();
-			return scaled;
-		}
-
-		public void Select (SemWeb.StatementSink sink)
-		{
-			byte [] data = GetEmbeddedJpeg ();
-			if (data != null) {
-				System.IO.Stream stream = new System.IO.MemoryStream (data);
-				JpegHeader header = new JpegHeader (stream);
-				header.Select (sink);
-			}
+				return DCRawFile.RawPixbufStream (Uri);
 		}
 
 		private byte [] GetEmbeddedJpeg ()
 		{
-			using (System.IO.Stream stream = Open ()) {
+			using (System.IO.Stream stream = base.PixbufStream ()) {
 				stream.Position = 0x54;
 				byte [] data = new byte [24];
 				stream.Read (data, 0, data.Length);
@@ -114,7 +52,6 @@ namespace FSpot.Raf {
 				stream.Read (image, 0, image.Length);
 				return image;
 			}
-
 		}
 	}
 }

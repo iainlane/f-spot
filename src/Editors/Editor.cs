@@ -7,9 +7,10 @@
  * This is free software. See COPYING for details.
  */
 
-using FSpot;
 using Hyena;
+
 using FSpot.Widgets;
+using FSpot.Imaging;
 
 using Gdk;
 using Gtk;
@@ -98,7 +99,7 @@ namespace FSpot.Editors {
 
 		protected void LoadPhoto (Photo photo, out Pixbuf photo_pixbuf, out Cms.Profile photo_profile) {
 			// FIXME: We might get this value from the PhotoImageView.
-			using (ImageFile img = ImageFile.Create (photo.DefaultVersion.Uri)) {
+			using (var img = ImageFile.Create (photo.DefaultVersion.Uri)) {
 				photo_pixbuf = img.Load ();
 				photo_profile = img.GetProfile ();
 			}

@@ -49,7 +49,6 @@ namespace FSpotFolderExport {
 
 		//[Glade.Widget] Gtk.CheckButton meta_check;
 		[Glade.Widget] Gtk.CheckButton scale_check;
-		[Glade.Widget] Gtk.CheckButton rotate_check;
 		[Glade.Widget] Gtk.CheckButton export_tags_check;
 		[Glade.Widget] Gtk.CheckButton export_tag_icons_check;
 		[Glade.Widget] Gtk.CheckButton open_check;
@@ -66,7 +65,6 @@ namespace FSpotFolderExport {
 		public const string SCALE_KEY = Preferences.APP_FSPOT_EXPORT + EXPORT_SERVICE + "scale";
 		public const string SIZE_KEY = Preferences.APP_FSPOT_EXPORT + EXPORT_SERVICE + "size";
 		public const string OPEN_KEY = Preferences.APP_FSPOT_EXPORT + EXPORT_SERVICE + "browser";
-		public const string ROTATE_KEY = Preferences.APP_FSPOT_EXPORT + EXPORT_SERVICE + "rotate";
 		public const string EXPORT_TAGS_KEY = Preferences.APP_FSPOT_EXPORT + EXPORT_SERVICE + "export_tags";
 		public const string EXPORT_TAG_ICONS_KEY = Preferences.APP_FSPOT_EXPORT + EXPORT_SERVICE + "export_tag_icons";
 		public const string METHOD_KEY = Preferences.APP_FSPOT_EXPORT + EXPORT_SERVICE + "method";
@@ -81,7 +79,6 @@ namespace FSpotFolderExport {
 
 		bool open;
 		bool scale;
-		bool rotate;
 		bool exportTags;
 		bool exportTagIcons;
 		int size;
@@ -135,7 +132,6 @@ namespace FSpotFolderExport {
 			LoadPreference (SCALE_KEY);
 			LoadPreference (SIZE_KEY);
 			LoadPreference (OPEN_KEY);
-			LoadPreference (ROTATE_KEY);
 			LoadPreference (EXPORT_TAGS_KEY);
 			LoadPreference (EXPORT_TAG_ICONS_KEY);
 			LoadPreference (METHOD_KEY);
@@ -189,11 +185,6 @@ namespace FSpotFolderExport {
 					Log.Debug ("Exporting full size.");
 				}
 
-				if (rotate) {
-					Log.Debug ("Autorotate images.");
-					gallery.SetRotate();
-				}
-
 				if (exportTags)
 					gallery.SetExportTags ();
 
@@ -206,8 +197,6 @@ namespace FSpotFolderExport {
 				FilterSet filter_set = new FilterSet ();
 				if (scale)
 					filter_set.Add (new ResizeFilter ((uint) size));
-				else if (rotate)
-					filter_set.Add (new OrientationFilter ());
 				filter_set.Add (new ChmodFilter ());
 				filter_set.Add (new UniqueNameFilter (new SafeUri (gallery_path)));
 
@@ -267,7 +256,6 @@ namespace FSpotFolderExport {
 				Preferences.Set (SCALE_KEY, scale);
 				Preferences.Set (SIZE_KEY, size);
 				Preferences.Set (OPEN_KEY, open);
-				Preferences.Set (ROTATE_KEY, rotate);
 				Preferences.Set (EXPORT_TAGS_KEY, exportTags);
 				Preferences.Set (EXPORT_TAG_ICONS_KEY, exportTagIcons);
 				Preferences.Set (METHOD_KEY, static_radio.Active ? "static" : original_radio.Active ? "original" : "folder" );
@@ -309,7 +297,6 @@ namespace FSpotFolderExport {
 			dest = GLib.FileFactory.NewForUri (uri_chooser.Uri);
 			open = open_check.Active;
 			scale = scale_check.Active;
-			rotate = rotate_check.Active;
 			exportTags = export_tags_check.Active;
 			exportTagIcons = export_tag_icons_check.Active;
 
@@ -349,11 +336,6 @@ namespace FSpotFolderExport {
 					open_check.Active = Preferences.Get<bool> (key);
 				break;
 
-			case ROTATE_KEY:
-				if (rotate_check.Active != Preferences.Get<bool> (key))
-					rotate_check.Active = Preferences.Get<bool> (key);
-				break;
-
 			case EXPORT_TAGS_KEY:
 				if (export_tags_check.Active != Preferences.Get<bool> (key))
 					export_tags_check.Active = Preferences.Get<bool> (key);
@@ -389,7 +371,6 @@ namespace FSpotFolderExport {
 		protected string gallery_path;
 		protected bool scale;
 		protected int size;
-		protected bool rotate;
 		protected bool exportTags;
 		protected bool exportTagIcons;
 		protected string description;
@@ -486,37 +467,34 @@ namespace FSpotFolderExport {
 								      new SafeUri (path).ToString ());
 				}
 
-				using (Exif.ExifData data = new Exif.ExifData (photo_path)) {
-					for (int i = 1; i < requests.Length; i++) {
+				for (int i = 1; i < requests.Length; i++) {
 
-						req = requests [i];
-						if (scale && req.AvoidScale (size))
-							continue;
+					req = requests [i];
+					if (scale && req.AvoidScale (size))
+						continue;
 
-						FilterSet req_set = new FilterSet ();
-						req_set.Add (new ResizeFilter ((uint)Math.Max (req.Width, req.Height)));
+					FilterSet req_set = new FilterSet ();
+					req_set.Add (new ResizeFilter ((uint)Math.Max (req.Width, req.Height)));
 
-						bool sharpen;
-						try {
-							sharpen = Preferences.Get<bool> (FolderExport.SHARPEN_KEY);
-						} catch (NullReferenceException) {
-							sharpen = true;
-							Preferences.Set (FolderExport.SHARPEN_KEY, true);
-						}
+					bool sharpen;
+					try {
+						sharpen = Preferences.Get<bool> (FolderExport.SHARPEN_KEY);
+					} catch (NullReferenceException) {
+						sharpen = true;
+						Preferences.Set (FolderExport.SHARPEN_KEY, true);
+					}
 
-						if (sharpen) {
-							if (req.Name == "lq")
-								req_set.Add (new SharpFilter (0.1, 2, 4));
-							if (req.Name == "thumbs")
-								req_set.Add (new SharpFilter (0.1, 2, 5));
-						}
-						using (FilterRequest tmp_req = new FilterRequest (photo.DefaultVersion.Uri)) {
-							req_set.Convert (tmp_req);
-							MakeDir (SubdirPath (req.Name));
-							path = SubdirPath (req.Name, ImageName (image_num));
-							System.IO.File.Copy (tmp_req.Current.LocalPath, path, true);
-						}
-
+					if (sharpen) {
+						if (req.Name == "lq")
+							req_set.Add (new SharpFilter (0.1, 2, 4));
+						if (req.Name == "thumbs")
+							req_set.Add (new SharpFilter (0.1, 2, 5));
+					}
+					using (FilterRequest tmp_req = new FilterRequest (photo.DefaultVersion.Uri)) {
+						req_set.Convert (tmp_req);
+						MakeDir (SubdirPath (req.Name));
+						path = SubdirPath (req.Name, ImageName (image_num));
+						System.IO.File.Copy (tmp_req.Current.LocalPath, path, true);
 					}
 				}
 			}
@@ -583,10 +561,6 @@ namespace FSpotFolderExport {
 			this.size = size;
 			requests [0].Width = size;
 			requests [0].Height = size;
-		}
-
-		public void SetRotate () {
-			this.rotate = true;
 		}
 
 		public void SetExportTags () {
@@ -779,7 +753,7 @@ namespace FSpotFolderExport {
 				// identify tags present in these photos
 				i = 0;
 				foreach (IBrowsableItem photo in photos) {
-					foreach (Tag tag in photo.Tags) {
+					foreach (var tag in photo.Tags) {
 						if (!tagSets.ContainsKey (tag.Name)) {
 							tagSets.Add (tag.Name, new ArrayList ());
 							allTags.Add (tag.Name, tag);
@@ -1079,10 +1053,10 @@ namespace FSpotFolderExport {
 			writer.RenderEndTag (); //div styleboxcontainer
 		}
 
-		public void WriteTagsLinks (System.Web.UI.HtmlTextWriter writer, Tag[] tags)
+		public void WriteTagsLinks (System.Web.UI.HtmlTextWriter writer, FSpot.Tag[] tags)
 		{
 			ArrayList tagsList = new ArrayList (tags.Length);
-			foreach (Tag tag in tags) {
+			foreach (var tag in tags) {
 				tagsList.Add (tag);
 			}
 			WriteTagsLinks (writer, tagsList);
@@ -1102,7 +1076,7 @@ namespace FSpotFolderExport {
 			writer.RenderEndTag (); //h1
 			writer.AddAttribute ("id", "innertagbox");
 			writer.RenderBeginTag ("ul");
-			foreach (Tag tag in tags) {
+			foreach (FSpot.Tag tag in tags) {
 				writer.AddAttribute ("class", "tag");
 				writer.RenderBeginTag ("li");
 				writer.AddAttribute ("href", TagIndexPath (tag.Name, 0));
@@ -1300,11 +1274,11 @@ namespace FSpotFolderExport {
 		public void SaveTagIcons ()
 		{
 			MakeDir (SubdirPath ("tags"));
-			foreach (Tag tag in allTags.Values)
+			foreach (FSpot.Tag tag in allTags.Values)
 				SaveTagIcon (tag);
 		}
 
-		public void SaveTagIcon (Tag tag) {
+		public void SaveTagIcon (FSpot.Tag tag) {
 			Gdk.Pixbuf icon = tag.Icon;
 			Gdk.Pixbuf scaled = null;
 			if (icon.Height != 52 || icon.Width != 52) {
@@ -1315,12 +1289,12 @@ namespace FSpotFolderExport {
 			scaled.Dispose ();
 		}
 
-		public string TagPath (Tag tag)
+		public string TagPath (FSpot.Tag tag)
 		{
 			return System.IO.Path.Combine("tags",TagName(tag));
 		}
 
-		public string TagName (Tag tag)
+		public string TagName (FSpot.Tag tag)
 		{
 			return "tag_"+ ((DbItem)tag).Id+".png";
 		}

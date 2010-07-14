@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="extensions">
+
+  <info>
+    <link type="guide" xref="index#advanced"/>
+    <desc>Arbeiten mit <app>F-Spot</app>-Erweiterungen</desc>
+  </info>
+
+  <title>Erweiterungen</title>
+
+  <p><app>F-Spot</app> ermöglicht die Nutzung von Erweiterungen, um zusätzliche Funktionalität bereitzustellen.</p>
+
+  <p>Um die Erweiterungsverwaltung zu öffnen, wählen Sie <guiseq><gui>Bearbeiten</gui><gui>Erweiterungen verwalten</gui></guiseq>.</p>
+
+  <p>So installieren Sie Erweiterungen:</p>
+  <steps>
+    <item>
+      <p>Öffnen Sie die Erweiterungsverwaltung.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Install Add-ins...</gui>.</p>
+    </item>
+    <item>
+      <p>Wählen Sie aus der Liste eine zu installierende Erweiterung aus.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Vor</gui>.</p>
+    </item>
+    <item>
+      <p>Überprüfen Sie alle Informationen und klicken Sie erneut auf <gui>Vor</gui>.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>OK</gui>.</p>
+    </item>
+  </steps>
+
+  <p>So aktivieren Sie Plugins, die bereits installiert sind:</p>
+  <steps>
+    <item>
+      <p>Öffnen Sie die Erweiterungsverwaltung.</p>
+    </item>
+    <item>
+      <p>Wählen Sie die Erweiterung, die Sie aktivieren wollen.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Aktivieren</gui>.</p>
+    </item>
+  </steps>
+  <p>So deaktivieren Sie Plugins, die bereits installiert sind:</p>
+  <steps>
+    <item>
+      <p>Öffnen Sie die Erweiterungsverwaltung.</p>
+    </item>
+    <item>
+      <p>Wählen Sie die Erweiterung, die Sie deaktivieren wollen.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Deaktivieren</gui>.</p>
+    </item>
+  </steps>
+  <p>So deinstallieren Sie Plugins:</p>
+  <steps>
+    <item>
+      <p>Öffnen Sie die Erweiterungsverwaltung.</p>
+    </item>
+    <item>
+      <p>Wählen Sie die Erweiterung, die Sie deinstallieren wollen.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Deinstallieren</gui>.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>Vor</gui>.</p>
+    </item>
+    <item>
+      <p>Klicken Sie auf <gui>OK</gui>.</p>
+    </item>
+  </steps>
+</page>
