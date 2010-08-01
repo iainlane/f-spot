@@ -1,11 +1,9 @@
 # Patches that haven't been applied upstream yet.
-debian_fix-distclean.patch
 debian_libfspot-linkage.patch
 debian_libfspotjpegtran-linkage.patch
 debian_link-system-flickrnet.patch
 debian_link-system-gnome-keyring.patch
 debian_disable-unit-tests
-debian_fix_f-spot.exe.config.patch
 
 # Patches from Ubuntu
 ubuntu_importer-targetdir-selector.patch
