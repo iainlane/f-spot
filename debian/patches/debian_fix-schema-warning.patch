@@ -1,0 +1,48 @@
+Description: Remove empty default tags from schemas to prevent a gconf warning
+Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=584215
+Forwarded: not-needed
+
+Index: f-spot.git/f-spot.schemas.in
+===================================================================
+--- f-spot.git.orig/f-spot.schemas.in	2010-08-02 14:31:03.266266002 +0100
++++ f-spot.git/f-spot.schemas.in	2010-08-02 14:31:29.346266000 +0100
+@@ -8,7 +8,6 @@
+         <key>/schemas/desktop/gnome/f-spot/ui/gtkrc</key>
+ 	<applyto>/desktop/gnome/f-spot/ui/gtkrc</applyto>
+ 	<type>string</type>
+-	<default></default>
+ 	<locale name="C">
+ 	  <short>Path to custom gtkrc for theming F-Spot.</short>
+ 	  <long>Path to custom gtkrc for theming F-Spot.</long>
+@@ -53,7 +52,6 @@
+         <key>/schemas/desktop/gnome/f-spot/ui/main_window_x</key>
+ 	<applyto>/desktop/gnome/f-spot/ui/main_window_x</applyto>
+ 	<type>int</type>
+-	<default></default>
+ 	<locale name="C">
+ 	  <short>X position of the main window.</short>
+ 	  <long>The X position to use for the main window.</long>
+@@ -64,7 +62,6 @@
+         <key>/schemas/desktop/gnome/f-spot/ui/main_window_y</key>
+ 	<applyto>/desktop/gnome/f-spot/ui/main_window_y</applyto>
+ 	<type>int</type>
+-	<default></default>
+ 	<locale name="C">
+ 	  <short>Y position of the main window.</short>
+ 	  <long>The Y position to use for the main window.</long>
+@@ -253,7 +250,6 @@
+         <key>/schemas/desktop/gnome/f-spot/ui/viewer_x</key>
+ 	<applyto>/desktop/gnome/f-spot/ui/viewer_x</applyto>
+ 	<type>int</type>
+-	<default></default>
+ 	<locale name="C">
+ 	  <short>X position of the photo viewer window.</short>
+ 	  <long>The X position to use for the photo viewer window.</long>
+@@ -264,7 +260,6 @@
+         <key>/schemas/desktop/gnome/f-spot/ui/viewer_y</key>
+ 	<applyto>/desktop/gnome/f-spot/ui/viewer_y</applyto>
+ 	<type>int</type>
+-	<default></default>
+ 	<locale name="C">
+ 	  <short>Y position of the photo viewer window.</short>
+ 	  <long>The Y position to use for the photo viewer window.</long>

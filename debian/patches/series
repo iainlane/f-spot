@@ -5,6 +5,7 @@ debian_link-system-flickrnet.patch
 debian_link-system-gnome-keyring.patch
 debian_disable-unit-tests
 debian_dont-duplicate-icons.patch
+debian_fix-schema-warning.patch
 
 # Patches from Ubuntu
 ubuntu_importer-targetdir-selector.patch
