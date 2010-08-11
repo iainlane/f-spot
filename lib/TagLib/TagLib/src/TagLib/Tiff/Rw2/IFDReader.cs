@@ -97,7 +97,7 @@ namespace TagLib.Tiff.Rw2
 
 				file.Seek (base_offset + offset, SeekOrigin.Begin);
 				var data = file.ReadBlock ((int) count);
-				var mem_stream = new MemoryStream (data.Data); 
+				var mem_stream = new MemoryStream (data.Data);
 				var res = new StreamJPGAbstraction (mem_stream);
 				(file as Rw2.File).JpgFromRaw = new Jpeg.File (res, ReadStyle.Average);
 

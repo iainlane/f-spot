@@ -104,7 +104,7 @@ namespace TagLib.Jpeg
 		///    Define Huffman table(s)
 		/// </summary>
 		DHT = 0xc4,
-		
+
 		/// <summary>
 		///    Define arithmetic coding conditioning(s)
 		/// </summary>
@@ -342,7 +342,7 @@ namespace TagLib.Jpeg
 		JPG13,
 
 		/// <summary>
-		///   Comment 
+		///   Comment
 		/// </summary>
 		COM = 0xfe,
 	}

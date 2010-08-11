@@ -94,17 +94,17 @@ namespace TagLib {
 		///    TIFF IFD Tag
 		/// </summary>
 		TiffIFD = 0x00000400,
-		
+
 		/// <summary>
 		///    XMP Tag
 		/// </summary>
 		XMP = 0x00000800,
-		
+
 		/// <summary>
 		///    Jpeg Comment Tag
 		/// </summary>
 		JpegComment = 0x00001000,
-		
+
 		/// <summary>
 		///    Gif Comment Tag
 		/// </summary>

@@ -35,17 +35,17 @@ namespace TagLib.Xmp
 	{
 
 #region Private Fields
-		
+
 		/// <value>
 		///    The children of the current node
 		/// </value>
 		private List<XmpNode> children;
-	
+
 		/// <value>
 		///    The qualifiers of the current node
 		/// </value>
 		private Dictionary<string, Dictionary<string, XmpNode>> qualifiers;
-		
+
 		/// <value>
 		///    The name of the current node
 		/// </value>
@@ -54,12 +54,12 @@ namespace TagLib.Xmp
 #endregion
 
 #region Properties
-		
+
 		/// <value>
 		///    The namespace the current instance belongs to
 		/// </value>
 		public string Namespace { get; private set; }
-		
+
 		/// <value>
 		///    The name of the current node instance
 		/// </value>
@@ -68,25 +68,25 @@ namespace TagLib.Xmp
 			internal set {
 				if (name != null)
 					throw new Exception ("Cannot change named node");
-				
+
 				if (value == null)
 					throw new ArgumentException ("value");
-				
+
 				name = value;
 			}
 		}
-		
+
 		/// <value>
 		///    The text value of the current node
 		/// </value>
 		public string Value { get; set; }
-		
+
 		/// <value>
 		///    The type of the current node
 		/// </value>
 		public XmpNodeType Type { get; internal set; }
 
-		
+
 		/// <value>
 		///    The number of qualifiers of the current instance
 		/// </value>
@@ -101,7 +101,7 @@ namespace TagLib.Xmp
 				return count;
 			}
 		}
-		
+
 		/// <value>
 		///    The children of the current instance.
 		/// </value>
@@ -111,9 +111,9 @@ namespace TagLib.Xmp
 		}
 
 #endregion
-		
+
 #region Constructors
-		
+
 		/// <summary>
 		///    Constructor.
 		/// </summary>
@@ -155,7 +155,7 @@ namespace TagLib.Xmp
 		}
 
 #endregion
-		
+
 #region Public Methods
 
 		/// <summary>
@@ -168,13 +168,13 @@ namespace TagLib.Xmp
 		{
 			if (node == null || node == this)
 				throw new ArgumentException ("node");
-			
+
 			if (children == null)
 				children = new List<XmpNode> ();
-			
+
 			children.Add (node);
 		}
-		
+
 		/// <summary>
 		///    Removes the given node as child of the current instance
 		/// </summary>
@@ -185,7 +185,7 @@ namespace TagLib.Xmp
 		{
 			if (children == null)
 				return;
-			
+
 			children.Remove (node);
 		}
 
@@ -220,13 +220,13 @@ namespace TagLib.Xmp
 		{
 			if (node == null || node == this)
 				throw new ArgumentException ("node");
-			
+
 			if (qualifiers == null)
 				qualifiers = new Dictionary<string, Dictionary<string, XmpNode>> ();
-			
+
 			if (!qualifiers.ContainsKey (node.Namespace))
 				qualifiers [node.Namespace] = new Dictionary<string, XmpNode> ();
-			
+
 			qualifiers [node.Namespace][node.Name] = node;
 		}
 
@@ -253,7 +253,7 @@ namespace TagLib.Xmp
 				return null;
 			return qualifiers [ns][name];
 		}
-		
+
 		/// <summary>
 		///    Print a debug output of the node.
 		/// </summary>
@@ -261,7 +261,7 @@ namespace TagLib.Xmp
 		{
 			Dump ("");
 		}
-		
+
 		/// <summary>
 		///    Calls the Visitor for this node and every child node.
 		/// </summary>
@@ -271,7 +271,7 @@ namespace TagLib.Xmp
 		public void Accept (XmpNodeVisitor visitor)
 		{
 			visitor.Visit (this);
-			
+
 			// TODO: what is with the qualifiers ?
 			// either add them to be also visited, or add a comment
 			if (children != null) {
@@ -280,7 +280,7 @@ namespace TagLib.Xmp
 				}
 			}
 		}
-		
+
 		/// <summary>
 		///    Renders the current instance as child of the given node to the
 		///    given <see cref="XmlNode"/>
@@ -360,7 +360,7 @@ namespace TagLib.Xmp
 #endregion
 
 #region Internal Methods
-		
+
 		internal void Dump (string prefix) {
 			Console.WriteLine ("{0}{1}{2} ({4}) = \"{3}\"", prefix, Namespace, Name, Value, Type);
 			if (qualifiers != null) {
@@ -379,10 +379,10 @@ namespace TagLib.Xmp
 					child.Dump (prefix+"  ->  ");
 				}
 			}
-		}	
-		
+		}
+
 #endregion
-		
+
 #region Private Methods
 
 		/// <summary>
@@ -392,7 +392,7 @@ namespace TagLib.Xmp
 		/// </summary>
 		private bool IsReallySimpleType {
 			get {
-				return Type == XmpNodeType.Simple && (children == null || children.Count == 0) 
+				return Type == XmpNodeType.Simple && (children == null || children.Count == 0)
 					&& QualifierCount == 0 && (Name != XmpTag.LI_URI || Namespace != XmpTag.RDF_NS);
 			}
 		}
@@ -416,7 +416,7 @@ namespace TagLib.Xmp
 				}
 			}
 		}
-		
+
 		private void AddAllChildrenTo (XmlNode parent)
 		{
 			if (children == null)
@@ -425,7 +425,7 @@ namespace TagLib.Xmp
 				child.RenderInto (parent);
 		}
 #endregion
-		
-		
+
+
 	}
 }

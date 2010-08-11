@@ -60,6 +60,11 @@ namespace TagLib.IFD.Tags
 		AFMode                                              = 15,
 
 		/// <summary>
+		///    ISO Speed. (Hex: 0X0017)
+		/// </summary>
+		ISO                                                 = 23,
+
+		/// <summary>
 		///    Image stabilization. (Hex: 0X001A)
 		/// </summary>
 		ImageStabilization                                  = 26,
@@ -101,7 +106,7 @@ namespace TagLib.IFD.Tags
 
 		/// <summary>
 		///    This number is unique, and contains the date of manufacture, but
-		///    is not the same as the number printed on the camera body. 
+		///    is not the same as the number printed on the camera body.
 		///    (Hex: 0X0025)
 		/// </summary>
 		InternalSerialNumber                                = 37,

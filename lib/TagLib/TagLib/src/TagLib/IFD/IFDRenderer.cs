@@ -54,7 +54,7 @@ namespace TagLib.IFD
 		private readonly uint ifd_offset;
 
 #endregion
-		
+
 #region Constructors
 
 		/// <summary>
@@ -94,13 +94,13 @@ namespace TagLib.IFD
 
 			uint current_offset = ifd_offset;
 			var directories = structure.directories;
-			
+
 			for (int index = 0; index < directories.Count; index++) {
 				ByteVector data = RenderIFD (directories [index], current_offset, index == directories.Count - 1);
 				current_offset += (uint) data.Count;
 				ifd_data.Add (data);
 			}
-			
+
 			return ifd_data;
 		}
 
@@ -142,40 +142,40 @@ namespace TagLib.IFD
 					directory.Remove (tag);
 				}
 			}
-		
+
 			ushort entry_count = (ushort) directory.Count;
-			
+
 			// ifd_offset + size of entry_count + entries + next ifd offset
 			uint data_offset = ifd_offset + 2 + 12 * (uint) entry_count + 4;
-						
+
 			// store the entries itself
 			ByteVector entry_data = new ByteVector ();
-			
+
 			// store the data referenced by the entries
 			ByteVector offset_data = new ByteVector ();
-			
+
 			entry_data.Add (ByteVector.FromUShort (entry_count, is_bigendian));
-			
+
 			foreach (IFDEntry entry in directory.Values)
 				RenderEntryData (entry, entry_data, offset_data, data_offset);
-			
+
 			if (last)
 				entry_data.Add ("\0\0\0\0");
 			else
 				entry_data.Add (ByteVector.FromUInt ((uint) (data_offset + offset_data.Count), is_bigendian));
-						
+
 			if (data_offset - ifd_offset != entry_data.Count)
 				throw new Exception (String.Format ("Expected IFD data size was {0} but is {1}", data_offset - ifd_offset, entry_data.Count));
-				
+
 			entry_data.Add (offset_data);
-			
+
 			return entry_data;
 		}
 
 #endregion
 
 #region Protected Methods
-		
+
 		/// <summary>
 		///    Adds the data of a single entry to <paramref name="entry_data"/>.
 		/// </summary>
@@ -201,12 +201,12 @@ namespace TagLib.IFD
 			entry_data.Add (ByteVector.FromUInt (count, is_bigendian));
 			entry_data.Add (ByteVector.FromUInt (offset, is_bigendian));
 		}
-		
+
 		/// <summary>
 		///    Renders a complete entry together with the data. The entry itself
 		///    is stored in <paramref name="entry_data"/> and the data of the
 		///    entry is stored in <paramref name="offset_data"/> if it cannot be
-		///    stored in the offset. This method is called for every <see 
+		///    stored in the offset. This method is called for every <see
 		///    cref="IFDEntry"/> of this IFD and can be overwritten in subclasses
 		///    to provide special behavior.
 		/// </summary>
@@ -229,25 +229,25 @@ namespace TagLib.IFD
 		{
 			ushort tag = (ushort) entry.Tag;
 			uint offset = (uint) (data_offset + offset_data.Count);
-			
+
 			ushort type;
 			uint count;
 			ByteVector data = entry.Render (is_bigendian, offset, out type, out count);
-			
+
 			// store data in offset, if it is smaller than 4 byte
 			if (data.Count <= 4) {
-				
+
 				while (data.Count < 4)
 					data.Add ("\0");
-				
+
 				offset = data.ToUInt (is_bigendian);
 				data = null;
 			}
-			
+
 			// preserve word boundary of offsets
 			if (data != null && data.Count % 2 != 0)
 				data.Add ("\0");
-			
+
 			RenderEntry (entry_data, tag, type, count, offset);
 			offset_data.Add (data);
 		}

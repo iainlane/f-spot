@@ -1122,15 +1122,15 @@ namespace TagLib {
 		{
 			int ret = 0;
 			int last = Count > 4 ? 3 : Count - 1;
-			
+
 			for (int i = 0; i <= last; i++) {
 				int offset = mostSignificantByteFirst ? last-i : i;
 				ret |= (int) this[i] << (offset * 8);
 			}
-			
+
 			return ret;
 		}
-		
+
 		/// <summary>
 		///    Converts an first four bytes of the current instance to
 		///    a <see cref="int" /> value using big-endian format.
@@ -1143,7 +1143,7 @@ namespace TagLib {
 		{
 			return ToInt (true);
 		}
-		
+
 		/// <summary>
 		///    Converts an first four bytes of the current instance to
 		///    a <see cref="uint" /> value.
@@ -1729,10 +1729,10 @@ namespace TagLib {
 				int offset = mostSignificantByteFirst ? 3-i : i;
 				vector.Add ((byte)(value >> (offset * 8) & 0xFF));
 			}
-			
+
 			return vector;
 		}
-		
+
 		/// <summary>
 		///    Converts an value into a big-endian data representation.
 		/// </summary>
@@ -1747,7 +1747,7 @@ namespace TagLib {
 		{
 			return FromInt (value, true);
 		}
-		
+
 		/// <summary>
 		///    Converts an unsigned value into a data representation.
 		/// </summary>

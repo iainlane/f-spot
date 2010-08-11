@@ -78,7 +78,7 @@ namespace TagLib.Image.NoMetadata
 
 #endregion
 
-#region Constructors		
+#region Constructors
 
 		/// <summary>
 		///    Constructs and initializes a new instance of <see
@@ -102,7 +102,7 @@ namespace TagLib.Image.NoMetadata
 				propertiesStyle)
 		{
 		}
-		
+
 		/// <summary>
 		///    Constructs and initializes a new instance of <see
 		///    cref="File" /> for a specified path in the local file
@@ -118,7 +118,7 @@ namespace TagLib.Image.NoMetadata
 		public File (string path) : this (path, ReadStyle.Average)
 		{
 		}
-		
+
 		/// <summary>
 		///    Constructs and initializes a new instance of <see
 		///    cref="File" /> for a specified file abstraction and
@@ -142,7 +142,7 @@ namespace TagLib.Image.NoMetadata
 		{
 			ImageTag = new CombinedImageTag (TagTypes.XMP);
 		}
-		
+
 		/// <summary>
 		///    Constructs and initializes a new instance of <see
 		///    cref="File" /> for a specified file abstraction.

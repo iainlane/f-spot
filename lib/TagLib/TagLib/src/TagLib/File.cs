@@ -197,12 +197,12 @@ namespace TagLib {
 		///    the file ends.
 		/// </summary>
 		private long invariant_end_position = -1;
-		
+
 		/// <summary>
 		///    Whether or not this file might be corrupt.
 		/// </summary>
 		private bool possibly_corrupt = false;
-		
+
 		#endregion
 		
 		
@@ -457,7 +457,7 @@ namespace TagLib {
 		public virtual bool Writeable {
 			get { return !PossiblyCorrupt; }
 		}
-		
+
 		/// <summary>
 		///   Indicates whether or not this file may be corrupt.
 		/// </summary>
@@ -475,7 +475,7 @@ namespace TagLib {
 				possibly_corrupt = value;
 			}
 		}
-		
+
 		#endregion
 		
 		
@@ -970,7 +970,7 @@ namespace TagLib {
 				
 				read_size = (int) Math.Min (buffer_offset, buffer_size);
 				buffer_offset -= read_size;
-			
+
 				file_stream.Position = buffer_offset;
 			}
 			

@@ -43,15 +43,15 @@ namespace TagLib.Tiff
 	public class File : BaseTiffFile
 	{
 #region Private Fields
-		
+
 		/// <summary>
 		///    Contains the media properties.
 		/// </summary>
 		private Properties properties;
-		
-#endregion		
-		
-#region Constructors		
+
+#endregion
+
+#region Constructors
 
 		/// <summary>
 		///    Constructs and initializes a new instance of <see
@@ -75,7 +75,7 @@ namespace TagLib.Tiff
 				propertiesStyle)
 		{
 		}
-		
+
 		/// <summary>
 		///    Constructs and initializes a new instance of <see
 		///    cref="File" /> for a specified path in the local file
@@ -91,7 +91,7 @@ namespace TagLib.Tiff
 		public File (string path) : base (path)
 		{
 		}
-		
+
 		/// <summary>
 		///    Constructs and initializes a new instance of <see
 		///    cref="File" /> for a specified file abstraction and
@@ -114,7 +114,7 @@ namespace TagLib.Tiff
 		             ReadStyle propertiesStyle) : base (abstraction)
 		{
 			ImageTag = new CombinedImageTag (TagTypes.TiffIFD | TagTypes.XMP);
-			
+
 			Mode = AccessMode.Read;
 			try {
 				Read (propertiesStyle);
@@ -123,7 +123,7 @@ namespace TagLib.Tiff
 				Mode = AccessMode.Closed;
 			}
 		}
-		
+
 		/// <summary>
 		///    Constructs and initializes a new instance of <see
 		///    cref="File" /> for a specified file abstraction.
@@ -139,11 +139,11 @@ namespace TagLib.Tiff
 		protected File (IFileAbstraction abstraction) : base (abstraction)
 		{
 		}
-		
+
 #endregion
-		
+
 #region Public Properties
-		
+
 		/// <summary>
 		///    Gets the media properties of the file represented by the
 		///    current instance.
@@ -156,11 +156,11 @@ namespace TagLib.Tiff
 		public override TagLib.Properties Properties {
 			get { return properties; }
 		}
-		
+
 #endregion
-		
+
 #region Public Methods
-		
+
 		/// <summary>
 		///    Saves the changes made in the current instance to the
 		///    file it represents.
@@ -170,7 +170,7 @@ namespace TagLib.Tiff
 			Mode = AccessMode.Write;
 			try {
 				WriteFile ();
-				
+
 				TagTypesOnDisk = TagTypes;
 			} finally {
 				Mode = AccessMode.Closed;
@@ -190,20 +190,20 @@ namespace TagLib.Tiff
 			IFDTag exif = ImageTag.Exif;
 			if (exif == null)
 				throw new Exception ("Tiff file without tags");
-			
+
 			UpdateTags (exif);
-			
+
 			// first IFD starts at 8
 			uint first_ifd_offset = 8;
 			ByteVector data = RenderHeader (first_ifd_offset);
-			
+
 			var renderer = new IFDRenderer (IsBigEndian, exif.Structure, first_ifd_offset);
-			
+
 			data.Add (renderer.Render ());
-			
+
 			Insert (data, 0, Length);
 		}
-		
+
 		/// <summary>
 		///    Update the XMP stored in the Tiff IFD
 		/// </summary>
@@ -214,12 +214,12 @@ namespace TagLib.Tiff
 		{
 			// update the XMP entry
 			exif.Structure.RemoveTag (0, (ushort) IFDEntryTag.XMP);
-			
+
 			XmpTag xmp = ImageTag.Xmp;
 			if (xmp != null)
 				exif.Structure.AddEntry (0, new ByteVectorIFDEntry ((ushort) IFDEntryTag.XMP, xmp.Render ()));
 		}
-		
+
 		/// <summary>
 		///    Reads the file with a specified read style.
 		/// </summary>
@@ -234,7 +234,7 @@ namespace TagLib.Tiff
 			try {
 				uint first_ifd_offset = ReadHeader ();
 				ReadIFD (first_ifd_offset);
-				
+
 				// Find XMP data
 				var xmp_entry = ImageTag.Exif.Structure.GetEntry (0, (ushort) IFDEntryTag.XMP) as ByteVectorIFDEntry;
 				if (xmp_entry != null) {
@@ -265,7 +265,7 @@ namespace TagLib.Tiff
 
 			IFDTag tag = GetTag (TagTypes.TiffIFD) as IFDTag;
 			IFDStructure structure = tag.Structure;
-			
+
 			width = (int) (structure.GetLongValue (0, (ushort) IFDEntryTag.ImageWidth) ?? 0);
 			height = (int) (structure.GetLongValue (0, (ushort) IFDEntryTag.ImageLength) ?? 0);
 

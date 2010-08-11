@@ -87,7 +87,7 @@ namespace TagLib.Xmp
 		//		anyURI - ( coreSyntaxTerms | rdf:Description | rdf:li | oldTerms )
 		public static bool IsPropertyAttribute (this XmlNode node)
 		{
-			return node is XmlAttribute && 
+			return node is XmlAttribute &&
 				!node.IsCoreSyntax () &&
 				!node.Is (XmpTag.RDF_NS, XmpTag.DESCRIPTION_URI) &&
 				!node.Is (XmpTag.RDF_NS, XmpTag.LI_URI) &&

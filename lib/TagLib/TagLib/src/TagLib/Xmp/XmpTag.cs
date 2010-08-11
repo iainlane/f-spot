@@ -242,7 +242,7 @@ namespace TagLib.Xmp
 			NodeTree = new XmpNode (String.Empty, String.Empty);
 			nodes = new Dictionary<string, Dictionary<string, XmpNode>> ();
 		}
-		
+
 		/// <summary>
 		///    Construct a new <see cref="XmpTag"/>, using the data parsed from the given string.
 		/// </summary>
@@ -270,7 +270,7 @@ namespace TagLib.Xmp
 		}
 
 #endregion
-		
+
 #region Private Methods
 
 		// 7.2.9 RDF
@@ -283,7 +283,7 @@ namespace TagLib.Xmp
 			foreach (XmlNode node in rdf_node.ChildNodes) {
 				if (node is XmlWhitespace)
 					continue;
-				
+
 				if (node.Is (RDF_NS, DESCRIPTION_URI)) {
 					var attr = node.Attributes.GetNamedItem (RDF_NS, ABOUT_URI) as XmlAttribute;
 					if (attr != null) {
@@ -495,7 +495,7 @@ namespace TagLib.Xmp
 
 			var rdf_value = node.Attributes.GetNamedItem (VALUE_URI, RDF_NS) as XmlAttribute;
 			var rdf_resource = node.Attributes.GetNamedItem (RESOURCE_URI, RDF_NS) as XmlAttribute;
-			
+
 			// Options 1 and 2
 			var simple_prop_val = rdf_value ?? rdf_resource ?? null;
 			if (simple_prop_val != null) {
@@ -531,18 +531,18 @@ namespace TagLib.Xmp
 			}
 			return t;
 		}
-		
+
 		private XmpNode NewNode (string ns, string name)
 		{
 			Dictionary <string, XmpNode> ns_nodes = null;
-			
+
 			if (!nodes.ContainsKey (ns)) {
 				ns_nodes = new Dictionary <string, XmpNode> ();
 				nodes.Add (ns, ns_nodes);
-			
+
 			} else
 				ns_nodes = nodes [ns];
-			
+
 			if (ns_nodes.ContainsKey (name)) {
 				foreach (XmpNode child_node in NodeTree.Children) {
 					if (child_node.Namespace == ns && child_node.Name == name) {
@@ -550,38 +550,38 @@ namespace TagLib.Xmp
 						break;
 					}
 				}
-				
+
 				ns_nodes.Remove (name);
 			}
-			
+
 			XmpNode node = new XmpNode (ns, name);
 			ns_nodes.Add (name, node);
-			
+
 			NodeTree.AddChild (node);
-			
+
 			return node;
 		}
-		
+
 		private XmpNode NewNode (string ns, string name, XmpNodeType type)
 		{
 			XmpNode node = NewNode (ns, name);
 			node.Type = type;
-			
+
 			return node;
 		}
-		
+
 		private void RemoveNode (string ns, string name)
 		{
 			if (!nodes.ContainsKey (ns))
 				return;
-			
+
 			foreach (XmpNode node in NodeTree.Children) {
 				if (node.Namespace == ns && node.Name == name) {
 					NodeTree.RemoveChild (node);
 					break;
 				}
 			}
-			
+
 			nodes[ns].Remove (name);
 		}
 
@@ -633,7 +633,7 @@ namespace TagLib.Xmp
 			nodes = new Dictionary<string, Dictionary<string, XmpNode>> ();
 			AcceptVisitors ();
 		}
-		
+
 		/// <summary>
 		///    Clears the values stored in the current instance.
 		/// </summary>
@@ -665,7 +665,7 @@ namespace TagLib.Xmp
 			return nodes [ns][name];
 
 		}
-		
+
 		/// <summary>
 		///    Returns the text of the node associated with the namespace
 		///    <param name="ns"/> and the name <paramref name="name"/>.
@@ -684,13 +684,13 @@ namespace TagLib.Xmp
 		public string GetTextNode (string ns, string name)
 		{
 			var node = FindNode (ns, name);
-			
+
 			if (node == null || node.Type != XmpNodeType.Simple)
 				return null;
-			
+
 			return node.Value;
 		}
-		
+
 		/// <summary>
 		///    Creates a new text node associated with the namespace
 		///    <paramref name="ns"/> and the name <paramref name="name"/>.
@@ -712,11 +712,11 @@ namespace TagLib.Xmp
 				RemoveNode (ns, name);
 				return;
 			}
-			
+
 			var node = NewNode (ns, name);
 			node.Value = value;
 		}
-		
+
 		/// <summary>
 		///    Searches for a node holding language alternatives. The return value
 		///    is the value of the default language stored by the node. The node is
@@ -739,29 +739,29 @@ namespace TagLib.Xmp
 		public string GetLangAltNode (string ns, string name)
 		{
 			var node = FindNode (ns, name);
-			
+
 			if (node == null)
 				return null;
-			
+
 			if (node.Type == XmpNodeType.Simple)
 				return node.Value;
-			
+
 			if (node.Type != XmpNodeType.Alt)
 				return null;
-			
+
 			var children = node.Children;
 			foreach (XmpNode child_node in children) {
 				var qualifier = child_node.GetQualifier (XML_NS, "lang");
 				if (qualifier != null && qualifier.Value == "x-default")
 					return child_node.Value;
 			}
-			
+
 			if (children.Count > 0 && children[0].Type == XmpNodeType.Simple)
 				return children[0].Value;
-			
+
 			return null;
 		}
-		
+
 		/// <summary>
 		///    Stores a the given <paramref name="value"/> as the default language
 		///    value for the alt-node associated with the namespace
@@ -785,15 +785,15 @@ namespace TagLib.Xmp
 				RemoveNode (ns, name);
 				return;
 			}
-			
+
 			var node = NewNode (ns, name, XmpNodeType.Alt);
-			
+
 			var child_node = new XmpNode (RDF_NS, LI_URI, value);
 			child_node.AddQualifier (new XmpNode (XML_NS, "lang", "x-default"));
-			
+
 			node.AddChild (child_node);
 		}
-		
+
 		/// <summary>
 		///    The method returns an array of <see cref="System.String"/> values
 		///    which are the stored text of the child nodes of the node associated
@@ -811,22 +811,22 @@ namespace TagLib.Xmp
 		public string[] GetCollectionNode (string ns, string name)
 		{
 			var node = FindNode (ns, name);
-			
+
 			if (node == null)
 				return null;
-			
+
 			List<string> items = new List<string> ();
-				
+
 			foreach (XmpNode child in node.Children) {
-				
+
 				string item = child.Value;
 				if (item != null)
 					items.Add (item);
 			}
-			
+
 			return items.ToArray ();
 		}
-		
+
 		/// <summary>
 		///    Sets a <see cref="System.String[]"/> as texts to the children of the
 		///    node associated with the namespace <paramref name="ns"/> and the name
@@ -848,12 +848,12 @@ namespace TagLib.Xmp
 		{
 			if (type == XmpNodeType.Simple || type == XmpNodeType.Alt)
 				throw new ArgumentException ("type");
-			
+
 			if (values == null) {
 				RemoveNode (ns, name);
 				return;
 			}
-			
+
 			var node = NewNode (ns, name, type);
 			foreach (string value in values)
 				node.AddChild (new XmpNode (RDF_NS, LI_URI, value));
@@ -921,7 +921,7 @@ namespace TagLib.Xmp
 		/// </param>
 		public void SetRationalNode (string ns, string name, double value)
 		{
-			
+
 			string fraction = DecimalToFraction (value, (long) Math.Pow (10, 10));
 			SetTextNode (ns, name, fraction);
 		}
@@ -1082,7 +1082,7 @@ namespace TagLib.Xmp
 				SetLangAltNode (EXIF_NS, "UserComment", value);
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the keywords for the image described
 		///    by the current instance.
@@ -1095,7 +1095,7 @@ namespace TagLib.Xmp
 			get { return GetCollectionNode (DC_NS, "subject") ?? new string [] {}; }
 			set { SetCollectionNode (DC_NS, "subject", value, XmpNodeType.Bag); }
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the rating for the image described
 		///    by the current instance.
@@ -1109,7 +1109,7 @@ namespace TagLib.Xmp
 			set { SetTextNode (XAP_NS, "Rating", value != null ? value.ToString () : null);
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the time when the image, the current instance
 		///    belongs to, was taken.
@@ -1123,7 +1123,7 @@ namespace TagLib.Xmp
 				try {
 					return System.DateTime.Parse (GetTextNode (XAP_NS, "CreateDate"));
 				} catch {}
-				
+
 				return null;
 			}
 			set {
@@ -1131,7 +1131,7 @@ namespace TagLib.Xmp
 				SetTextNode (XAP_NS, "CreateDate", value != null ? value.ToString () : null);
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the orientation of the image described
 		///    by the current instance.
@@ -1147,7 +1147,7 @@ namespace TagLib.Xmp
 				if (orientation.HasValue)
 					return (ImageOrientation) orientation;
 
-				return ImageOrientation.TopLeft;
+				return ImageOrientation.None;
 			}
 			set {
 				if ((uint) value < 1U || (uint) value > 8U) {
@@ -1171,7 +1171,7 @@ namespace TagLib.Xmp
 			get { return GetTextNode (XAP_NS, "CreatorTool"); }
 			set { SetTextNode (XAP_NS, "CreatorTool", value); }
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the latitude of the GPS coordinate the current
 		///    image was taken.
@@ -1184,20 +1184,20 @@ namespace TagLib.Xmp
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the longitude of the GPS coordinate the current
 		///    image was taken.
 		/// </summary>
 		/// <value>
-		///    A <see cref="System.Nullable"/> with the longitude ranging from -180.0 
+		///    A <see cref="System.Nullable"/> with the longitude ranging from -180.0
 		///    to +180.0 degrees.
 		/// </value>
 		public override double? Longitude {
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the altitude of the GPS coordinate the current
 		///    image was taken. The unit is meter.
@@ -1210,7 +1210,7 @@ namespace TagLib.Xmp
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets the exposure time the image, the current instance belongs
 		///    to, was taken with.
@@ -1222,7 +1222,7 @@ namespace TagLib.Xmp
 			get { return GetRationalNode (EXIF_NS, "ExposureTime"); }
 			set { SetRationalNode (EXIF_NS, "ExposureTime", value.HasValue ? (double) value : 0); }
 		}
-		
+
 		/// <summary>
 		///    Gets the FNumber the image, the current instance belongs
 		///    to, was taken with.
@@ -1244,7 +1244,7 @@ namespace TagLib.Xmp
 				SetRationalNode (EXIF_NS, "FNumber", value.HasValue ? (double) value : 0);
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets the ISO speed the image, the current instance belongs
 		///    to, was taken with.
@@ -1273,7 +1273,7 @@ namespace TagLib.Xmp
 				SetCollectionNode (EXIF_NS, "ISOSpeedRatings", new string [] { value.ToString () }, XmpNodeType.Seq);
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets the focal length the image, the current instance belongs
 		///    to, was taken with.
@@ -1297,7 +1297,7 @@ namespace TagLib.Xmp
 			get { return GetUIntNode (EXIF_NS, "FocalLengthIn35mmFilm"); }
 			set { SetTextNode (EXIF_NS, "FocalLengthIn35mmFilm", value.HasValue ? value.Value.ToString () : String.Empty); }
 		}
-		
+
 		/// <summary>
 		///    Gets the manufacture of the recording equipment the image, the
 		///    current instance belongs to, was taken with.
@@ -1309,7 +1309,7 @@ namespace TagLib.Xmp
 			get { return GetTextNode (TIFF_NS, "Make"); }
 			set { SetTextNode (TIFF_NS, "Make", value); }
 		}
-		
+
 		/// <summary>
 		///    Gets the model name of the recording equipment the image, the
 		///    current instance belongs to, was taken with.
@@ -1321,7 +1321,7 @@ namespace TagLib.Xmp
 			get { return GetTextNode (TIFF_NS, "Model"); }
 			set { SetTextNode (TIFF_NS, "Model", value); }
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the creator of the image.
 		/// </summary>

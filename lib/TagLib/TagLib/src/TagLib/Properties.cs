@@ -416,17 +416,17 @@ namespace TagLib {
 					if (codec == null ||
 						(codec.MediaTypes & MediaTypes.Photo) == 0)
 						continue;
-					
+
 					IPhotoCodec photo = codec as IPhotoCodec;
-					
+
 					if (photo != null && photo.PhotoWidth != 0)
 						return photo.PhotoWidth;
 				}
-				
+
 				return 0;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets the height of the photo represented by the current
 		///    instance.
@@ -441,13 +441,13 @@ namespace TagLib {
 					if (codec == null ||
 						(codec.MediaTypes & MediaTypes.Photo) == 0)
 						continue;
-					
+
 					IPhotoCodec photo = codec as IPhotoCodec;
-					
+
 					if (photo != null && photo.PhotoHeight != 0)
 						return photo.PhotoHeight;
 				}
-				
+
 				return 0;
 			}
 		}
@@ -467,17 +467,17 @@ namespace TagLib {
 					if (codec == null ||
 						(codec.MediaTypes & MediaTypes.Photo) == 0)
 						continue;
-					
+
 					IPhotoCodec photo = codec as IPhotoCodec;
-					
+
 					if (photo != null && photo.PhotoQuality != 0)
 						return photo.PhotoQuality;
 				}
-				
+
 				return 0;
 			}
 		}
-	
+
 
 		#endregion
 	}

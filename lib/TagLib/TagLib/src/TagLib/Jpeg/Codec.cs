@@ -32,7 +32,7 @@ namespace TagLib.Jpeg
 	/// </summary>
 	public class Codec : Image.Codec
 	{
-		
+
 		/// <summary>
 		///    Gets a text description of the media represented by the
 		///    current instance.
@@ -43,7 +43,7 @@ namespace TagLib.Jpeg
 		/// </value>
 		public override string Description { get { return "JFIF File"; } }
 
-		
+
 		/// <summary>
 		///    Constructs a new <see cref="Codec" /> with the given width
 		///    and height.

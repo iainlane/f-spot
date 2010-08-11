@@ -46,7 +46,7 @@ namespace TagLib.IFD.Tags
 		///     http://www.awaresystems.be/imaging/tiff/tifftags/xresolution.html
 		/// </summary>
 		XResolution                                        = 282,
-		
+
 		/// <summary>
 		///     The number of pixels per ResolutionUnit in the ImageLength direction. (Hex: 0x011B)
 		///     http://www.awaresystems.be/imaging/tiff/tifftags/yresolution.html
@@ -58,19 +58,19 @@ namespace TagLib.IFD.Tags
 		///     http://www.awaresystems.be/imaging/tiff/tifftags/resolutionunit.html
 		/// </summary>
 		ResolutionUnit                                     = 296,
-		
+
 		/// <summary>
 		///     Start of the preview image data. (Hex: 0x0201)
 		///     http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/Nikon.html#PreviewImage
 		/// </summary>
 		PreviewImageStart                                  = 513,
-		
+
 		/// <summary>
 		///     Length of the preview image data. (Hex: 0x0202)
 		///     http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/Nikon.html#PreviewImage
 		/// </summary>
 		PreviewImageLength                                 = 514,
-		
+
 		/// <summary>
 		///     Specifies the positioning of subsampled chrominance components relative to luminance samples. (Hex: 0x0213)
 		///     http://www.awaresystems.be/imaging/tiff/tifftags/ycbcrpositioning.html

@@ -8,7 +8,6 @@ INCLUDES =							\
 	-DGDK_PIXBUF_DISABLE_SINGLE_INCLUDES			\
 	-DGTK_DISABLE_SINGLE_INCLUDES				\
 	$(F_CFLAGS)						\
-	$(EXIF_CFLAGS)						\
 	$(LCMS_CFLAGS)						\
 	$(WERROR)
 
@@ -19,11 +18,12 @@ libfspot_la_SOURCES =				\
 	f-image-surface.c			\
 	f-image-surface.h			\
 	f-pixbuf-unsharp.c			\
+	f-pixbuf-utils.c			\
+	f-pixbuf-utils.h			\
 	f-screen-utils.c
 
 libfspot_la_LIBADD = 					\
 	-lX11						\
 	$(F_LIBS)					\
 	$(LCMS_LIBS)					\
-	$(EXIF_LIBS)					\
 	$(GIO_LIBS)

@@ -30,19 +30,19 @@ namespace TagLib.IFD.Entries
 	/// </summary>
 	public class ByteIFDEntry : IFDEntry
 	{
-		
+
 #region Properties
-		
+
 		/// <value>
 		///    The ID of the tag, the current instance belongs to
 		/// </value>
 		public ushort Tag { get; private set; }
-		
+
 		/// <value>
 		///    The value which is stored by the current instance
 		/// </value>
 		public byte Value { get; private set; }
-		
+
 #endregion
 
 #region Constructors
@@ -66,7 +66,7 @@ namespace TagLib.IFD.Entries
 #endregion
 
 #region Public Methods
-		
+
 		/// <summary>
 		///    Renders the current instance to a <see cref="ByteVector"/>
 		/// </summary>
@@ -90,7 +90,7 @@ namespace TagLib.IFD.Entries
 		{
 			type = (ushort) IFDEntryType.Byte;
 			count = 1;
-			
+
 			return Value;
 		}
 

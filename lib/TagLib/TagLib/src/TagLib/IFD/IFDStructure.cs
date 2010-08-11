@@ -47,7 +47,7 @@ namespace TagLib.IFD
 		///    Contains the IFD directories in this tag.
 		/// </summary>
 		internal readonly List<IFDDirectory> directories = new List<IFDDirectory> ();
-		
+
 #endregion
 
 #region Public Properties
@@ -103,7 +103,7 @@ namespace TagLib.IFD
 				directories [directory].Remove (tag);
 			}
 		}
-		
+
 		/// <summary>
 		///    Removes a given tag from the IFD.
 		/// </summary>
@@ -118,7 +118,7 @@ namespace TagLib.IFD
 		{
 			RemoveTag (directory, (ushort) entry_tag);
 		}
-		
+
 		/// <summary>
 		///    Adds an <see cref="IFDEntry"/> to the IFD, if it is not already
 		///    contained in, it fails otherwise.
@@ -137,7 +137,7 @@ namespace TagLib.IFD
 
 			directories [directory].Add (entry.Tag, entry);
 		}
-		
+
 		/// <summary>
 		///    Adds an <see cref="IFDEntry"/> to the IFD. If it is already contained
 		///    in the IFD, it is overwritten.
@@ -153,10 +153,10 @@ namespace TagLib.IFD
 		{
 			if (ContainsTag (directory, entry.Tag))
 				RemoveTag (directory, entry.Tag);
-			
+
 			AddEntry (directory, entry);
 		}
-		
+
 		/// <summary>
 		///   Returns the <see cref="IFDEntry"/> belonging to the given tag.
 		/// </summary>
@@ -175,10 +175,10 @@ namespace TagLib.IFD
 		{
 			if (!ContainsTag (directory, tag))
 				return null;
-			
+
 			return directories [directory] [tag];
 		}
-		
+
 		/// <summary>
 		///   Returns the <see cref="IFDEntry"/> belonging to the given tag.
 		/// </summary>
@@ -197,9 +197,9 @@ namespace TagLib.IFD
 		{
 			return GetEntry (directory, (ushort) entry_tag);
 		}
-		
+
 		/// <summary>
-		///    Returns the <see cref="System.String"/> stored in the 
+		///    Returns the <see cref="System.String"/> stored in the
 		///    entry defined by <paramref name="entry_tag"/>.
 		/// </summary>
 		/// <param name="directory">
@@ -217,13 +217,13 @@ namespace TagLib.IFD
 		public string GetStringValue (int directory, ushort entry_tag)
 		{
 			var entry = GetEntry (directory, entry_tag);
-			
+
 			if (entry != null && entry is StringIFDEntry)
 				return (entry as StringIFDEntry).Value;
-			
+
 			return null;
 		}
-		
+
 		/// <summary>
 		///    Returns a <see cref="System.Nullable"/> containing the
 		///    <see cref="System.Byte"/> stored in the entry defined
@@ -245,13 +245,13 @@ namespace TagLib.IFD
 		public byte? GetByteValue (int directory, ushort entry_tag)
 		{
 			var entry = GetEntry (directory, entry_tag);
-			
+
 			if (entry != null && entry is ByteIFDEntry)
 				return (entry as ByteIFDEntry).Value;
-			
+
 			return null;
 		}
-		
+
 		/// <summary>
 		///    Returns a <see cref="System.Nullable"/> containing the
 		///    <see cref="System.UInt32"/> stored in the entry defined
@@ -273,16 +273,16 @@ namespace TagLib.IFD
 		public uint? GetLongValue (int directory, ushort entry_tag)
 		{
 			var entry = GetEntry (directory, entry_tag);
-			
+
 			if (entry is LongIFDEntry)
 				return (entry as LongIFDEntry).Value;
-				
+
 			if (entry is ShortIFDEntry)
 				return (entry as ShortIFDEntry).Value;
-			
+
 			return null;
 		}
-		
+
 		/// <summary>
 		///    Returns a <see cref="System.Nullable"/> containing the
 		///    <see cref="System.Double"/> stored in the entry defined
@@ -305,16 +305,16 @@ namespace TagLib.IFD
 		public double? GetRationalValue (int directory, ushort entry_tag)
 		{
 			var entry = GetEntry (directory, entry_tag);
-			
+
 			if (entry is RationalIFDEntry)
 				return (entry as RationalIFDEntry).Value;
-				
+
 			if (entry is SRationalIFDEntry)
 				return (entry as SRationalIFDEntry).Value;
-			
+
 			return null;
 		}
-		
+
 		/// <summary>
 		///    Returns a <see cref="System.Nullable"/> containing the
 		///    <see cref="System.DateTime"/> stored in the entry defined
@@ -338,17 +338,17 @@ namespace TagLib.IFD
 		public DateTime? GetDateTimeValue (int directory, ushort entry_tag)
 		{
 			string date_string = GetStringValue (directory, entry_tag);
-				
+
 			try {
 				DateTime date_time = DateTime.ParseExact (date_string,
 						DATETIME_FORMAT, System.Globalization.CultureInfo.InvariantCulture);
-				
+
 				return date_time;
 			} catch {}
-				
+
 			return null;
 		}
-		
+
 		/// <summary>
 		///    Adds a <see cref="Entries.StringIFDEntry"/> to the directory with tag
 		///    given by <paramref name="entry_tag"/> and value given by <paramref name="value"/>
@@ -370,7 +370,7 @@ namespace TagLib.IFD
 				RemoveTag (directory, entry_tag);
 				return;
 			}
-			
+
 			SetEntry (directory, new StringIFDEntry (entry_tag, value));
 		}
 
@@ -392,7 +392,7 @@ namespace TagLib.IFD
 		{
 			SetEntry (directory, new ByteIFDEntry (entry_tag, value));
 		}
-		
+
 		/// <summary>
 		///    Adds a <see cref="Entries.LongIFDEntry"/> to the directory with tag
 		///    given by <paramref name="entry_tag"/> and value given by <paramref name="value"/>
@@ -411,7 +411,7 @@ namespace TagLib.IFD
 		{
 			SetEntry (directory, new LongIFDEntry (entry_tag, value));
 		}
-		
+
 		/// <summary>
 		///    Adds a <see cref="Entries.RationalIFDEntry"/> to the directory with tag
 		///    given by <paramref name="entry_tag"/> and value given by <paramref name="value"/>
@@ -431,14 +431,14 @@ namespace TagLib.IFD
 		{
 			if (value < 0.0d || value > (double)UInt32.MaxValue)
 				throw new ArgumentException ("value");
-			
+
 			uint scale = (value >= 1.0d) ? 1 : UInt32.MaxValue;
-			
+
 			Rational rational = new Rational ((uint) (scale * value), scale);
-			
+
 			SetEntry (directory, new RationalIFDEntry (entry_tag, rational));
 		}
-		
+
 		/// <summary>
 		///    Adds a <see cref="Entries.StringIFDEntry"/> to the directory with tag
 		///    given by <paramref name="entry_tag"/> and value given by <paramref name="value"/>.
@@ -457,7 +457,7 @@ namespace TagLib.IFD
 		public void SetDateTimeValue (int directory, ushort entry_tag, DateTime value)
 		{
 			string date_string = value.ToString (DATETIME_FORMAT);
-				
+
 			SetStringValue (directory, entry_tag, date_string);
 		}
 

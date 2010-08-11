@@ -34,21 +34,21 @@ namespace TagLib.IFD.Entries
 	{
 
 #region Private Fields
-		
+
 		/// <value>
 		///    Store the strip length to read them before writing.
 		/// </value>
 		private uint[] byte_counts;
-		
+
 		/// <value>
 		///    The file the offsets belong to
 		/// </value>
 		private File file;
-		
+
 #endregion
-		
+
 #region Constructors
-		
+
 		/// <summary>
 		///    Constructor.
 		/// </summary>
@@ -70,7 +70,7 @@ namespace TagLib.IFD.Entries
 			Values = values;
 			this.byte_counts = byte_counts;
 			this.file = file;
-			
+
 			if (values.Length != byte_counts.Length)
 				throw new Exception ("strip offsets and strip byte counts do not have the same length");
 		}
@@ -78,7 +78,7 @@ namespace TagLib.IFD.Entries
 #endregion
 
 #region Public Methods
-		
+
 		/// <summary>
 		///    Renders the current instance to a <see cref="ByteVector"/>
 		/// </summary>
@@ -106,22 +106,22 @@ namespace TagLib.IFD.Entries
 			// collected by offset_data. Then both are concatenated.
 			ByteVector data = new ByteVector ();
 			ByteVector offset_data = new ByteVector ();
-			
+
 			// every offset needs 4 byte, we need to reserve the bytes.
 			uint data_offset = offset + (uint) (4 * Values.Length);
-			
+
 			for (int i = 0; i < Values.Length; i++) {
 				uint new_offset = (uint) (data_offset + data.Count);
-				
+
 				file.Seek (Values[i], SeekOrigin.Begin);
 				data.Add (file.ReadBlock ((int) byte_counts[i]));
-				
+
 				// update strip offset data to new offset
 				Values[i] = new_offset;
-				
+
 				offset_data.Add (ByteVector.FromUInt (new_offset, is_bigendian));
 			}
-			
+
 			// If the StripOffsets only consists of one offset, this doesn't work, because this offset
 			// should be stored inside the IFD as a value. But, because of the additional image data,
 			// it is not stored there. We need to fix this, that the offset is adjusted correctly.
@@ -133,15 +133,15 @@ namespace TagLib.IFD.Entries
 				data.Insert (0, offset_data);
 			else
 				Values[0] = offset;
-			
+
 			while (data.Count < 4)
 				data.Add (0x00);
-			
+
 			// the entry is a single long entry where the value is an offset to the data
 			// the offset is automatically updated by the renderer.
 			type = (ushort) IFDEntryType.Long;
 			count = (uint) Values.Length;
-			
+
 			return data;
 		}
 

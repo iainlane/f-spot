@@ -192,7 +192,7 @@ namespace TagLib {
 		/// </value>
 		int VideoHeight {get;}
 	}
-	
+
 	/// <summary>
 	///    This interface inherits <see cref="ICodec" /> to provide
 	///    information about a photo.
@@ -214,7 +214,7 @@ namespace TagLib {
 		///    photo represented by the current instance.
 		/// </value>
 		int PhotoWidth  {get;}
-		
+
 		/// <summary>
 		///    Gets the height of the photo represented by the current
 		///    instance.

@@ -53,7 +53,7 @@ namespace TagLib.IFD.Makernotes
 		///     name="base_offset"/> must contain the beginning of the segment.
 		/// </param>
 		/// <param name="ifd_offset">
-		///     A <see cref="System.UInt32"/> value with the beginning of the IFD relative to 
+		///     A <see cref="System.UInt32"/> value with the beginning of the IFD relative to
 		///     <paramref name="base_offset"/>.
 		/// </param>
 		/// <param name="max_offset">
@@ -98,7 +98,7 @@ namespace TagLib.IFD.Makernotes
 				// SubIFD with Preview Image
 				// The entry itself is usually a long
 				// TODO: handle JPEGInterchangeFormat and JPEGInterchangeFormatLength correctly
-				
+
 				// The preview field contains a long with an offset to an IFD
 				// that contains the preview image. We need to be careful
 				// though: this IFD does not contain a valid next-offset
@@ -107,10 +107,10 @@ namespace TagLib.IFD.Makernotes
 				// starting after the IFD entries).
 
 				type = (ushort) IFDEntryType.IFD;
-				
+
 				IFDStructure ifd_structure = new IFDStructure ();
 				IFDReader reader = CreateSubIFDReader (file, is_bigendian, ifd_structure, base_offset, offset, max_offset);
-			
+
 				reader.Read (1);
 				return new SubIFDEntry (tag, type, (uint) ifd_structure.Directories.Length, ifd_structure);
 			}

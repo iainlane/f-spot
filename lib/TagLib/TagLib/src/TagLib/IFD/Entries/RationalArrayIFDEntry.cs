@@ -30,7 +30,7 @@ namespace TagLib.IFD.Entries
 	/// </summary>
 	public class RationalArrayIFDEntry : ArrayIFDEntry<Rational>
 	{
-		
+
 #region Constructors
 
 		/// <summary>
@@ -52,7 +52,7 @@ namespace TagLib.IFD.Entries
 #endregion
 
 #region Public Methods
-		
+
 		/// <summary>
 		///    Renders the current instance to a <see cref="ByteVector"/>
 		/// </summary>
@@ -82,7 +82,7 @@ namespace TagLib.IFD.Entries
 				data.Add (ByteVector.FromUInt (rational.Numerator, is_bigendian));
 				data.Add (ByteVector.FromUInt (rational.Denominator, is_bigendian));
 			}
-			
+
 			return data;
 		}
 

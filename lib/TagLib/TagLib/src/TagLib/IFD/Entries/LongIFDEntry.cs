@@ -30,23 +30,23 @@ namespace TagLib.IFD.Entries
 	/// </summary>
 	public class LongIFDEntry : IFDEntry
 	{
-		
+
 #region Properties
-		
+
 		/// <value>
 		///    The ID of the tag, the current instance belongs to
 		/// </value>
 		public ushort Tag { get; private set; }
-		
+
 		/// <value>
 		///    The value which is stored by the current instance
 		/// </value>
 		public uint Value { get; private set; }
-		
+
 #endregion
 
 #region Constructors
-		
+
 		/// <summary>
 		///    Construcor.
 		/// </summary>
@@ -66,7 +66,7 @@ namespace TagLib.IFD.Entries
 #endregion
 
 #region Public Methods
-		
+
 		/// <summary>
 		///    Renders the current instance to a <see cref="ByteVector"/>
 		/// </summary>

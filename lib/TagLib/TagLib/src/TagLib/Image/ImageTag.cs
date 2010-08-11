@@ -27,7 +27,7 @@ using System;
 
 namespace TagLib.Image
 {
-	
+
 	/// <summary>
 	///    A class to abstract the image tags. It extends the <see cref="Tag"/>
 	///    class and adds some image specific propties.
@@ -36,7 +36,7 @@ namespace TagLib.Image
 	{
 
 #region Public Properties
-	
+
 		/// <summary>
 		///    Gets or sets the keywords for the image described
 		///    by the current instance.
@@ -49,7 +49,7 @@ namespace TagLib.Image
 			get { return new string [] {}; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the rating for the image described
 		///    by the current instance.
@@ -62,7 +62,7 @@ namespace TagLib.Image
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the time when the image, the current instance
 		///    belongs to, was taken.
@@ -74,7 +74,7 @@ namespace TagLib.Image
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the orientation of the image described
 		///    by the current instance.
@@ -84,10 +84,10 @@ namespace TagLib.Image
 		///    image
 		/// </value>
 		public virtual ImageOrientation Orientation {
-			get { return ImageOrientation.TopLeft; }
+			get { return ImageOrientation.None; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the software the image, the current instance
 		///    belongs to, was created with.
@@ -100,7 +100,7 @@ namespace TagLib.Image
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the latitude of the GPS coordinate the current
 		///    image was taken.
@@ -113,20 +113,20 @@ namespace TagLib.Image
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the longitude of the GPS coordinate the current
 		///    image was taken.
 		/// </summary>
 		/// <value>
-		///    A <see cref="System.Nullable"/> with the longitude ranging from -180.0 
+		///    A <see cref="System.Nullable"/> with the longitude ranging from -180.0
 		///    to +180.0 degrees.
 		/// </value>
 		public virtual double? Longitude {
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the altitude of the GPS coordinate the current
 		///    image was taken. The unit is meter.
@@ -139,7 +139,7 @@ namespace TagLib.Image
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets the exposure time the image, the current instance belongs
 		///    to, was taken with.
@@ -151,7 +151,7 @@ namespace TagLib.Image
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets the FNumber the image, the current instance belongs
 		///    to, was taken with.
@@ -163,7 +163,7 @@ namespace TagLib.Image
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets the ISO speed the image, the current instance belongs
 		///    to, was taken with.
@@ -175,7 +175,7 @@ namespace TagLib.Image
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets the focal length the image, the current instance belongs
 		///    to, was taken with.
@@ -187,7 +187,7 @@ namespace TagLib.Image
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets the focal length the image, the current instance belongs
 		///    to, was taken with, assuming a 35mm film camera.
@@ -199,7 +199,7 @@ namespace TagLib.Image
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets the manufacture of the recording equipment the image, the
 		///    current instance belongs to, was taken with.
@@ -211,7 +211,7 @@ namespace TagLib.Image
 			get { return null; }
 			set {}
 		}
-		
+
 		/// <summary>
 		///    Gets the model name of the recording equipment the image, the
 		///    current instance belongs to, was taken with.
@@ -236,6 +236,6 @@ namespace TagLib.Image
 		}
 
 #endregion
-		
+
 	}
 }

@@ -6,134 +6,123 @@ data/desktop-files/f-spot.desktop.in.in
 data/desktop-files/f-spot.desktop.in.in
 data/desktop-files/f-spot-import.desktop.in.in
 data/desktop-files/f-spot-view.desktop.in.in
-extensions/Exporters/CDExport/CDExport.addin.xml
-extensions/Exporters/CDExport/CDExport.cs
-[type: gettext/glade]extensions/Exporters/CDExport/CDExport.ui
-extensions/Exporters/FacebookExport/FacebookExport.addin.xml
-extensions/Exporters/FacebookExport/FacebookExport.cs
-extensions/Exporters/FacebookExport/FacebookExportDialog.cs
-[type: gettext/glade]extensions/Exporters/FacebookExport/FacebookExport.ui
-extensions/Exporters/FlickrExport/FlickrExport.addin.xml
-extensions/Exporters/FlickrExport/FlickrExport.cs
-extensions/Exporters/FlickrExport/FlickrExport.glade
-extensions/Exporters/FolderExport/FolderExport.addin.xml
-extensions/Exporters/FolderExport/FolderExport.cs
-extensions/Exporters/FolderExport/FolderExport.glade
-extensions/Exporters/GalleryExport/FormClient.cs
-extensions/Exporters/GalleryExport/GalleryExport.addin.xml
-extensions/Exporters/GalleryExport/GalleryExport.cs
-extensions/Exporters/GalleryExport/GalleryExport.glade
-extensions/Exporters/GalleryExport/GalleryRemote.cs
-extensions/Exporters/PicasaWebExport/PicasaWebExport.addin.xml
-extensions/Exporters/PicasaWebExport/PicasaWebExport.cs
-extensions/Exporters/PicasaWebExport/PicasaWebExport.glade
-extensions/Exporters/SmugMugExport/SmugMugExport.addin.xml
-extensions/Exporters/SmugMugExport/SmugMugExport.cs
-extensions/Exporters/SmugMugExport/SmugMugExport.glade
-extensions/Exporters/TabbloExport/Tabblo/Connection.cs
-extensions/Exporters/TabbloExport/TabbloExport.addin.xml
-extensions/Exporters/TabbloExport/TabbloExport.cs
-[type: gettext/glade]extensions/Exporters/TabbloExport/ui/TabbloExport.ui
-[type: gettext/glade]extensions/Exporters/TabbloExport/ui/TrustError.ui
-extensions/Exporters/ZipExport/ZipExport.addin.xml
-extensions/Exporters/ZipExport/ZipExport.cs
-extensions/Exporters/ZipExport/ZipExport.glade
-extensions/Tools/HashJob/HashJob.addin.xml
-extensions/Tools/HashJob/HashJob.cs
-extensions/Tools/LiveWebGallery/GalleryRequestHandler.cs
-extensions/Tools/LiveWebGallery/LiveWebGallery.addin.xml
-extensions/Tools/LiveWebGallery/LiveWebGalleryDialog.cs
-[type: gettext/glade]extensions/Tools/LiveWebGallery/ui/LiveWebGallery.ui
-extensions/Tools/MergeDb/MergeDb.addin.xml
-extensions/Tools/MergeDb/MergeDb.cs
-extensions/Tools/MergeDb/MergeDb.glade
-extensions/Tools/MergeDb/PickFolderDialog.cs
-extensions/Tools/ScreensaverConfig/ScreensaverConfig.addin.xml
-[type: gettext/glade]extensions/Tools/ScreensaverConfig/ScreensaverConfigDialog.ui
 f-spot.schemas.in
-src/Core/App.cs
-src/Core/Photo.cs
-src/Editors/AutoStretchEditor.cs
-src/Editors/ColorEditor.cs
-src/Editors/CropEditor.cs
-src/Editors/DesaturateEditor.cs
-src/Editors/RedEyeEditor.cs
-src/Editors/SepiaEditor.cs
-src/Editors/SoftFocusEditor.cs
-src/Editors/TiltEditor.cs
-src/Filters/ResizeFilter.cs
-src/Filters/SharpFilter.cs
-src/FSpot.addin.xml
-src/f-spot.glade
-src/FullScreenView.cs
-src/GroupSelector.cs
-src/Imaging/ImageFile.cs
-src/Import/ImportController.cs
-src/Import/MetadataImporter.cs
-src/ItemAction.cs
-src/Jobs/SyncMetadataJob.cs
-src/Loupe.cs
-src/MainWindow.cs
-src/PhotoPopup.cs
-src/PhotoStore.cs
-src/PhotoTagMenu.cs
-src/PhotoVersionCommands.cs
-src/PhotoVersionMenu.cs
-src/PhotoView.cs
-src/Preferences.cs
-src/PrintOperation.cs
-src/QueryWidget.cs
-src/RotateCommand.cs
-src/SendEmail.cs
-src/Sharpener.cs
-src/SingleView.cs
-src/TagCommands.cs
-src/TagPopup.cs
-src/TagQueryWidget.cs
-src/TagSelectionWidget.cs
-src/TagStore.cs
-src/Term.cs
-src/ThumbnailCommand.cs
-src/UI.Dialog/AboutDialog.cs
-src/UI.Dialog/AdjustTimeDialog.cs
-src/UI.Dialog/DateRangeDialog.cs
-src/UI.Dialog/EditExceptionDialog.cs
-src/UI.Dialog/EditTagDialog.cs
-src/UI.Dialog/EditTagIconDialog.cs
-src/UI.Dialog/ExceptionDialog.cs
-src/UI.Dialog/ImportDialog.cs
-src/UI.Dialog/PreferenceDialog.cs
-src/UI.Dialog/ProgressDialog.cs
-src/UI.Dialog/RepairDbDialog.cs
-src/UI.Dialog/SelectionRatioDialog.cs
-src/UI.Dialog/ThreadProgressDialog.cs
-[type: gettext/glade]src/UI.Dialog/ui/AdjustTimeDialog.ui
-[type: gettext/glade]src/UI.Dialog/ui/CreateTagDialog.ui
-[type: gettext/glade]src/UI.Dialog/ui/DateRangeDialog.ui
-[type: gettext/glade]src/UI.Dialog/ui/EditTagDialog.ui
-[type: gettext/glade]src/UI.Dialog/ui/EditTagIconDialog.ui
-[type: gettext/glade]src/UI.Dialog/ui/LastImportRollFilterDialog.ui
-[type: gettext/glade]src/UI.Dialog/ui/PreferenceDialog.ui
-[type: gettext/glade]src/UI.Dialog/ui/RatingFilterDialog.ui
-[type: gettext/glade]src/UI.Dialog/ui/RepairDialog.ui
-[type: gettext/glade]src/ui/import.ui
-[type: gettext/glade]src/ui/mail_dialog.ui
-[type: gettext/glade]src/ui/main_window.ui
-[type: gettext/glade]src/ui/single_view.ui
-[type: gettext/glade]src/ui/viewer_preferences.ui
-src/Updater.cs
-src/Util.cs
-src/Utils/Unix.cs
-src/Widgets/CustomPrintWidget.cs
-src/Widgets/EditorPage.cs
-src/Widgets/Filmstrip.cs
-src/Widgets/FindBar.cs
-src/Widgets/FolderTreePage.cs
-src/Widgets/FolderTreeView.cs
-src/Widgets/InfoBox.cs
-src/Widgets/MetadataDisplay.cs
-src/Widgets/OpenWithMenu.cs
-src/Widgets/RatingMenuItem.cs
-src/Widgets/Sidebar.cs
-src/Widgets/TagMenu.cs
+lib/Mono.Google/Mono.Google/CaptchaException.cs
+lib/Mono.Tabblo/Mono.Tabblo/Connection.cs
+src/Clients/MainApp/FSpot.addin.xml
+src/Clients/MainApp/FSpot/App.cs
+src/Clients/MainApp/FSpot.Database/Updater.cs
+src/Clients/MainApp/FSpot.Editors/AutoStretchEditor.cs
+src/Clients/MainApp/FSpot.Editors/ColorEditor.cs
+src/Clients/MainApp/FSpot.Editors/CropEditor.cs
+src/Clients/MainApp/FSpot.Editors/DesaturateEditor.cs
+src/Clients/MainApp/FSpot.Editors/RedEyeEditor.cs
+src/Clients/MainApp/FSpot.Editors/SepiaEditor.cs
+src/Clients/MainApp/FSpot.Editors/SoftFocusEditor.cs
+src/Clients/MainApp/FSpot.Editors/TiltEditor.cs
+src/Clients/MainApp/FSpot/FullScreenView.cs
+[type: gettext/glade]src/Clients/MainApp/f-spot.glade
+src/Clients/MainApp/FSpot/GroupSelector.cs
+src/Clients/MainApp/FSpot.Import/ImportController.cs
+src/Clients/MainApp/FSpot.Import/MetadataImporter.cs
+src/Clients/MainApp/FSpot/ItemAction.cs
+src/Clients/MainApp/FSpot.Jobs/SyncMetadataJob.cs
+src/Clients/MainApp/FSpot/MainWindow.cs
+src/Clients/MainApp/FSpot/Photo.cs
+src/Clients/MainApp/FSpot/PhotoStore.cs
+src/Clients/MainApp/FSpot/PhotoView.cs
+src/Clients/MainApp/FSpot/Preferences.cs
+src/Clients/MainApp/FSpot/PrintOperation.cs
+src/Clients/MainApp/FSpot/QueryWidget.cs
+src/Clients/MainApp/FSpot/RotateCommand.cs
+src/Clients/MainApp/FSpot/SendEmail.cs
+src/Clients/MainApp/FSpot/SingleView.cs
+src/Clients/MainApp/FSpot/TagQueryWidget.cs
+src/Clients/MainApp/FSpot/TagSelectionWidget.cs
+src/Clients/MainApp/FSpot/TagStore.cs
+src/Clients/MainApp/FSpot/Term.cs
+src/Clients/MainApp/FSpot.UI.Dialog/AboutDialog.cs
+src/Clients/MainApp/FSpot.UI.Dialog/AdjustTimeDialog.cs
+src/Clients/MainApp/FSpot.UI.Dialog/DateRangeDialog.cs
+src/Clients/MainApp/FSpot.UI.Dialog/EditExceptionDialog.cs
+src/Clients/MainApp/FSpot.UI.Dialog/EditTagDialog.cs
+src/Clients/MainApp/FSpot.UI.Dialog/EditTagIconDialog.cs
+src/Clients/MainApp/FSpot.UI.Dialog/ImportDialog.cs
+src/Clients/MainApp/FSpot.UI.Dialog/ImportFailureDialog.cs
+src/Clients/MainApp/FSpot.UI.Dialog/PreferenceDialog.cs
+src/Clients/MainApp/FSpot.UI.Dialog/ProgressDialog.cs
+src/Clients/MainApp/FSpot.UI.Dialog/RepairDbDialog.cs
+src/Clients/MainApp/FSpot.UI.Dialog/SelectionRatioDialog.cs
+src/Clients/MainApp/FSpot.UI.Dialog/ThreadProgressDialog.cs
+[type: gettext/glade]src/Clients/MainApp/FSpot.UI.Dialog/ui/AdjustTimeDialog.ui
+[type: gettext/glade]src/Clients/MainApp/FSpot.UI.Dialog/ui/CreateTagDialog.ui
+[type: gettext/glade]src/Clients/MainApp/FSpot.UI.Dialog/ui/DateRangeDialog.ui
+[type: gettext/glade]src/Clients/MainApp/FSpot.UI.Dialog/ui/EditTagDialog.ui
+[type: gettext/glade]src/Clients/MainApp/FSpot.UI.Dialog/ui/EditTagIconDialog.ui
+[type: gettext/glade]src/Clients/MainApp/FSpot.UI.Dialog/ui/LastImportRollFilterDialog.ui
+[type: gettext/glade]src/Clients/MainApp/FSpot.UI.Dialog/ui/PreferenceDialog.ui
+[type: gettext/glade]src/Clients/MainApp/FSpot.UI.Dialog/ui/RatingFilterDialog.ui
+[type: gettext/glade]src/Clients/MainApp/FSpot.UI.Dialog/ui/RepairDialog.ui
+src/Clients/MainApp/FSpot.Widgets/EditorPage.cs
+src/Clients/MainApp/FSpot.Widgets/Filmstrip.cs
+src/Clients/MainApp/FSpot.Widgets/FindBar.cs
+src/Clients/MainApp/FSpot.Widgets/FolderTreePage.cs
+src/Clients/MainApp/FSpot.Widgets/FolderTreeView.cs
+src/Clients/MainApp/FSpot.Widgets/InfoBox.cs
+src/Clients/MainApp/FSpot.Widgets/MetadataDisplay.cs
+src/Clients/MainApp/FSpot.Widgets/RatingMenuItem.cs
+src/Clients/MainApp/FSpot.Widgets/Sharpener.cs
+src/Clients/MainApp/FSpot.Widgets/Sidebar.cs
+src/Clients/MainApp/FSpot.Widgets/TagMenu.cs
+src/Clients/MainApp/PhotoTagMenu.cs
+src/Clients/MainApp/PhotoVersionCommands.cs
+src/Clients/MainApp/PhotoVersionMenu.cs
+src/Clients/MainApp/TagCommands.cs
+src/Clients/MainApp/TagPopup.cs
+src/Clients/MainApp/ThumbnailCommand.cs
+[type: gettext/glade]src/Clients/MainApp/ui/import.ui
+[type: gettext/glade]src/Clients/MainApp/ui/mail_dialog.ui
+[type: gettext/glade]src/Clients/MainApp/ui/main_window.ui
+[type: gettext/glade]src/Clients/MainApp/ui/single_view.ui
+[type: gettext/glade]src/Clients/MainApp/ui/tag_selection_dialog.ui
+[type: gettext/glade]src/Clients/MainApp/ui/viewer_preferences.ui
+src/Core/FSpot.Gui/FSpot.Widgets/CustomPrintWidget.cs
+src/Core/FSpot.Gui/FSpot.Widgets/OpenWithMenu.cs
+src/Extensions/Editors/FSpot.Editors.Blackout/FSpot.Addins.Editors/BlackoutEditor.cs
+src/Extensions/Editors/FSpot.Editors.BW/FSpot.Addins.Editors/BWEditor.cs
+src/Extensions/Editors/FSpot.Editors.Flip/FSpot.Addins.Editors/FlipEditor.cs
+src/Extensions/Editors/FSpot.Editors.Pixelate/FSpot.Addins.Editors/PixelateEditor.cs
+src/Extensions/Editors/FSpot.Editors.Resize/FSpot.Addins.Editors/ResizeEditor.cs
+src/Extensions/Exporters/FSpot.Exporters.CD/FSpot.Exporters.CD/CDExport.cs
+[type: gettext/glade]src/Extensions/Exporters/FSpot.Exporters.CD/Resources/CDExport.ui
+src/Extensions/Exporters/FSpot.Exporters.Facebook/FSpot.Exporters.Facebook/FacebookExport.cs
+src/Extensions/Exporters/FSpot.Exporters.Facebook/FSpot.Exporters.Facebook/FacebookExportDialog.cs
+[type: gettext/glade]src/Extensions/Exporters/FSpot.Exporters.Facebook/Resources/FacebookExport.ui
+src/Extensions/Exporters/FSpot.Exporters.Flickr/FSpot.Exporters.Flickr/FlickrExport.cs
+[type: gettext/glade]src/Extensions/Exporters/FSpot.Exporters.Flickr/Resources/FlickrExport.glade
+src/Extensions/Exporters/FSpot.Exporters.Folder/FSpot.Exporters.Folder/FolderExport.cs
+[type: gettext/glade]src/Extensions/Exporters/FSpot.Exporters.Folder/Resources/FolderExport.glade
+src/Extensions/Exporters/FSpot.Exporters.Gallery/FSpot.Exporters.Gallery/FormClient.cs
+src/Extensions/Exporters/FSpot.Exporters.Gallery/FSpot.Exporters.Gallery/GalleryExport.cs
+src/Extensions/Exporters/FSpot.Exporters.Gallery/FSpot.Exporters.Gallery/GalleryRemote.cs
+[type: gettext/glade]src/Extensions/Exporters/FSpot.Exporters.Gallery/Resources/GalleryExport.glade
+src/Extensions/Exporters/FSpot.Exporters.PicasaWeb/FSpot.Exporters.PicasaWeb/PicasaWebExport.cs
+[type: gettext/glade]src/Extensions/Exporters/FSpot.Exporters.PicasaWeb/Resources/PicasaWebExport.glade
+src/Extensions/Exporters/FSpot.Exporters.SmugMug/FSpot.Exporters.SmugMug/SmugMugExport.cs
+[type: gettext/glade]src/Extensions/Exporters/FSpot.Exporters.SmugMug/Resources/SmugMugExport.glade
+src/Extensions/Exporters/FSpot.Exporters.Tabblo/FSpot.Exporters.Tabblo/TabbloExport.cs
+[type: gettext/glade]src/Extensions/Exporters/FSpot.Exporters.Tabblo/Resources/ui/TabbloExport.ui
+[type: gettext/glade]src/Extensions/Exporters/FSpot.Exporters.Tabblo/Resources/ui/TrustError.ui
+src/Extensions/Exporters/FSpot.Exporters.Zip/FSpot.Exporters.Zip/ZipExport.cs
+[type: gettext/glade]src/Extensions/Exporters/FSpot.Exporters.Zip/Resources/ZipExport.glade
+[type: gettext/glade]src/Extensions/Tools/FSpot.Tools.ChangePhotoPath/Resources/ChangePhotoPath.glade
+src/Extensions/Tools/FSpot.Tools.DevelopInUFraw/FSpot.Tools.DevelopInUFraw/DevelopInUFRawBatch.cs
+src/Extensions/Tools/FSpot.Tools.HashJob/FSpot.Tools.HashJob/HashJob.cs
+src/Extensions/Tools/FSpot.Tools.LiveWebGallery/FSpot.Tools.LiveWebGallery/GalleryRequestHandler.cs
+src/Extensions/Tools/FSpot.Tools.LiveWebGallery/FSpot.Tools.LiveWebGallery/LiveWebGalleryDialog.cs
+[type: gettext/glade]src/Extensions/Tools/FSpot.Tools.LiveWebGallery/Resources/ui/LiveWebGallery.ui
+src/Extensions/Tools/FSpot.Tools.MergeDb/FSpot.Tools.MergeDb/MergeDb.cs
+[type: gettext/glade]src/Extensions/Tools/FSpot.Tools.MergeDb/Resources/MergeDb.glade
+src/Extensions/Tools/FSpot.Tools.MergeDb/FSpot.Tools.MergeDb/PickFolderDialog.cs
+[type: gettext/glade]src/Extensions/Tools/FSpot.Tools.ScreensaverConfig/Resources/ScreensaverConfigDialog.ui
 tools/f-spot-screensaver.desktop.in

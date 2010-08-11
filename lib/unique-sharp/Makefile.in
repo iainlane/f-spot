@@ -45,6 +45,7 @@ am__aclocal_m4_deps = $(top_srcdir)/build/m4/shave/shave.m4 \
 	$(top_srcdir)/build/m4/f-spot/flickrnet.m4 \
 	$(top_srcdir)/build/m4/f-spot/gnome-keyring-sharp.m4 \
 	$(top_srcdir)/build/m4/f-spot/gtk-sharp.m4 \
+	$(top_srcdir)/build/m4/f-spot/libfspot.m4 \
 	$(top_srcdir)/build/m4/f-spot/mono-addins.m4 \
 	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -108,6 +109,10 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BUILD_HOST_CPU = @BUILD_HOST_CPU@
+BUILD_HOST_OS = @BUILD_HOST_OS@
+BUILD_TIME = @BUILD_TIME@
+BUILD_VENDOR_ID = @BUILD_VENDOR_ID@
 CATALOGS = @CATALOGS@
 CATOBJEXT = @CATOBJEXT@
 CC = @CC@
@@ -117,9 +122,6 @@ CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CSC_DEFINES = @CSC_DEFINES@
 CXX = @CXX@
-CXXCPP = @CXXCPP@
-CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DATADIRNAME = @DATADIRNAME@
 DEFS = @DEFS@
@@ -133,6 +135,7 @@ ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
+ENABLE_RELEASE = @ENABLE_RELEASE@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FC = @FC@
@@ -160,6 +163,7 @@ GLIB_CFLAGS = @GLIB_CFLAGS@
 GLIB_GENMARSHAL = @GLIB_GENMARSHAL@
 GLIB_LIBS = @GLIB_LIBS@
 GLIB_MKENUMS = @GLIB_MKENUMS@
+GMCS_FLAGS = @GMCS_FLAGS@
 GMOFILES = @GMOFILES@
 GMSGFMT = @GMSGFMT@
 GNOME_DOC_UTILS_CFLAGS = @GNOME_DOC_UTILS_CFLAGS@
@@ -256,14 +260,12 @@ UNIQUE_LIBS = @UNIQUE_LIBS@
 USE_NLS = @USE_NLS@
 V = @V@
 VERSION = @VERSION@
-WARN_CFLAGS = @WARN_CFLAGS@
 XGETTEXT = @XGETTEXT@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
 ac_ct_CC = @ac_ct_CC@
-ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@

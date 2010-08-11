@@ -1,0 +1,2 @@
+SUBDIRS = 			\
+	FSpot.Transitions.Cover

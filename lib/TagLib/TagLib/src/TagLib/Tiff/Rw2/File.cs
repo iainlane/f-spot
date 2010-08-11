@@ -38,7 +38,10 @@ namespace TagLib.Tiff.Rw2
 	/// </summary>
 	[SupportedMimeType("taglib/rw2", "rw2")]
 	[SupportedMimeType("image/rw2")]
+	[SupportedMimeType("taglib/raw", "raw")]
+	[SupportedMimeType("image/raw")]
 	[SupportedMimeType("image/x-raw")]
+	[SupportedMimeType("image/x-panasonic-raw")]
 	public class File : TagLib.Tiff.BaseTiffFile
 	{
 #region private fields
@@ -214,7 +217,7 @@ namespace TagLib.Tiff.Rw2
 			if (type != TagTypes.TiffIFD)
 				return base.GetTag (type, create);
 
-			ImageTag new_tag = new IFDTag ();
+			ImageTag new_tag = new IFDTag (this);
 			ImageTag.AddTag (new_tag);
 			return new_tag;
 		}
@@ -298,11 +301,16 @@ namespace TagLib.Tiff.Rw2
 			IFDTag tag = GetTag (TagTypes.TiffIFD) as IFDTag;
 			IFDStructure structure = tag.Structure;
 
-			width = (int) (structure.GetLongValue (0, (ushort) IFDEntryTag.ImageWidth) ?? 0);
-			height = (int) (structure.GetLongValue (0, (ushort) IFDEntryTag.ImageLength) ?? 0);
+			width = (int) (structure.GetLongValue (0, 0x07) ?? 0);
+			height = (int) (structure.GetLongValue (0, 0x06) ?? 0);
+
+			var vendor = ImageTag.Make;
+			if (vendor == "LEICA")
+				vendor = "Leica";
+			var desc = String.Format ("{0} RAW File", vendor);
 
 			if (width > 0 && height > 0) {
-				return new Properties (TimeSpan.Zero, new Codec (width, height, "Panasonic RAW File"));
+				return new Properties (TimeSpan.Zero, new Codec (width, height, desc));
 			}
 
 			return null;

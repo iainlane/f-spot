@@ -30,19 +30,19 @@ namespace TagLib.IFD.Entries
 	/// </summary>
 	public class StringIFDEntry : IFDEntry
 	{
-		
+
 #region Properties
-		
+
 		/// <value>
 		///    The ID of the tag, the current instance belongs to
 		/// </value>
 		public ushort Tag { get; private set; }
-		
+
 		/// <value>
 		///    The value which is stored by the current instance
 		/// </value>
 		public string Value { get; private set; }
-		
+
 #endregion
 
 #region Constructors
@@ -66,7 +66,7 @@ namespace TagLib.IFD.Entries
 #endregion
 
 #region Public Methods
-		
+
 		/// <summary>
 		///    Renders the current instance to a <see cref="ByteVector"/>
 		/// </summary>
@@ -89,12 +89,12 @@ namespace TagLib.IFD.Entries
 		public ByteVector Render (bool is_bigendian, uint offset, out ushort type, out uint count)
 		{
 			type = (ushort) IFDEntryType.Ascii;
-			
+
 			ByteVector data = Value;
 			data.Add ("\0");
-			
+
 			count = (uint) data.Count;
-			
+
 			return data;
 		}
 

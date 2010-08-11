@@ -27,6 +27,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Threading;
 
 namespace Hyena.Downloader
 {
@@ -42,6 +43,7 @@ namespace Hyena.Downloader
         private Stream response_stream;
         private DateTime last_raised_percent_complete;
         private IAsyncResult async_begin_result;
+        private ManualResetEvent sync_event;
 
         public string UserAgent { get; set; }
         public Uri Uri { get; set; }
@@ -74,6 +76,14 @@ namespace Hyena.Downloader
         public HttpDownloader ()
         {
             ProgressEventRaiseLimit = TimeSpan.FromSeconds (0.25);
+        }
+
+        public void StartSync ()
+        {
+            sync_event = new ManualResetEvent (false);
+            Start ();
+            sync_event.WaitOne ();
+            sync_event = null;
         }
 
         public void Start ()
@@ -261,8 +271,16 @@ namespace Hyena.Downloader
         {
             var handler = Finished;
             if (handler != null) {
-                handler (this);
+                try {
+                    handler (this);
+                } catch (Exception e) {
+                    Log.Exception (String.Format ("HttpDownloader.Finished handler ({0})", Uri), e);
+                }
             } 
+
+            if (sync_event != null) {
+                sync_event.Set ();
+            }
         }
 
         public override string ToString ()

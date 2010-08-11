@@ -25,52 +25,52 @@
 
 namespace TagLib.IFD.Entries
 {
-	
+
 	/// <summary>
 	///    An enum to represent the manufactor of the makernote
 	///    The information of the makernote types is from:
 	///    http://exiv2.org/makernote.html
 	/// </summary>
 	public enum MakernoteType {
-		
+
 		/// <summary>
 		///    The manufactor could not be determined
 		/// </summary>
 		Unknown,
-		
+
 		/// <summary>
 		///    Canon makernote.
 		///    Standard IFD without a special prefix.
 		/// </summary>
 		Canon,
-		
+
 		/// <summary>
 		///    Panasonic makernote.
 		///    "Panasonic\0\0\0" prefix and IFD starting at offset 12.
 		///    The next-IFD pointer is missing
 		/// </summary>
 		Panasonic,
-		
+
 		/// <summary>
 		///    Pentax makernote.
 		///    "AOC\0" + 2 unknown bytes as prefix. The IFD starts at
 		///    offset 6.
 		/// </summary>
 		Pentax,
-		
+
 		/// <summary>
 		///    Nikon makernote (type 1).
 		///    Standard IFD without a special prefix.
 		/// </summary>
 		Nikon1,
-		
+
 		/// <summary>
 		///    Nikon makernote (type 2).
 		///    "Nikon\0" + 2 unknown bytes prefix. The IFD starts at
 		///    offset 8.
 		/// </summary>
 		Nikon2,
-		
+
 		/// <summary>
 		///    Nikon makernote (type 3).
 		///    "Nikon\0" + 4 bytes with verison code + Tiff header.
@@ -78,14 +78,14 @@ namespace TagLib.IFD.Entries
 		///    are relative to start of the Tiff header (byte 10)
 		/// </summary>
 		Nikon3,
-		
+
 		/// <summary>
 		///    Olympus makernote (type 1).
 		///    "OLYMP\0" + 2 unknown bytes as prefix. The IFD starts at
 		///    offset 8.
 		/// </summary>
 		Olympus1,
-		
+
 		/// <summary>
 		///    Olympus makernote (type 2)
 		///    "OLYMPUS\0II" + 2 unknown bytes as prefix. The IFD starts at
@@ -93,7 +93,7 @@ namespace TagLib.IFD.Entries
 		///    beginning of the makernote.
 		/// </summary>
 		Olympus2,
-		
+
 		/// <summary>
 		///    Sony makernote (type 1).
 		///    "SONY DSC \0\0\0" as prefix. The IFD starts at offset 12. A
@@ -101,8 +101,8 @@ namespace TagLib.IFD.Entries
 		/// </summary>
 		Sony
 	}
-	
-	
+
+
 	/// <summary>
 	///    Contains a Makernote IFD.
 	/// </summary>
@@ -120,56 +120,56 @@ namespace TagLib.IFD.Entries
 	/// </remarks>
 	public class MakernoteIFDEntry : IFDEntry
 	{
-		
+
 #region Private Fields
-		
+
 		/// <value>
 		///    Stores the prefix of the makernote
 		/// </value>
 		private ByteVector prefix;
-		
+
 		/// <value>
 		///    Stores the offset of the IFD contained in makernote
 		/// </value>
 		private uint ifd_offset;
-		
+
 		/// <value>
 		///    Indicates, if the offsets are relative to the current makernote
 		///    or absolut to the base_offset of the surrounding IFD.
 		/// </value>
 		private bool absolute_offset;
-		
+
 		/// <value>
 		///    Stores, if the makernote is encoded in big- or little endian.
 		///    If the field is <see langword="null"/>, the endianess of the
 		///    surrounding IFD is used.
 		/// </value>
 		private bool? is_bigendian;
-		
+
 #endregion
-		
+
 #region Properties
-		
+
 		/// <value>
 		///    The ID of the tag, the current instance belongs to
 		/// </value>
 		public ushort Tag { get; private set; }
-		
+
 		/// <value>
 		///    The type of the makernote the current instance represents
 		/// </value>
 		public MakernoteType MakernoteType { get; private set; }
-		
+
 		/// <value>
 		///    The pure <see cref="IFDStructure"/> which is stored by the
 		///    makernote.
 		/// </value>
 		public IFDStructure Structure { get; private set; }
-		
+
 #endregion
 
 #region Constructors
-		
+
 		/// <summary>
 		///    Construcor.
 		/// </summary>
@@ -212,7 +212,7 @@ namespace TagLib.IFD.Entries
 			this.absolute_offset = absolute_offset;
 			this.is_bigendian = is_bigendian;
 		}
-		
+
 		/// <summary>
 		///    Constructor. Creates a makernote instance just containing an IFD and
 		///    without any special prefix or offset behavior.
@@ -234,7 +234,7 @@ namespace TagLib.IFD.Entries
 #endregion
 
 #region Public Methods
-		
+
 		/// <summary>
 		///    Renders the current instance to a <see cref="ByteVector"/>
 		/// </summary>
@@ -257,17 +257,17 @@ namespace TagLib.IFD.Entries
 		public ByteVector Render (bool is_bigendian, uint offset, out ushort type, out uint count)
 		{
 			type = (ushort) IFDEntryType.Undefined;
-			
+
 			var renderer =
 				new IFDRenderer (this.is_bigendian ?? is_bigendian, Structure, absolute_offset ? offset + ifd_offset : ifd_offset);
-			
+
 			ByteVector data = renderer.Render ();
 			data.Insert (0, prefix);
 			count = (uint) data.Count;
 			return data;
 		}
-		
+
 #endregion
-		
+
 	}
 }

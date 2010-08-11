@@ -165,6 +165,5 @@ namespace TagLib.Tiff.Nef
 			return new Codec (width, height, "Nikon Raw File");
 		}
 
-
 	}
 }

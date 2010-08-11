@@ -44,9 +44,9 @@ namespace TagLib.IFD.Entries
 		///    The structures of the IFDs to which this entry points.
 		/// </value>
 		public IFDStructure [] Entries { get; private set; }
-		
+
 #region Constructors
-		
+
 		/// <summary>
 		///    Constructor.
 		/// </summary>
@@ -66,7 +66,7 @@ namespace TagLib.IFD.Entries
 #endregion
 
 #region Public Methods
-		
+
 		/// <summary>
 		///    Renders the current instance to a <see cref="ByteVector"/>
 		/// </summary>

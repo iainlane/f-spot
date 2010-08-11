@@ -30,19 +30,19 @@ namespace TagLib.IFD.Entries
 	/// </summary>
 	public class SubIFDEntry : IFDEntry
 	{
-		
+
 #region Properties
-		
+
 		/// <value>
 		///    The ID of the tag, the current instance belongs to
 		/// </value>
 		public ushort Tag { get; private set; }
-		
+
 		/// <value>
 		///    The type of the IFD entry.
 		/// </value>
 		public ushort Type { get; private set; }
-		
+
 		/// <value>
 		///    The count of the IFD entry.
 		/// </value>
@@ -65,7 +65,7 @@ namespace TagLib.IFD.Entries
 				return sum;
 			}
 		}
-		
+
 		/// <summary>
 		///    Construcor.
 		/// </summary>
@@ -93,7 +93,7 @@ namespace TagLib.IFD.Entries
 #endregion
 
 #region Public Methods
-		
+
 		/// <summary>
 		///    Renders the current instance to a <see cref="ByteVector"/>
 		/// </summary>
@@ -117,7 +117,7 @@ namespace TagLib.IFD.Entries
 		{
 			type = (ushort) Type;
 			count = 1;
-			
+
 			count = Count;
 			return new IFDRenderer (is_bigendian, Structure, offset).Render ();
 		}

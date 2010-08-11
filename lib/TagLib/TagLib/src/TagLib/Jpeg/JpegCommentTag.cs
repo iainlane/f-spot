@@ -44,7 +44,7 @@ namespace TagLib.Jpeg
 		{
 			Value = value;
 		}
-		
+
 		/// <summary>
 		///    Constructor. Creates a new empty comment.
 		/// </summary>
@@ -55,12 +55,12 @@ namespace TagLib.Jpeg
 #endregion
 
 #region Public Properties
-		
+
 		/// <summary>
 		///    The value of the comment represented by the current instance.
 		/// </summary>
 		public string Value { get; set; }
-		
+
 		/// <summary>
 		///    Gets or sets the comment for the image described
 		///    by the current instance.
@@ -73,7 +73,7 @@ namespace TagLib.Jpeg
 			get { return Value; }
 			set { Value = value; }
 		}
-		
+
 #endregion
 
 #region Public Methods
@@ -87,7 +87,7 @@ namespace TagLib.Jpeg
 		public override TagTypes TagTypes {
 			get { return TagTypes.JpegComment; }
 		}
-		
+
 		/// <summary>
 		///    Clears the values stored in the current instance.
 		/// </summary>

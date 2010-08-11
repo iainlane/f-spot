@@ -31,7 +31,7 @@ using TagLib.Xmp;
 
 namespace TagLib.Image
 {
-	
+
 	/// <summary>
 	///    Combines some <see cref="ImageTag"/> instance to behave as one.
 	/// </summary>
@@ -39,7 +39,7 @@ namespace TagLib.Image
 	{
 
 #region Private Fields
-		
+
 		/// <summary>
 		///    Direct access to the Exif (IFD) tag (if any)
 		/// </summary>
@@ -54,7 +54,7 @@ namespace TagLib.Image
 		///    Other image tags available in this tag.
 		/// </summary>
 		public List<ImageTag> OtherTags { get; private set; }
-		
+
 		/// <summary>
 		///    Stores the types of the tags, which are allowed for
 		///    the current instance.
@@ -81,11 +81,11 @@ namespace TagLib.Image
 		}
 
 		private List<ImageTag> all_tags = null;
-		
+
 #endregion
-		
+
 #region Constructors
-		
+
 		/// <summary>
 		///    Constructs and initializes a new instance of <see
 		///    cref="CombinedImageTag" /> with a restriction on the
@@ -101,11 +101,11 @@ namespace TagLib.Image
 			AllowedTypes = allowed_types;
 			OtherTags = new List<ImageTag> ();
 		}
-		
+
 #endregion
-		
+
 #region Protected Methods
-		
+
 		internal void AddTag (ImageTag tag)
 		{
 			if ((tag.TagTypes & AllowedTypes) != tag.TagTypes)
@@ -120,7 +120,7 @@ namespace TagLib.Image
 
 			all_tags = null;
 		}
-		
+
 		internal void RemoveTag (ImageTag tag)
 		{
 			if (tag is IFDTag)
@@ -132,7 +132,7 @@ namespace TagLib.Image
 
 			all_tags = null;
 		}
-		
+
 #endregion
 
 #region Public Methods (Tag)
@@ -155,7 +155,7 @@ namespace TagLib.Image
 				return types;
 			}
 		}
-		
+
 		/// <summary>
 		///    Clears all of the child tags.
 		/// </summary>
@@ -166,7 +166,7 @@ namespace TagLib.Image
 		}
 
 #endregion
-		
+
 #region Public Properties (ImageTag)
 
 		/// <summary>
@@ -184,7 +184,7 @@ namespace TagLib.Image
 					if (value != null && value.Length > 0)
 						return value;
 				}
-				
+
 				return new string[] {};
 			}
 			set {
@@ -192,7 +192,7 @@ namespace TagLib.Image
 					tag.Keywords = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the rating for the image described
 		///    by the current instance.
@@ -205,11 +205,11 @@ namespace TagLib.Image
 			get {
 				foreach (ImageTag tag in AllTags) {
 					uint? value = tag.Rating;
-					
+
 					if (value != null)
 						return value;
 				}
-				
+
 				return null;
 			}
 			set {
@@ -217,7 +217,7 @@ namespace TagLib.Image
 					tag.Rating = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the time when the image, the current instance
 		///    belongs to, was taken.
@@ -229,11 +229,11 @@ namespace TagLib.Image
 			get {
 				foreach (ImageTag tag in AllTags) {
 					DateTime? value = tag.DateTime;
-					
+
 					if (value != null)
 						return value;
 				}
-				
+
 				return null;
 			}
 			set {
@@ -241,7 +241,7 @@ namespace TagLib.Image
 					tag.DateTime = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the orientation of the image described
 		///    by the current instance.
@@ -254,19 +254,19 @@ namespace TagLib.Image
 			get {
 				foreach (ImageTag tag in AllTags) {
 					ImageOrientation value = tag.Orientation;
-					
+
 					if ((uint) value >= 1U && (uint) value <= 8U)
 						return value;
 				}
-				
-				return ImageOrientation.TopLeft;
+
+				return ImageOrientation.None;
 			}
 			set {
 				foreach (ImageTag tag in AllTags)
 					tag.Orientation = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the software the image, the current instance
 		///    belongs to, was created with.
@@ -279,11 +279,11 @@ namespace TagLib.Image
 			get {
 				foreach (ImageTag tag in AllTags) {
 					string value = tag.Software;
-					
+
 					if (!string.IsNullOrEmpty(value))
 						return value;
 				}
-				
+
 				return null;
 			}
 			set {
@@ -291,7 +291,7 @@ namespace TagLib.Image
 					tag.Software = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the latitude of the GPS coordinate the current
 		///    image was taken.
@@ -304,11 +304,11 @@ namespace TagLib.Image
 			get {
 				foreach (ImageTag tag in AllTags) {
 					double? value = tag.Latitude;
-					
+
 					if (value != null)
 						return value;
 				}
-				
+
 				return null;
 			}
 			set {
@@ -316,24 +316,24 @@ namespace TagLib.Image
 					tag.Latitude = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the longitude of the GPS coordinate the current
 		///    image was taken.
 		/// </summary>
 		/// <value>
-		///    A <see cref="System.Nullable"/> with the longitude ranging from -180.0 
+		///    A <see cref="System.Nullable"/> with the longitude ranging from -180.0
 		///    to +180.0 degrees.
 		/// </value>
 		public override double? Longitude {
 			get {
 				foreach (ImageTag tag in AllTags) {
 					double? value = tag.Longitude;
-					
+
 					if (value != null)
 						return value;
 				}
-				
+
 				return null;
 			}
 			set {
@@ -341,7 +341,7 @@ namespace TagLib.Image
 					tag.Longitude = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets or sets the altitude of the GPS coordinate the current
 		///    image was taken. The unit is meter.
@@ -354,11 +354,11 @@ namespace TagLib.Image
 			get {
 				foreach (ImageTag tag in AllTags) {
 					double? value = tag.Altitude;
-					
+
 					if (value != null)
 						return value;
 				}
-				
+
 				return null;
 			}
 			set {
@@ -366,7 +366,7 @@ namespace TagLib.Image
 					tag.Altitude = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets the exposure time the image, the current instance belongs
 		///    to, was taken with.
@@ -378,11 +378,11 @@ namespace TagLib.Image
 			get {
 				foreach (ImageTag tag in AllTags) {
 					double? value = tag.ExposureTime;
-					
+
 					if (value != null)
 						return value;
 				}
-				
+
 				return null;
 			}
 			set {
@@ -390,7 +390,7 @@ namespace TagLib.Image
 					tag.ExposureTime = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets the FNumber the image, the current instance belongs
 		///    to, was taken with.
@@ -402,11 +402,11 @@ namespace TagLib.Image
 			get {
 				foreach (ImageTag tag in AllTags) {
 					double? value = tag.FNumber;
-					
+
 					if (value != null)
 						return value;
 				}
-				
+
 				return null;
 			}
 			set {
@@ -414,7 +414,7 @@ namespace TagLib.Image
 					tag.FNumber = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets the ISO speed the image, the current instance belongs
 		///    to, was taken with.
@@ -426,11 +426,11 @@ namespace TagLib.Image
 			get {
 				foreach (ImageTag tag in AllTags) {
 					uint? value = tag.ISOSpeedRatings;
-					
+
 					if (value != null)
 						return value;
 				}
-				
+
 				return null;
 			}
 			set {
@@ -438,7 +438,7 @@ namespace TagLib.Image
 					tag.ISOSpeedRatings = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets the focal length the image, the current instance belongs
 		///    to, was taken with.
@@ -450,11 +450,11 @@ namespace TagLib.Image
 			get {
 				foreach (ImageTag tag in AllTags) {
 					double? value = tag.FocalLength;
-					
+
 					if (value != null)
 						return value;
 				}
-				
+
 				return null;
 			}
 			set {
@@ -462,7 +462,7 @@ namespace TagLib.Image
 					tag.FocalLength = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets the focal length the image, the current instance belongs
 		///    to, was taken with, assuming a 35mm film camera.
@@ -474,11 +474,11 @@ namespace TagLib.Image
 			get {
 				foreach (ImageTag tag in AllTags) {
 					uint? value = tag.FocalLengthIn35mmFilm;
-					
+
 					if (value != null)
 						return value;
 				}
-				
+
 				return null;
 			}
 			set {
@@ -486,7 +486,7 @@ namespace TagLib.Image
 					tag.FocalLengthIn35mmFilm = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets the manufacture of the recording equipment the image, the
 		///    current instance belongs to, was taken with.
@@ -498,11 +498,11 @@ namespace TagLib.Image
 			get {
 				foreach (ImageTag tag in AllTags) {
 					string value = tag.Make;
-					
+
 					if (!string.IsNullOrEmpty(value))
 						return value;
 				}
-				
+
 				return null;
 			}
 			set {
@@ -510,7 +510,7 @@ namespace TagLib.Image
 					tag.Make = value;
 			}
 		}
-		
+
 		/// <summary>
 		///    Gets the model name of the recording equipment the image, the
 		///    current instance belongs to, was taken with.
@@ -522,11 +522,11 @@ namespace TagLib.Image
 			get {
 				foreach (ImageTag tag in AllTags) {
 					string value = tag.Model;
-					
+
 					if (!string.IsNullOrEmpty(value))
 						return value;
 				}
-				
+
 				return null;
 			}
 			set {
@@ -642,6 +642,6 @@ namespace TagLib.Image
 		}
 
 #endregion
-		
+
 	}
 }

@@ -34,7 +34,7 @@ namespace TagLib.IFD.Entries
 	{
 
 #region Constant Values
-		
+
 		/// <summary>
 		///   Marker for an ASCII-encoded UserComment tag.
 		/// </summary>
@@ -56,19 +56,19 @@ namespace TagLib.IFD.Entries
 		public static readonly ByteVector COMMENT_UNDEFINED_CODE = new byte[] {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 #endregion
-		
+
 #region Properties
-		
+
 		/// <value>
 		///    The ID of the tag, the current instance belongs to
 		/// </value>
 		public ushort Tag { get; private set; }
-		
+
 		/// <value>
 		///    The value which is stored by the current instance
 		/// </value>
 		public string Value { get; private set; }
-		
+
 #endregion
 
 #region Constructors
@@ -104,12 +104,12 @@ namespace TagLib.IFD.Entries
 			Tag = tag;
 
 			if (data.StartsWith (COMMENT_ASCII_CODE)) {
-				Value = data.ToString (StringType.Latin1, COMMENT_ASCII_CODE.Count, data.Count - COMMENT_ASCII_CODE.Count);
+				Value = TrimNull (data.ToString (StringType.Latin1, COMMENT_ASCII_CODE.Count, data.Count - COMMENT_ASCII_CODE.Count));
 				return;
 			}
 
 			if (data.StartsWith (COMMENT_UNICODE_CODE)) {
-				Value = data.ToString (StringType.UTF8, COMMENT_UNICODE_CODE.Count, data.Count - COMMENT_UNICODE_CODE.Count);
+				Value = TrimNull (data.ToString (StringType.UTF8, COMMENT_UNICODE_CODE.Count, data.Count - COMMENT_UNICODE_CODE.Count));
 				return;
 			}
 
@@ -118,11 +118,11 @@ namespace TagLib.IFD.Entries
 				Value = String.Empty;
 				return;
 			}
-				
+
 			// Some programs like e.g. CanonZoomBrowser inserts just the first 0x00-byte
 			// followed by 7-bytes of trash.
 			if (data.StartsWith ((byte) 0x00) && data.Count >= 8) {
-					
+
 				// And CanonZoomBrowser fills some trailing bytes of the comment field
 				// with '\0'. So we return only the characters before the first '\0'.
 				int term = data.Find ("\0", 8);
@@ -138,14 +138,22 @@ namespace TagLib.IFD.Entries
 				Value = String.Empty;
 				return;
 			}
-			
+
 			throw new NotImplementedException ("UserComment with other encoding than Latin1 or Unicode");
+		}
+
+		private string TrimNull (string value)
+		{
+			int term = value.IndexOf ('\0');
+			if (term > -1)
+				value = value.Substring (0, term);
+			return value;
 		}
 
 #endregion
 
 #region Public Methods
-		
+
 		/// <summary>
 		///    Renders the current instance to a <see cref="ByteVector"/>
 		/// </summary>
@@ -168,13 +176,13 @@ namespace TagLib.IFD.Entries
 		public ByteVector Render (bool is_bigendian, uint offset, out ushort type, out uint count)
 		{
 			type = (ushort) IFDEntryType.Undefined;
-			
+
 			ByteVector data = new ByteVector ();
 			data.Add (COMMENT_UNICODE_CODE);
 			data.Add (ByteVector.FromString (Value, StringType.UTF8));
-			
+
 			count = (uint) data.Count;
-			
+
 			return data;
 		}
 

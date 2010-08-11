@@ -40,7 +40,7 @@ namespace TagLib.Image
 	{
 		private CombinedImageTag image_tag;
 
-#region Constructors		
+#region Constructors
 
 		/// <summary>
 		///    Constructs and initializes a new instance of <see
@@ -57,7 +57,7 @@ namespace TagLib.Image
 		protected File (string path) : base (path)
 		{
 		}
-		
+
 		/// <summary>
 		///    Constructs and initializes a new instance of <see
 		///    cref="File" /> for a specified file abstraction.
@@ -73,11 +73,11 @@ namespace TagLib.Image
 		protected File (IFileAbstraction abstraction) : base (abstraction)
 		{
 		}
-		
+
 #endregion
 
 #region Public Properties
-		
+
 		/// <summary>
 		///    Gets a abstract representation of all tags stored in the
 		///    current instance.
@@ -93,7 +93,7 @@ namespace TagLib.Image
 		///    current instance.
 		/// </summary>
 		/// <value>
-		///    A <see cref="TagLib.Image.CombinedImageTag" /> object 
+		///    A <see cref="TagLib.Image.CombinedImageTag" /> object
 		///    representing all image tags stored in the current instance.
 		/// </value>
 		public CombinedImageTag ImageTag {
@@ -104,7 +104,7 @@ namespace TagLib.Image
 #endregion
 
 #region Public Methods
-		
+
 		/// <summary>
 		///    The method creates all tags which are allowed for the current
 		///    instance of the image file. This method can be used to ensure,
@@ -185,11 +185,11 @@ namespace TagLib.Image
 			case TagTypes.Png:
 				new_tag = new PngTag ();
 				break;
-				
+
 			case TagTypes.TiffIFD:
 				new_tag = new IFDTag ();
 				break;
-				
+
 			case TagTypes.XMP:
 				new_tag = new XmpTag ();
 				break;
@@ -202,7 +202,7 @@ namespace TagLib.Image
 
 			throw new NotImplementedException (String.Format ("Adding tag of type {0} not supported!", type));
 		}
-		
+
 		/// <summary>
 		/// 	Copies metadata from the given file..
 		/// </summary>
@@ -217,7 +217,7 @@ namespace TagLib.Image
 			foreach (var prop in typeof (TagLib.Image.ImageTag).GetProperties ()) {
 				if (!prop.CanWrite || prop.Name == "TagTypes")
 					continue;
-				
+
 				var value = prop.GetValue (from_tag, null);
 				prop.SetValue (to_tag, value, null);
 			}

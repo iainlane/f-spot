@@ -2,7 +2,7 @@ dnl Granularly define the version components
 dnl Remember to also update the Display Version
 m4_define([fspot_version_major], [0])
 m4_define([fspot_version_minor], [7])
-m4_define([fspot_version_micro], [1])
+m4_define([fspot_version_micro], [2])
 
 dnl set to 0 when doing an official release
 m4_define([fspot_version_pre_release], [0])
@@ -23,7 +23,7 @@ m4_define([fspot_version],
 
 dnl this can sometimes differ manually
 m4_define([fspot_display_version],
-	["0.7.1"])
+	["0.7.2"])
 
 m4_define([fspot_api_version],
 	[fspot_version_major.fspot_version_minor])
@@ -37,8 +37,9 @@ AC_INIT([f-spot], fspot_version,
 
 AM_INIT_AUTOMAKE([1.9 dist-bzip2 tar-ustar dist-zip foreign])
 AM_MAINTAINER_MODE
-AM_CONFIG_HEADER(config.h)
-AC_SUBST([ACLOCAL_AMFLAGS], ["-I build/m4/f-spot -I build/m4/shamrock -I build/m4/shave \${ACLOCAL_FLAGS}"])
+AM_CONFIG_HEADER([config.h])
+AC_CONFIG_MACRO_DIR([build/m4])
+AC_SUBST([ACLOCAL_AMFLAGS], ["-I build/m4/shamrock -I build/m4/f-spot -I build/m4/shave \${ACLOCAL_FLAGS}"])
 
 IT_PROG_INTLTOOL([0.35.0])
 AC_PROG_LIBTOOL
@@ -66,7 +67,6 @@ SHAMROCK_CHECK_MONO_MODULE(2.2)
 SHAMROCK_FIND_MONO_2_0_COMPILER
 SHAMROCK_FIND_MONO_RUNTIME
 SHAMROCK_CHECK_MONO_2_0_GAC_ASSEMBLIES([
-    Mono.Data.SqliteClient
     Mono.Posix
     Mono.Simd
     Mono.Data
@@ -79,26 +79,14 @@ SHAMROCK_CHECK_MONO_2_0_GAC_ASSEMBLIES([
     ICSharpCode.SharpZipLib
 ])
 
+FSPOT_CHECK_LIBFSPOT
 FSPOT_CHECK_GTK_SHARP
 FSPOT_CHECK_GNOME_KEYRING_SHARP
 FSPOT_CHECK_FLICKRNET
 SHAMROCK_CHECK_NUNIT
 
 
-
-AM_CONDITIONAL(HYENA_PKG_CONFIG, false)
-
-
-AC_CONFIG_SRCDIR(src/main.cs)
-
-AC_PROG_CC
-AC_PROG_CXX
-AC_ISC_POSIX
-AC_HEADER_STDC
-
-GNOME_COMPILE_WARNINGS
-AM_PATH_GLIB_2_0
-
+# ---------------------------------- <Old build stuff>
 dnl --- Check for mono and gmcs
 
 AC_PATH_PROG(MONO, mono)
@@ -170,23 +158,15 @@ if pkg-config --atleast-version=2.13.0 gtk-sharp-2.0 && pkg-config --max-version
 	AC_MSG_ERROR([There's a svn version of gtk-sharp 2.13.x installed. Uninstall it.])
 fi
 
-dnl - Choose PreferenceBackend (default to gconf)
-AC_ARG_ENABLE([gconf],[AC_HELP_STRING([--disable-gconf], [build without gconf preference backend])],,)
-
-AM_CONDITIONAL(NOGCONF, test "x$enable_gconf" = "xno")
-
-if test "x$enable_gconf" = "xno"; then
-  CSC_DEFINES="$CSC_DEFINES -d:NOGCONF"
-else
-  AC_PATH_PROG(GCONFTOOL, gconftool-2)
-  AM_GCONF_SOURCE_2
-  PKG_CHECK_MODULES(GCONF_SHARP, gconf-sharp-2.0 >= $GTKSHARP_REQUIRED)
-  if pkg-config --atleast-version=2.18 gconf-sharp-2.0; then
-    CSC_DEFINES="$CSC_DEFINES -d:GCONF_SHARP_2_18"
-  fi
-  if pkg-config --atleast-version=2.20.2 gconf-sharp-2.0; then
-    CSC_DEFINES="$CSC_DEFINES -d:GCONF_SHARP_2_20_2"
-  fi
+dnl --- GConf
+AC_PATH_PROG(GCONFTOOL, gconftool-2)
+AM_GCONF_SOURCE_2
+PKG_CHECK_MODULES(GCONF_SHARP, gconf-sharp-2.0 >= $GTKSHARP_REQUIRED)
+if pkg-config --atleast-version=2.18 gconf-sharp-2.0; then
+	CSC_DEFINES="$CSC_DEFINES -d:GCONF_SHARP_2_18"
+fi
+if pkg-config --atleast-version=2.20.2 gconf-sharp-2.0; then
+	CSC_DEFINES="$CSC_DEFINES -d:GCONF_SHARP_2_20_2"
 fi
 
 if pkg-config --atleast-version=2.16 gtk+-2.0; then
@@ -201,12 +181,6 @@ FSPOT_CHECK_MONO_ADDINS
 dnl -- dbus-sharp
 PKG_CHECK_MODULES(NDESK_DBUS, ndesk-dbus-1.0 >= $NDESK_DBUS_REQUIRED ndesk-dbus-glib-1.0 >= $NDESK_DBUS_GLIB_REQUIRED)
 AC_SUBST(NDESK_DBUS_LIBS)
-
-dnl --- GConf
-
-AC_PATH_PROG(GCONFTOOL, gconftool-2, no)
-AM_GCONF_SOURCE_2
-
 
 dnl --- libjpeg
 
@@ -280,14 +254,51 @@ AC_SUBST(CFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(LDFLAGS)
 
-AC_CONFIG_FILES([src/f-spot],[chmod +x src/f-spot])
+AC_CONFIG_FILES([src/Clients/MainApp/f-spot],[chmod +x src/Clients/MainApp/f-spot])
 
 GNOME_ICON_THEME_PREFIX=`$PKG_CONFIG --variable=prefix gnome-icon-theme`
 AC_SUBST(GNOME_ICON_THEME_PREFIX)
 
+# ---------------------------------- </Old build stuff>
+
+AC_ARG_ENABLE(release,
+	AC_HELP_STRING([--enable-release],
+		[Use release configuration]),
+	enable_release=yes, enable_release=`(test ! -d .svn && test ! -d .git) && echo "yes" || echo "no"`)
+AM_CONDITIONAL(ENABLE_RELEASE, test "x$enable_release" = "xyes")
+ENABLE_RELEASE=$enable_release
+AC_SUBST(ENABLE_RELEASE)
+if test "x$enable_release" = "xyes"; then
+	GMCS_FLAGS="-define:RELEASE"
+# FIXME: Enable as soon as we rock sufficiently
+#else
+#	GMCS_FLAGS="-warnaserror"
+fi
+AC_SUBST(GMCS_FLAGS)
+
+AM_CONDITIONAL(HYENA_PKG_CONFIG, false)
+
+AC_ARG_WITH(vendor-build-id,
+	AC_HELP_STRING([--with-vendor-build-id=<vendor-build-id>],
+		[Set a vendor build ID, recommended for packagers]),
+	[vendor_build_id="$withval"], [
+		test -d .git \
+			&& vendor_build_id="git-checkout" \
+			|| vendor_build_id="source-tarball"
+	])
+BUILD_VENDOR_ID="$vendor_build_id"
+BUILD_HOST_OS="$host_os"
+BUILD_HOST_CPU="$host_cpu"
+BUILD_TIME=`date +"%F %T %Z"`
+AC_SUBST(BUILD_VENDOR_ID)
+AC_SUBST(BUILD_HOST_OS)
+AC_SUBST(BUILD_HOST_CPU)
+AC_SUBST(BUILD_TIME)
+
 SHAVE_INIT([build/m4/shave], [enable])
 
-AC_OUTPUT(
+dnl generated files
+AC_OUTPUT([
 Makefile
 
 build/Makefile
@@ -304,78 +315,85 @@ data/desktop-files/f-spot-import.desktop.in
 
 help/Makefile
 
-lib/GKeyFile/Makefile
-lib/gio-sharp/Makefile
-lib/gio-sharp/gio/Makefile
 lib/gio-sharp/generator/Makefile
+lib/gio-sharp/gio/Makefile
+lib/gio-sharp/Makefile
+lib/GKeyFile/Makefile
 lib/gtk-sharp-beans/Makefile
-lib/libfspot/Makefile
-lib/Makefile
-lib/unique-sharp/Makefile
-lib/unique-sharp/generator/Makefile
-lib/unique-sharp/unique/Makefile
-lib/Hyena/Makefile
+lib/Hyena/build/m4/Makefile
 lib/Hyena/build/Makefile
 lib/Hyena/build/pkg-config/Makefile
-lib/Hyena/build/m4/Makefile
-lib/Hyena/Hyena/Makefile
-lib/Hyena/Mono.Data.Sqlite/Makefile
 lib/Hyena/Hyena.Data.Sqlite/Makefile
 lib/Hyena/Hyena.Gui/Makefile
+lib/Hyena/Hyena/Makefile
+lib/Hyena/Makefile
+lib/Hyena/Mono.Data.Sqlite/Makefile
+lib/libfspot/Makefile
+lib/Makefile
+lib/Mono.Google/Makefile
+lib/Mono.Tabblo/Makefile
+lib/SmugMugNet/Makefile
 lib/TagLib/Makefile
+lib/unique-sharp/generator/Makefile
+lib/unique-sharp/Makefile
+lib/unique-sharp/unique/Makefile
+
+src/AssemblyInfo.cs
+
+src/Makefile
+src/Core/Makefile
+src/Core/FSpot.Bling/Makefile
+src/Core/FSpot.Cms/Makefile
+src/Core/FSpot.Cms/FSpot.Cms.dll.config
+src/Core/FSpot.Core/Makefile
+src/Core/FSpot.Core/FSpot.Core.dll.config
+src/Core/FSpot.Core/FSpot.Core/Defines.cs
+src/Core/FSpot.JobScheduler/Makefile
+src/Core/FSpot.Utils/Makefile
+src/Core/FSpot.Query/Makefile
+src/Core/FSpot.Gui/Makefile
+src/Core/FSpot.Gui/FSpot.Gui.dll.config
+src/Core/FSpot.Platform/Makefile
+
+src/Clients/Makefile
+src/Clients/MainApp/Makefile
+src/Clients/MainApp/f-spot.exe.config
+
+src/Extensions/Makefile
+src/Extensions/Editors/Makefile
+src/Extensions/Editors/FSpot.Editors.Blackout/Makefile
+src/Extensions/Editors/FSpot.Editors.BW/Makefile
+src/Extensions/Editors/FSpot.Editors.Flip/Makefile
+src/Extensions/Editors/FSpot.Editors.Pixelate/Makefile
+src/Extensions/Editors/FSpot.Editors.Resize/Makefile
+src/Extensions/Exporters/Makefile
+src/Extensions/Exporters/FSpot.Exporters.CD/Makefile
+src/Extensions/Exporters/FSpot.Exporters.Flickr/Makefile
+src/Extensions/Exporters/FSpot.Exporters.Gallery/Makefile
+src/Extensions/Exporters/FSpot.Exporters.Facebook/Makefile
+src/Extensions/Exporters/FSpot.Exporters.Folder/Makefile
+src/Extensions/Exporters/FSpot.Exporters.SmugMug/Makefile
+src/Extensions/Exporters/FSpot.Exporters.Tabblo/Makefile
+src/Extensions/Exporters/FSpot.Exporters.PicasaWeb/Makefile
+src/Extensions/Exporters/FSpot.Exporters.Zip/Makefile
+src/Extensions/Tools/Makefile
+src/Extensions/Tools/FSpot.Tools.RawPlusJpeg/Makefile
+src/Extensions/Tools/FSpot.Tools.ChangePhotoPath/Makefile
+src/Extensions/Tools/FSpot.Tools.HashJob/Makefile
+src/Extensions/Tools/FSpot.Tools.DevelopInUFraw/Makefile
+src/Extensions/Tools/FSpot.Tools.LiveWebGallery/Makefile
+src/Extensions/Tools/FSpot.Tools.MergeDb/Makefile
+src/Extensions/Tools/FSpot.Tools.RetroactiveRoll/Makefile
+src/Extensions/Tools/FSpot.Tools.ScreensaverConfig/Makefile
+src/Extensions/Transitions/Makefile
+src/Extensions/Transitions/FSpot.Transitions.Cover/Makefile
 
 docs/Makefile
 icons/Makefile
 tools/Makefile
 po/Makefile.in
-src/Cms/FSpot.Cms.dll.config
-src/Cms/Makefile
-src/Utils/Makefile
-src/Bling/Makefile
-src/JobScheduler/Makefile
-src/Query/Makefile
-src/Core/Defines.cs
-src/Core/Makefile
-src/Core/FSpot.Core.dll.config
-src/Widgets/Makefile
-src/Widgets/FSpot.Widgets.dll.config
-src/Platform/Makefile
-src/AssemblyInfo.cs
-src/f-spot.exe.config
-src/Makefile
-extensions/Makefile
-extensions/Editors/Makefile
-extensions/Editors/BlackoutEditor/Makefile
-extensions/Editors/BWEditor/Makefile
-extensions/Editors/FlipEditor/Makefile
-extensions/Editors/PixelateEditor/Makefile
-extensions/Editors/ResizeEditor/Makefile
-extensions/Exporters/Makefile
-extensions/Exporters/CDExport/Makefile
-extensions/Exporters/FlickrExport/Makefile
-extensions/Exporters/GalleryExport/Makefile
-extensions/Exporters/FacebookExport/Makefile
-extensions/Exporters/FolderExport/Makefile
-extensions/Exporters/SmugMugExport/SmugMugNet/Makefile
-extensions/Exporters/SmugMugExport/Makefile
-extensions/Exporters/TabbloExport/Makefile
-extensions/Exporters/TabbloExport/Tabblo/Makefile
-extensions/Exporters/PicasaWebExport/Makefile
-extensions/Exporters/PicasaWebExport/google-sharp/Makefile
-extensions/Exporters/ZipExport/Makefile
-extensions/Tools/Makefile
-extensions/Tools/RawPlusJpeg/Makefile
-extensions/Tools/ChangePhotoPath/Makefile
-extensions/Tools/HashJob/Makefile
-extensions/Tools/DevelopInUFraw/Makefile
-extensions/Tools/LiveWebGallery/Makefile
-extensions/Tools/MergeDb/Makefile
-extensions/Tools/RetroactiveRoll/Makefile
-extensions/Tools/ScreensaverConfig/Makefile
-extensions/Transitions/Makefile
-extensions/Transitions/CoverTransition/Makefile
 tests/Makefile
-)
+])
 
 cat <<EOF
 
@@ -397,3 +415,12 @@ ${PACKAGE}-${VERSION}
 Run 'make' to build F-Spot.
 
 EOF
+
+if test -d ${expanded_libdir}/${PACKAGE}; then
+	if test x$br = xyes; then echo; fi
+	echo "  WARNING: An existing F-Spot install is in ${expanded_libdir}/${PACKAGE}"
+	echo "           Remove the existing install before installing this build."
+	echo "           Installing over an existing install will cause conflicts!"
+	echo 
+fi
+

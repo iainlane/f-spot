@@ -27,24 +27,24 @@ using System;
 
 namespace TagLib.IFD.Entries
 {
-	
+
 	/// <summary>
 	///    Representation of a signed rational value
 	/// </summary>
 	public struct SRational : IFormattable
 	{
 #region Private Fields
-		
+
 		/// <summary>
 		///    The numerator of the rational value
 		/// </summary>
 		private int numerator;
-		
+
 		/// <summary>
 		///    The denominator of the rational value
 		/// </summary>
 		private int denominator;
-		
+
 #endregion
 
 #region Constructor
@@ -65,11 +65,11 @@ namespace TagLib.IFD.Entries
 			Numerator = numerator;
 			Denominator = denominator;
 		}
-		
+
 #endregion
 
 #region Public Methods
-		
+
 		/// <summary>
 		///    Returns a rational value with reduced nominator and denominator
 		/// </summary>
@@ -87,10 +87,10 @@ namespace TagLib.IFD.Entries
 				gcd = b;
 				b = tmp;
 			}
-			
+
 			return new SRational (den_sign * (Numerator / gcd), Math.Abs (Denominator) / gcd);
 		}
-		
+
 		/// <summary>
 		///    Formatprovider to allow formatting of a value. <see cref="IFormattable"/>
 		/// </summary>
@@ -104,12 +104,12 @@ namespace TagLib.IFD.Entries
 		///    A <see cref="System.String"/> formated according to the given parameter
 		/// </returns>
 		public string ToString (string format, IFormatProvider provider) {
-			
+
 			SRational reduced = Reduce ();
-			
+
 			return String.Format ("{0}/{1}", reduced.Numerator, reduced.Denominator);
 		}
-				
+
 		/// <summary>
 		///    Converts the value to a <see cref="System.String"/>.
 		/// </summary>
@@ -120,11 +120,11 @@ namespace TagLib.IFD.Entries
 		{
 			return String.Format ("{0}", this);
 		}
-		
+
 #endregion
 
 #region Public Properties
-		
+
 		/// <value>
 		///    The numerator of the rational value
 		/// </value>
@@ -132,7 +132,7 @@ namespace TagLib.IFD.Entries
 			get { return numerator; }
 			set { numerator = value; }
 		}
-		
+
 		/// <value>
 		///    The denominator of the rational value
 		/// </value>
@@ -144,15 +144,15 @@ namespace TagLib.IFD.Entries
 			set {
 				if (value == 0)
 					throw new ArgumentException ("denominator");
-				
+
 				denominator = value;
 			}
 		}
-		
+
 #endregion
 
 #region Public Static Methods
-		
+
 		/// <summary>
 		///    Cast the <see cref="Rational"/> value to a <see cref="System.Double"/>.
 		/// </summary>
@@ -166,8 +166,8 @@ namespace TagLib.IFD.Entries
 		{
 			return (double) rat.Numerator / (double) rat.Denominator;
 		}
-		
+
 #endregion
-			
+
 	}
 }

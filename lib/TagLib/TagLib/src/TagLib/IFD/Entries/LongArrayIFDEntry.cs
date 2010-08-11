@@ -30,9 +30,9 @@ namespace TagLib.IFD.Entries
 	/// </summary>
 	public class LongArrayIFDEntry : ArrayIFDEntry<uint>
 	{
-		
+
 #region Constructors
-		
+
 		/// <summary>
 		///    Construcor.
 		/// </summary>
@@ -51,7 +51,7 @@ namespace TagLib.IFD.Entries
 #endregion
 
 #region Public Methods
-		
+
 		/// <summary>
 		///    Renders the current instance to a <see cref="ByteVector"/>
 		/// </summary>
@@ -75,11 +75,11 @@ namespace TagLib.IFD.Entries
 		{
 			type = (ushort) IFDEntryType.Long;
 			count = (uint) Values.Length;
-			
+
 			ByteVector data = new ByteVector ();
 			foreach (uint value in Values)
 				data.Add (ByteVector.FromUInt (value, is_bigendian));
-			
+
 			return data;
 		}
 
