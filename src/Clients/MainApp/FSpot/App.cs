@@ -253,13 +253,13 @@ namespace FSpot
 			else
 				tag = Database.Tags.GetTagById (Preferences.Get<int> (Preferences.SCREENSAVER_TAG));
 
-			IBrowsableItem[] photos;
+			IPhoto[] photos;
 			if (tag != null)
 				photos = Database.Photos.Query (new Tag[] {tag});
 			else if (Preferences.Get<int> (Preferences.SCREENSAVER_TAG) == 0)
 				photos = Database.Photos.Query (new Tag [] {});
 			else
-				photos = new IBrowsableItem [0];
+				photos = new IPhoto [0];
 
 			// Minimum delay 1 second; default is 4s
 			var delay = Math.Max (1.0, Preferences.Get<double> (Preferences.SCREENSAVER_DELAY));
@@ -269,7 +269,7 @@ namespace FSpot
 			window.ModifyBg (Gtk.StateType.Normal, new Gdk.Color (0, 0, 0));
 
 			if (photos.Length > 0) {
-				Array.Sort (photos, new IBrowsableItemComparer.RandomSort ());
+				Array.Sort (photos, new IPhotoComparer.RandomSort ());
 				slideshow = new FSpot.Widgets.SlideShow (new BrowsablePointer (new PhotoList (photos), 0), (uint)(delay * 1000), true);
 				slideshow.Transition = new FSpot.Transitions.DissolveTransition ();
 				window.Add (slideshow);

@@ -41,7 +41,7 @@ namespace FSpot.UI.Dialog {
 
 		IBrowsableCollection collection;
 		BrowsablePointer item;
-		FSpot.Widgets.IconView tray;
+		CollectionGridView tray;
 		PhotoImageView view;
 		Db db;
 		TimeSpan gnome_dateedit_sucks;
@@ -51,15 +51,19 @@ namespace FSpot.UI.Dialog {
 			this.db = db;
 			this.collection = collection;
 
-			tray = new TrayView (collection);
-			tray_scrolled.Add (tray);
-			tray.Selection.Changed += HandleSelectionChanged;
-
 			view = new PhotoImageView (collection);
 			view_scrolled.Add (view);
 			item = view.Item;
 			item.Changed += HandleItemChanged;
 			item.MoveFirst ();
+
+            tray = new BrowseablePointerGridView (view.Item) {
+                MaxColumns = 1,
+                DisplayRatings = false,
+                DisplayTags = false,
+                DisplayDates = true
+            };
+            tray_scrolled.Add (tray);
 
 			//forward_button.Clicked += HandleForwardClicked;
 			//back_button.Clicked += HandleBackClicked;
@@ -120,7 +124,7 @@ namespace FSpot.UI.Dialog {
 			//forward_button.Sensitive = (Item.Index < collection.Count - 1);
 
 			if (item.IsValid) {
-				IBrowsableItem curr_item = item.Current;
+				IPhoto curr_item = item.Current;
 
 				name_label.Text = System.Uri.UnescapeDataString(curr_item.Name);
 				old_label.Text = (curr_item.Time).ToString ();
@@ -134,11 +138,6 @@ namespace FSpot.UI.Dialog {
 				gnome_dateedit_sucks = date_edit.Time - actual;
 			}
 			HandleTimeChanged (this, System.EventArgs.Empty);
-
-			if (!tray.Selection.Contains (item.Index)) {
-				tray.Selection.Clear ();
-				tray.Selection.Add (item.Index);
-			}
 
 			photo_spin.Value = item.Index + 1;
 		}
@@ -249,14 +248,6 @@ namespace FSpot.UI.Dialog {
 		void HandleBackClicked (object sender, EventArgs args)
 		{
 			view.Item.MovePrevious ();
-		}
-
-		void HandleSelectionChanged (IBrowsableCollection sender)
-		{
-			if (sender.Count > 0) {
-				view.Item.Index = ((FSpot.Widgets.IconView.SelectionCollection)sender).Ids[0];
-
-			}
 		}
 
 		void HandleCollectionChanged (IBrowsableCollection collection)

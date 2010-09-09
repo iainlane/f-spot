@@ -2,7 +2,7 @@ dnl Granularly define the version components
 dnl Remember to also update the Display Version
 m4_define([fspot_version_major], [0])
 m4_define([fspot_version_minor], [7])
-m4_define([fspot_version_micro], [2])
+m4_define([fspot_version_micro], [3])
 
 dnl set to 0 when doing an official release
 m4_define([fspot_version_pre_release], [0])
@@ -23,7 +23,7 @@ m4_define([fspot_version],
 
 dnl this can sometimes differ manually
 m4_define([fspot_display_version],
-	["0.7.2"])
+	["0.7.3"])
 
 m4_define([fspot_api_version],
 	[fspot_version_major.fspot_version_minor])
@@ -69,7 +69,6 @@ SHAMROCK_FIND_MONO_RUNTIME
 SHAMROCK_CHECK_MONO_2_0_GAC_ASSEMBLIES([
     Mono.Posix
     Mono.Simd
-    Mono.Data
     System
     System.Runtime.Remoting
     System.Web
@@ -141,7 +140,7 @@ CAIRO_REQUIRED=1.4.0
 LCMS_REQUIRED=1.12
 MONOADDINS_REQUIRED=0.3
 
-PKG_CHECK_MODULES(F, libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED glade-sharp-2.0 >= $GTKSHARP_REQUIRED gtk+-2.0 >= $GTK_REQUIRED mono-cairo >= $MONO_CAIRO_REQUIRED cairo >= $CAIRO_REQUIRED mono-addins >= $MONOADDINS_REQUIRED mono-addins-gui >= $MONOADDINS_REQUIRED mono-addins-setup >= $MONOADDINS_REQUIRED)
+PKG_CHECK_MODULES(F, libgnome-2.0 >= $LIBGNOME_REQUIRED libgnomeui-2.0 >= $LIBGNOMEUI_REQUIRED gtk+-2.0 >= $GTK_REQUIRED mono-cairo >= $MONO_CAIRO_REQUIRED cairo >= $CAIRO_REQUIRED mono-addins >= $MONOADDINS_REQUIRED mono-addins-gui >= $MONOADDINS_REQUIRED mono-addins-setup >= $MONOADDINS_REQUIRED)
 AC_SUBST(F_CFLAGS)
 AC_SUBST(F_LIBS)
 
@@ -350,6 +349,7 @@ src/Core/FSpot.Core/FSpot.Core.dll.config
 src/Core/FSpot.Core/FSpot.Core/Defines.cs
 src/Core/FSpot.JobScheduler/Makefile
 src/Core/FSpot.Utils/Makefile
+src/Core/FSpot.Utils/FSpot.Utils.dll.config
 src/Core/FSpot.Query/Makefile
 src/Core/FSpot.Gui/Makefile
 src/Core/FSpot.Gui/FSpot.Gui.dll.config

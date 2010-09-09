@@ -31,451 +31,28 @@ using Mono.Google;
 using Mono.Google.Picasa;
 
 namespace FSpot.Exporters.PicasaWeb {
-	public class GoogleAccount {
-
-		private string username;
-		private string password;
-		private string token;
-		private string unlock_captcha;
-		private GoogleConnection connection;
-		private Mono.Google.Picasa.PicasaWeb picasa;
-
-		public GoogleAccount (string username, string password)
-		{
-			this.username = username;
-			this.password = password;
-		}
-
-		public GoogleAccount (string username, string password, string token, string unlock_captcha)
-		{
-			this.username = username;
-			this.password = password;
-			this.token = token;
-			this.unlock_captcha = unlock_captcha;
-		}
-
-		public Mono.Google.Picasa.PicasaWeb Connect ()
-		{
-			Log.Debug ("GoogleAccount.Connect()");
-			GoogleConnection conn = new GoogleConnection (GoogleService.Picasa);
-			ServicePointManager.CertificatePolicy = new NoCheckCertificatePolicy ();
-			if (unlock_captcha == null || token == null)
-				conn.Authenticate(username, password);
-			else {
-				conn.Authenticate(username, password, token, unlock_captcha);
-				token = null;
-				unlock_captcha = null;
-			}
-			connection = conn;
-			var picasa = new Mono.Google.Picasa.PicasaWeb(conn);
-			this.picasa = picasa;
-			return picasa;
-		}
-
-		private void MarkChanged()
-		{
-			connection = null;
-		}
-
-		public bool Connected {
-			get {
-				return (connection != null);
-			}
-		}
-
-		public string Username {
-			get {
-				return username;
-			}
-			set {
-				if (username != value) {
-					username = value;
-					MarkChanged ();
-				}
-			}
-		}
-
-		public string Password {
-			get {
-				return password;
-			}
-			set {
-				if (password != value) {
-					password = value;
-					MarkChanged ();
-				}
-			}
-		}
-
-		public string Token {
-			get {
-				return token;
-			}
-			set {
-				token = value;
-			}
-		}
-
-		public string UnlockCaptcha {
-			get {
-				return unlock_captcha;
-			}
-			set {
-				unlock_captcha = value;
-			}
-		}
-
-		public Mono.Google.Picasa.PicasaWeb Picasa {
-			get {
-				return picasa;
-			}
-		}
-	}
-
-
-	public class GoogleAccountManager
-	{
-		private static GoogleAccountManager instance;
-		private const string keyring_item_name = "Google Account";
-		ArrayList accounts;
-
-		public delegate void AccountListChangedHandler (GoogleAccountManager manager, GoogleAccount changed_account);
-		public event AccountListChangedHandler AccountListChanged;
-
-		public static GoogleAccountManager GetInstance ()
-		{
-			if (instance == null) {
-				instance = new GoogleAccountManager ();
-			}
-
-			return instance;
-		}
-
-		private GoogleAccountManager ()
-		{
-			accounts = new ArrayList ();
-			ReadAccounts ();
-		}
-
-		public void MarkChanged ()
-		{
-			MarkChanged (true, null);
-		}
-
-		public void MarkChanged (bool write, GoogleAccount changed_account)
-		{
-			if (write)
-				WriteAccounts ();
-
-			if (AccountListChanged != null)
-				AccountListChanged (this, changed_account);
-		}
-
-		public ArrayList GetAccounts ()
-		{
-			return accounts;
-		}
-
-		public void AddAccount (GoogleAccount account)
-		{
-			AddAccount (account, true);
-		}
-
-		public void AddAccount (GoogleAccount account, bool write)
-		{
-			accounts.Add (account);
-			MarkChanged (write, account);
-		}
-
-		public void RemoveAccount (GoogleAccount account)
-		{
-			string keyring;
-			try {
-				keyring = Ring.GetDefaultKeyring();
-			} catch {
-				return;
-			}
-			Hashtable request_attributes = new Hashtable();
-			request_attributes["name"] = keyring_item_name;
-			request_attributes["username"] = account.Username;
-			try {
-				foreach(ItemData result in Ring.Find(ItemType.GenericSecret, request_attributes)) {
-					Ring.DeleteItem(keyring, result.ItemID);
-				}
-			} catch (Exception e) {
-				Log.DebugException (e);
-			}
-			accounts.Remove (account);
-			MarkChanged ();
-		}
-
-		public void WriteAccounts ()
-		{
-			string keyring;
-			try {
-				keyring = Ring.GetDefaultKeyring();
-			} catch {
-				return;
-			}
-			foreach (GoogleAccount account in accounts) {
-				Hashtable update_request_attributes = new Hashtable();
-				update_request_attributes["name"] = keyring_item_name;
-				update_request_attributes["username"] = account.Username;
-
-				try {
-					Ring.CreateItem(keyring, ItemType.GenericSecret, keyring_item_name, update_request_attributes, account.Password, true);
-				} catch {
-					continue;
-				}
-			}
-		}
-
-		private void ReadAccounts ()
-		{
-
-			Hashtable request_attributes = new Hashtable();
-			request_attributes["name"] = keyring_item_name;
-			try {
-				foreach(ItemData result in Ring.Find(ItemType.GenericSecret, request_attributes)) {
-					if(!result.Attributes.ContainsKey("name") || !result.Attributes.ContainsKey("username") ||
-						(result.Attributes["name"] as string) != keyring_item_name)
-						continue;
-
-					string username = (string)result.Attributes["username"];
-					string password = result.Secret;
-
-					if (username == null || username == String.Empty || password == null || password == String.Empty)
-						throw new ApplicationException ("Invalid username/password in keyring");
-
-					GoogleAccount account = new GoogleAccount(username, password);
-					if (account != null)
-						AddAccount (account, false);
-
-				}
-			} catch (Exception e) {
-				Log.DebugException (e);
-			}
-
-			MarkChanged ();
-		}
-	}
-
-	public class GoogleAccountDialog {
-		public GoogleAccountDialog (Gtk.Window parent) : this (parent, null, false, null) {
-			Dialog.Response += HandleAddResponse;
-			add_button.Sensitive = false;
-		}
-
-		public GoogleAccountDialog (Gtk.Window parent, GoogleAccount account, bool show_error, CaptchaException captcha_exception)
-		{
-			xml = new Glade.XML (null, "PicasaWebExport.glade", dialog_name, "f-spot");
-			xml.Autoconnect (this);
-			Dialog.Modal = false;
-			Dialog.TransientFor = parent;
-			Dialog.DefaultResponse = Gtk.ResponseType.Ok;
-
-			this.account = account;
-
-			bool show_captcha = (captcha_exception != null);
-			status_area.Visible = show_error;
-			locked_area.Visible = show_captcha;
-			captcha_label.Visible = show_captcha;
-			captcha_entry.Visible = show_captcha;
-			captcha_image.Visible = show_captcha;
-
-			password_entry.ActivatesDefault = true;
-			username_entry.ActivatesDefault = true;
-
-			if (show_captcha) {
-				try {
-					using  (var img = ImageFile.Create(new SafeUri(captcha_exception.CaptchaUrl, true))) {
-						captcha_image.Pixbuf = img.Load();
-						token = captcha_exception.Token;
-					}
-				} catch (Exception) {}
-			}
-
-			if (account != null) {
-				password_entry.Text = account.Password;
-				username_entry.Text = account.Username;
-				add_button.Label = Gtk.Stock.Ok;
-				Dialog.Response += HandleEditResponse;
-			}
-
-			if (remove_button != null)
-				remove_button.Visible = account != null;
-
-			this.Dialog.Show ();
-
-			password_entry.Changed += HandleChanged;
-			username_entry.Changed += HandleChanged;
-			HandleChanged (null, null);
-		}
-
-		private void HandleChanged (object sender, System.EventArgs args)
-		{
-			password = password_entry.Text;
-			username = username_entry.Text;
-
-			add_button.Sensitive = !(password == String.Empty || username == String.Empty);
-		}
-
-		[GLib.ConnectBefore]
-		protected void HandleAddResponse (object sender, Gtk.ResponseArgs args)
-		{
-			if (args.ResponseId == Gtk.ResponseType.Ok) {
-				GoogleAccount account = new GoogleAccount (username, password);
-				GoogleAccountManager.GetInstance ().AddAccount (account);
-			}
-			Dialog.Destroy ();
-		}
-
-		protected void HandleEditResponse (object sender, Gtk.ResponseArgs args)
-		{
-			if (args.ResponseId == Gtk.ResponseType.Ok) {
-				account.Username = username;
-				account.Password = password;
-				account.Token = token;
-				account.UnlockCaptcha = captcha_entry.Text;
-				GoogleAccountManager.GetInstance ().MarkChanged (true, account);
-			} else if (args.ResponseId == Gtk.ResponseType.Reject) {
-				// NOTE we are using Reject to signal the remove action.
-				GoogleAccountManager.GetInstance ().RemoveAccount (account);
-			}
-			Dialog.Destroy ();
-		}
-
-		private Gtk.Dialog Dialog {
-			get {
-				if (dialog == null)
-					dialog = (Gtk.Dialog) xml.GetWidget (dialog_name);
-
-				return dialog;
-			}
-		}
-
-		private GoogleAccount account;
-		private string password;
-		private string username;
-		private string token;
-
-		private Glade.XML xml;
-		private string dialog_name = "google_add_dialog";
-
-		// widgets
-		[Glade.Widget] Gtk.Dialog dialog;
-		[Glade.Widget] Gtk.Entry password_entry;
-		[Glade.Widget] Gtk.Entry username_entry;
-		[Glade.Widget] Gtk.Entry captcha_entry;
-
-		[Glade.Widget] Gtk.Button add_button;
-		[Glade.Widget] Gtk.Button remove_button;
-		[Glade.Widget] Gtk.Button cancel_button;
-
-		[Glade.Widget] Gtk.HBox status_area;
-		[Glade.Widget] Gtk.HBox locked_area;
-
-		[Glade.Widget] Gtk.Image captcha_image;
-		[Glade.Widget] Gtk.Label captcha_label;
-
-	}
-
-	public class GoogleAddAlbum {
-		[Glade.Widget] Gtk.Dialog dialog;
-		[Glade.Widget] Gtk.OptionMenu album_optionmenu;
-
-		[Glade.Widget] Gtk.Entry title_entry;
-		[Glade.Widget] Gtk.Entry description_entry;
-		[Glade.Widget] Gtk.CheckButton public_check;
-
-		[Glade.Widget] Gtk.Button add_button;
-		[Glade.Widget] Gtk.Button cancel_button;
-
-		private Glade.XML xml;
-		private string dialog_name = "google_add_album_dialog";
-
-		private GoogleExport export;
-		private Mono.Google.Picasa.PicasaWeb picasa;
-		private string description;
-		private string title;
-		private bool public_album;
-
-		public GoogleAddAlbum (GoogleExport export, Mono.Google.Picasa.PicasaWeb picasa)
-		{
-			xml = new Glade.XML (null, "PicasaWebExport.glade", dialog_name, "f-spot");
-			xml.Autoconnect (this);
-
-			this.export = export;
-			this.picasa = picasa;
-
-			Dialog.Response += HandleAddResponse;
-
-			description_entry.Changed += HandleChanged;
-			title_entry.Changed += HandleChanged;
-			HandleChanged (null, null);
-		}
-
-		private void HandleChanged (object sender, EventArgs args)
-		{
-			description = description_entry.Text;
-			title = title_entry.Text;
-			public_album = public_check.Active;
-
-			if (title == String.Empty)
-				add_button.Sensitive = false;
-			else
-				add_button.Sensitive = true;
-		}
-
-		[GLib.ConnectBefore]
-		protected void HandleAddResponse (object sender, Gtk.ResponseArgs args)
-		{
-			if (args.ResponseId == Gtk.ResponseType.Ok) {
-				public_album = public_check.Active;
-
-				try {
-					picasa.CreateAlbum (System.Web.HttpUtility.HtmlEncode (title), description, public_album ? AlbumAccess.Public : AlbumAccess.Private);
-				} catch (System.Exception e) {
-					HigMessageDialog md =
-					new HigMessageDialog (Dialog,
-							      Gtk.DialogFlags.Modal |
-							      Gtk.DialogFlags.DestroyWithParent,
-								      Gtk.MessageType.Error, Gtk.ButtonsType.Ok,
-							      Catalog.GetString ("Error while creating Album"),
-							      String.Format (Catalog.GetString ("The following error was encountered while attempting to create an album: {0}"), e.Message));
-					md.Run ();
-					md.Destroy ();
-					return;
-				}
-				export.HandleAlbumAdded (title);
-			}
-			Dialog.Destroy ();
-		}
-
-		private Gtk.Dialog Dialog {
-			get {
-				if (dialog == null)
-					dialog = (Gtk.Dialog) xml.GetWidget (dialog_name);
-
-				return dialog;
-			}
-		}
-	}
-
-
 	public class GoogleExport : FSpot.Extensions.IExporter {
-		public GoogleExport ()
-		{
-		}
+		public GoogleExport () {}
 
 		public void Run (IBrowsableCollection selection)
 		{
-			xml = new Glade.XML (null, "PicasaWebExport.glade", dialog_name, "f-spot");
-			xml.Autoconnect (this);
+			builder = new GtkBeans.Builder (null, "google_export_dialog.ui", null);
+			builder.Autoconnect (this);
+
+            gallery_optionmenu = new Gtk.OptionMenu ();
+            album_optionmenu = new Gtk.OptionMenu ();
+
+            (edit_button.Parent as Gtk.HBox).PackStart (gallery_optionmenu);
+            (album_button.Parent as Gtk.HBox).PackStart (album_optionmenu);
+            (edit_button.Parent as Gtk.HBox).ReorderChild (gallery_optionmenu, 1);
+            (album_button.Parent as Gtk.HBox).ReorderChild (album_optionmenu, 1);
+
+            gallery_optionmenu.Show ();
+            album_optionmenu.Show ();
 
 			this.items = selection.Items;
 			album_button.Sensitive = false;
-			IconView view = new IconView (selection);
+			var view = new TrayView (selection);
 			view.DisplayDates = false;
 			view.DisplayTags = false;
 
@@ -485,7 +62,6 @@ namespace FSpot.Exporters.PicasaWeb {
 			thumb_scrolledwindow.Add (view);
 			view.Show ();
 			Dialog.Show ();
-
 
 			GoogleAccountManager manager = GoogleAccountManager.GetInstance ();
 			manager.AccountListChanged += PopulateGoogleOptionMenu;
@@ -503,21 +79,19 @@ namespace FSpot.Exporters.PicasaWeb {
 			LoadPreference (SCALE_KEY);
 			LoadPreference (SIZE_KEY);
 			LoadPreference (BROWSER_KEY);
-//			LoadPreference (Preferences.EXPORT_PICASAWEB_META);
 			LoadPreference (TAG_KEY);
 		}
 
 		private bool scale;
 		private int size;
 		private bool browser;
-//		private bool meta;
 		private bool export_tag;
 		private bool connect = false;
 
 		private long approx_size = 0;
 		private long sent_bytes = 0;
 
-		IBrowsableItem [] items;
+		IPhoto [] items;
 		int photo_index;
 		ThreadProgressDialog progress_dialog;
 
@@ -526,9 +100,7 @@ namespace FSpot.Exporters.PicasaWeb {
 		private PicasaAlbum album;
 		private PicasaAlbumCollection albums = null;
 
-		private string xml_path;
-
-		private Glade.XML xml;
+		private GtkBeans.Builder builder;
 		private string dialog_name = "google_export_dialog";
 
 		public const string EXPORT_SERVICE = "picasaweb/";
@@ -538,31 +110,25 @@ namespace FSpot.Exporters.PicasaWeb {
 		public const string TAG_KEY = Preferences.APP_FSPOT_EXPORT + EXPORT_SERVICE + "tag";
 
 		// widgets
-		[Glade.Widget] Gtk.Dialog dialog;
-		[Glade.Widget] Gtk.OptionMenu gallery_optionmenu;
-		[Glade.Widget] Gtk.OptionMenu album_optionmenu;
+		[GtkBeans.Builder.Object] Gtk.Dialog dialog;
+		Gtk.OptionMenu gallery_optionmenu;
+		Gtk.OptionMenu album_optionmenu;
 
-		[Glade.Widget] Gtk.Entry width_entry;
-		[Glade.Widget] Gtk.Entry height_entry;
+		[GtkBeans.Builder.Object] Gtk.Label status_label;
+		[GtkBeans.Builder.Object] Gtk.Label album_status_label;
 
-		[Glade.Widget] Gtk.Label status_label;
-		[Glade.Widget] Gtk.Label album_status_label;
+		[GtkBeans.Builder.Object] Gtk.CheckButton browser_check;
+		[GtkBeans.Builder.Object] Gtk.CheckButton scale_check;
+		[GtkBeans.Builder.Object] Gtk.CheckButton tag_check;
 
-		[Glade.Widget] Gtk.CheckButton browser_check;
-		[Glade.Widget] Gtk.CheckButton scale_check;
-//		[Glade.Widget] Gtk.CheckButton meta_check;
-		[Glade.Widget] Gtk.CheckButton tag_check;
+		[GtkBeans.Builder.Object] Gtk.SpinButton size_spin;
 
-		[Glade.Widget] Gtk.SpinButton size_spin;
+		[GtkBeans.Builder.Object] Gtk.Button album_button;
+		[GtkBeans.Builder.Object] Gtk.Button edit_button;
 
-		[Glade.Widget] Gtk.Button album_button;
-		[Glade.Widget] Gtk.Button add_button;
-		[Glade.Widget] Gtk.Button edit_button;
+		[GtkBeans.Builder.Object] Gtk.Button export_button;
 
-		[Glade.Widget] Gtk.Button export_button;
-		[Glade.Widget] Gtk.Button cancel_button;
-
-		[Glade.Widget] Gtk.ScrolledWindow thumb_scrolledwindow;
+		[GtkBeans.Builder.Object] Gtk.ScrolledWindow thumb_scrolledwindow;
 
 		System.Threading.Thread command_thread;
 
@@ -580,7 +146,6 @@ namespace FSpot.Exporters.PicasaWeb {
 				scale = false;
 
 			browser = browser_check.Active;
-//			meta = meta_check.Active;
 			export_tag = tag_check.Active;
 
 			if (account != null) {
@@ -622,7 +187,7 @@ namespace FSpot.Exporters.PicasaWeb {
 		{
 			public int Compare (object left, object right)
 			{
-				return DateTime.Compare ((left as IBrowsableItem).Time, (right as IBrowsableItem).Time);
+				return DateTime.Compare ((left as IPhoto).Time, (right as IPhoto).Time);
 			}
 		}
 
@@ -644,7 +209,7 @@ namespace FSpot.Exporters.PicasaWeb {
 
 			while (photo_index < items.Length) {
 				try {
-					IBrowsableItem item = items[photo_index];
+					IPhoto item = items[photo_index];
 
 					FileInfo file_info;
 					Log.Debug ("Picasa uploading " + photo_index);
@@ -932,7 +497,7 @@ namespace FSpot.Exporters.PicasaWeb {
 		private Gtk.Dialog Dialog {
 			get {
 				if (dialog == null)
-					dialog = (Gtk.Dialog) xml.GetWidget (dialog_name);
+					dialog = new Gtk.Dialog (builder.GetRawObject (dialog_name));
 
 				return dialog;
 			}

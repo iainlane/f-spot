@@ -14,10 +14,11 @@ using Gdk;
 using FSpot.Core;
 using FSpot.Widgets;
 using FSpot.Utils;
+using FSpot.Gui;
 
 namespace FSpot {
 	public class PreviewPopup : Gtk.Window {
-		private IconView view;
+		private CollectionGridView view;
 		private Gtk.Image image;
 		private Gtk.Label label;
 
@@ -102,7 +103,7 @@ namespace FSpot {
 
 		private void UpdateImage ()
 		{
-			IBrowsableItem item = view.Collection [Item];
+			IPhoto item = view.Collection [Item];
 
 			string orig_path = item.DefaultVersion.Uri.LocalPath;
 
@@ -251,7 +252,7 @@ namespace FSpot {
 			return false;
 		}
 
-		public PreviewPopup (IconView view) : base (Gtk.WindowType.Toplevel)
+		public PreviewPopup (SelectionCollectionGridView view) : base (Gtk.WindowType.Toplevel)
 		{
 			Gtk.VBox vbox = new Gtk.VBox ();
 			this.Add (vbox);

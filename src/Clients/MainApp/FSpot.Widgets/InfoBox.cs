@@ -31,10 +31,10 @@ using Hyena;
 namespace FSpot.Widgets
 {
 	public class InfoBox : VBox {
-		Delay update_delay;
+		DelayedOperation update_delay;
 
-		private IBrowsableItem [] photos = new IBrowsableItem [0];
-		public IBrowsableItem [] Photos {
+		private IPhoto [] photos = new IPhoto [0];
+		public IPhoto [] Photos {
 			set {
 				photos = value;
 				update_delay.Start ();
@@ -44,10 +44,10 @@ namespace FSpot.Widgets
 			}
 		}
 
-		public IBrowsableItem Photo {
+		public IPhoto Photo {
 			set {
 				if (value != null) {
-					Photos = new IBrowsableItem [] { value };
+					Photos = new IPhoto [] { value };
 				}
 			}
 		}
@@ -77,7 +77,7 @@ namespace FSpot.Widgets
 			}
 		}
 
-		public delegate void VersionChangedHandler (InfoBox info_box, IBrowsableItemVersion version);
+		public delegate void VersionChangedHandler (InfoBox info_box, IPhotoVersion version);
 		public event VersionChangedHandler VersionChanged;
 
 		private Expander info_expander;
@@ -86,7 +86,7 @@ namespace FSpot.Widgets
 		private Gtk.Image histogram_image;
 		private Histogram histogram;
 
-		private Delay histogram_delay;
+		private DelayedOperation histogram_delay;
 
 		// Context switching (toggles visibility).
 		public event EventHandler ContextChanged;
@@ -130,7 +130,7 @@ namespace FSpot.Widgets
 		private Label file_size_value_label;
 
 		private Label rating_label;
-		private RatingSmall rating_view;
+		private RatingEntry rating_view;
 
 		private TagView tag_view;
 		private string default_exposure_string;
@@ -145,7 +145,7 @@ namespace FSpot.Widgets
 
 		private void HandleRatingChanged (object o, EventArgs e)
 		{
-			App.Instance.Organizer.HandleRatingMenuSelected ((o as Widgets.Rating).Value);
+			App.Instance.Organizer.HandleRatingMenuSelected ((o as Widgets.RatingEntry).Value);
 		}
 
 		private Label CreateRightAlignedLabel (string text)
@@ -252,7 +252,7 @@ namespace FSpot.Widgets
 			size_value_label = AttachLabel (info_table, 3, name_value_label);
 			exposure_value_label = AttachLabel (info_table, 4, name_value_label);
 
-			version_list = new ListStore (typeof (IBrowsableItemVersion), typeof (string), typeof (bool));
+			version_list = new ListStore (typeof (IPhotoVersion), typeof (string), typeof (bool));
 			version_combo = new ComboBox ();
 			CellRendererText version_name_cell = new CellRendererText ();
 			version_name_cell.Ellipsize = Pango.EllipsizeMode.End;
@@ -271,7 +271,7 @@ namespace FSpot.Widgets
 			Gtk.Alignment rating_align = new Gtk.Alignment( 0, 0, 0, 0);
 			info_table.Attach (rating_align, 1, 2, 8, 9, AttachOptions.Fill, AttachOptions.Fill, TABLE_XPADDING, TABLE_YPADDING);
 
-			rating_view = new RatingSmall ();
+			rating_view = new RatingEntry () { HasFrame = false };
 			rating_view.Visible = false;
 			rating_view.Changed += HandleRatingChanged;
 			rating_align.Add (rating_view);
@@ -396,7 +396,7 @@ namespace FSpot.Widgets
 		{
 			ImageInfo info;
 
-			IBrowsableItem photo = Photos [0];
+			IPhoto photo = Photos [0];
 
 			histogram_expander.Visible = true;
 			UpdateHistogram ();
@@ -459,7 +459,7 @@ namespace FSpot.Widgets
 			version_combo.Changed -= OnVersionComboChanged;
 
 			int count = 0;
-			foreach (IBrowsableItemVersion version in photo.Versions) {
+			foreach (IPhotoVersion version in photo.Versions) {
 				version_list.AppendValues (version, version.Name, true);
 				if (version == photo.DefaultVersion)
 					version_combo.Active = count;
@@ -519,7 +519,7 @@ namespace FSpot.Widgets
 			TreeIter iter;
 
 			if (combo.GetActiveIter (out iter))
-				VersionChanged (this, (IBrowsableItemVersion)version_list.GetValue (iter, 0));
+				VersionChanged (this, (IPhotoVersion)version_list.GetValue (iter, 0));
 		}
 
 		private void UpdateMultiple ()
@@ -543,8 +543,8 @@ namespace FSpot.Widgets
 			camera_value_label.Visible = false;
 
 			if (show_date) {
-				IBrowsableItem first = Photos[Photos.Length-1];
-				IBrowsableItem last = Photos [0];
+				IPhoto first = Photos[Photos.Length-1];
+				IPhoto last = Photos [0];
 				if (first.Time.Date == last.Time.Date) {
 					//Note for translators: {0} is a date, {1} and {2} are times.
 					date_value_label.Text = String.Format(Catalog.GetString("On {0} between \n{1} and {2}"),
@@ -562,7 +562,7 @@ namespace FSpot.Widgets
 
 			if (show_file_size) {
 				long file_size = 0;
-				foreach (IBrowsableItem photo in Photos) {
+				foreach (IPhoto photo in Photos) {
 
 					try {
 						GFile file = FileFactory.NewForUri (photo.DefaultVersion.Uri);
@@ -608,7 +608,7 @@ namespace FSpot.Widgets
 			if (Photos.Length == 0)
 				return false;
 
-			IBrowsableItem photo = Photos [0];
+			IPhoto photo = Photos [0];
 
 			Gdk.Pixbuf hint = histogram_hint;
 			histogram_hint = null;
@@ -798,10 +798,10 @@ namespace FSpot.Widgets
 
 			SetupWidgets ();
 
-			update_delay = new Delay (Update);
+			update_delay = new DelayedOperation (Update);
 			update_delay.Start ();
 
-			histogram_delay = new Delay (DelayedUpdateHistogram);
+			histogram_delay = new DelayedOperation (DelayedUpdateHistogram);
 
 			BorderWidth = 2;
 			Hide ();

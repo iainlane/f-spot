@@ -42,16 +42,16 @@ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 subdir = src/Extensions/Exporters/FSpot.Exporters.PicasaWeb
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/build/m4/shave/shave.m4 \
-	$(top_srcdir)/build/m4/shamrock/expansions.m4 \
-	$(top_srcdir)/build/m4/shamrock/gnome-doc.m4 \
-	$(top_srcdir)/build/m4/shamrock/mono.m4 \
-	$(top_srcdir)/build/m4/shamrock/nunit.m4 \
-	$(top_srcdir)/build/m4/shamrock/programs.m4 \
 	$(top_srcdir)/build/m4/f-spot/flickrnet.m4 \
 	$(top_srcdir)/build/m4/f-spot/gnome-keyring-sharp.m4 \
 	$(top_srcdir)/build/m4/f-spot/gtk-sharp.m4 \
 	$(top_srcdir)/build/m4/f-spot/libfspot.m4 \
 	$(top_srcdir)/build/m4/f-spot/mono-addins.m4 \
+	$(top_srcdir)/build/m4/shamrock/expansions.m4 \
+	$(top_srcdir)/build/m4/shamrock/gnome-doc.m4 \
+	$(top_srcdir)/build/m4/shamrock/mono.m4 \
+	$(top_srcdir)/build/m4/shamrock/nunit.m4 \
+	$(top_srcdir)/build/m4/shamrock/programs.m4 \
 	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
@@ -231,6 +231,8 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POFILES = @POFILES@
 POSUB = @POSUB@
 PO_IN_DATADIR_FALSE = @PO_IN_DATADIR_FALSE@
@@ -287,7 +289,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -308,10 +309,18 @@ ASSEMBLY = FSpot.Exporters.PicasaWeb
 TARGET = library
 LINK = $(REF_FSPOT_EXTENSION_PICASAWEBEXPORT) $(am__append_1)
 INSTALL_DIR = $(EXTENSIONS_INSTALL_DIR)
-SOURCES = FSpot.Exporters.PicasaWeb/PicasaWebExport.cs
+SOURCES = \
+	FSpot.Exporters.PicasaWeb/GoogleAccount.cs \
+	FSpot.Exporters.PicasaWeb/GoogleAccountDialog.cs \
+	FSpot.Exporters.PicasaWeb/GoogleAccountManager.cs \
+	FSpot.Exporters.PicasaWeb/GoogleAddAlbum.cs \
+	FSpot.Exporters.PicasaWeb/PicasaWebExport.cs
+
 RESOURCES = \
-	Resources/PicasaWebExport.addin.xml \
-	Resources/PicasaWebExport.glade
+	Resources/google_add_album_dialog.ui \
+	Resources/google_add_dialog.ui \
+	Resources/google_export_dialog.ui \
+	Resources/PicasaWebExport.addin.xml
 
 
 # Initializers
@@ -340,14 +349,12 @@ LINK_SYSTEM_WEB = -r:System.Web
 LINK_MONO_POSIX = -r:Mono.Posix
 LINK_MONO_CAIRO = -r:Mono.Cairo
 LINK_MONO_SIMD = -r:Mono.Simd
-LINK_MONODATA = -r:Mono.Data
 LINK_ICSHARP_ZIP_LIB = -r:ICSharpCode.SharpZipLib
 LINK_KEYRING = $(KEYRINGSHARP_LIBS)
 LINK_GLIB = $(GLIBSHARP_LIBS)
 LINK_GTK = $(GTKSHARP_LIBS)
 LINK_GNOME = $(GNOME_SHARP_LIBS)
 LINK_GCONF = $(GCONF_SHARP_LIBS)
-LINK_GLADE = -pkg:glade-sharp-2.0
 LINK_FLICKRNET = -pkg:flickrnet
 LINK_DBUS = $(NDESK_DBUS_LIBS) $(NDESK_DBUS_GLIB_LIBS)
 LINK_DBUS_NO_GLIB = $(NDESK_DBUS_LIBS)
@@ -430,14 +437,14 @@ LINK_FSPOT_PLATFORM = -r:$(DIR_BIN)/FSpot.Platform.dll
 LINK_FSPOT_PLATFORM_DEPS = $(REF_FSPOT_PLATFORM) $(LINK_FSPOT_PLATFORM)
 
 # FSpot.Gui
-REF_FSPOT_GUI = $(LINK_FSPOT_CORE_DEPS) $(LINK_FSPOT_BLING_DEPS)
+REF_FSPOT_GUI = $(LINK_FSPOT_CORE_DEPS) $(LINK_FSPOT_BLING_DEPS) $(LINK_HYENA_GUI_DEPS)
 LINK_FSPOT_GUI = -r:$(DIR_BIN)/FSpot.Gui.dll
 LINK_FSPOT_GUI_DEPS = $(REF_FSPOT_GUI) $(LINK_FSPOT_GUI) $(LINK_HENA_GUI_DEPS)
 
 # FSpot (executable)
 REF_FSPOT = $(LINK_FSPOT_GUI_DEPS) $(LINK_FSPOT_PLATFORM_DEPS) $(LINK_FSPOT_QUERY_DEPS) \
             $(LINK_GLIB) $(LINK_MONO_ADDINS_DEPS) $(LINK_UNIQUE_DEPS) $(LINK_MONO_ADDINS_SETUP_DEPS) \
-            $(LINK_GLADE) $(LINK_MONODATA) \
+            $(LINK_MONODATA) \
             $(LINK_MONO_ADDINS_GUI_DEPS) $(LINK_FSPOT_JOB_SCHEDULER_DEPS) $(LINK_ICSHARP_ZIP_LIB) \
             $(LINK_GNOME) $(LINK_HYENA_GUI_DEPS) $(LINK_TAGLIB) $(LINK_FSPOT_DATABASE_DEPS)
 

@@ -3,14 +3,16 @@ TARGET = library
 LINK = $(REF_FSPOT_GUI)
 
 SOURCES =  \
+	FSpot.Gui/CompositeUtils.cs \
+	FSpot.Gui/WindowOpacityFader.cs \
 	FSpot.Transitions/CairoTransition.cs \
 	FSpot.Transitions/DissolveTransition.cs \
 	FSpot.Transitions/PushTransition.cs \
 	FSpot.Transitions/SlideShowTransition.cs \
 	FSpot.Widgets/ApplicationActivatedEventArgs.cs \
 	FSpot.Widgets/BuilderWindow.cs \
+	FSpot.Widgets/CellGridView.cs \
 	FSpot.Widgets/CheckPattern.cs \
-	FSpot.Widgets/ComplexMenuItem.cs \
 	FSpot.Widgets/Curve.cs \
 	FSpot.Widgets/CurveType.cs \
 	FSpot.Widgets/CustomPrintWidget.cs \
@@ -24,9 +26,12 @@ SOURCES =  \
 	FSpot.Widgets/MenuButton.cs \
 	FSpot.Widgets/OpenWithMenu.cs \
 	FSpot.Widgets/PointerMode.cs \
-	FSpot.Widgets/Rating.cs \
+	FSpot.Widgets/RatingEntry.cs \
+	FSpot.Widgets/RatingRenderer.cs \
 	FSpot.Widgets/SaneTreeView.cs \
-	FSpot.Widgets/ScrolledView.cs
+	FSpot.Widgets/ScrolledView.cs \
+	FSpot.Widgets/SelectionCollection.cs \
+	FSpot.Widgets/ToolTipWindow.cs
 
 RESOURCES =
 

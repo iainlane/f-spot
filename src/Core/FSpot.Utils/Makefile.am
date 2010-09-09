@@ -6,11 +6,13 @@ SOURCES =  \
 	FSpot.Utils/Cache.cs \
 	FSpot.Utils/CairoUtils.cs \
 	FSpot.Utils/ConsoleCrayon.cs \
+	FSpot.Utils/DelayedOperation.cs \
 	FSpot.Utils/FileExtensions.cs \
 	FSpot.Utils/GdkUtils.cs \
 	FSpot.Utils/GIOTagLibFileAbstraction.cs \
 	FSpot.Utils/GtkUtil.cs \
 	FSpot.Utils/HashUtils.cs \
+	FSpot.Utils/MemorySurface.cs \
 	FSpot.Utils/Metadata.cs \
 	FSpot.Utils/PixbufUtils.cs \
 	FSpot.Utils/RecursiveFileEnumerator.cs \

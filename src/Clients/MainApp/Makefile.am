@@ -76,7 +76,6 @@ SOURCES =  \
 	FSpot.UI.Dialog/EditExceptionDialog.cs \
 	FSpot.UI.Dialog/EditTagDialog.cs \
 	FSpot.UI.Dialog/EditTagIconDialog.cs \
-	FSpot.UI.Dialog/GladeDialog.cs \
 	FSpot.UI.Dialog/ImportDialog.cs \
 	FSpot.UI.Dialog/ImportFailureDialog.cs \
 	FSpot.UI.Dialog/LastRollDialog.cs \
@@ -88,15 +87,15 @@ SOURCES =  \
 	FSpot.UI.Dialog/SelectionRatioDialog.cs \
 	FSpot.UI.Dialog/TagSelectionDialog.cs \
 	FSpot.UI.Dialog/ThreadProgressDialog.cs \
+	FSpot.Widgets/BrowseablePointerGridView.cs \
 	FSpot.Widgets/CellRendererTextProgress.cs \
-	FSpot.Widgets/CompositeUtils.cs \
+	FSpot.Widgets/CollectionCellGridView.cs \
 	FSpot.Widgets/EditorPage.cs \
 	FSpot.Widgets/Filmstrip.cs \
 	FSpot.Widgets/FindBar.cs \
 	FSpot.Widgets/FolderTreeModel.cs \
 	FSpot.Widgets/FolderTreePage.cs \
 	FSpot.Widgets/FolderTreeView.cs \
-	FSpot.Widgets/IconView.cs \
 	FSpot.Widgets/ImageInfo.cs \
 	FSpot.Widgets/InfoBox.cs \
 	FSpot.Widgets/Loupe.cs \
@@ -105,7 +104,7 @@ SOURCES =  \
 	FSpot.Widgets/PreviewPopup.cs \
 	FSpot.Widgets/QueryView.cs \
 	FSpot.Widgets/RatingMenuItem.cs \
-	FSpot.Widgets/ScalingIconView.cs \
+	FSpot.Widgets/SelectionCollectionGridView.cs \
 	FSpot.Widgets/Sharpener.cs \
 	FSpot.Widgets/Sidebar.cs \
 	FSpot.Widgets/SlideShow.cs \
@@ -114,6 +113,13 @@ SOURCES =  \
 	FSpot.Widgets/TagMenu.cs \
 	FSpot.Widgets/TagView.cs \
 	FSpot.Widgets/Tests/FindBarTests.cs \
+	FSpot.Widgets/ThumbnailCaptionRenderer.cs \
+	FSpot.Widgets/ThumbnailDateCaptionRenderer.cs \
+	FSpot.Widgets/ThumbnailDecorationRenderer.cs \
+	FSpot.Widgets/ThumbnailFilenameCaptionRenderer.cs \
+	FSpot.Widgets/ThumbnailRatingDecorationRenderer.cs \
+	FSpot.Widgets/ThumbnailTagsCaptionRenderer.cs \
+	FSpot.Widgets/ThumbnailTextCaptionRenderer.cs \
 	FSpot.Widgets/TrayView.cs \
 	FSpot.Widgets/ViewContext.cs \
 	FSpot/Accelerometer.cs \
@@ -123,7 +129,6 @@ SOURCES =  \
 	FSpot/ControlOverlay.cs \
 	FSpot/DragDropTargets.cs \
 	FSpot/ExportStore.cs \
-	FSpot/Fader.cs \
 	FSpot/FolderQueryWidget.cs \
 	FSpot/FullScreenView.cs \
 	FSpot/GroupAdaptor.cs \
@@ -134,11 +139,9 @@ SOURCES =  \
 	FSpot/JobStore.cs \
 	FSpot/main.cs \
 	FSpot/MainWindow.cs \
-	FSpot/MemorySurface.cs \
 	FSpot/MetaStore.cs \
 	FSpot/Photo.cs \
 	FSpot/PhotoEventArgs.cs \
-	FSpot/PhotoList.cs \
 	FSpot/PhotoLoader.cs \
 	FSpot/PhotoPopup.cs \
 	FSpot/PhotoQuery.cs \
@@ -162,7 +165,6 @@ SOURCES =  \
 	FSpot/ThumbnailCache.cs \
 	FSpot/ThumbnailGenerator.cs \
 	FSpot/TimeAdaptor.cs \
-	FSpot/TipWindow.cs \
 	FSpot/UriCollection.cs \
 	FSpot/XScreenSaverSlide.cs \
 	ImageLoaderThread.cs \
@@ -180,7 +182,6 @@ RESOURCES =  \
 	../../../icons/f-spot-128.png \
 	../../../icons/f-spot-not.png \
 	FSpot.addin.xml \
-	f-spot.glade \
 	FSpot.UI.Dialog/ui/AdjustTimeDialog.ui \
 	FSpot.UI.Dialog/ui/CreateTagDialog.ui \
 	FSpot.UI.Dialog/ui/DateRangeDialog.ui \
@@ -190,6 +191,8 @@ RESOURCES =  \
 	FSpot.UI.Dialog/ui/PreferenceDialog.ui \
 	FSpot.UI.Dialog/ui/RatingFilterDialog.ui \
 	FSpot.UI.Dialog/ui/RepairDialog.ui \
+	FSpot.UI.Dialog/ui/SelectionRatioDialog.ui \
+	ui/color_editor_prefs_window.ui \
 	ui/import.ui \
 	ui/mail_dialog.ui \
 	ui/main_window.ui \

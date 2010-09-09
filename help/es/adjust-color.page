@@ -41,13 +41,12 @@
          </p>
     </item>
     <item>
-      <title>Temp</title>
-      <p>This adjust changes the color temperature, measured in degrees Kelvin.
-      </p>
+      <title>Temperatura</title>
+      <p>Esto ajusta el color de la temperatura, medido en grados Kelvin.</p>
     </item>
     <item>
-      <title>Tint</title>
-      <p>This adjustment allows you to tinge the photo with a color.</p>
+      <title>Matiz</title>
+      <p>Este ajuste le permite teñir la foto con un color.</p>
     </item>
   </terms>
 </page>

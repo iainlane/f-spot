@@ -26,6 +26,7 @@ using Hyena;
 using Hyena.Widgets;
 using FSpot.Core;
 using FSpot.Utils;
+using FSpot.Widgets;
 using FSpot.Platform;
 using FSpot.UI.Dialog;
 
@@ -62,7 +63,7 @@ namespace FSpot.Exporters.Facebook
 		int tag_image_height;
 		int tag_image_width;
 
-		FSpot.Widgets.IconView thumbnail_iconview;
+		SelectionCollectionGridView tray_view;
 		Dictionary<long, User> friends;
 
 		private class DateComparer : IComparer
@@ -70,8 +71,8 @@ namespace FSpot.Exporters.Facebook
 			public int Compare (object left,
 			                    object right)
 			{
-				return DateTime.Compare ((left as IBrowsableItem).Time,
-					(right as IBrowsableItem).Time);
+				return DateTime.Compare ((left as IPhoto).Time,
+					(right as IPhoto).Time);
 			}
 		}
 
@@ -85,14 +86,16 @@ namespace FSpot.Exporters.Facebook
 			captions = new string [selection.Items.Length];
 			tags = new List<Mono.Facebook.Tag> [selection.Items.Length];
 
-			thumbnail_iconview = new FSpot.Widgets.IconView (selection);
-			thumbnail_iconview.DisplayDates = false;
-			thumbnail_iconview.DisplayTags = false;
-			thumbnail_iconview.DisplayRatings = false;
-			thumbnail_iconview.ButtonPressEvent += HandleThumbnailIconViewButtonPressEvent;
-			thumbnail_iconview.KeyPressEvent += delegate (object sender, KeyPressEventArgs e) {(sender as FSpot.Widgets.IconView).Selection.Clear(); };
-			thumbnails_scrolled_window.Add (thumbnail_iconview);
-			thumbnail_iconview.Show ();
+			tray_view = new SelectionCollectionGridView (selection) {
+                MaxColumns = 1,
+                DisplayDates = false,
+                DisplayTags = false,
+                DisplayRatings = false
+            };
+			tray_view.ButtonPressEvent += HandleThumbnailIconViewButtonPressEvent;
+			tray_view.KeyPressEvent += delegate (object sender, KeyPressEventArgs e) {(sender as SelectionCollectionGridView).Selection.Clear(); };
+			thumbnails_scrolled_window.Add (tray_view);
+			tray_view.Show ();
 
 			login_button.Clicked += HandleLoginClicked;
 			logout_button.Clicked += HandleLogoutClicked;
@@ -132,8 +135,8 @@ namespace FSpot.Exporters.Facebook
 
 		List<Mono.Facebook.Tag>[] tags;
 		int current_item;
-		IBrowsableItem[] items;
-		public IBrowsableItem[] Items {
+		IPhoto[] items;
+		public IPhoto[] Items {
 			get {return items; }
 		}
 
@@ -173,7 +176,7 @@ namespace FSpot.Exporters.Facebook
 			StoreCaption ();
 			
 			int old_item = current_item;
-			current_item = thumbnail_iconview.CellAtPosition ((int) args.Event.X, (int) args.Event.Y, false, false);
+			current_item = tray_view.CellAtPosition ((int) args.Event.X, (int) args.Event.Y);
 
 			if (current_item < 0 || current_item >=  items.Length) {
 				current_item = old_item;
@@ -188,7 +191,7 @@ namespace FSpot.Exporters.Facebook
 
 			tag_treeview.Model = new TagStore (account.Facebook, tags [current_item], friends);
 
-			IBrowsableItem item = items [current_item];
+			IPhoto item = items [current_item];
 
 			if (tag_image_eventbox.Children.Length > 0) {
 				tag_image_eventbox.Remove (tag_image);

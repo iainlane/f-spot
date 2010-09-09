@@ -10,14 +10,14 @@ using FSpot.Core;
 
 public class PhotoVersionMenu : Menu {
 
-	public IBrowsableItemVersion Version {
+	public IPhotoVersion Version {
 		get; private set;
 	}
 
 	public delegate void VersionChangedHandler (PhotoVersionMenu menu);
 	public event VersionChangedHandler VersionChanged;
 
-	private Dictionary <MenuItem, IBrowsableItemVersion> version_mapping;
+	private Dictionary <MenuItem, IPhotoVersion> version_mapping;
 
 	private void HandleMenuItemActivated (object sender, EventArgs args)
 	{
@@ -29,13 +29,13 @@ public class PhotoVersionMenu : Menu {
 		}
 	}
 
-	public PhotoVersionMenu (IBrowsableItem photo)
+	public PhotoVersionMenu (IPhoto photo)
 	{
 		Version = photo.DefaultVersion;
 
-		version_mapping = new Dictionary<MenuItem, IBrowsableItemVersion> ();
+		version_mapping = new Dictionary<MenuItem, IPhotoVersion> ();
 
-		foreach (IBrowsableItemVersion version in photo.Versions) {
+		foreach (IPhotoVersion version in photo.Versions) {
 			MenuItem menu_item = new MenuItem (version.Name);
 			menu_item.Show ();
 			menu_item.Sensitive = true;

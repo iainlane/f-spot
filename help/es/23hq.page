@@ -3,13 +3,10 @@
 
   <info>
     <link type="guide" xref="upload-to-web"/>
-    <desc>Upload photos to 23hq</desc>
+    <desc>Subir fotos a 23hq</desc>
   </info>
 
   <title>23hq</title>
 
-  <p>To upload photos to 23hq you will need a 23hq account, as well as
-     internet access.  Also, the 23hq
-     <link xref="extensions">extension</link> must be installed and enabled.
-     </p>
+  <p>Para subir fotos a 23hq necesitará una cuenta de 23hq, así como acceso a internet. También debe tener instalada y activada la <link xref="extensions">extensión</link> 23hq.</p>
 </page>

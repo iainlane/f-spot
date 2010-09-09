@@ -34,7 +34,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+DIST_COMMON = $(srcdir)/FSpot.Utils.dll.config.in \
+	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/build/build.environment.mk \
 	$(top_srcdir)/build/build.mk \
 	$(top_srcdir)/build/build.rules.mk
@@ -42,22 +43,22 @@ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 subdir = src/Core/FSpot.Utils
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/build/m4/shave/shave.m4 \
-	$(top_srcdir)/build/m4/shamrock/expansions.m4 \
-	$(top_srcdir)/build/m4/shamrock/gnome-doc.m4 \
-	$(top_srcdir)/build/m4/shamrock/mono.m4 \
-	$(top_srcdir)/build/m4/shamrock/nunit.m4 \
-	$(top_srcdir)/build/m4/shamrock/programs.m4 \
 	$(top_srcdir)/build/m4/f-spot/flickrnet.m4 \
 	$(top_srcdir)/build/m4/f-spot/gnome-keyring-sharp.m4 \
 	$(top_srcdir)/build/m4/f-spot/gtk-sharp.m4 \
 	$(top_srcdir)/build/m4/f-spot/libfspot.m4 \
 	$(top_srcdir)/build/m4/f-spot/mono-addins.m4 \
+	$(top_srcdir)/build/m4/shamrock/expansions.m4 \
+	$(top_srcdir)/build/m4/shamrock/gnome-doc.m4 \
+	$(top_srcdir)/build/m4/shamrock/mono.m4 \
+	$(top_srcdir)/build/m4/shamrock/nunit.m4 \
+	$(top_srcdir)/build/m4/shamrock/programs.m4 \
 	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = FSpot.Utils.dll.config
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -231,6 +232,8 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POFILES = @POFILES@
 POSUB = @POSUB@
 PO_IN_DATADIR_FALSE = @PO_IN_DATADIR_FALSE@
@@ -287,7 +290,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -311,11 +313,13 @@ SOURCES = \
 	FSpot.Utils/Cache.cs \
 	FSpot.Utils/CairoUtils.cs \
 	FSpot.Utils/ConsoleCrayon.cs \
+	FSpot.Utils/DelayedOperation.cs \
 	FSpot.Utils/FileExtensions.cs \
 	FSpot.Utils/GdkUtils.cs \
 	FSpot.Utils/GIOTagLibFileAbstraction.cs \
 	FSpot.Utils/GtkUtil.cs \
 	FSpot.Utils/HashUtils.cs \
+	FSpot.Utils/MemorySurface.cs \
 	FSpot.Utils/Metadata.cs \
 	FSpot.Utils/PixbufUtils.cs \
 	FSpot.Utils/RecursiveFileEnumerator.cs \
@@ -361,14 +365,12 @@ LINK_SYSTEM_WEB = -r:System.Web
 LINK_MONO_POSIX = -r:Mono.Posix
 LINK_MONO_CAIRO = -r:Mono.Cairo
 LINK_MONO_SIMD = -r:Mono.Simd
-LINK_MONODATA = -r:Mono.Data
 LINK_ICSHARP_ZIP_LIB = -r:ICSharpCode.SharpZipLib
 LINK_KEYRING = $(KEYRINGSHARP_LIBS)
 LINK_GLIB = $(GLIBSHARP_LIBS)
 LINK_GTK = $(GTKSHARP_LIBS)
 LINK_GNOME = $(GNOME_SHARP_LIBS)
 LINK_GCONF = $(GCONF_SHARP_LIBS)
-LINK_GLADE = -pkg:glade-sharp-2.0
 LINK_FLICKRNET = -pkg:flickrnet
 LINK_DBUS = $(NDESK_DBUS_LIBS) $(NDESK_DBUS_GLIB_LIBS)
 LINK_DBUS_NO_GLIB = $(NDESK_DBUS_LIBS)
@@ -451,14 +453,14 @@ LINK_FSPOT_PLATFORM = -r:$(DIR_BIN)/FSpot.Platform.dll
 LINK_FSPOT_PLATFORM_DEPS = $(REF_FSPOT_PLATFORM) $(LINK_FSPOT_PLATFORM)
 
 # FSpot.Gui
-REF_FSPOT_GUI = $(LINK_FSPOT_CORE_DEPS) $(LINK_FSPOT_BLING_DEPS)
+REF_FSPOT_GUI = $(LINK_FSPOT_CORE_DEPS) $(LINK_FSPOT_BLING_DEPS) $(LINK_HYENA_GUI_DEPS)
 LINK_FSPOT_GUI = -r:$(DIR_BIN)/FSpot.Gui.dll
 LINK_FSPOT_GUI_DEPS = $(REF_FSPOT_GUI) $(LINK_FSPOT_GUI) $(LINK_HENA_GUI_DEPS)
 
 # FSpot (executable)
 REF_FSPOT = $(LINK_FSPOT_GUI_DEPS) $(LINK_FSPOT_PLATFORM_DEPS) $(LINK_FSPOT_QUERY_DEPS) \
             $(LINK_GLIB) $(LINK_MONO_ADDINS_DEPS) $(LINK_UNIQUE_DEPS) $(LINK_MONO_ADDINS_SETUP_DEPS) \
-            $(LINK_GLADE) $(LINK_MONODATA) \
+            $(LINK_MONODATA) \
             $(LINK_MONO_ADDINS_GUI_DEPS) $(LINK_FSPOT_JOB_SCHEDULER_DEPS) $(LINK_ICSHARP_ZIP_LIB) \
             $(LINK_GNOME) $(LINK_HYENA_GUI_DEPS) $(LINK_TAGLIB) $(LINK_FSPOT_DATABASE_DEPS)
 
@@ -582,6 +584,8 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
+FSpot.Utils.dll.config: $(top_builddir)/config.status $(srcdir)/FSpot.Utils.dll.config.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 install-moduleSCRIPTS: $(module_SCRIPTS)
 	@$(NORMAL_INSTALL)
 	test -z "$(moduledir)" || $(MKDIR_P) "$(DESTDIR)$(moduledir)"

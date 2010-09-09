@@ -2,8 +2,8 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: ApplicationVersion ("0.7.2", "0.7.2")]
-[assembly: ApplicationBuildInformation ("git-checkout", "linux-gnu", "x86_64", "2010-08-10 13:36:15 CEST")]
+[assembly: ApplicationVersion ("0.7.3", "0.7.3")]
+[assembly: ApplicationBuildInformation ("git-checkout", "linux-gnu", "x86_64", "2010-09-09 10:06:41 CEST")]
 
 [assembly: AssemblyVersion ("0.7.0.0")]
 [assembly: AssemblyTitle ("F-Spot")]

@@ -43,16 +43,16 @@ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 subdir = src/Clients/MainApp
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/build/m4/shave/shave.m4 \
-	$(top_srcdir)/build/m4/shamrock/expansions.m4 \
-	$(top_srcdir)/build/m4/shamrock/gnome-doc.m4 \
-	$(top_srcdir)/build/m4/shamrock/mono.m4 \
-	$(top_srcdir)/build/m4/shamrock/nunit.m4 \
-	$(top_srcdir)/build/m4/shamrock/programs.m4 \
 	$(top_srcdir)/build/m4/f-spot/flickrnet.m4 \
 	$(top_srcdir)/build/m4/f-spot/gnome-keyring-sharp.m4 \
 	$(top_srcdir)/build/m4/f-spot/gtk-sharp.m4 \
 	$(top_srcdir)/build/m4/f-spot/libfspot.m4 \
 	$(top_srcdir)/build/m4/f-spot/mono-addins.m4 \
+	$(top_srcdir)/build/m4/shamrock/expansions.m4 \
+	$(top_srcdir)/build/m4/shamrock/gnome-doc.m4 \
+	$(top_srcdir)/build/m4/shamrock/mono.m4 \
+	$(top_srcdir)/build/m4/shamrock/nunit.m4 \
+	$(top_srcdir)/build/m4/shamrock/programs.m4 \
 	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
@@ -232,6 +232,8 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 POFILES = @POFILES@
 POSUB = @POSUB@
 PO_IN_DATADIR_FALSE = @PO_IN_DATADIR_FALSE@
@@ -288,7 +290,6 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
-lt_ECHO = @lt_ECHO@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -382,7 +383,6 @@ SOURCES = \
 	FSpot.UI.Dialog/EditExceptionDialog.cs \
 	FSpot.UI.Dialog/EditTagDialog.cs \
 	FSpot.UI.Dialog/EditTagIconDialog.cs \
-	FSpot.UI.Dialog/GladeDialog.cs \
 	FSpot.UI.Dialog/ImportDialog.cs \
 	FSpot.UI.Dialog/ImportFailureDialog.cs \
 	FSpot.UI.Dialog/LastRollDialog.cs \
@@ -394,15 +394,15 @@ SOURCES = \
 	FSpot.UI.Dialog/SelectionRatioDialog.cs \
 	FSpot.UI.Dialog/TagSelectionDialog.cs \
 	FSpot.UI.Dialog/ThreadProgressDialog.cs \
+	FSpot.Widgets/BrowseablePointerGridView.cs \
 	FSpot.Widgets/CellRendererTextProgress.cs \
-	FSpot.Widgets/CompositeUtils.cs \
+	FSpot.Widgets/CollectionCellGridView.cs \
 	FSpot.Widgets/EditorPage.cs \
 	FSpot.Widgets/Filmstrip.cs \
 	FSpot.Widgets/FindBar.cs \
 	FSpot.Widgets/FolderTreeModel.cs \
 	FSpot.Widgets/FolderTreePage.cs \
 	FSpot.Widgets/FolderTreeView.cs \
-	FSpot.Widgets/IconView.cs \
 	FSpot.Widgets/ImageInfo.cs \
 	FSpot.Widgets/InfoBox.cs \
 	FSpot.Widgets/Loupe.cs \
@@ -411,7 +411,7 @@ SOURCES = \
 	FSpot.Widgets/PreviewPopup.cs \
 	FSpot.Widgets/QueryView.cs \
 	FSpot.Widgets/RatingMenuItem.cs \
-	FSpot.Widgets/ScalingIconView.cs \
+	FSpot.Widgets/SelectionCollectionGridView.cs \
 	FSpot.Widgets/Sharpener.cs \
 	FSpot.Widgets/Sidebar.cs \
 	FSpot.Widgets/SlideShow.cs \
@@ -420,6 +420,13 @@ SOURCES = \
 	FSpot.Widgets/TagMenu.cs \
 	FSpot.Widgets/TagView.cs \
 	FSpot.Widgets/Tests/FindBarTests.cs \
+	FSpot.Widgets/ThumbnailCaptionRenderer.cs \
+	FSpot.Widgets/ThumbnailDateCaptionRenderer.cs \
+	FSpot.Widgets/ThumbnailDecorationRenderer.cs \
+	FSpot.Widgets/ThumbnailFilenameCaptionRenderer.cs \
+	FSpot.Widgets/ThumbnailRatingDecorationRenderer.cs \
+	FSpot.Widgets/ThumbnailTagsCaptionRenderer.cs \
+	FSpot.Widgets/ThumbnailTextCaptionRenderer.cs \
 	FSpot.Widgets/TrayView.cs \
 	FSpot.Widgets/ViewContext.cs \
 	FSpot/Accelerometer.cs \
@@ -429,7 +436,6 @@ SOURCES = \
 	FSpot/ControlOverlay.cs \
 	FSpot/DragDropTargets.cs \
 	FSpot/ExportStore.cs \
-	FSpot/Fader.cs \
 	FSpot/FolderQueryWidget.cs \
 	FSpot/FullScreenView.cs \
 	FSpot/GroupAdaptor.cs \
@@ -440,11 +446,9 @@ SOURCES = \
 	FSpot/JobStore.cs \
 	FSpot/main.cs \
 	FSpot/MainWindow.cs \
-	FSpot/MemorySurface.cs \
 	FSpot/MetaStore.cs \
 	FSpot/Photo.cs \
 	FSpot/PhotoEventArgs.cs \
-	FSpot/PhotoList.cs \
 	FSpot/PhotoLoader.cs \
 	FSpot/PhotoPopup.cs \
 	FSpot/PhotoQuery.cs \
@@ -468,7 +472,6 @@ SOURCES = \
 	FSpot/ThumbnailCache.cs \
 	FSpot/ThumbnailGenerator.cs \
 	FSpot/TimeAdaptor.cs \
-	FSpot/TipWindow.cs \
 	FSpot/UriCollection.cs \
 	FSpot/XScreenSaverSlide.cs \
 	ImageLoaderThread.cs \
@@ -486,7 +489,6 @@ RESOURCES = \
 	../../../icons/f-spot-128.png \
 	../../../icons/f-spot-not.png \
 	FSpot.addin.xml \
-	f-spot.glade \
 	FSpot.UI.Dialog/ui/AdjustTimeDialog.ui \
 	FSpot.UI.Dialog/ui/CreateTagDialog.ui \
 	FSpot.UI.Dialog/ui/DateRangeDialog.ui \
@@ -496,6 +498,8 @@ RESOURCES = \
 	FSpot.UI.Dialog/ui/PreferenceDialog.ui \
 	FSpot.UI.Dialog/ui/RatingFilterDialog.ui \
 	FSpot.UI.Dialog/ui/RepairDialog.ui \
+	FSpot.UI.Dialog/ui/SelectionRatioDialog.ui \
+	ui/color_editor_prefs_window.ui \
 	ui/import.ui \
 	ui/mail_dialog.ui \
 	ui/main_window.ui \
@@ -531,14 +535,12 @@ LINK_SYSTEM_WEB = -r:System.Web
 LINK_MONO_POSIX = -r:Mono.Posix
 LINK_MONO_CAIRO = -r:Mono.Cairo
 LINK_MONO_SIMD = -r:Mono.Simd
-LINK_MONODATA = -r:Mono.Data
 LINK_ICSHARP_ZIP_LIB = -r:ICSharpCode.SharpZipLib
 LINK_KEYRING = $(KEYRINGSHARP_LIBS)
 LINK_GLIB = $(GLIBSHARP_LIBS)
 LINK_GTK = $(GTKSHARP_LIBS)
 LINK_GNOME = $(GNOME_SHARP_LIBS)
 LINK_GCONF = $(GCONF_SHARP_LIBS)
-LINK_GLADE = -pkg:glade-sharp-2.0
 LINK_FLICKRNET = -pkg:flickrnet
 LINK_DBUS = $(NDESK_DBUS_LIBS) $(NDESK_DBUS_GLIB_LIBS)
 LINK_DBUS_NO_GLIB = $(NDESK_DBUS_LIBS)
@@ -621,14 +623,14 @@ LINK_FSPOT_PLATFORM = -r:$(DIR_BIN)/FSpot.Platform.dll
 LINK_FSPOT_PLATFORM_DEPS = $(REF_FSPOT_PLATFORM) $(LINK_FSPOT_PLATFORM)
 
 # FSpot.Gui
-REF_FSPOT_GUI = $(LINK_FSPOT_CORE_DEPS) $(LINK_FSPOT_BLING_DEPS)
+REF_FSPOT_GUI = $(LINK_FSPOT_CORE_DEPS) $(LINK_FSPOT_BLING_DEPS) $(LINK_HYENA_GUI_DEPS)
 LINK_FSPOT_GUI = -r:$(DIR_BIN)/FSpot.Gui.dll
 LINK_FSPOT_GUI_DEPS = $(REF_FSPOT_GUI) $(LINK_FSPOT_GUI) $(LINK_HENA_GUI_DEPS)
 
 # FSpot (executable)
 REF_FSPOT = $(LINK_FSPOT_GUI_DEPS) $(LINK_FSPOT_PLATFORM_DEPS) $(LINK_FSPOT_QUERY_DEPS) \
             $(LINK_GLIB) $(LINK_MONO_ADDINS_DEPS) $(LINK_UNIQUE_DEPS) $(LINK_MONO_ADDINS_SETUP_DEPS) \
-            $(LINK_GLADE) $(LINK_MONODATA) \
+            $(LINK_MONODATA) \
             $(LINK_MONO_ADDINS_GUI_DEPS) $(LINK_FSPOT_JOB_SCHEDULER_DEPS) $(LINK_ICSHARP_ZIP_LIB) \
             $(LINK_GNOME) $(LINK_HYENA_GUI_DEPS) $(LINK_TAGLIB) $(LINK_FSPOT_DATABASE_DEPS)
 

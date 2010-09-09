@@ -26,9 +26,6 @@ namespace FSpot {
 		[GtkBeans.Builder.Object]  Gtk.CheckMenuItem toolbar_item;
 		[GtkBeans.Builder.Object]  Gtk.CheckMenuItem filenames_item;
 
-		[GtkBeans.Builder.Object]  Gtk.MenuItem zoom_in;
-		[GtkBeans.Builder.Object]  Gtk.MenuItem zoom_out;
-
 		[GtkBeans.Builder.Object]  Gtk.MenuItem export;
 
 		[GtkBeans.Builder.Object]  Gtk.Scale zoom_scale;
@@ -51,7 +48,7 @@ namespace FSpot {
 		}
 
 		PhotoImageView image_view;
-		FSpot.Widgets.IconView directory_view;
+		SelectionCollectionGridView directory_view;
 		private SafeUri uri;
 
 		UriCollection collection;
@@ -101,7 +98,7 @@ namespace FSpot {
 				FSpot.DragDropTargets.PlainTextEntry
 			};
 
-			directory_view = new FSpot.Widgets.IconView (collection);
+			directory_view = new SelectionCollectionGridView (collection);
 			directory_view.Selection.Changed += HandleSelectionChanged;
 			directory_view.DragDataReceived += HandleDragDataReceived;
 			Gtk.Drag.DestSet (directory_view, DestDefaults.All, dest_table,
@@ -161,7 +158,7 @@ namespace FSpot {
 					BrowsablePointer pointer = sender as BrowsablePointer;
 					if (pointer == null)
 						return;
-					IBrowsableItem [] item = {pointer.Current};
+					IPhoto [] item = {pointer.Current};
 					sidebar.HandleSelectionChanged (new PhotoList (item));
 			};
 
@@ -240,14 +237,14 @@ namespace FSpot {
 		void HandleRotate90Command (object sender, System.EventArgs args)
 		{
 			RotateCommand command = new RotateCommand (this.Window);
-			if (command.Execute (RotateDirection.Clockwise, new IBrowsableItem [] { image_view.Item.Current }))
+			if (command.Execute (RotateDirection.Clockwise, new IPhoto [] { image_view.Item.Current }))
 				collection.MarkChanged (image_view.Item.Index, FullInvalidate.Instance);
 		}
 
 		void HandleRotate270Command (object sender, System.EventArgs args)
 		{
 			RotateCommand command = new RotateCommand (this.Window);
-			if (command.Execute (RotateDirection.Counterclockwise, new IBrowsableItem [] { image_view.Item.Current }))
+			if (command.Execute (RotateDirection.Counterclockwise, new IPhoto [] { image_view.Item.Current }))
 				collection.MarkChanged (image_view.Item.Index, FullInvalidate.Instance);
 		}
 
@@ -255,7 +252,7 @@ namespace FSpot {
 		{
 
 			if (selection.Count > 0) {
-				image_view.Item.Index = ((FSpot.Widgets.IconView.SelectionCollection)selection).Ids[0];
+				image_view.Item.Index = ((FSpot.Widgets.SelectionCollection)selection).Ids[0];
 
 				zoom_scale.Value = image_view.NormalizedZoom;
 			}
@@ -278,7 +275,7 @@ namespace FSpot {
 
 		void HandleSetAsBackgroundCommand (object sender, EventArgs args)
 		{
-			IBrowsableItem current = image_view.Item.Current;
+			IPhoto current = image_view.Item.Current;
 
 			if (current == null)
 				return;
@@ -462,7 +459,7 @@ namespace FSpot {
 
 		private void UpdateStatusLabel ()
 		{
-			IBrowsableItem item = image_view.Item.Current;
+			IPhoto item = image_view.Item.Current;
 			System.Text.StringBuilder sb = new System.Text.StringBuilder();
 			if (filenames_item.Active && item != null)
 				sb.Append (System.IO.Path.GetFileName (item.DefaultVersion.Uri.LocalPath) + "  -  ");

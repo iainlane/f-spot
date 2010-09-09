@@ -26,7 +26,7 @@ using FSpot.Imaging;
 
 namespace FSpot
 {
-	public class Photo : DbItem, IComparable, IBrowsableItem, IBrowsableItemVersionable {
+	public class Photo : DbItem, IComparable, IPhoto, IPhotoVersionable {
 
 		PhotoChanges changes = new PhotoChanges ();
 		public PhotoChanges Changes {
@@ -64,15 +64,15 @@ namespace FSpot
 			}
 		}
 
-		private bool loaded = false;
-		public bool Loaded {
-			get { return loaded; }
+		private bool all_versions_loaded = false;
+		internal bool AllVersionsLoaded {
+			get { return all_versions_loaded; }
 			set {
 				if (value) {
 					if (DefaultVersionId != OriginalVersionId && !versions.ContainsKey (DefaultVersionId))
 						DefaultVersionId = OriginalVersionId;
 				}
-				loaded = value;
+				all_versions_loaded = value;
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace FSpot
 		private uint highest_version_id;
 
 		private Dictionary<uint, PhotoVersion> versions = new Dictionary<uint, PhotoVersion> ();
-		public IEnumerable<IBrowsableItemVersion> Versions {
+		public IEnumerable<IPhotoVersion> Versions {
 			get {
 				foreach (var version in versions.Values)
 					yield return version;
@@ -207,7 +207,7 @@ namespace FSpot
 			return null;
 		}
 
-		public IBrowsableItemVersion DefaultVersion {
+		public IPhotoVersion DefaultVersion {
 			get {
 				if (!versions.ContainsKey (DefaultVersionId))
 					throw new Exception ("Something is horribly wrong, this should never happen: no default version!");
@@ -215,7 +215,7 @@ namespace FSpot
 			}
 		}
 
-		public void SetDefaultVersion (IBrowsableItemVersion version)
+		public void SetDefaultVersion (IPhotoVersion version)
 		{
 			PhotoVersion photo_version = version as PhotoVersion;
 			if (photo_version == null)
@@ -587,7 +587,7 @@ namespace FSpot
 			if (result == 0)
 				return 0;
 			else
-				return (this as IBrowsableItem).Compare (photo);
+				return (this as IPhoto).Compare (photo);
 		}
 
 #endregion

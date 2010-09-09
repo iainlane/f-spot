@@ -26,7 +26,7 @@ using FSpot.UI.Dialog;
 
 namespace FSpot {
 	public class PhotoView : EventBox {
-		Delay commit_delay;
+		DelayedOperation commit_delay;
 
 		private PhotoImageView photo_view;
 		private ScrolledWindow photo_view_scrolled;
@@ -39,7 +39,7 @@ namespace FSpot {
 		private Widgets.TagView tag_view;
 
 		private Entry description_entry;
-		private Widgets.Rating rating;
+		private RatingEntry rating;
 
 		// Public events.
 
@@ -192,7 +192,7 @@ namespace FSpot {
 			if (!Item.IsValid)
 				return;
 
-			((Photo)Item.Current).Rating = (uint)(o as Widgets.Rating).Value;
+			((Photo)Item.Current).Rating = (uint)(o as Widgets.RatingEntry).Value;
 
 			if (commit_delay.IsPending)
 				if (changed_photo == Item.Index)
@@ -288,7 +288,7 @@ namespace FSpot {
 		{
 			this.query = query;
 
-			commit_delay = new Delay (1000, new GLib.IdleHandler (CommitPendingChanges));
+			commit_delay = new DelayedOperation (1000, new GLib.IdleHandler (CommitPendingChanges));
 			this.Destroyed += HandleDestroy;
 
 			Name = "ImageContainer";
@@ -340,7 +340,10 @@ namespace FSpot {
 			lower_hbox.PackStart (description_entry, true, true, 0);
 			description_entry.Changed += HandleDescriptionChanged;
 
-			rating = new Widgets.Rating();
+            rating = new RatingEntry () {
+                HasFrame = false,
+                AlwaysShowEmptyStars = true
+            };
 			lower_hbox.PackStart (rating, false, false, 0);
 			rating.Changed += HandleRatingChanged;
 

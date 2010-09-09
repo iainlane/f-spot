@@ -114,6 +114,8 @@ namespace Hyena.Data.Sqlite
             set { warn_if_called_from_thread = value; }
         }
 
+        public string ServerVersion { get { return connection.ServerVersion; } }
+
         public event EventHandler<ExecutingEventArgs> Executing;
 
         public HyenaSqliteConnection(string dbpath)
@@ -385,7 +387,11 @@ namespace Hyena.Data.Sqlite
 
             while (true) {
                 lock (command_queue) {
-                    if (transaction_thread == null || Thread.CurrentThread == transaction_thread) {
+                    if (dispose_requested) {
+                        // No point in queueing the command if we're already disposing.
+                        // This helps avoid using the probably-disposed queue_signal below too
+                        return;
+                    } else if (transaction_thread == null || Thread.CurrentThread == transaction_thread) {
                         command_queue.Enqueue (command);
                         args_queue.Enqueue (args);
                         arg_queue.Enqueue (arg);
