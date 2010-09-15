@@ -2,10 +2,10 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: ApplicationVersion ("0.7.3", "0.7.3")]
-[assembly: ApplicationBuildInformation ("git-checkout", "linux-gnu", "x86_64", "2010-09-09 10:06:41 CEST")]
+[assembly: ApplicationVersion ("0.8.0", "0.8.0")]
+[assembly: ApplicationBuildInformation ("git-checkout", "linux-gnu", "i686", "2010-09-15 11:15:14 CEST")]
 
-[assembly: AssemblyVersion ("0.7.0.0")]
+[assembly: AssemblyVersion ("0.8.0.0")]
 [assembly: AssemblyTitle ("F-Spot")]
 [assembly: AssemblyDescription ("Personal photo management for the GNOME Desktop")]
 [assembly: AssemblyCopyright ("Copyright (C) 2003-2010 Novell Inc. and others")]

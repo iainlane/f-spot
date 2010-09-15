@@ -9,15 +9,24 @@
   <title>Picasa</title>
 
   <p>Um Fotos zu Picasa hochzuladen, benötigen Sie ein Picasa-Konto sowie einen aktiven Internetzugang. Außerdem muss die Picasa-<link xref="extensions">Erweiterung</link> installiert und aktiviert sein.</p>
-  <steps><item>
-      <p>Wählen Sie die Fotos aus, die Sie hochladen wollen.</p>
-    </item><item>
-      <p>Klicken Sie auf <guiseq><gui>Foto</gui><gui>Exportieren nach</gui><gui>PicasaWeb …</gui></guiseq>.</p>
-    </item><item>
-      <p>Fügen Sie eine Galerie hinzu, indem Sie auf <gui>Hinzufügen</gui> klicken und einen Benutzernamen und ein Passwort angeben.</p>
-    </item>j <item>
-      <p>Wählen Sie eine Galerie für den Export aus oder klicken Sie auf <gui>Hinzufügen</gui>, um eine neue Galerie zu erstellen.</p>
-    </item><item>
-      <p>Klicken Sie auf <gui>Exportieren</gui>.</p>
-    </item></steps>
+  <steps>
+    <item>
+      <p>Select the photos you wish to upload.</p>
+    </item>
+    <item>
+      <p>Click <guiseq><gui>Photo</gui><gui>Export To</gui>
+      <gui>PicasaWeb...</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Add a gallery by clicking <gui>Add</gui> and supplying a username and
+         password.</p>
+    </item>j
+    <item>
+      <p>Select a gallery to export to, or click <gui>Add</gui> to create a new
+         gallery.</p>
+    </item>
+    <item>
+      <p>Click <gui>Export</gui>.</p>
+    </item>
+  </steps>
 </page>

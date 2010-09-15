@@ -11,7 +11,7 @@
 namespace FSpot.Core {
 	public struct Defines {
 		public const string LOCALE_DIR = "/home/ruben/Build/share/locale";
-		public const string VERSION = "0.7.3";
+		public const string VERSION = "0.8.0";
 		public const string PACKAGE = "f-spot";
 		public const string PREFIX = "/home/ruben/Build";
 		public const string APP_DATA_DIR = "/home/ruben/Build/share/f-spot";

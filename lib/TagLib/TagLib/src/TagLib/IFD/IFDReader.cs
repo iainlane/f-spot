@@ -261,7 +261,15 @@ namespace TagLib.IFD
 		/// </returns>
 		private uint ReadIFD (long base_offset, uint offset, uint max_offset)
 		{
-			if (base_offset + offset > file.Length) {
+			long length = 0;
+			try {
+				length = file.Length;
+			} catch (Exception) {
+				// Use a safety-value of 4 gigabyte.
+				length = 1073741824L * 4;
+			}
+
+			if (base_offset + offset > length) {
 				// Invalid IFD offset
 				file.PossiblyCorrupt = true;
 				return 0;
@@ -789,10 +797,18 @@ namespace TagLib.IFD
 			// to identify the makernote types
 			int header_size = 18;
 
-			if (file.Length < makernote_offset)
+			long length = 0;
+			try {
+				length = file.Length;
+			} catch (Exception) {
+				// Use a safety-value of 4 gigabyte.
+				length = 1073741824L * 4;
+			}
+
+			if (makernote_offset > length)
 			    throw new Exception ("offset to makernote is beyond file size");
 
-			if (file.Length < makernote_offset + header_size)
+			if (makernote_offset + header_size > length)
 				throw new Exception ("data is to short to contain a maker note ifd");
 
 			// read header
