@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="tag-search">
+
+  <info>
+    <link type="guide" xref="index#searching"/>
+    <desc>Recherche de photos par leurs étiquettes</desc>
+  </info>
+
+  <title>Recherche par étiquette</title>
+
+  <p>Il y a plusieurs méthodes de recherche par étiquettes</p>
+  <p>Première méthode : double-cliquez sur les étiquettes que vous voulez rechercher.</p>
+  <p>Deuxième méthode :</p>
+  <steps>
+    <item>
+      <p>Activez la barre de recherche dans le menu <guiseq><gui>Recherche</gui><gui>Afficher la barre de recherche</gui></guiseq></p>
+    </item>
+    <item>
+      <p>Déposez les étiquettes que vous voulez rechercher dans la barre de recherche que vous venez d'activer.</p>
+    </item>
+  <p>Pour enlever une étiquette de la recherche, faites un clic droit sur l'étiquette dans la barre de recherche et choisissez <gui>Enlever de la recherche</gui>.</p>
+  </steps>
+  <p>Pour exclure une étiquette de votre recherche :</p>
+  <steps>
+    <item>
+      <p>Dans le volet Étiquettes, double-cliquez sur l'étiquette que vous souhaitez exclure pour l'ajouter à la barre de recherche.</p>
+    </item>
+    <item>
+      <p>Dans la barre de recherche, double-cliquez sur l'étiquette que vous souhaitez exclure.</p>
+    </item>
+  </steps>
+</page>

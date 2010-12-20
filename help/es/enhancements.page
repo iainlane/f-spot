@@ -2,40 +2,34 @@
 <page xmlns="http://projectmallard.org/1.0/" type="topic" id="enhancements">
   <info>
     <link type="guide" xref="index#editing" group="enhancements"/>
-    <desc>Simple enhancements for your photos</desc>
+    <desc>Mejoras simples para sus fotos</desc>
   </info>
 
-  <title>
-    Enhancements
-  </title>
+  <title>Mejoras</title>
 
-  <p>Currently, there are two main enhancements that <app>F-Spot</app>
-     supports: red-eye removal and the automatic enhancement of color.</p>
-  <p>To remove red-eye:</p>
+  <p>Actualmente existen dos mejoras principales que <app>F-Spot</app> soporta: eliminación de ojos rojos y mejora automática del color.</p>
+  <p>Quitar ojos rojos:</p>
   <steps>
     <item>
-      <p>By double-clicking, select the photo on which you wish to use the
-         red-eye removal tool.</p>
+      <p>Pulsando dos veces con el ratón, seleccione la foto sobre la que quiera usar la herramienta de reducción de ojos rojos.</p>
     </item>
     <item>
-      <p>Click <gui>Red-Eye Removal</gui> in the Edit panel.</p>
+      <p>Pulse <gui>Reducción de ojos rojos</gui> en el panel de edición.</p>
     </item>
     <item>
-      <p>Select the area from which you wish to remove red-eye.  Note:  If
-         the contains many red areas, you may wish to select each eye
-         individually.</p>
+      <p>Seleccione el área en el que quiere reducir los ojos rojos. Nota: si contiene muchas áreas rojas puede querer seleccionar cada ojo individualmente.</p>
     </item>
     <item>
-      <p>Click <gui>Fix!</gui>.</p>
+      <p>Pulse <gui>Arreglar</gui>.</p>
     </item>
   </steps>
-  <p>To automatically enhance the colors of the photo:</p>
+  <p>Mejorar automáticamente los colores de la foto:</p>
   <steps>
     <item>
-      <p>By double-clicking, select the photo which you wish to enhance.</p>
+      <p>Pulse dos veces con el ratón, seleccione la foto que quiere mejorar.</p>
     </item>
     <item>
-      <p>Click <gui>Auto Color</gui>.</p>
+      <p>Pulsar <gui>Autocolor</gui>.</p>
     </item>
   </steps>
 </page>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="colors">
+  <info>
+    <link type="guide" xref="index#editing" group="colors"/>
+    <desc>Urejajte barve svojih fotografij</desc>
+  </info>
+
+  <title>Urejanje barv</title>
+  <p><app>F-Spot</app> podpira več načinov upravljanja barv.</p>
+  <terms>
+    <item>
+      <title>Zmanjšaj nasičenje</title>
+      <p>Ta način odstrani vse nasičenje in barvno sliko spremeni v črno-belo sliko.</p>
+    </item>
+    <item>
+      <title>Sepia učinek staranja</title>
+      <p>Ta način simulira fotografijo,  ustvarjeno z učinkom staranja. </p>
+    </item>
+    <item>
+      <title>Samodejna barva</title>
+      <p>Ta način samodejno prilagodi barve na nastavljen profil.</p>
+    </item>
+  </terms>
+</page>

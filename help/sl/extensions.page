@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="extensions">
+
+  <info>
+    <link type="guide" xref="index#advanced"/>
+    <desc>Delo z razširitvami <app>F-Spot</app></desc>
+  </info>
+
+  <title>Razširitve</title>
+
+  <p><app>F-Spot</app> omogoča uporabo razširitev, ki zagotavljajo dodatne zmožnsti.</p>
+
+  <p>Za odprtje upravljalnika razširitev izberite <guiseq><gui>Uredi</gui><gui>Upravljanje razširitev</gui></guiseq>.</p>
+
+  <p>Za namestitev vstavkov:</p>
+  <steps>
+    <item>
+      <p>Odprite upravljalnika razširitev.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Namesti vstavke</gui>.</p>
+    </item>
+    <item>
+      <p>Izberite vstavek za namestitev s seznama.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Naprej</gui>.</p>
+    </item>
+    <item>
+      <p>Preverite vse podatke in znva kliknite <gui>Naprej</gui>.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>V redu</gui>.</p>
+    </item>
+  </steps>
+
+  <p>Za omogočenje vstavkov, ki so že nameščeni:</p>
+  <steps>
+    <item>
+      <p>Odprite upravljalnika razširitev.</p>
+    </item>
+    <item>
+      <p>Izberite razširitev, ki jo želite omogočiti.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Omogoči</gui>.</p>
+    </item>
+  </steps>
+  <p>Za onemogočenje nameščenih vstavkov:</p>
+  <steps>
+    <item>
+      <p>Odprite upravljalnika razširitev.</p>
+    </item>
+    <item>
+      <p>Izberite razširitev, ki jo želite onemogočiti.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Onemogoči</gui>.</p>
+    </item>
+  </steps>
+  <p>Za odstranitev vstavkov:</p>
+  <steps>
+    <item>
+      <p>Odprite upravljalnika razširitev.</p>
+    </item>
+    <item>
+      <p>Izberite razširitev, ki jo želite odstraniti.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Odstrani</gui>.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Naprej</gui>.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>V redu</gui>.</p>
+    </item>
+  </steps>
+</page>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="guide" id="upload-to-web">
+
+  <info>
+    <link type="guide" xref="index#sharing"/>
+    <desc>Envoyer des photos vers différents services Web</desc>
+  </info>
+
+  <title>Envoi vers le Web</title>
+  <p><app>F-Spot</app> vous permet d'envoyer des photos vers les services Web à la mode, y compris PicasaWeb de Google et Flickr.</p>
+</page>

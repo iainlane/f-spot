@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="tags">
+  <info>
+    <link type="guide" xref="index#basic-functions" group="tag"/>
+    <desc>Kratek uvod k zmogljivostim označevanja v F-Spotu</desc>
+  </info>
+
+  <title>Oznake</title>
+  <p>Kot nekateri drugi upravljalniki fotografij vam tudi <app>F-Spot</app> omogoča označevanje vaših fotografij. To vam omogoča hitro, enostavno na vsebini osnovano iskanje vaših fotografij. Označite lahko ljudi, mesta, najljubše stari in celo naredite svojo lastno skupino oznak.</p>
+  <section id="tag-functions" style="2column" groups="create attach remove delete">
+    <title>Delo z oznakami</title>
+  </section>
+</page>

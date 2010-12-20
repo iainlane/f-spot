@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="extensions">
+
+  <info>
+    <link type="guide" xref="index#advanced"/>
+    <desc>Utilisation des extensions de <app>F-Spot</app></desc>
+  </info>
+
+  <title>Extensions</title>
+
+  <p><app>F-Spot</app> permet l'ajout d'extensions pour augmenter ses fonctionnalités.</p>
+
+  <p>Pour ouvrir le gestionnaire d'extensions, choisissez <guiseq><gui>Édition</gui><gui>Gérer les extensions</gui></guiseq> dans le menu.</p>
+
+  <p>Pour installer des extensions :</p>
+  <steps>
+    <item>
+      <p>Ouvrez le gestionnaire d'extensions.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Installer des greffons</gui>.</p>
+    </item>
+    <item>
+      <p>Sélectionnez dans la liste un greffon à installer.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Suivant</gui>.</p>
+    </item>
+    <item>
+      <p>Vérifiez toutes les informations et cliquez de nouveau sur <gui>Suivant</gui>.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Ok</gui>.</p>
+    </item>
+  </steps>
+
+  <p>Pour activer des greffons déjà installés :</p>
+  <steps>
+    <item>
+      <p>Ouvrez le gestionnaire d'extensions.</p>
+    </item>
+    <item>
+      <p>Sélectionnez l'extension que vous voulez activer.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Activer</gui>.</p>
+    </item>
+  </steps>
+  <p>Pour désactiver des greffons installés :</p>
+  <steps>
+    <item>
+      <p>Ouvrez le gestionnaire d'extensions.</p>
+    </item>
+    <item>
+      <p>Sélectionnez l'extension que vous voulez désactiver.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Désactiver</gui>.</p>
+    </item>
+  </steps>
+  <p>Désinstaller des greffons :</p>
+  <steps>
+    <item>
+      <p>Ouvrez le gestionnaire d'extensions.</p>
+    </item>
+    <item>
+      <p>Sélectionnez l'extension que vous voulez désinstaller.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Désinstaller</gui>.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Suivant</gui>.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Ok</gui>.</p>
+    </item>
+  </steps>
+</page>

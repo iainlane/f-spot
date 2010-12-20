@@ -2,7 +2,6 @@ using Gdk;
 using Gtk;
 using System.Collections;
 using System.IO;
-using System.Data;
 using System;
 using FSpot;
 using FSpot.Core;
@@ -102,7 +101,7 @@ public class MetaStore : DbStore<MetaItem> {
 			AddToCache (item);
 		}
 
-		reader.Close ();
+		reader.Dispose ();
 
 		if (FSpotVersion.Value != Defines.VERSION) {
 			FSpotVersion.Value = Defines.VERSION;

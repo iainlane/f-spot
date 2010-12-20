@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="facebook">
+
+  <info>
+    <link type="guide" xref="upload-to-web"/>
+    <desc>Pošiljanje fotografij na Facebook</desc>
+  </info>
+
+  <title>Facebook</title>
+
+  <p>Za pošiljanje fotografij na Facebook boste potrebovali račun Facebook in internetni dostop. Poleg tega mora biti <link xref="extensions">razširitev</link> Facebook nameščena in omogočena.</p>
+
+  <p>Za objavo izbranih fotografij na Facebooku:</p>
+  <steps>
+    <item>
+      <p>Izberite <guiseq><gui>Fotografija</gui><gui>Izvozi v</gui><gui>Facebook</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Prijava</gui>. Odprlo se bo okno brskalnika. Prijavite se v Facebook in kliknite "Dovoli" za omogočitev dostopa F-Spot-u do svojega profila Facebook.</p>
+    </item>
+    <item>
+      <p>Izberite ali želite ustvariti nov album ali dodati slike k obstoječemu albumu. V primeru, da ustvarjajte nov album, izpolnite vse pomembne podatke.</p>
+    </item>
+    <item>
+      <p>Uredite naslove za vsako fotografije, če tako želite.</p>
+    </item>
+    <item>
+      <p>Ko boste končali, kliknite <gui>Dodaj</gui>.</p>
+    </item>
+  </steps>
+</page>

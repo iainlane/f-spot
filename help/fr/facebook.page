@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="facebook">
+
+  <info>
+    <link type="guide" xref="upload-to-web"/>
+    <desc>Envoyer des photos vers FaceBook</desc>
+  </info>
+
+  <title>Facebook</title>
+
+  <p>Pour envoyer des photos vers Facebook, vous avez besoin d'un compte Facebook, ainsi que d'un accès à internet. L'<link xref="extensions">extension</link> Facebook doit aussi être installée et activée.</p>
+
+  <p>Pour poster les photos sélectionnées vers Facebook :</p>
+  <steps>
+    <item>
+      <p>Choisissez dans le menu <guiseq><gui>Photo</gui><gui>Exporter vers</gui><gui>Facebook</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Connexion</gui>. Une fenêtre du navigateur s'ouvre. Connectez vous à Facebook avec vos identifiants et cliquez sur « Autoriser » pour permettre à F-Spot d'accéder à votre profil Facebook.</p>
+    </item>
+    <item>
+      <p>Choisissez, soit de créer un nouvel album, soit d'ajouter à un album existant. Si vous créez un nouvel album, fournissez les informations adéquates.</p>
+    </item>
+    <item>
+      <p>Modifiez les légendes de chaque photo si vous le souhaitez.</p>
+    </item>
+    <item>
+      <p>Lorsque vous avez fini, cliquez sur <gui>Ajouter</gui>.</p>
+    </item>
+  </steps>
+</page>

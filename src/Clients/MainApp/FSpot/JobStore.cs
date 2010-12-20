@@ -10,7 +10,6 @@
 
 using System.Collections;
 using System.IO;
-using System.Data;
 using System;
 using Banshee.Kernel;
 using FSpot.Jobs;
@@ -18,7 +17,6 @@ using FSpot.Database;
 using FSpot;
 using FSpot.Core;
 using Hyena;
-
 using Hyena.Data.Sqlite;
 
 namespace FSpot {
@@ -130,7 +128,7 @@ public class JobStore : DbStore<Job> {
 			job.Status = JobStatus.Scheduled;
 		}
 
-		reader.Close ();
+		reader.Dispose ();
 	}
 
 	public Job Create (Type job_type, string job_options)

@@ -3,34 +3,26 @@
 
   <info>
     <link type="guide" xref="index#searching"/>
-    <desc>Searching by date of import</desc>
+    <desc>Buscar por fecha de importación</desc>
   </info>
 
-  <title>
-    Search by Import Roll
-  </title>
+  <title>Buscar por carrete importado</title>
 
-  <p>Import rolls are "batches" of imported photos.  Regardless of the date the
-     photo was taken, the import roll timestamp is decided when you import photos.
-  </p>
-  <p>To search by latest import roll:</p>
+  <p>Importar carretes son «lotes» de fotos importadas. Independientemente de la fecha en la que se tomó la foto, la fecha de importación del lote se marca al importar las fotos.</p>
+  <p>Buscar por el último carrete importado:</p>
   <steps>
     <item>
-      <p>Select <guiseq><gui>Find</gui><gui>By Import Roll</gui><gui>Last Import
-         Roll</gui></guiseq>.</p>
+      <p>Seleccione <guiseq><gui>Buscar</gui><gui>Por carrete importado</gui><gui>Último carrete importado</gui></guiseq>.</p>
     </item>
   </steps>
-  <p>To select a previous import roll:</p>
+  <p>Seleccionar un carrete importado anteriormente:</p>
   <steps>
     <item>
-      <p>Select <guiseq><gui>Find</gui><gui>By Import Roll</gui><gui>Select Import
-         Rolls</gui></guiseq>.</p>
+      <p>Seleccione <guiseq><gui>Buscar</gui><gui>Por carrete importado</gui><gui>Seleccionar carretes importados…</gui></guiseq>.</p>
     </item>
     <item>
-      <p>Select an import roll to search, or select a range by choosing
-      <gui>Between</gui> and select the dates you wish to include.</p>
+      <p>Seleccione un carrete importado para buscarlo o seleccione un rango escogiendo <gui>Entre</gui> y seleccionando las fechas que quiere incluir.</p>
     </item>
   </steps>
-  <p>To stop searching by import rolls, select <guiseq><gui>Find</gui><gui>By
-     Import Roll</gui><gui>Clear Roll Filter</gui></guiseq>.</p>
+  <p>Para dejar de buscar por carretes importados seleccione <guiseq><gui>Buscar</gui><gui>Por carrete importado</gui><gui>Limpiar el filtro de carrete</gui></guiseq>.</p>
 </page>

@@ -2,37 +2,33 @@
 <page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-remove">
   <info>
     <link type="guide" xref="tags#tag-functions" group="remove"/>
-    <desc>Removing tags from photos</desc>
+    <desc>Quitar etiquetas de las fotos</desc>
   </info>
 
   <title>Eliminando</title>
-  <p>As with attaching tags, there are two main methods of removing tags
-     from photos.</p>
-  <p>Method One:</p>
+  <p>Al igual que al añadir etiquetas, existen principalmente dos métodos para quitar etiquetas de las fotos.</p>
+  <p>Método uno:</p>
   <steps>
     <item>
-      <p>Select photos from which to remove a tag.</p>
+      <p>Seleccione las fotos de las que quiera quitar la etiqueta.</p>
     </item>
     <item>
-      <p>In the tag pane, select a tag to remove from the photos you have
-         selected.</p>
+      <p>En el panel de etiquetas, seleccione una etiqueta para quitar de las fotos que ha seleccionado.</p>
     </item>
     <item>
-      <p>Click <guiseq><gui>Tags</gui><gui>Remove Tag From Selection</gui>
-      </guiseq>.</p>
+      <p>Pulse <guiseq><gui>Etiquetas</gui><gui>Quitar etiqueta de la selección</gui></guiseq>.</p>
     </item>
   </steps>
-  <p>Method Two:</p>
+  <p>Método uno:</p>
   <steps>
     <item>
-      <p>Select photos from which to remove a tag.</p>
+      <p>Seleccione las fotos de las que quiera quitar la etiqueta.</p>
     </item>
     <item>
-      <p>Right click the photos.</p>
+      <p>Pulse con el botón derecho las fotos.</p>
     </item>
     <item>
-      <p>Select <gui>Remove Tag</gui> and select the tag you wish to remove.
-      </p>
+      <p>Seleccione <gui>Quitar etiqueta</gui> y seleccione la etiqueta que quiere quitar.</p>
     </item>
   </steps>
 </page>

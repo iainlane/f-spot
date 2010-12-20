@@ -2,40 +2,33 @@
 <page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-attach">
   <info>
     <link type="guide" xref="tags#tag-functions" group="attach"/>
-    <desc>Attaching tags to photos</desc>
+    <desc>Adjuntar etiquetas a las fotos</desc>
   </info>
 
-  <title>
-    Attaching
-  </title>
-  <p>By attaching tags you have <link xref="tag-creation">created</link> you
-     make it easier to search through your photos.  As with creating tags,
-     there is more than one method of attaching tags to photos.</p>
-  <p>Method One:</p>
+  <title>Adjuntar</title>
+  <p>Al adjuntar las etiquetas que ha <link xref="tag-creation">creado</link> hará más fácil la búsqueda entre sus fotos. Al igual que para crear etiquetas, existe más de un método para adjuntar etiquetas a las fotos.</p>
+  <p>Método uno:</p>
   <steps>
     <item>
-      <p>Select photos to which to attach a tag.</p>
+      <p>Seleccione las fotos sobre las que adjuntar la etiqueta.</p>
     </item>
     <item>
-      <p>In the tag pane, select a tag to attach to the photos you have
-         selected.</p>
+      <p>En el panel de etiquetas seleccione una etiqueta para adjuntar a las fotos que ha seleccionado.</p>
     </item>
     <item>
-      <p>Click <guiseq><gui>Tags</gui><gui>Attach Tag to Selection</gui>
-      </guiseq>.  Alternatively, press Ctrl+T.</p>
+      <p>Pulse <guiseq><gui>Etiquetas</gui><gui>Adjuntar etiqueta a la selección</gui></guiseq>. Alternativamente, pulse Ctrl+T.</p>
     </item>
   </steps>
-  <p>Method Two:</p>
+  <p>Método uno:</p>
   <steps>
     <item>
-      <p>Select photos to which to attach a tag.</p>
+      <p>Seleccione las fotos sobre las que adjuntar la etiqueta.</p>
     </item>
     <item>
-      <p>Right click the photos.</p>
+      <p>Pulse con el botón derecho las fotos.</p>
     </item>
     <item>
-      <p>Select <gui>Attach Tag</gui> and select the tag you wish to attach.
-      </p>
+      <p>Seleccione <gui>Adjuntar etiqueta</gui> y seleccione la etiqueta que quiere adjuntar.</p>
     </item>
   </steps>
 </page>

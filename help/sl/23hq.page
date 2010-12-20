@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="23hq">
+
+  <info>
+    <link type="guide" xref="upload-to-web"/>
+    <desc>Pošiljanje fotografij na 23hq</desc>
+  </info>
+
+  <title>23hq</title>
+
+  <p>Za pošiljanje fotografij na 23hq boste potrebovali račun 23hq in internetni dostop. Poleg tega mora biti <link xref="extensions">razširitev</link> 23hq nameščena in omogočena.</p>
+</page>

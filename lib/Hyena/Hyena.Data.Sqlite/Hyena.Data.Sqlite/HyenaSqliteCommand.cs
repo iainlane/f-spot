@@ -29,10 +29,8 @@
 
 using System;
 using System.IO;
-using System.Data;
 using System.Text;
 using System.Threading;
-using Mono.Data.Sqlite;
 
 namespace Hyena.Data.Sqlite
 {
@@ -66,6 +64,8 @@ namespace Hyena.Data.Sqlite
             get { return command; }
         }
 
+        public bool ReaderDisposes { get; set; }
+
         internal HyenaCommandType CommandType;
 
         public HyenaSqliteCommand (string command)
@@ -79,7 +79,7 @@ namespace Hyena.Data.Sqlite
             ApplyValues (param_values);
         }
 
-        internal void Execute (HyenaSqliteConnection hconnection, SqliteConnection connection)
+        internal void Execute (HyenaSqliteConnection hconnection, Connection connection)
         {
             if (finished) {
                 throw new Exception ("Command is already set to finished; result needs to be claimed before command can be rerun");
@@ -89,40 +89,36 @@ namespace Hyena.Data.Sqlite
             result = null;
             int execution_ms = 0;
 
-            using (SqliteCommand sql_command = new SqliteCommand (CurrentSqlText)) {
-                sql_command.Connection = connection;
+            string command_text = CurrentSqlText;
+            try {
+                ticks = System.Environment.TickCount;
 
-                hconnection.OnExecuting (sql_command);
+                switch (CommandType) {
+                    case HyenaCommandType.Reader:
+                        using (var reader = connection.Query (command_text)) {
+                            result = new ArrayDataReader (reader);
+                        }
+                        break;
 
-                try {
-                    ticks = System.Environment.TickCount;
+                    case HyenaCommandType.Scalar:
+                        result = connection.Query<object> (command_text);
+                        break;
 
-                    switch (CommandType) {
-                        case HyenaCommandType.Reader:
-                            using (SqliteDataReader reader = sql_command.ExecuteReader ()) {
-                                result = new HyenaSqliteArrayDataReader (reader);
-                            }
-                            break;
-
-                        case HyenaCommandType.Scalar:
-                            result = sql_command.ExecuteScalar ();
-                            break;
-
-                        case HyenaCommandType.Execute:
-                        default:
-                            sql_command.ExecuteNonQuery ();
-                            result = sql_command.LastInsertRowID ();
-                            break;
-                    }
-
-                    execution_ms = System.Environment.TickCount - ticks;
-                    if (log_all) {
-                        Log.DebugFormat ("Executed in {0}ms {1}", execution_ms, sql_command.CommandText);
-                    }
-                } catch (Exception e) {
-                    Log.DebugFormat ("Exception executing command: {0}", sql_command.CommandText);
-                    execution_exception = e;
+                    case HyenaCommandType.Execute:
+                    default:
+                        connection.Execute (command_text);
+                        result = connection.LastInsertRowId;
+                        break;
                 }
+
+                execution_ms = System.Environment.TickCount - ticks;
+                if (log_all) {
+                    Log.DebugFormat ("Executed in {0}ms {1}", execution_ms, command_text);
+                }
+            } catch (Exception e) {
+                Log.DebugFormat ("Exception executing command: {0}", command_text);
+                Log.Exception (e);
+                execution_exception = e;
             }
 
             // capture the text

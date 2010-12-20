@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-attach">
+  <info>
+    <link type="guide" xref="tags#tag-functions" group="attach"/>
+    <desc>Attribution d'étiquettes aux photos</desc>
+  </info>
+
+  <title>Attribution</title>
+  <p>En attribuant des étiquettes que vous avez <link xref="tag-creation">créer</link>, vous simplifiez vos recherche parmi vos photos. Comme pour la création d'étiquettes, il y a plusieurs méthodes pour les attribuer aux photos.</p>
+  <p>Première méthode :</p>
+  <steps>
+    <item>
+      <p>Sélectionnez les photos auxquelles vous souhaitez attribuer une étiquette.</p>
+    </item>
+    <item>
+      <p>Dans le volet Étiquettes, choisissez une étiquette à attribuer aux photos sélectionnées.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <guiseq><gui>Étiquettes</gui><gui>Attribuer l'étiquette à la sélection</gui></guiseq>. Alternativement, pressez Ctrl+T.</p>
+    </item>
+  </steps>
+  <p>Deuxième méthode :</p>
+  <steps>
+    <item>
+      <p>Sélectionnez les photos auxquelles vous souhaitez attribuer une étiquette.</p>
+    </item>
+    <item>
+      <p>Cliquez avec le bouton droit sur les photos.</p>
+    </item>
+    <item>
+      <p>Choisissez <gui>Attribuer l'étiquette à la sélection</gui> et sélectionnez l'étiquette que vous souhaitez attribuer.</p>
+    </item>
+  </steps>
+</page>

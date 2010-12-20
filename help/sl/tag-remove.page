@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-remove">
+  <info>
+    <link type="guide" xref="tags#tag-functions" group="remove"/>
+    <desc>Odstranjevanje oznak iz fotografij</desc>
+  </info>
+
+  <title>Odstranjevanje</title>
+  <p>Tako kot za pripenjanje oznak, sta tudi za odstranjevanje oznak na voljo dva glavna načina. </p>
+  <p>Prvi način:</p>
+  <steps>
+    <item>
+      <p>Izberite fotografije iz katerih želite odstraniti oznako.</p>
+    </item>
+    <item>
+      <p>V pladnju oznak izberite oznako za odstranitev iz izbranih fotografij.</p>
+    </item>
+    <item>
+      <p>Kliknite <guiseq><gui>Oznake</gui><gui>Odstrani oznako iz izbora</gui></guiseq>.</p>
+    </item>
+  </steps>
+  <p>Drugi način:</p>
+  <steps>
+    <item>
+      <p>Izberite fotografije iz katerih želite odstraniti oznako.</p>
+    </item>
+    <item>
+      <p>Desno kliknite fotografije.</p>
+    </item>
+    <item>
+      <p>Izberite <gui>Odstrani oznako</gui> in izberite oznake, ki jih želite odstraniti.</p>
+    </item>
+  </steps>
+</page>

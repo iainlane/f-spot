@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="versions">
+
+  <info>
+    <link type="guide" xref="index#advanced"/>
+    <desc>Suivi des différentes versions de vos photos</desc>
+  </info>
+
+  <title>Gestion des versions</title>
+  <p><app>F-Spot</app> permet de conserver plusieurs versions de vos photos. Ceci est particulièrement utile lorsque vous modifiez des photos car vous pouvez ainsi rapidement voir la différence entre la version modifiée et l'original.</p>
+  <p>Pour passer d'une version à une autre pendant les modifications :</p>
+  <steps>
+    <item>
+      <p>Double-cliquez sur la photo que vous souhaitez modifier.</p>
+    </item>
+    <item>
+      <p>Dans la barre latérale, vous voyez la liste déroulante <gui>Version</gui>. Pour sélectionner une version à afficher, choisissez-la dans la liste déroulante.</p>
+    </item>
+  </steps>
+</page>

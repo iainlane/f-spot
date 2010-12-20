@@ -7,18 +7,14 @@
   </info>
 
   <title>Versionado</title>
-  <p><app>F-Spot</app> allows you to keep multiple versions of your photos.
-     This is especially useful when editing photos, as you can quickly see the
-     difference between the edited version and the original.</p>
-  <p>To switch between versions while editing:</p>
+  <p><app>F-Spot</app> le permite tener varias versiones de sus fotos. Esto es especialmente útil al editar fotos, ya que puede ver rápidamente la diferencia entre la versión editada y la original.</p>
+  <p>Cambiar entre versiones al editar:</p>
   <steps>
     <item>
-      <p>Double-click the photo you wish to edit.</p>
+      <p>Pulse dos veces en la foto que quiera editar.</p>
     </item>
     <item>
-      <p>In the sidebar, you will see a drop-down box labeled
-         <gui>Version:</gui>.  To select a version to view, select it in the
-         drop-down box.</p>
+      <p>En la barra lateral verá una caja desplegable etiquetada como <gui>Versión:</gui>. Para seleccionar una versión para verla, selecciónela en la caja desplegable.</p>
     </item>
   </steps>
 </page>

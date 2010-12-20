@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="import-photos">
+  <info>
+    <link type="guide" xref="index#basic-functions" group="import"/>
+    <desc>Uvažanje fotografij za upravljanje</desc>
+  </info>
+
+  <title>Uvažanje fotografij</title>
+  <p>Verjetno boste najprej želeli uvoziti fotografije.</p>
+  <p>Za uvoz fotografij:</p>
+  <steps>
+    <item>
+      <p>Izberite <guiseq><gui>Fotografija</gui><gui>Uvozi ...</gui></guiseq>. Dodatno lahko kliknete gumb <gui>Uvozi</gui>.</p>
+    </item>
+    <item>
+      <p>Izberite vir iz katerega želite uvažati kot je naprava ali mapa.</p>
+     </item>
+     <item>
+       <p>F-Spot bo morda rabil nekaj časa za pripravo kazala fotografij. Ko bo program končal s pripravo kazala, vam bo kazalo predstavljeno. Takrat lahko vsem fotografijam pripnete  <link xref="tags">oznake</link> ali pa to storite kasneje.</p>
+    </item>
+    <item>
+      <p>Ko ste pripravljeni na konec uvažanja fotografij kliknite <gui>Uvoz</gui>.</p>
+    </item>
+  </steps>
+</page>

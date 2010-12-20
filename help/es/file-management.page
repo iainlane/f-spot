@@ -3,34 +3,28 @@
 
   <info>
     <link type="guide" xref="index#basic-functions" group="management"/>
-    <desc>Manage files already imported</desc>
+    <desc>Gestionar archivos ya importados</desc>
   </info>
 
   <title>Gestión de archivos</title>
 
-  <p><app>F-Spot</app> allows for some control over the contents of your
-     catalog, that is, removing files from your catalog as well as deleting
-     files from your catalog.</p>
-  <p>To remove files from your catalog:</p>
+  <p><app>F-Spot</app> le permite algún control sobre el contenido de su catálogo, esto es, quitar archivos de su catálogo al igual que eliminar archivos del mismo.</p>
+  <p>Quitar fotos de su catálogo:</p>
   <steps>
     <item>
-      <p>Select the photos you wish to remove from the catalog.</p>
+      <p>Seleccione las fotos que quiere quitar del catálogo.</p>
     </item>
     <item>
-      <p>Right-click the photos, select <gui>Remove From Catalog</gui>.
-         Alternatively, select <guiseq><gui>Edit</gui><gui>Remove From
-         Catalog</gui></guiseq> or press the Delete key on your keyboard.</p>
+      <p>Pulse con el botón derecho del ratón en las fotos, seleccione <gui>Quitar del catálogo</gui>. Alternativamente, seleccione <guiseq><gui>Editar</gui><gui>Quitar del catálogo</gui></guiseq> o pulse la tecla Suprimir en su teclado.</p>
     </item>
   </steps>
-  <p>To delete photos from your computer:</p>
+  <p>Eliminar fotos de su equipo:</p>
   <steps>
     <item>
-      <p>Select the photos you wish to delete.</p>
+      <p>Seleccione las fotos que quiere eliminar.</p>
     </item>
     <item>
-      <p>Right-click the photos, select <gui>Delete From Drive</gui>.
-         Alternatively, select <guiseq><gui>Edit</gui><gui>Delete
-         From Drive</gui></guiseq> or press Shift+Delete on your keyboard.</p>
+      <p>Pulse con el botón derecho del ratón en las fotos, seleccione <gui>Eliminar de la unidad</gui>. Alternativamente, seleccione <guiseq><gui>Editar</gui><gui>Eliminar de la unidad</gui></guiseq> o pulse las teclas Mayús+Suprimir en su teclado.</p>
     </item>
   </steps>
 </page>

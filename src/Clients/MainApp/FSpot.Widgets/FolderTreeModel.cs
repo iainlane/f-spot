@@ -8,7 +8,6 @@
  */
 
 using System;
-using System.Data;
 using System.Collections.Generic;
 
 using Gtk;
@@ -18,6 +17,7 @@ using FSpot;
 using FSpot.Database;
 using FSpot.Core;
 using Hyena;
+using Hyena.Data.Sqlite;
 
 using Mono.Unix;
 

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="tag-search">
+
+  <info>
+    <link type="guide" xref="index#searching"/>
+    <desc>Iskanje fotografij z uporabo oznak</desc>
+  </info>
+
+  <title>Iskanje po oznaki</title>
+
+  <p>Obstaja več načinov za iskanje po oznakah.</p>
+  <p>Prvi način: Dvokliknite oznake, ki jih želite iskati.</p>
+  <p>Drugi način:</p>
+  <steps>
+    <item>
+      <p>Omogočite iskalno vrstico s klikom na <guiseq>NajdiPoka</guiseq></p>
+    </item>
+    <item>
+      <p>Povlecite oznake, ki jih želite iskati v novo omogočeno iskalno vrstico.</p>
+    </item>
+  <p>Za odstranitev oznake iz svojega iskanja jo desno kliknite in izberite <gui>Odstrani</gui>.</p>
+  </steps>
+  <p>Za izključitev oznake iz svojega iskanja:</p>
+  <steps>
+    <item>
+      <p>V pladnju oznak dvokliknite oznako, ki jo želite izključiti. To jo bo dodalo v iskalno vrstico.</p>
+    </item>
+    <item>
+      <p>V iskalni vrstici dvokoliknite oznako, ki jo želite izključiti.</p>
+    </item>
+  </steps>
+</page>

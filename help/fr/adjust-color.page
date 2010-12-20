@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="adjust-color">
+  <info>
+    <link type="guide" xref="colors"/>
+    <desc>Ajustement des couleurs d'une photo</desc>
+  </info>
+
+  <title>Ajustement des couleurs</title>
+  <p>Parmi les outils de modification disponibles dans F-Spot, l'ajustement des couleurs est assurément le plus puissant. L'éditeur des couleurs permets de modifier :</p>
+  <terms>
+    <item>
+      <title>L'exposition</title>
+      <p>Ce réglage simule l'allongement ou le raccourcissement de la durée d'exposition.</p>
+    </item>
+    <item>
+      <title>La saturation</title>
+      <p>Ce réglage modifie la saturation des couleurs de l'image, c'est-à-dire : déplacer le curseur vers la gauche ternit les couleurs progressivement jusqu'au noir et blanc, tandis que le déplacer vers la droite les ravive jusqu'à la saturation.</p>
+    </item>
+    <item>
+      <title>La luminosité</title>
+      <p>Ce réglage accroit la luminosité des couleurs. Trop l'augmenter produit des couleurs « délavées », alors que trop le diminuer rend l'image trop sombre et manquant de contraste.</p>
+    </item>
+    <item>
+      <title>La coloration</title>
+      <p>Ce réglage modifie le mélange des couleurs primaires en les faisant « tourner » sur le diagramme des couleurs .</p>
+    </item>
+    <item>
+      <title>Le contraste</title>
+      <p>Ce réglage ajuste le contraste, c'est-à-dire le ratio entre le nombre de pixels clairs et foncés. Déplacer le curseur vers la gauche diminue le contraste, alors que le déplacer vers la droite l'augmente.</p>
+    </item>
+    <item>
+      <title>La température</title>
+      <p>Ce réglage permet de modifier la température de couleur, mesurée en kelvin.</p>
+    </item>
+    <item>
+      <title>La nuance</title>
+      <p>Ce réglage permet de teinter la photo avec une couleur.</p>
+    </item>
+  </terms>
+</page>

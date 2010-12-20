@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="tags">
+  <info>
+    <link type="guide" xref="index#basic-functions" group="tag"/>
+    <desc>Une brève introduction aux possibilités d'étiquetage de F-Spot</desc>
+  </info>
+
+  <title>Les étiquettes</title>
+  <p>Comme certains autres gestionnaires de photos, <app>F-Spot</app> vous permet d'étiqueter vos photos, ce qui autorise ensuite une recherche rapide simplement basée sur le contenu de vos photos. Vous pouvez étiqueter des personnes, des évènements, des endroits, des sujets favoris, ou même créer vos groupes d'étiquettes personnalisées.</p>
+  <section id="tag-functions" style="2column" groups="create attach remove delete">
+    <title>Gestion des étiquettes</title>
+  </section>
+</page>

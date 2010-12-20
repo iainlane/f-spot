@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="rate-search">
+
+  <info>
+    <link type="guide" xref="index#searching"/>
+    <desc>Recherche de photos en fonction de leur notation</desc>
+  </info>
+
+  <title>Recherche par note</title>
+
+  <p>Pour effectuer une recherche par note :</p>
+  <steps>
+    <item>
+      <p>Allez dans le menu <guiseq><gui>Recherche</gui><gui>Par note</gui><gui>Définir une plage de notes...</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Sélectionnez la plage de notes que vous souhaitez afficher.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Ok</gui>.</p>
+    </item>
+  </steps>
+  <p>Pour arrêter la recherche par note :</p>
+  <steps>
+    <item>
+      <p>Choisissez dans le menu <guiseq><gui>Recherche</gui><gui>Par note</gui><gui>Effacer le filtre des notations</gui></guiseq>.</p>
+    </item>
+  </steps>
+</page>

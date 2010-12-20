@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="23hq">
+
+  <info>
+    <link type="guide" xref="upload-to-web"/>
+    <desc>Envoyer des photos vers 23hq</desc>
+  </info>
+
+  <title>23hq</title>
+
+  <p>Pour envoyer des photos vers 23hq, vous avez besoin d'un compte 23hq, ainsi que d'un accès à internet. L'<link xref="extensions">extension</link> 23hq doit aussi être installée et activée.</p>
+</page>

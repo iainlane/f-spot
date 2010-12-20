@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="ratings">
+  <info>
+    <link type="guide" xref="index#basic-functions" group="rate"/>
+    <desc>Ocenite svoje fotografije z eno do pet zvezdic</desc>
+  </info>
+
+  <title>Ocenjevanje vaših fotografij</title>
+  <p><app>F-Spot</app> vam omogoča ocenjevanj svojih fotografij z eno do pet zvezdic. Za ocenjevanje fotografij sta na voljo dva načina.</p>
+  <p>Prvi način:</p>
+  <steps>
+    <item>
+      <p>Z dvoklikom izberite fotografijo, ki jo želite oceniti.</p>
+    </item>
+    <item>
+      <p>V spodnjem desnem kotu boste videli pet pikic, ki ustrezajo vaši oceni. Za oceno ena zvezdica kliknite na prvo piko.</p>
+    </item>
+  </steps>
+  <p>Drugi način:</p>
+  <steps>
+    <item>
+      <p>Izberite fotografij-o/e, ki jih želite oceniti.</p>
+    </item>
+    <item>
+      <p>Desno kliknite fotografij-o/e, ki j-o/ih želite oceniti. Nato s klikom na ustrezno piko na dnu menija desnega klika izberite oceno.</p>
+    </item>
+  </steps>
+</page>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="smugmug">
+
+  <info>
+    <link type="guide" xref="upload-to-web"/>
+    <desc>Pošiljanje fotografij na SmugMug</desc>
+  </info>
+
+  <title>SmugMug</title>
+
+  <p>Za pošiljanje fotografij na SmugMug boste potrebovali račun SmugMug in interneti dostop. Poleg tega mora biti <link xref="extensions">razširitev</link> SmugMug nameščena in omogočena.</p>
+</page>

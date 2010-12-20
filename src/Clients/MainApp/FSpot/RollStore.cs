@@ -11,7 +11,6 @@
 
 using System.Collections;
 using System.IO;
-using System.Data;
 using System;
 
 using FSpot.Core;
@@ -20,7 +19,6 @@ using FSpot.Utils;
 using FSpot;
 
 using Hyena;
-
 using Hyena.Data.Sqlite;
 
 namespace FSpot {
@@ -67,6 +65,8 @@ public class RollStore : DbStore<Roll>
 			AddToCache (roll);
 		}
 
+        reader.Dispose();
+
 		return roll;
 	}
 
@@ -88,7 +88,7 @@ public class RollStore : DbStore<Roll>
 			if (reader.Read ())
 				number_of_photos = Convert.ToUInt32 (reader ["count"]);
 
-			reader.Close ();
+			reader.Dispose ();
 		}
                 return number_of_photos;
 	}
@@ -117,7 +117,7 @@ public class RollStore : DbStore<Roll>
 				}
 				list.Add (roll);
 			}
-			reader.Close ();
+			reader.Dispose ();
 		}
 		return (Roll []) list.ToArray (typeof (Roll));
 	}

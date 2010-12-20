@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="folder">
+
+  <info>
+    <link type="guide" xref="index#sharing"/>
+    <desc>Envoyer des photos dans un dossier</desc>
+  </info>
+
+  <title>Exportation dans un dossier</title>
+
+  <p><app>F-Spot</app> vous permet d'exporter vers un dossier. Cependant, pour pouvoir le faire, vous devez avoir installé et activé l'<link xref="extensions">extension</link> d'exportation de dossier.</p>
+  <p>Pour exporter les photos sélectionnées vers un dossier :</p>
+  <steps>
+    <item>
+      <p>Choisissez dans le menu <guiseq><gui>Photo</gui><gui>Exporter vers</gui><gui>Dossier...</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Sélectionnez un dossier.</p>
+    </item>
+    <item>
+      <p>Donnez un nom et une description à la galerie.</p>
+    </item>
+    <item>
+      <p>Sélectionnez une méthode d'exportation. <gui>Créer une galerie Web indépendante</gui> crée un dossier contenant les fichiers prêts à être envoyés vers un serveur Web pour présenter les photos dans une galerie. <gui>Enregistrer uniquement les fichiers</gui> déplace seulement les photos vers le dossier sélectionné. <gui>Créer la galerie avec « Original »</gui> crée un dossier avec un contenu adapté aux galeries Original Photo Gallery.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Exporter</gui>.</p>
+    </item>
+  </steps>
+</page>

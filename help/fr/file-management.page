@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="file-management">
+
+  <info>
+    <link type="guide" xref="index#basic-functions" group="management"/>
+    <desc>Gérer les fichiers déjà importés</desc>
+  </info>
+
+  <title>Gestion des fichiers</title>
+
+  <p><app>F-Spot</app> vous permet de contrôler le contenu de votre catalogue, c'est-à-dire d'enlever des fichiers du catalogue ou de les supprimer de votre ordinateur.</p>
+  <p>Pour enlever des fichiers de votre catalogue :</p>
+  <steps>
+    <item>
+      <p>Sélectionnez les photos que vous voulez enlever du catalogue.</p>
+    </item>
+    <item>
+      <p>D'un clic droit sur les photos, faites <gui>Enlever du catalogue</gui>. Vous pouvez aussi choisir <guiseq><gui>Édition</gui><gui>Enlever du catalogue</gui></guiseq> dans le menu, ou appuyer sur la touche Suppr de votre clavier.</p>
+    </item>
+  </steps>
+  <p>Pour supprimer des photos de votre ordinateur :</p>
+  <steps>
+    <item>
+      <p>Sélectionnez les photos que vous voulez supprimer.</p>
+    </item>
+    <item>
+      <p>D'un clic droit sur les photos, faites <gui>Supprimer du lecteur</gui>. Vous pouvez aussi choisir <guiseq><gui>Édition</gui><gui>Supprimer du lecteur</gui></guiseq> dans le menu, ou utiliser le raccourci Maj + Suppr de votre clavier.</p>
+    </item>
+  </steps>
+</page>

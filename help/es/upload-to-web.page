@@ -3,12 +3,9 @@
 
   <info>
     <link type="guide" xref="index#sharing"/>
-    <desc>Upload photos to various web services</desc>
+    <desc>Subir fotos a varios servicios web</desc>
   </info>
 
-  <title>
-    Upload to Web
-  </title>
-  <p><app>F-Spot</app> allows you to upload photos to popular web services,
-     including Google's PicasaWeb and Flickr.</p>
+  <title>Subir a la web</title>
+  <p><app>F-Spot</app> le permite subir fotos a los servicios web más populares, incluyendo PicasaWeb de Google y Flickr.</p>
 </page>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="date-search">
+
+  <info>
+    <link type="guide" xref="index#searching"/>
+    <desc>Iskanje fotografij po datumu</desc>
+  </info>
+
+  <title>Iskanje po datumu</title>
+
+  <p>Za iskanje po datumu:</p>
+  <steps>
+    <item>
+      <p>Izberite <guiseq><gui>Išči</gui><gui>Po datumu</gui><gui>Nastavi obseg datumov ...</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Izberite časovno obdobje za ogled fotografij. To lahko storite z izbiro nastavljenega obdobja, kot je na primer teden, ali z določitvijo datumov.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>V redu</gui>.</p>
+    </item>
+  </steps>
+  <p>Dodatno lahko uporabite časovnico. Za uporabo časovnice:</p>
+  <steps>
+    <item>
+      <p>Omogočite časovnico tako, da izberete <guiseq><gui>Pogled</gui><gui>Sestavni deli</gui></guiseq> in obkljukajte polje <gui>Časovnica</gui>.</p>
+    </item>
+    <item>
+      <p>V časovnici kliknite na vrstico, ki ustreza časovnemu območju, ki si ga želite ogledati.</p>
+    </item>
+  </steps>
+  <p>Za končanje iskanje po datumu</p>
+  <steps>
+    <item>
+      <p>Izberite <guiseq><gui>Išči</gui><gui>Po datumu</gui><gui>Počisti obseg datumov</gui></guiseq>.</p>
+    </item>
+  </steps>
+</page>

@@ -2,33 +2,27 @@
 <page xmlns="http://projectmallard.org/1.0/" type="topic" id="ratings">
   <info>
     <link type="guide" xref="index#basic-functions" group="rate"/>
-    <desc>Rate your photos from one to five stars</desc>
+    <desc>Puntúe sus fotos de una a cinco estrellas</desc>
   </info>
 
-  <title>
-    Rating your photos
-  </title>
-  <p><app>F-Spot</app> allows you to rate your photos from one to five stars.
-     There are two ways to rate photos.</p>
-  <p>Method One:</p>
+  <title>Puntuar sus fotos</title>
+  <p><app>F-Spot</app> le permite puntuar sus fotos desde una a cinco estrellas. Existen dos formas de puntuar fotos.</p>
+  <p>Método uno:</p>
   <steps>
     <item>
-      <p>By double-clicking, select the photo you wish to rate.</p>
+      <p>Al pulsar dos veces seleccionará la foto que quiere puntuar.</p>
     </item>
     <item>
-      <p>In the lower-right corner, you will see five dots, corresponding to
-         the rating you wish to give; to give a rating of one star, for
-         example, click the first dot.</p>
+      <p>En la esquina inferior derecha verá cinco puntos, correspondientes con la puntuación que quiere otorgarle; para darle una puntuación de una estrella, por ejemplo, pulse el primer punto.</p>
     </item>
   </steps>
-  <p>Method Two:</p>
+  <p>Método uno:</p>
   <steps>
     <item>
-      <p>Select the photo(s) you wish to rate.</p>
+      <p>Seleccione las fotos que quiere puntuar.</p>
     </item>
     <item>
-      <p>Right-click the photo(s) you wish to rate, and select a rating at the
-         bottom of the right-click menu by clicking the corresponding dot.</p>
+      <p>Pulse con el botón derecho del ratón sobre las fotos que quiere puntuar y seleccione una puntuación en la parte inferior del menú contextual del botón derecho del ratón, seleccionando el punto correspondiente.</p>
     </item>
   </steps>
 </page>

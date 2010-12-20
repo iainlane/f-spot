@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="adjust-color">
+  <info>
+    <link type="guide" xref="colors"/>
+    <desc>Prilagajanje barv fotografije</desc>
+  </info>
+
+  <title>Prilagodi barvo</title>
+  <p>Med orodji urejanja v F-Spot-u je prilagajanje barv daleč najzmogljivejše. Urejevalnik barv vam omogoča prilagoditev:</p>
+  <terms>
+    <item>
+      <title>Osvetljenost</title>
+      <p>Ta prilagoditev simulira podaljšanje ali skrajšanje osvetljenosti.</p>
+    </item>
+    <item>
+      <title>Nasičenost</title>
+      <p>Ta prilagodite simulira prilagajanje količine barv na sliki, drsanje na levo zmanjšava barve in jo naredi črno-belo, drsanje na desno bo povečalo živahnost barv.</p>
+    </item>
+    <item>
+      <title>Svetlost</title>
+      <p>Ta prilagoditev poveča svetlost barv. Prevelika svetlost bo povzročila "spranost" barv, premajhna pa bo povzročila temno sliko z majhnih kontrastom.</p>
+    </item>
+    <item>
+      <title>Odtenek</title>
+      <p>Ta prilagoditev barve "zavrti" po barvnem kolescu.</p>
+    </item>
+    <item>
+      <title>Kontrast</title>
+      <p>Ta prilagoditev prilagodi razmerje kontrasta, razlike med temnimi in svetlimi točkami. Drsenje na levo kontrast zmanjša, drsenje na desno pa poveča.</p>
+    </item>
+    <item>
+      <title>Temp</title>
+      <p>Ta možnost prilagodi temperaturo barve merjeno v Kelvinih.</p>
+    </item>
+    <item>
+      <title>Črnilo</title>
+      <p>Ta prilagoditev vam omogoča dodajanje pridiha barve fotografijam.</p>
+    </item>
+  </terms>
+</page>

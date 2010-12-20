@@ -3,31 +3,27 @@
 
   <info>
     <link type="guide" xref="index#searching"/>
-    <desc>Search photos by star rating</desc>
+    <desc>Buscar fotos por puntuación</desc>
   </info>
 
-  <title>
-    Search by Rating
-  </title>
+  <title>Buscar por puntuación</title>
 
-  <p>To search by rating:</p>
+  <p>Buscar por puntuación:</p>
   <steps>
     <item>
-      <p>Select <guiseq><gui>Find</gui><gui>By Rating</gui><gui>Set Rating
-         Filter...</gui></guiseq>.</p>
+      <p>Seleccione <guiseq><gui>Buscar</gui><gui>Por puntuación</gui><gui>Establecer el filtro de puntuación...</gui></guiseq>.</p>
     </item>
     <item>
-      <p>Select the rating range which you wish to view.</p>
+      <p>Seleccione el rango de puntuación que quiere ver.</p>
     </item>
     <item>
-      <p>Click <gui>Ok</gui>.</p>
+      <p>Pulse <gui>Aceptar</gui>.</p>
     </item>
   </steps>
-  <p>To stop searching by rating:</p>
+  <p>Dejar de buscar por puntuación:</p>
   <steps>
     <item>
-      <p>Select <guiseq><gui>Find</gui><gui>By Rating</gui><gui>Set Rating
-         Filter</gui></guiseq>.</p>
+      <p>Seleccione <guiseq><gui>Buscar</gui><gui>Por puntuación</gui><gui>Establecer el filtro de puntuación</gui></guiseq>.</p>
     </item>
   </steps>
 </page>

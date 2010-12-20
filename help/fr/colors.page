@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="colors">
+  <info>
+    <link type="guide" xref="index#editing" group="colors"/>
+    <desc>Modifiez les couleurs de vos photos</desc>
+  </info>
+
+  <title>Modification de couleurs</title>
+  <p><app>F-Spot</app> prend en charge plusieurs modes de manipulation des couleurs.</p>
+  <terms>
+    <item>
+      <title>Décoloriser</title>
+      <p>Ce mode élimine toute les couleurs, une photo en couleur devenant alors une photo en noir et blanc.</p>
+    </item>
+    <item>
+      <title>Effet sépia</title>
+      <p>Ce mode donne l'impression d'avoir crée une photo sur du papier sépia.</p>
+    </item>
+    <item>
+      <title>Couleurs automatiques</title>
+      <p>Ce mode ajuste automatiquement les couleurs à un profil défini.</p>
+    </item>
+  </terms>
+</page>

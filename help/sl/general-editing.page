@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="general-editing">
+  <info>
+    <link type="guide" xref="index#editing" group="general"/>
+    <desc>Opravite majhna urejanja svojih fotografij</desc>
+  </info>
+
+  <title>Splošno urejanje</title>
+
+  <p><app>F-Spot</app> vam omogoča enostavna splošna urejanja, vključno s poravnavo obrezovanjem in vrtenjem vaših fotografij.</p>
+  <p>Za vrtenje izbrane  fotografije so na voljo trije načini:</p>
+  <steps>
+    <item>
+      <p>Kliknite primeren gumb vrtenja desno od gumba uvoza.</p>
+    </item>
+    <item>
+      <p>Izberite primerno možnost v meniju <gui>Uredi</gui>.</p>
+    </item>
+    <item>
+      <p>Uporabite tipke oklepaja za vrtenje fotografije.</p>
+    </item>
+  </steps>
+  <p>Za poravnavo izbrane fotografije:</p>
+  <steps>
+    <item>
+      <p>V pladnju urejanja izberite <app>Poravnaj</app>.</p>
+    </item>
+    <item>
+      <p>Izberite vrtenje med -45 do 45 stopinjami.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Poravnaj</gui>.</p>
+    </item>
+  </steps>
+  <p>Za obrez izbrane fotografije:</p>
+  <steps>
+    <item>
+      <p>Kliknite gumb <gui>Obreži</gui> v pladnju Uredi.</p>
+    </item>
+    <item>
+      <p>Izberite razmerje velikosti to je razmerje med širino in dolžino kateremu se mora prilegati nova fotografija. Primeri razmerij velikosti so 4x3, 4x6 in 5x7.</p>
+    </item>
+    <item>
+      <p>Kliknite in povlecite za izbiro področja, ki ga želite obdržati. Polje lahko po spremembi velikosti vlečete naokoli.</p>
+    </item>
+    <item>
+      <p>Ko ste izbrali področje za obrez, kliknite <gui>Obreži</gui>.</p>
+    </item>
+  </steps>
+</page>

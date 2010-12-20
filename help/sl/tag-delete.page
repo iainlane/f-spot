@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-delete">
+  <info>
+    <link type="guide" xref="tags#tag-functions" group="delete"/>
+    <desc>Brisanje oznak s sistema</desc>
+  </info>
+
+  <title>Brisanje</title>
+  <p>Izbris oznak jih popolnoma izbriše z vašega sistema, vendar pusti fotografije s pripetimi oznakami nedotaknjene.</p>
+  <p>Za izbris oznake:</p>
+  <steps>
+    <item>
+      <p>V pladnju oznak izberite oznako, ki jo želite izbrisati.</p>
+    </item>
+    <item>
+      <p>Kliknite <guiseq><gui>Oznake</gui><gui>Izbriši izbrano oznako</gui></guiseq>. Dodatno lahko desno kliknete v pladnju in kliknete <gui>Izbriši oznako</gui>.</p>
+    </item>
+  </steps>
+</page>

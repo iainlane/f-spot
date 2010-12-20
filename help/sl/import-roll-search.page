@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="import-roll-search">
+
+  <info>
+    <link type="guide" xref="index#searching"/>
+    <desc>Iskanje po datumu uvoza</desc>
+  </info>
+
+  <title>Iskanje po uvoznem zvitku</title>
+
+  <p>Uvozni zvitki so  "paketi" uvoženih fotografij. Ne glede na datum zajema fotografije je časovni žig uvoznega zvitka določen ob uvozu fotografij.</p>
+  <p>Za iskanje po zadnjem uvoznem zvitku:</p>
+  <steps>
+    <item>
+      <p>Izberite <guiseq><gui>Išči</gui><gui>Po uvoznem zvitku</gui><gui>Zadnji uvozni zvitek</gui></guiseq>.</p>
+    </item>
+  </steps>
+  <p>Za izbiro predhodnega uvoznega zvitka:</p>
+  <steps>
+    <item>
+      <p>Izberite <guiseq><gui>Išči</gui><gui>Po uvoznem zvitku</gui><gui>Izberi uvozne zvitke</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Izberite uvozni zvitek za iskanje ali izberite obseg z izbiro <gui>Vmes</gui> in izberite datume, ki jih želite vključiti.</p>
+    </item>
+  </steps>
+  <p>Za zaustavitev iskanja po uvoznih zvitkih izberite <guiseq><gui>Najdi</gui><gui>Po uvoznem zvitku</gui><gui>Počisti uvozni zvitek</gui></guiseq>.</p>
+</page>

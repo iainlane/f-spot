@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-remove">
+  <info>
+    <link type="guide" xref="tags#tag-functions" group="remove"/>
+    <desc>Enlever les étiquettes des photos</desc>
+  </info>
+
+  <title>Enlèvement</title>
+  <p>Comme lorsqu'on attribue une étiquette à des photos, il y a deux méthodes pour les enlever.</p>
+  <p>Première méthode :</p>
+  <steps>
+    <item>
+      <p>Sélectionnez les photos dont vous voulez ôter une étiquette.</p>
+    </item>
+    <item>
+      <p>Dans le volet Étiquettes, sélectionnez l'étiquette à enlever sur les photos que vous avez préalablement choisies.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <guiseq><gui>Étiquettes</gui><gui>Enlever l'étiquette de la sélection</gui></guiseq>.</p>
+    </item>
+  </steps>
+  <p>Deuxième méthode :</p>
+  <steps>
+    <item>
+      <p>Sélectionnez les photos dont vous voulez ôter une étiquette.</p>
+    </item>
+    <item>
+      <p>Cliquez avec le bouton droit sur les photos.</p>
+    </item>
+    <item>
+      <p>Sélectionnez <gui>Enlever l'étiquette</gui> et choisissez celle que vous souhaitez enlever.</p>
+    </item>
+  </steps>
+</page>

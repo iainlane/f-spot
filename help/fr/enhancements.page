@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="enhancements">
+  <info>
+    <link type="guide" xref="index#editing" group="enhancements"/>
+    <desc>Améliorations simples de vos photos</desc>
+  </info>
+
+  <title>Améliorations</title>
+
+  <p>Pour le moment, <app>F-spot</app> prend en charge deux outils de retouche : la réduction des yeux rouges et l'amélioration automatique des couleurs.</p>
+  <p>Pour réduire des yeux rouges :</p>
+  <steps>
+    <item>
+      <p>Double-cliquez sur la photo à traiter avec l'outil de réduction des yeux rouges.</p>
+    </item>
+    <item>
+      <p>Appuyez sur le bouton <gui>Réduction des yeux rouges</gui> dans le volet d'édition.</p>
+    </item>
+    <item>
+      <p>Sélectionnez la zone où vous voulez réduire les yeux rouges. Note : si celle-ci comporte de nombreuses zones rouges, il est préférable de sélectionner les yeux un par un.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Corriger !</gui></p>
+    </item>
+  </steps>
+  <p>Pour améliorer automatiquement les couleurs de la photo :</p>
+  <steps>
+    <item>
+      <p>Double-cliquez sur la photo que vous souhaitez améliorer.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui style="button">Couleurs automatiques</gui>.</p>
+    </item>
+  </steps>
+</page>

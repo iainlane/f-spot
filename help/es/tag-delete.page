@@ -2,23 +2,18 @@
 <page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-delete">
   <info>
     <link type="guide" xref="tags#tag-functions" group="delete"/>
-    <desc>Deleting tags from the system</desc>
+    <desc>Eliminar etiquetas del sistema</desc>
   </info>
 
-  <title>
-    Deleting
-  </title>
-  <p>Deleting tags removes them entirely from your system, but leaves behind
-     any photos to which that tag is attached.</p>
-  <p>To delete a tag:</p>
+  <title>Eliminar</title>
+  <p>Eliminar etiquetas las quita completamente del sistema, pero deja las fotos que tenían esa etiqueta.</p>
+  <p>Para eliminar una etiqueta:</p>
   <steps>
     <item>
-      <p>Select the tag you wish to delete from within the tag pane.</p>
+      <p>Seleccione la etiqueta que quiere eliminar desde el panel de etiquetas.</p>
     </item>
     <item>
-      <p>Click <guiseq><gui>Tags</gui><gui>Delete Select Tag</gui></guiseq>.
-      Alternatively, right click the tag within the pane, and click
-      <gui>Delete Tag</gui>.</p>
+      <p>Pulse <guiseq><gui>Etiquetas</gui><gui>Eliminar la etiqueta seleccionada</gui></guiseq>. Alternativamente, pulse con el botón derecho del ratón y pulse <gui>Eliminar etiqueta</gui>.</p>
     </item>
   </steps>
 </page>

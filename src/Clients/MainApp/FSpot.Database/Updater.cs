@@ -1,7 +1,6 @@
 using Mono.Unix;
 using Gtk;
 using System;
-using System.Data;
 using System.Collections;
 
 using FSpot.Utils;
@@ -552,7 +551,7 @@ namespace FSpot.Database {
 						String.IsNullOrEmpty (md5) ? null : md5));
 				}
 
-				reader.Close ();
+                reader.Dispose();
 
 				reader = ExecuteReader (String.Format (
 						"SELECT photo_id, version_id, name, uri, md5_sum, protected " +
@@ -658,7 +657,7 @@ namespace FSpot.Database {
 						Convert.ToUInt32 (reader ["rating"])));
 				}
 
-				reader.Close ();
+				reader.Dispose();
 
 				reader = ExecuteReader (String.Format (
 						"SELECT photo_id, version_id, name, base_uri, filename, protected " +

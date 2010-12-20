@@ -2,24 +2,23 @@
 <page xmlns="http://projectmallard.org/1.0/" type="guide" id="colors">
   <info>
     <link type="guide" xref="index#editing" group="colors"/>
-    <desc>Edit the colors of your photos</desc>
+    <desc>Editar los colores de sus fotos</desc>
   </info>
 
   <title>Edición de color</title>
-  <p><app>F-Spot</app> supports several modes of color manipulation.</p>
+  <p><app>F-Spot</app> soporta diversos modos de manipulación de color.</p>
   <terms>
     <item>
       <title>Desaturar</title>
-      <p>This mode eliminates all saturation, turning a color image into a
-         black and white image.</p>
+      <p>Este modo elimina toda la saturación, convirtiendo una imagen de color en una imagen en blanco y negro.</p>
     </item>
     <item>
       <title>Tono sepia</title>
-      <p>This mode simulates a photo being created with sepia toner.</p>
+      <p>Este modo simula una foto creada con un tóner sepia.</p>
     </item>
     <item>
-      <title>Ajustar el color</title>
-      <p>This mode automatically adjusts the colors to a set profile.</p>
+      <title>Color automático</title>
+      <p>Este modo ajusta automáticamente los colores para establecer sobre un perfil.</p>
     </item>
   </terms>
 </page>

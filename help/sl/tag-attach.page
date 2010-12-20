@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-attach">
+  <info>
+    <link type="guide" xref="tags#tag-functions" group="attach"/>
+    <desc>Pripenjanje oznak fotografijam</desc>
+  </info>
+
+  <title>Pripenjanje</title>
+  <p>S pripenjanjem oznak, ki ste jih <link xref="tag-creation">ustvarili</link>, si boste olajšali iskanje po svojih fotografijah. To kot z ustvarjanjem oznak je za pripenjanje oznak fotografijam na voljo več načinov.</p>
+  <p>Prvi način:</p>
+  <steps>
+    <item>
+      <p>Izberite fotografije katerim želite pripeti oznake.</p>
+    </item>
+    <item>
+      <p>V pladnju oznak izberite oznako za pripenjanje k izbranim fotografijam.</p>
+    </item>
+    <item>
+      <p>Kliknite <guiseq><gui>Oznake</gui><gui>Pripni oznako izboru</gui></guiseq>. Namesto tega lahko pritisnete Ctrl+T.</p>
+    </item>
+  </steps>
+  <p>Drugi način:</p>
+  <steps>
+    <item>
+      <p>Izberite fotografije katerim želite pripeti oznake.</p>
+    </item>
+    <item>
+      <p>Desno kliknite fotografije.</p>
+    </item>
+    <item>
+      <p>Izberite <gui>Pripni oznako</gui> in izberite oznako, ki jo želite pripeti.</p>
+    </item>
+  </steps>
+</page>

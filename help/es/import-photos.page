@@ -2,34 +2,24 @@
 <page xmlns="http://projectmallard.org/1.0/" type="topic" id="import-photos">
   <info>
     <link type="guide" xref="index#basic-functions" group="import"/>
-    <desc>Import photos to be managed</desc>
+    <desc>Importar fotos para ser gestionadas</desc>
   </info>
 
-  <title>
-    Importing Photos
-  </title>
-  <p>
-    Chances are, the first thing you will want to do is import photos.
-  </p>
-  <p>
-    To import photos:
-  </p>
+  <title>Importando fotos</title>
+  <p>Seguramente lo primero que quiera hacer es importar fotos.</p>
+  <p>Importar fotos:</p>
   <steps>
     <item>
-      <p>Select <guiseq><gui>Photo</gui><gui>Import...</gui></guiseq>.
-      Alternatively, click the <gui>Import</gui> button.</p>
+      <p>Seleccione <guiseq><gui>Foto</gui><gui>Importar...</gui></guiseq>. Alternativamente, pulse el botón <gui>Importar</gui>.</p>
     </item>
     <item>
-      <p>Select a source from which to import, such as a device or a folder.</p>
+      <p>Seleccione un origen del que importar, tal como un dispositivo o una carpeta.</p>
      </item>
      <item>
-       <p>It may take a while for F-Spot to index the files.  When it is done
-          indexing, your photos will be presented to you.  At this time, you
-          can attach <link xref="tags">tags</link> to all photos, or you can
-          leave that task for later.</p>
+       <p>Puede llevar un tiempo que F-Spot indexe los archivos. Cuando haya terminado de indexarlos, se le presentarán sus fotos. en ese momento puede adjuntar <link xref="tags">etiquetas</link> a todas sus fotos, o puede dejar la tarea para más tarde.</p>
     </item>
     <item>
-      <p>When you are ready to finish importing photos, click <gui>Import</gui>.</p>
+      <p>Cuando esté listo para terminar de importar fotos pulse <gui>Importar</gui>.</p>
     </item>
   </steps>
 </page>

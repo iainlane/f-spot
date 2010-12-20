@@ -8,8 +8,5 @@
 
   <title>Flickr</title>
 
-  <p>To upload photos to Flickr you will need a Flickr account, as well as
-     internet access.  Also, the Flickr
-     <link xref="extensions">extension</link> must be installed and enabled.
-     </p>
+  <p>Para subir fotos a Flickr necesitará una cuenta Flickr, así como acceso a internet. También debe tener instalada y activada la <link xref="extensions">extensión</link> Flickr.</p>
 </page>

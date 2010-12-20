@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="rate-search">
+
+  <info>
+    <link type="guide" xref="index#searching"/>
+    <desc>Iščite fotografije po oceni zvezdic</desc>
+  </info>
+
+  <title>Iskanje po ocenah</title>
+
+  <p>Za iskanje po ocenah:</p>
+  <steps>
+    <item>
+      <p>Izberite <guiseq><gui>Najdi</gui><gui>Po oceni</gui><gui>Izbor filtra ocen ...</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Izberite si obseg ocen, ki ga želite videti.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>V redu</gui>.</p>
+    </item>
+  </steps>
+  <p>Za zaustavitev iskanja po ocenah:</p>
+  <steps>
+    <item>
+      <p>Izberite <guiseq><gui>Najdi</gui><gui>Po oceni</gui><gui>Nastavi filter ocen</gui></guiseq>.</p>
+    </item>
+  </steps>
+</page>

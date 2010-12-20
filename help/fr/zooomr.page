@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="zooomr">
+
+  <info>
+    <link type="guide" xref="upload-to-web"/>
+    <desc>Envoyer des photos vers Zooomr</desc>
+  </info>
+
+  <title>Zooomr</title>
+
+  <p>Pour envoyer des photos vers Zooomr, vous avez besoin d'un compte ainsi que d'un accès à internet. L'<link xref="extensions">extension</link> Zooomr doit aussi être installée et activée.</p>
+</page>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="date-search">
+
+  <info>
+    <link type="guide" xref="index#searching"/>
+    <desc>Recherche de photos par date</desc>
+  </info>
+
+  <title>Recherche par date</title>
+
+  <p>Pour effectuer une recherche par date :</p>
+  <steps>
+    <item>
+      <p>Choisissez dans le menu <guiseq><gui>Recherche</gui><gui>Par date</gui><gui>Définir une plage de dates</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Choisissez la période dont vous voulez visionner les photos. Vous pouvez le faire soit en sélectionnant une période donnée, telle qu'une semaine, soit en spécifiant les dates de début et de fin.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Ok</gui>.</p>
+    </item>
+  </steps>
+  <p>Vous pouvez aussi utiliser la frise chronologique. Pour utiliser la frise chronologie :</p>
+  <steps>
+    <item>
+      <p>Assurez-vous que la frise chronologie soit activée dans le menu <guiseq><gui>Affichage</gui><gui>Composants</gui></guiseq> et que la case <gui>Frise chronologique</gui> soit cochée.</p>
+    </item>
+    <item>
+      <p>Dans la frise chronologie, cliquez sur la barre correspondant à la période que vous souhaitez visionner.</p>
+    </item>
+  </steps>
+  <p>Pour arrêter la recherche par date :</p>
+  <steps>
+    <item>
+      <p>Choisissez dans le menu <guiseq><gui>Recherche</gui><gui>Par date</gui><gui>Ne plus tenir compte des dates</gui></guiseq>.</p>
+    </item>
+  </steps>
+</page>

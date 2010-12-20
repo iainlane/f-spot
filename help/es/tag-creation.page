@@ -2,68 +2,57 @@
 <page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-creation">
   <info>
     <link type="guide" xref="tags#tag-functions" group="create"/>
-    <desc>Creating tags to be attached to photos</desc>
+    <desc>Crear etiquetas para adjuntarlas a las fotos</desc>
   </info>
 
   <title>Crear</title>
-  <p>In order to use tags, you need to first create a set of tags which you
-     wish to use.  There are three main methods to create tags.</p>
-  <p>Method One:</p>
+  <p>Para poder usar las etiquetas, primero necesita crear un conjunto de ellas que quiera usar. Existen principalmente tres métodos para crear etiquetas.</p>
+  <p>Método uno:</p>
   <steps>
     <item>
-      <p>Select <guiseq><gui>Tags</gui><gui>Create New Tag...</gui></guiseq>.
-      </p>
+      <p>Seleccione <guiseq><gui>Etiquetas</gui><gui>Crear etiqueta nueva...</gui></guiseq>.</p>
     </item>
     <item>
-      <p>Select a parent tag for the new tag to appear under, such as people
-         or events.  If you wish to create a new tag without a parent, select
-         <gui>(None)</gui>.</p>
+      <p>Seleccione una etiqueta padre para que la nueva etiqueta aparezca bajo ella, tales como gente o eventos. Si quiere crear una etiqueta nueva sin padre, seleccione <gui>(Ninguno)</gui>.</p>
     </item>
     <item>
-      <p>Name the tag.</p>
+      <p>Nombre de la etiqueta.</p>
     </item>
     <item>
-      <p>Click <gui>Create</gui></p>
+      <p>Pulse <gui>Crear</gui></p>
     </item>
   </steps>
-  <p>Method Two:</p>
+  <p>Método uno:</p>
   <steps>
     <item>
-      <p>In the tags page, right click, and select <gui>Create New Tag...</gui>
-      </p>
+      <p>En el panel de etiquetas, pulse con el botón derecho del ratón y seleccione <gui>Crear etiqueta nueva...</gui></p>
     </item>
     <item>
-      <p>Select a parent tag for the new tag to appear under, such as people
-         or events.  If you wish to create a new tag without a parent, select
-         <gui>(None)</gui>.</p>
+      <p>Seleccione una etiqueta padre para que la nueva etiqueta aparezca bajo ella, tales como gente o eventos. Si quiere crear una etiqueta nueva sin padre, seleccione <gui>(Ninguno)</gui>.</p>
     </item>
     <item>
-      <p>Name the tag.</p>
+      <p>Nombre de la etiqueta.</p>
     </item>
     <item>
-      <p>Click <gui>Create</gui></p>
+      <p>Pulse <gui>Crear</gui></p>
     </item>
   </steps>
-  <p>Method three has the advantage of also <link xref="tag-attach">
-     attaching</link> the new tag to the photos selected.  To do this:</p>
+  <p>El método tres tiene la ventana de que puede <link xref="tag-attach">adjuntar</link> la etiqueta nueva a las fotos seleccionadas. Para hacerlo:</p>
   <steps>
     <item>
-      <p>Select the photos to which you wish to attach the new tag.</p>
+      <p>Seleccione las fotos en las que quiere añadir la etiqueta nueva.</p>
     </item>
     <item>
-      <p>Right-click on the photos, and select <guiseq><gui>Attach Tag</gui>
-         <gui>Create New Tag...</gui></guiseq>.</p>
+      <p>Pulse con el botón derecho sobre las fotos y seleccione <guiseq><gui>Adjuntar etiqueta</gui><gui>Crear etiqueta nueva...</gui>.</guiseq></p>
     </item>
     <item>
-      <p>Select a parent tag for the new tag to appear under, such as people
-         or events.  If you wish to create a new tag without a parent, select
-         <gui>(None)</gui>.</p>
+      <p>Seleccione una etiqueta padre para que la nueva etiqueta aparezca bajo ella, tales como gente o eventos. Si quiere crear una etiqueta nueva sin padre, seleccione <gui>(Ninguno)</gui>.</p>
     </item>
     <item>
-      <p>Name the tag.</p>
+      <p>Nombre de la etiqueta.</p>
     </item>
     <item>
-      <p>Click <gui>Create</gui></p>
+      <p>Pulse <gui>Crear</gui></p>
     </item>
   </steps>
 </page>

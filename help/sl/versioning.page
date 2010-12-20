@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="versions">
+
+  <info>
+    <link type="guide" xref="index#advanced"/>
+    <desc>Sledite različnim različicam svojih fotografij</desc>
+  </info>
+
+  <title>Različice</title>
+  <p><app>F-Spot</app> vam omogoča obdržati več različic svojih fotografij. To je še posebno uporabno pri urejanju fotografij, saj lahko hitro vidite razlike med urejeno različico in izvirnikom.</p>
+  <p>Za menjavo med različicami med urejanjem:</p>
+  <steps>
+    <item>
+      <p>Dvokliknite na fotografijo, ki jo želite urediti.</p>
+    </item>
+    <item>
+      <p>V stranski vrstici boste videli spustno polje z oznako <gui>Različica:</gui>. Za izbiro različice za ogled jo izberite v spustnem polju.</p>
+    </item>
+  </steps>
+</page>

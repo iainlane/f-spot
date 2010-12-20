@@ -36,7 +36,7 @@ namespace Hyena.Data.Gui
 {
     public class ColumnHeaderCellText : ColumnCellText, IHeaderCell
     {
-        public delegate Column DataHandler ();
+        public new delegate Column DataHandler ();
 
         private DataHandler data_handler;
         private bool has_sort;
@@ -52,26 +52,26 @@ namespace Hyena.Data.Gui
             return new  ColumnHeaderCellTextAccessible (BoundObject, this, parent);
         }
 
-        public override void Render (CellContext context, StateType state, double cellWidth, double cellHeight)
+        public override void Render (CellContext context, double cellWidth, double cellHeight)
         {
             if (data_handler == null) {
                 return;
             }
 
             if (!has_sort) {
-                base.Render (context, state, cellWidth, cellHeight);
+                base.Render (context, cellWidth, cellHeight);
                 return;
             }
 
             Gdk.Rectangle arrow_alloc = new Gdk.Rectangle ();
             arrow_alloc.Width = (int)(cellHeight / 3.0);
             arrow_alloc.Height = (int)((double)arrow_alloc.Width / 1.6);
-            arrow_alloc.X = (int)cellWidth - arrow_alloc.Width - Spacing;
+            arrow_alloc.X = (int)cellWidth - arrow_alloc.Width - (int)Padding.Left;
             arrow_alloc.Y = ((int)cellHeight - arrow_alloc.Height) / 2;
 
-            double textWidth = arrow_alloc.X - Spacing;
+            double textWidth = arrow_alloc.X - Padding.Left;
             if (textWidth > 0) {
-                base.Render (context, state, textWidth, cellHeight);
+                base.Render (context, textWidth, cellHeight);
             }
 
             SortType sort_type = ((ISortableColumn)data_handler ()).SortType;
@@ -92,7 +92,7 @@ namespace Hyena.Data.Gui
 
         public static int GetArrowWidth (int headerHeight)
         {
-            return (int)(headerHeight / 3.0) + Spacing;
+            return (int)(headerHeight / 3.0) + 4;
         }
     }
 }

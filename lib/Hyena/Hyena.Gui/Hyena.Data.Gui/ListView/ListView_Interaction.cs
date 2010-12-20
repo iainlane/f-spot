@@ -205,6 +205,8 @@ namespace Hyena.Data.Gui
                         HeaderFocused = false;
                     }
                     break;
+                case Gdk.Key.l:
+                case Gdk.Key.L:
                 case Gdk.Key.Right:
                 case Gdk.Key.KP_Right:
                     handled = true;
@@ -215,6 +217,8 @@ namespace Hyena.Data.Gui
                         InvalidateHeader ();
                     }
                     break;
+                case Gdk.Key.h:
+                case Gdk.Key.H:
                 case Gdk.Key.Left:
                 case Gdk.Key.KP_Left:
                     handled = true;
@@ -308,7 +312,7 @@ namespace Hyena.Data.Gui
 
 #region DataViewLayout Interaction Events
 
-        private DataViewChild last_layout_child;
+        private CanvasItem last_layout_child;
 
         private bool LayoutChildHandlesEvent (Gdk.Event evnt, bool press)
         {
@@ -337,6 +341,7 @@ namespace Hyena.Data.Gui
                 return false;
             }
 
+            point.Offset (-list_interaction_alloc.X, -list_interaction_alloc.Y);
             point.Offset (-child.VirtualAllocation.X, -child.VirtualAllocation.Y);
 
             if (evnt_motion != null) {
@@ -355,7 +360,7 @@ namespace Hyena.Data.Gui
             return handled;
         }
 
-        private DataViewChild GetLayoutChildAt (Point point)
+        private CanvasItem GetLayoutChildAt (Point point)
         {
             point.Offset (-list_interaction_alloc.X, -list_interaction_alloc.Y);
             return ViewLayout.FindChildAtPoint (point);
@@ -370,7 +375,7 @@ namespace Hyena.Data.Gui
 
         private void InvalidateLastIcell ()
         {
-            if (last_icell != null && last_icell.PointerLeaveEvent ()) {
+            if (last_icell != null && last_icell.CursorLeaveEvent ()) {
                 QueueDirtyRegion (last_icell_area);
                 last_icell = null;
                 last_icell_area = Gdk.Rectangle.Zero;
@@ -387,7 +392,7 @@ namespace Hyena.Data.Gui
             int yoffset = VadjustmentValue;
 
             if (last_icell_area != icell_area) {
-                if (last_icell != null && last_icell.PointerLeaveEvent ()) {
+                if (last_icell != null && last_icell.CursorLeaveEvent ()) {
                     QueueDirtyRegion (new Gdk.Rectangle () {
                         X = last_icell_area.X - xoffset,
                         Y = last_icell_area.Y - yoffset,
@@ -456,9 +461,9 @@ namespace Hyena.Data.Gui
 
             // Send the cell a synthesized input event
             if (evnt_motion != null) {
-                return icell.MotionEvent (x, y, evnt_motion);
+                return icell.CursorMotionEvent (new Hyena.Gui.Canvas.Point (x, y));
             } else {
-                return icell.ButtonEvent (x, y, press, evnt_button);
+                return icell.ButtonEvent (new Hyena.Gui.Canvas.Point (x, y), press, evnt_button.Button);
             }
         }
 
@@ -494,7 +499,7 @@ namespace Hyena.Data.Gui
             }
 
             // Bind the row to the cell
-            cell.BindListItem (model[row_index]);
+            cell.Bind (model[row_index]);
             return true;
         }
 
@@ -863,7 +868,7 @@ namespace Hyena.Data.Gui
         {
             if (ViewLayout != null) {
                 var child = ViewLayout.FindChildAtPoint (new Point (x, y));
-                return child == null ? -1 : child.ModelRowIndex;
+                return child == null ? -1 : ViewLayout.GetModelIndex (child);
             } else {
                 if (y < 0 || ChildSize.Height <= 0) {
                     return -1;

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="guide" id="index">
+
+  <info>
+    <title type="link">Gestionnaire de photos F-Spot</title>
+    <title type="text">Gestionnaire de photos F-Spot</title>
+  </info>
+
+  <title>Gestionnaire de photos F-Spot</title>
+
+  <section id="basic-functions" style="2column" groups="import tag rate management">
+    <title>Fonctions de base</title>
+  </section>
+
+  <section id="searching" style="2column">
+    <title>Recherche</title>
+  </section>
+
+  <section id="editing" style="2column" groups="general colors enhancements">
+    <title>Modification de photos</title>
+  </section>
+
+  <section id="sharing" style="2column">
+    <title>Partage</title>
+  </section>
+
+  <section id="advanced" style="2column">
+    <title>Options avancées</title>
+  </section>
+</page>

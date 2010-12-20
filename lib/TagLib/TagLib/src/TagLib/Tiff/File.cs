@@ -238,7 +238,7 @@ namespace TagLib.Tiff
 				// Find XMP data
 				var xmp_entry = ImageTag.Exif.Structure.GetEntry (0, (ushort) IFDEntryTag.XMP) as ByteVectorIFDEntry;
 				if (xmp_entry != null) {
-					ImageTag.AddTag (new XmpTag (xmp_entry.Data.ToString ()));
+					ImageTag.AddTag (new XmpTag (xmp_entry.Data.ToString (), this));
 				}
 
 				if (propertiesStyle == ReadStyle.None)
@@ -259,7 +259,7 @@ namespace TagLib.Tiff
 		///    at the right values. When no guess at all can be made,
 		///    <see langword="null" /> is returned.
 		/// </returns>
-		private Properties ExtractProperties ()
+		protected virtual Properties ExtractProperties ()
 		{
 			int width = 0, height = 0;
 

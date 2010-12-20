@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="file-management">
+
+  <info>
+    <link type="guide" xref="index#basic-functions" group="management"/>
+    <desc>Upravljanje že uvoženih slik</desc>
+  </info>
+
+  <title>Upravljanje datotek</title>
+
+  <p><app>F-Spot</app> omogoča nekaj nadzora nad vsebino kataloga, to je možnost odstranjevanja ali izbrisa datotek iz vašega kataloga.</p>
+  <p>Za odstranitev datotek iz kataloga:</p>
+  <steps>
+    <item>
+      <p>Izberite fotografije, ki jih želite odstraniti iz kataloga.</p>
+    </item>
+    <item>
+      <p>Desno kliknite na fotografije in izberite <gui>Odstrani iz kataloga</gui>. Dodatno lahko izberete   <guiseq><gui>Uredi</gui><gui>Odstrani iz kataloga</gui></guiseq> ali pritisnete tipko Izbriši na svoji tipkovnici.</p>
+    </item>
+  </steps>
+  <p>Za izbris fotografij s svojega računalnika:</p>
+  <steps>
+    <item>
+      <p>Izberite fotografije, ki jih želite izbrisati.</p>
+    </item>
+    <item>
+      <p>Desno kliknite na fotografije in izberite <gui>Izbriši s pogona</gui>. Dodatno lahko na izberete <guiseq><gui>Uredi</gui><gui>Izbriši s pogona</gui></guiseq> ali na svoji tipkovnici pritisnete Shift+Izbriši.</p>
+    </item>
+  </steps>
+</page>

@@ -26,6 +26,7 @@ SOURCES =  \
 	Hyena.Data/ICacheableItem.cs \
 	Hyena.Data/ICacheableModel.cs \
 	Hyena.Data/ICareAboutView.cs \
+	Hyena.Data/IDataBinder.cs \
 	Hyena.Data/IFilterable.cs \
 	Hyena.Data/IListModel.cs \
 	Hyena.Data/IPropertyStoreExpose.cs \
@@ -35,15 +36,18 @@ SOURCES =  \
 	Hyena.Data/MemoryListModel.cs \
 	Hyena.Data/ModelCache.cs \
 	Hyena.Data/ModelSelection.cs \
+	Hyena.Data/ObjectBinder.cs \
 	Hyena.Data/PropertyStore.cs \
 	Hyena.Data/SortType.cs \
 	Hyena.Downloader/Buffer.cs \
 	Hyena.Downloader/DownloadManager.cs \
+	Hyena.Downloader/DownloadManagerJob.cs \
 	Hyena.Downloader/HttpDownloader.cs \
 	Hyena.Downloader/HttpDownloaderState.cs \
 	Hyena.Downloader/HttpFileDownloader.cs \
 	Hyena.Downloader/HttpStringDownloader.cs \
 	Hyena.Downloader/Tests/HttpTestServer.cs \
+	Hyena.Downloader/Tests/Tests.cs \
 	Hyena.Jobs/Job.cs \
 	Hyena.Jobs/JobExtensions.cs \
 	Hyena.Jobs/PriorityHints.cs \

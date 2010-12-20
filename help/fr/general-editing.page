@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="general-editing">
+  <info>
+    <link type="guide" xref="index#editing" group="general"/>
+    <desc>Effectuer des modifications simples de vos photos</desc>
+  </info>
+
+  <title>Modifications générales</title>
+
+  <p><app>F-Spot</app> vous permet de faire des modifications générales simples, comme redresser, découper et faire pivoter vos photos.</p>
+  <p>Il y a trois façons d'effectuer la rotation d'une photo sélectionnée :</p>
+  <steps>
+    <item>
+      <p>Cliquez sur le bouton de rotation approprié, à droite du bouton d'importation.</p>
+    </item>
+    <item>
+      <p>Sélectionnez l'option appropriée dans le menu <gui>Édition</gui>.</p>
+    </item>
+    <item>
+      <p>Utilisez les touches de raccourcis crochets « [ ] » pour faire tourner la photo.</p>
+    </item>
+  </steps>
+  <p>Pour redresser la photo sélectionnée :</p>
+  <steps>
+    <item>
+      <p>Dans le volet Modifier, sélectionnez <gui>Redressement</gui>.</p>
+    </item>
+    <item>
+      <p>Sélectionnez un angle de rotation, compris entre -45 et 45 degrés.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Redressement</gui></p>
+    </item>
+  </steps>
+  <p>Pour découper la photo sélectionnée :</p>
+  <steps>
+    <item>
+      <p>Cliquez sur le bouton <gui>Rogner</gui> dans le volet Modifier.</p>
+    </item>
+    <item>
+      <p>Choisissez une contrainte de format, c'est-à-dire le rapport hauteur-largeur dans laquelle la photo doit s'inscrire, par exemple 4x3, 4x6 et 5x7.</p>
+    </item>
+    <item>
+      <p>Cliquez puis déplacez le pointeur de la souris pour sélectionner la surface souhaitée à conserver. Cette zone peut ensuite encore être déplacée avec la souris après avoir choisi sa taille.</p>
+    </item>
+    <item>
+      <p>Après avoir choisi la zone à conserver, cliquez sur <gui>Rogner</gui>.</p>
+    </item>
+  </steps>
+</page>

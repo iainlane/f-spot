@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="guide" id="upload-to-web">
+
+  <info>
+    <link type="guide" xref="index#sharing"/>
+    <desc>Pošljanje fotografij na različne spletne storitve</desc>
+  </info>
+
+  <title>Pošljanje na splet</title>
+  <p><app>F-Spot</app> vam omogoča pošiljanje fotografij na priljubljene spletne storitve vključno z Google-ovim PicasaWeb in Flickr-jem.</p>
+</page>

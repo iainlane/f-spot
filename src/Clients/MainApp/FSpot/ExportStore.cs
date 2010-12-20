@@ -2,7 +2,6 @@ using Gdk;
 using Gtk;
 using System.Collections;
 using System.IO;
-using System.Data;
 using System;
 using FSpot;
 using FSpot.Core;
@@ -83,7 +82,7 @@ public class ExportStore : DbStore<ExportItem> {
 			AddToCache (LoadItem (reader));
 		}
 
-		reader.Close ();
+		reader.Dispose ();
 	}
 
 	public ExportItem Create (uint image_id, uint image_version_id, string export_type, string export_token)
@@ -122,7 +121,7 @@ public class ExportStore : DbStore<ExportItem> {
 		while (reader.Read ()) {
 			list.Add (LoadItem (reader));
 		}
-		reader.Close ();
+		reader.Dispose ();
 
 		return list;
 	}

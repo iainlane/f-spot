@@ -4,7 +4,6 @@ using Mono.Unix;
 using System.Collections.Generic;
 using System.Collections;
 using System.IO;
-using System.Data;
 using System;
 using FSpot;
 using FSpot.Core;
@@ -13,7 +12,6 @@ using FSpot.Jobs;
 using FSpot.Query;
 using FSpot.Utils;
 using Hyena;
-
 using Hyena.Data.Sqlite;
 
 namespace FSpot {
@@ -153,7 +151,7 @@ public class TagStore : DbStore<Tag> {
 			AddToCache (tag);
 		}
 
-		reader.Close ();
+		reader.Dispose ();
 
 		// Pass 2, set the parents.
 		reader = Database.Query ("SELECT id, category_id FROM tags");
@@ -174,7 +172,7 @@ public class TagStore : DbStore<Tag> {
 			}
 
 		}
-		reader.Close ();
+		reader.Dispose ();
 
 		//Pass 3, set popularity
 		reader = Database.Query ("SELECT tag_id, COUNT (*) AS popularity FROM photo_tags GROUP BY tag_id");
@@ -183,7 +181,7 @@ public class TagStore : DbStore<Tag> {
 			if (t != null)
 				t.Popularity = Convert.ToInt32 (reader ["popularity"]);
 		}
-		reader.Close ();
+		reader.Dispose ();
 
 		if (FSpot.App.Instance.Database.Meta.HiddenTagId.Value != null)
 			hidden = LookupInCache ((uint) FSpot.App.Instance.Database.Meta.HiddenTagId.ValueAsInt) as Tag;

@@ -8,31 +8,24 @@
 
   <title>Facebook</title>
 
-  <p>To upload photos to Facebook you will need a Facebook account, as well as
-     internet access.  Also, the Facebook
-     <link xref="extensions">extension</link> must be installed and enabled.
-     </p>
+  <p>Para subir fotos a Facebook necesitará una cuenta Facebook, así como acceso a internet. También debe tener instalada y activada la <link xref="extensions">extensión</link> Facebook.</p>
 
-  <p>To post selected photos to Facebook:</p>
+  <p>Para publicar las fotos seleccionadas en Facebook:</p>
   <steps>
     <item>
-      <p>Select <guiseq><gui>Photo</gui><gui>Export To</gui><gui>Facebook</gui>
-      </guiseq>.</p>
+      <p>Seleccione <guiseq><gui>Foto</gui><gui>Exportar a</gui><gui>Facebook</gui></guiseq>.</p>
     </item>
     <item>
-      <p>Click <gui>Login</gui>.  A browser window will be brought up.  Log in
-         to Facebook and click "Allow" to allow F-Spot access to your Facebook
-         profile.</p>
+      <p>Pulse <gui>Iniciar sesión</gui>. Se mostrará una ventana de un navegador. Inicie sesión en Facebook y pulse «Permitir» para permitir a F-Spot acceder a su perfil de Facebook.</p>
     </item>
     <item>
-      <p>Select whether to create a new album or add to an existing album.  If
-         you are creating a new album, fill in the relevant information.</p>
+      <p>Seleccione si quiere crear un álbum nuevo o añadir fotos a un álbum existente. Si está creando un álbum nuevo, rellene la información relevante.</p>
     </item>
     <item>
-      <p>Edit captions for each photo, if so desired.</p>
+      <p>Edite los títulos para cada foto, si así lo desea.</p>
     </item>
     <item>
-      <p>When finished, click <gui>Add</gui>.</p>
+      <p>Cuando haya terminado pulse <gui>Añadir</gui>.</p>
     </item>
   </steps>
 </page>

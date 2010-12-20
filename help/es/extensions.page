@@ -3,79 +3,77 @@
 
   <info>
     <link type="guide" xref="index#advanced"/>
-    <desc>Working with <app>F-Spot</app> extensions</desc>
+    <desc>Trabajar con las extensiones de <app>F-Spot</app></desc>
   </info>
 
   <title>Extensiones</title>
 
-  <p><app>F-Spot</app> allows for the use of extensions to provide additional
-     functionality.</p>
+  <p><app>F-Spot</app> permite usar extensiones para proporcionar funcionalidades adicionales.</p>
 
-  <p>To open the extension manager, select <guiseq><gui>Edit</gui>
-     <gui>Manage Extensions</gui></guiseq>.</p>
+  <p>Para abrir el gestor de extensiones seleccione <guiseq><gui>Editar</gui><gui>Gestionar extensiones</gui></guiseq>.</p>
 
-  <p>To install extensions:</p>
+  <p>Instalar extensiones:</p>
   <steps>
     <item>
-      <p>Open the extension manager.</p>
+      <p>Abrir el gestor de extensiones.</p>
     </item>
     <item>
-      <p>Click <gui>Install Add-ins</gui>.</p>
+      <p>Pulse <gui>Instalar complementos</gui>.</p>
     </item>
     <item>
-      <p>Select an add-on to install from the list.</p>
+      <p>Seleccione un complemento de la lista para instalar.</p>
     </item>
     <item>
-      <p>Click <gui>Forward</gui>.</p>
+      <p>Pulse </p>
     </item>
     <item>
-      <p>Verify all information, and click <gui>Forward</gui> again.</p>
+      <p>Compruebe toda la información y pulse <gui>Siguiente</gui> de nuevo.</p>
     </item>
     <item>
-      <p>Click <gui>Ok</gui>.</p>
+      <p>Pulse <gui>Aceptar</gui>.</p>
     </item>
   </steps>
 
-  <p>To enable plugins that are already installed:</p>
+  <p>Activar complementos que ya están instalados:</p>
   <steps>
     <item>
-      <p>Open the extension manager.</p>
+      <p>Abrir el gestor de extensiones.</p>
     </item>
     <item>
-      <p>Select the extension you wish to enable.</p>
+      <p>Seleccione la extensión que quiere activar.</p>
     </item>
     <item>
-      <p>Click <gui>Enable</gui>.</p>
+      <p>Pulse <gui>Activar</gui>.</p>
     </item>
   </steps>
-  <p>To disable plugins that are installed:</p>
+  <p>Desactivar complementos que están instalados:</p>
   <steps>
     <item>
-      <p>Open the extension manager.</p>
+      <p>Abrir el gestor de extensiones.</p>
     </item>
     <item>
-      <p>Select the extension you wish to disable.</p>
+      <p>Seleccione la extensión que quiere desactivar.</p>
     </item>
     <item>
-      <p>Click <gui>Disable</gui>.</p>
+      <p>Pulse <gui>Desactivar</gui>.</p>
     </item>
   </steps>
-  <p>To uninstall plugins:</p>
+  <p>Desinstalar complementos:</p>
   <steps>
     <item>
-      <p>Open the extension manager.</p>
+      <p>Abrir el gestor de extensiones.</p>
     </item>
     <item>
-      <p>Select the extension you wish to uninstall.</p>
+      <p>Seleccione la extensión que quiere desinstalar.</p>
     </item>
     <item>
-      <p>Click <gui>Uninstall</gui>.</p>
+      <p>Pulse <gui>Desinstalar</gui>.</p>
     </item>
     <item>
-      <p>Click <gui>Forward</gui>.</p>
+      <p>Pulse </p>
     </item>
     <item>
-      <p>Click <gui>Ok</gui>.</p>
+      <p>Pulse <gui>Aceptar</gui>.</p>
     </item>
   </steps>
 </page>

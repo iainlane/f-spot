@@ -2,58 +2,49 @@
 <page xmlns="http://projectmallard.org/1.0/" type="topic" id="general-editing">
   <info>
     <link type="guide" xref="index#editing" group="general"/>
-    <desc>Make simple edits to your photos</desc>
+    <desc>Realice ediciones simples de sus fotos</desc>
   </info>
 
-  <title>
-    General Editing
-  </title>
+  <title>Edición general</title>
 
-  <p><app>F-Spot</app> allows you to make simple general edits, including
-     straightening, cropping, and rotating your photos.</p>
-  <p>There are three ways to rotate a selected photo:</p>
+  <p><app>F-Spot</app> le permite realizar ediciones generales simples, incluyendo enderezar, recortar y rotar sus fotos.</p>
+  <p>Existen tres formas de rotar una foto seleccionada:</p>
   <steps>
     <item>
-      <p>Click the appropriate rotate button, to the right of the import
-         button.</p>
+      <p>Pulse el botón de rotación apropiado, a la izquierda del botón de importación.</p>
     </item>
     <item>
-      <p>Select the appropriate option from within the <gui>Edit</gui> menu.
-      </p>
+      <p>Seleccione la opción apropiada en el menú <gui>Editar</gui>.</p>
     </item>
     <item>
-      <p>Use the bracket keys to rotate the photo.</p>
+      <p>Use las teclas de paréntesis para rotar la foto.</p>
     </item>
   </steps>
-  <p>To straighten a selected photo:</p>
+  <p>Enderezar una foto seleccionada:</p>
   <steps>
     <item>
-      <p>From within the editing pane, select <app>Straighten</app>.</p>
+      <p>Desde el panel de edición seleccione <app>Enderezar</app>.</p>
     </item>
     <item>
-      <p>Select a rotation, ranging from -45 to 45 degrees.</p>
+      <p>Seleccione una rotación, desde -45º a 45º.</p>
     </item>
     <item>
-      <p>Click <gui>Straighten</gui>.</p>
+      <p>Pulse <gui>Enderezar</gui>.</p>
     </item>
   </steps>
-  <p>To crop a selected photo:</p>
+  <p>Recortar una foto seleccionada:</p>
   <steps>
     <item>
-      <p>Click the <gui>Crop</gui> button in the Edit pane.</p>
+      <p>Pulse el botón <gui>Recortar</gui> en el panel de edición.</p>
     </item>
     <item>
-      <p>Select a contraining aspect ratio, that is, a proportion of height
-         to width to which the new photo must fit.  Examples of contraining
-         aspect ratios include 4x3, 4x6, and 5x7.</p>
+      <p>Seleccione la tasa de proporción, esto es, la proporción entre la altura y la anchura en la que la nueva foto debe ajustarse. Los ejemplos de proporciones incluyen 4x3, 4x6 y 5x7.</p>
     </item>
     <item>
-      <p>Click and drag to select the desired area to keep.  This box can be
-         dragged around after being sized.</p>
+      <p>Pulse y arrastre para seleccionar el área deseado para mantener. Esta caja se puede arrastrar alrededor después de marcar el tamaño.</p>
     </item>
     <item>
-      <p>When you have selected your area to crop to, click <gui>Crop</gui>.
-      </p>
+      <p>Cuando haya seleccionado el área para recortar pulse <gui>Recortar</gui>.</p>
     </item>
   </steps>
 </page>

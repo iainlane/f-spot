@@ -177,7 +177,7 @@ namespace TagLib.IFD
 				StartIFDLoopDetect ();
 				do {
 					if (DetectIFDLoop (base_offset + next_offset)) {
-						file.PossiblyCorrupt = true; // IFD loop
+						file.MarkAsCorrupt ("IFD loop detected");
 						break;
 					}
 					next_offset = ReadIFD (base_offset, next_offset, max_offset);
@@ -270,8 +270,7 @@ namespace TagLib.IFD
 			}
 
 			if (base_offset + offset > length) {
-				// Invalid IFD offset
-				file.PossiblyCorrupt = true;
+				file.MarkAsCorrupt ("Invalid IFD offset");
 				return 0;
 			}
 
@@ -281,8 +280,7 @@ namespace TagLib.IFD
 			ushort entry_count = ReadUShort ();
 
 			if (file.Tell + 12 * entry_count > base_offset + max_offset) {
-				// Size of entries exceeds possible data size
-				file.PossiblyCorrupt = true;
+				file.MarkAsCorrupt ("Size of entries exceeds possible data size");
 				return 0;
 			}
 
@@ -296,6 +294,14 @@ namespace TagLib.IFD
 				ushort type = entry_data.Mid (2, 2).ToUShort (is_bigendian);
 				uint value_count = entry_data.Mid (4, 4).ToUInt (is_bigendian);
 				ByteVector offset_data = entry_data.Mid (8, 4);
+
+                // Even if the value count represents a single bytes it's impossible
+                // for the count plus the base offset to be bigger than the entire file,
+                // ignore this entry and keep going
+                if (value_count + base_offset > max_offset) {
+                    file.MarkAsCorrupt("Value count + base offset is greater than the maximum possible offset");
+                    continue;
+                }
 
 				IFDEntry entry = CreateIFDEntry (entry_tag, type, value_count, base_offset, offset_data, max_offset);
 
@@ -362,7 +368,7 @@ namespace TagLib.IFD
 
 			if (count > 0x10000000) {
 				// Some Nikon files are known to exhibit this corruption (or "feature").
-				file.PossiblyCorrupt = true;
+				file.MarkAsCorrupt ("Impossibly large item count");
 				return null;
 			}
 
@@ -510,7 +516,7 @@ namespace TagLib.IFD
 				if (tag == (ushort) ExifEntryTag.UserComment) {
 					ByteVector data = file.ReadBlock ((int) count);
 
-					return new UserCommentIFDEntry (tag, data);
+					return new UserCommentIFDEntry (tag, data, file);
 				}
 
 				if (type == (ushort) IFDEntryType.Undefined) {
@@ -525,7 +531,7 @@ namespace TagLib.IFD
 
 			if (type == 0 || type > 12) {
 				// Invalid type
-				file.PossiblyCorrupt = true;
+				file.MarkAsCorrupt ("Invalid item type");
 				return null;
 			}
 
@@ -933,6 +939,13 @@ namespace TagLib.IFD
 
 				uint [] data;
 				if (count >= 2) {
+
+					// This is impossible right?
+					if (base_offset + offset > file.Length) {
+						file.MarkAsCorrupt ("Length of SubIFD is too long");
+						return null;
+					}
+
 					file.Seek (base_offset + offset, SeekOrigin.Begin);
 					data = ReadUIntArray (count);
 				} else {

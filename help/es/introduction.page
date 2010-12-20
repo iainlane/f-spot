@@ -2,12 +2,10 @@
 <page xmlns="http://projectmallard.org/1.0/" type="topic" id="introduction">
   <info>
     <link type="guide" xref="index"/>
-    <desc>A brief introduction to F-Spot</desc>
+    <desc>Una pequeña introducción a F-Spot</desc>
   </info>
 
   <title>Introducción</title>
-  <p><app>F-Spot</app> is a full-featured photo manager for the GNOME Desktop,
-     allowing you to tag, rate, and date photos, edit photo metadata, and
-     even includes a simple in-program photo editor.</p>
-  <p>For help getting started using <app>F-Spot</app>, check out the <link xref="index#basic-functions">basic functions</link> of the help file.</p>
+  <p><app>F-Spot</app> es un gestor de fotos lleno de características para el Escritorio GNOME, permitiéndole etiquetar, puntuar y fechar fotos, editar los metadatos de las fotos e incluso incluye un pequeño editor simple de fotos.</p>
+  <p>Para obtener ayuda acerca de cómo comenzar a usar <app>F-Spot</app>, consulte el archivo de ayuda <link xref="index#basic-functions">funciones básicas</link>.</p>
 </page>

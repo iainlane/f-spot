@@ -3,13 +3,10 @@
 
   <info>
     <link type="guide" xref="upload-to-web"/>
-    <desc>Upload photos to SmugMug</desc>
+    <desc>Subir fotos a SmugMug</desc>
   </info>
 
   <title>SmugMug</title>
 
-  <p>To upload photos to SmugMug you will need a SmugMug account, as well as
-     internet access.  Also, the SmugMug
-     <link xref="extensions">extension</link> must be installed and enabled.
-     </p>
+  <p>Para subir fotos a SmugMug necesitará una cuenta SmugMug, así como acceso a internet. También debe tener instalada y activada la <link xref="extensions">extensión</link> SmugMug.</p>
 </page>

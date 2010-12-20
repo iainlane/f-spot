@@ -2,16 +2,14 @@
 <page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="guide" id="index">
 
   <info>
-    <title type="link">F-Spot photo manager</title>
-    <title type="text">F-Spot photo manager</title>
+    <title type="link">Gestor de fotos F-Spot</title>
+    <title type="text">Gestor de fotos F-Spot</title>
   </info>
 
-  <title>
-    F-Spot photo manager
-  </title>
+  <title>Gestor de fotos F-Spot</title>
 
   <section id="basic-functions" style="2column" groups="import tag rate management">
-    <title>Basic Functions</title>
+    <title>Funciones básicas</title>
   </section>
 
   <section id="searching" style="2column">
@@ -19,7 +17,7 @@
   </section>
 
   <section id="editing" style="2column" groups="general colors enhancements">
-    <title>Photo Editing</title>
+    <title>Edición de fotos</title>
   </section>
 
   <section id="sharing" style="2column">

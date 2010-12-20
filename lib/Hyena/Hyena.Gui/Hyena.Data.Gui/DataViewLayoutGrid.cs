@@ -38,7 +38,7 @@ namespace Hyena.Data.Gui
         public int Rows { get; private set; }
         public int Columns { get; private set; }
 
-        public Func<DataViewChild> ChildAllocator { get; set; }
+        public Func<CanvasItem> ChildAllocator { get; set; }
         public event EventHandler<EventArgs<int>> ChildCountChanged;
 
         protected override void InvalidateChildSize ()
@@ -78,6 +78,8 @@ namespace Hyena.Data.Gui
 
         protected override void InvalidateChildLayout ()
         {
+            base.InvalidateChildLayout ();
+
             if (ChildSize.Width <= 0 || ChildSize.Height <= 0) {
                 // FIXME: empty/reset all child slots here?
                 return;
@@ -89,7 +91,7 @@ namespace Hyena.Data.Gui
             int last_model_row = first_model_row + Rows * Columns;
 
             // Setup for the layout iteration
-            int model_row_index = first_model_row;
+            int child_span_width = (int)Math.Floor (ActualAllocation.Width / Columns);
             int layout_child_index = 0;
             int view_row_index = 0;
             int view_column_index = 0;
@@ -105,15 +107,16 @@ namespace Hyena.Data.Gui
 
             // Iterate the layout children and configure them for the current
             // view state to be consumed by interaction and rendering phases
-            for (; model_row_index < last_model_row; model_row_index++, layout_child_index++) {
+            for (int i = first_model_row; i < last_model_row; i++, layout_child_index++) {
                 var child = Children[layout_child_index];
                 child.Allocation = child_allocation;
                 child.VirtualAllocation = GetChildVirtualAllocation (child_allocation);
-                child.ModelRowIndex = model_row_index;
+
+                SetModelIndex (child, i);
                 if (Model != null) {
-                    child.BindDataItem (Model.GetItem (model_row_index));
+                    child.Bind (Model.GetItem (i));
                 }
-                child.Measure (ChildSize); // FIXME: Should not do this here...
+
                 child.Arrange ();
 
                 // Update the allocation for the next child
@@ -124,21 +127,22 @@ namespace Hyena.Data.Gui
                     child_allocation.Y += ChildSize.Height;
                     child_allocation.X = ActualAllocation.X;
                 } else {
-                    child_allocation.X += ChildSize.Width;
+                    child_allocation.X += child_span_width;
                 }
 
                 // FIXME: clear any layout children that go beyond the model
             }
         }
 
-        protected virtual DataViewChild CreateChild ()
+        protected virtual CanvasItem CreateChild ()
         {
             if (ChildAllocator == null) {
                 throw new InvalidOperationException ("ChildAllocator is unset");
             }
 
             var child = ChildAllocator ();
-            child.ParentLayout = this;
+            child.Manager = CanvasManager;
+            //child.ParentLayout = this;
             return child;
         }
 

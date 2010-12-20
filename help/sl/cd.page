@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="cd">
+
+  <info>
+    <link type="guide" xref="index#sharing"/>
+    <desc>Zapiši fotografije na CD</desc>
+  </info>
+
+  <title>Izvoz na CD</title>
+</page>

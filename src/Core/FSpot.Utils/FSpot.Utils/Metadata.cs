@@ -10,9 +10,15 @@ namespace FSpot.Utils
         public static TagLib.Image.File Parse (SafeUri uri)
         {
             // Detect mime-type
-            var gfile = FileFactory.NewForUri (uri);
-            var info = gfile.QueryInfo ("standard::content-type", FileQueryInfoFlags.None, null);
-            var mime = info.ContentType;
+            string mime;
+            try {
+                var gfile = FileFactory.NewForUri (uri);
+                var info = gfile.QueryInfo ("standard::content-type", FileQueryInfoFlags.None, null);
+                mime = info.ContentType;
+            } catch (Exception e) {
+                Hyena.Log.DebugException (e);
+                return null;
+            }
 
             if (mime.StartsWith ("application/x-extension-")) {
                 // Works around broken metadata detection - https://bugzilla.gnome.org/show_bug.cgi?id=624781
@@ -63,10 +69,26 @@ namespace FSpot.Utils
             }
         }
 
+        private delegate SafeUri GenerateSideCarName (SafeUri photo_uri);
+        private static GenerateSideCarName[] SidecarNameGenerators = {
+            (p) => new SafeUri (p.AbsoluteUri + ".xmp"),
+            (p) => p.ReplaceExtension (".xmp"),
+        };
+
         public static SafeUri GetSidecarUri (SafeUri photo_uri)
         {
-            // TODO: We might consider alternate namings here
-            return photo_uri.ReplaceExtension (".xmp");
+            // First probe for existing sidecar files, use the one that's found.
+            foreach (var generator in SidecarNameGenerators) {
+                var name = generator (photo_uri);
+                var file = GLib.FileFactory.NewForUri (name);
+                if (file.Exists) {
+                    return name;
+                }
+            }
+            
+
+            // Fall back to the default strategy.
+            return SidecarNameGenerators[0] (photo_uri);
         }
     }
 }

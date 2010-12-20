@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="flickr">
+
+  <info>
+    <link type="guide" xref="upload-to-web"/>
+    <desc>Pošiljanje fotografij na Flickr</desc>
+  </info>
+
+  <title>Flickr</title>
+
+  <p>Za pošiljanje fotografij na Flick boste potrebovali račun Flickr in internetni dostop. Poleg tega mora biti <link xref="extensions">razširitev</link> Flickr nameščena in omogočena.</p>
+</page>

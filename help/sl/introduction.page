@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="introduction">
+  <info>
+    <link type="guide" xref="index"/>
+    <desc>Kratek uvod v F-Spot</desc>
+  </info>
+
+  <title>Uvod</title>
+  <p><app>F-Spot</app> je polno zmogljiv upravljalnik fotografij za namizje GNOME. Omogoča vam oznako, oceno in datiranje fotografij, urejanje metapodatkov fotografij in vključuje celo majhen vgrajen urejevalnik fotografij.</p>
+  <p>Za pomoč pri začetku uporabe <app>F-Spot</app> si oglejte <link xref="index#basic-functions">osnovne zmožnosti</link> v datoteki pomoči.</p>
+</page>

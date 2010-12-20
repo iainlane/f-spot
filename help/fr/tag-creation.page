@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-creation">
+  <info>
+    <link type="guide" xref="tags#tag-functions" group="create"/>
+    <desc>Création d'étiquettes à attribuer aux photos</desc>
+  </info>
+
+  <title>Création</title>
+  <p>Pour pouvoir utiliser des étiquettes, vous devez d'abord en créer un assortiment qui vous convienne. Il y a trois méthodes principales pour créer des étiquettes.</p>
+  <p>Première méthode :</p>
+  <steps>
+    <item>
+      <p>Choisissez dans le menu <guiseq><gui>Étiquettes</gui><gui>Créer une nouvelle étiquette</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Choisissez une étiquette parente sous laquelle apparaîtra la nouvelle éiquette, comme Personnes ou Évènements. Si vous souhaitez créer une nouvelle étiquette non parente, choisissez <gui>(aucun)</gui>.</p>
+    </item>
+    <item>
+      <p>Nommez l'étiquette.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Créer</gui></p>
+    </item>
+  </steps>
+  <p>Deuxième méthode :</p>
+  <steps>
+    <item>
+      <p>Dans le volet Étiquettes, faites un clic droit, et sélectionnez <gui>Créer une nouvelle étiquette...</gui></p>
+    </item>
+    <item>
+      <p>Choisissez une étiquette parente sous laquelle apparaîtra la nouvelle éiquette, comme Personnes ou Évènements. Si vous souhaitez créer une nouvelle étiquette non parente, choisissez <gui>(aucun)</gui>.</p>
+    </item>
+    <item>
+      <p>Nommez l'étiquette.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Créer</gui></p>
+    </item>
+  </steps>
+  <p>La troisième méthode permet en plus d'<link xref="tag-attach">attribuer</link> la nouvelle étiquette aux photos sélectionnées. Procédez comme suit :</p>
+  <steps>
+    <item>
+      <p>Sélectionnez les photos auxquelles vous souhaitez attribuer la nouvelle étiquette.</p>
+    </item>
+    <item>
+      <p>D'un clic droit sur les photos, sélectionnez <guiseq><gui>Attribuer l'étiquette</gui><gui>Créer une nouvelle étiquette...</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Choisissez une étiquette parente sous laquelle apparaîtra la nouvelle éiquette, comme Personnes ou Évènements. Si vous souhaitez créer une nouvelle étiquette non parente, choisissez <gui>(aucun)</gui>.</p>
+    </item>
+    <item>
+      <p>Nommez l'étiquette.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <gui>Créer</gui></p>
+    </item>
+  </steps>
+</page>

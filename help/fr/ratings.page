@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="ratings">
+  <info>
+    <link type="guide" xref="index#basic-functions" group="rate"/>
+    <desc>Notez vos photos de une à cinq étoiles.</desc>
+  </info>
+
+  <title>Notation de vos photos</title>
+  <p><app>F-Spot</app> vous permet de noter vos photos de une à cinq étoiles. Il y a deux façons de noter des photos.</p>
+  <p>Première méthode :</p>
+  <steps>
+    <item>
+      <p>Double-cliquez sur la photo que vous souhaitez noter.</p>
+    </item>
+    <item>
+      <p>Dans le coin inférieur droite, vous voyez cinq points vous permettant d'attribuer une note correspondant à votre estimation ; pour donner une note d'une étoile, par exemple, cliquez sur le premier point.</p>
+    </item>
+  </steps>
+  <p>Deuxième méthode :</p>
+  <steps>
+    <item>
+      <p>Sélectionnez la ou les photos que vous souhaitez noter.</p>
+    </item>
+    <item>
+      <p>D'un clic droit sur la ou les photos que vous souhaitez noter, choisissez une note en bas du menu contextuel en sélectionnant le point correspondant.</p>
+    </item>
+  </steps>
+</page>

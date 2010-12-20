@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="import-roll-search">
+
+  <info>
+    <link type="guide" xref="index#searching"/>
+    <desc>Recherche par date d'importation</desc>
+  </info>
+
+  <title>Recherche par série d'importation</title>
+
+  <p>Les séries d'importation sont des « lots » de photos importées. Quelle que soit la date à laquelle la photo a été prise, l'horodatage de la série est défini par sa date d'importation.</p>
+  <p>Pour rechercher la dernière série d'importation :</p>
+  <steps>
+    <item>
+      <p>Choisissez dans le menu <guiseq><gui>Recherche</gui><gui>Par série d'importation</gui><gui>Dernière série importée</gui></guiseq>.</p>
+    </item>
+  </steps>
+  <p>Pour sélectionner une série d'importation précédente :</p>
+  <steps>
+    <item>
+      <p>Choisissez dans le menu <guiseq><gui>Recherche</gui><gui>Par série d'importation</gui><gui>Sélectionner des séries d'importation</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Choisissez une série d'importation où lancer la recherche, ou bien définissez une plage en sélectionnant <gui>Entre</gui> et les dates que vous souhaitez.</p>
+    </item>
+  </steps>
+  <p>Pour arrêter la recherche par série d'importation, sélectionnez dans le menu <guiseq><gui>Recherche</gui><gui>Par série d'importation</gui><gui>Effacer le filtre des séries</gui></guiseq>.</p>
+</page>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="folder">
+
+  <info>
+    <link type="guide" xref="index#sharing"/>
+    <desc>Pošiljanje fotografij v mapo</desc>
+  </info>
+
+  <title>Izvoz mape</title>
+
+  <p><app>F-Spot</app> vam omogoča izvoz v mapo. Da lahko to storite, boste morali imeti <link xref="extensions">razširitev</link> izvoza v mapo nameščeno in omogočeno.</p>
+  <p>Za izvoz izbranih fotografij v mapo:</p>
+  <steps>
+    <item>
+      <p>Izberite <guiseq><gui>Fotografija</gui><gui>Izvozi v</gui><gui>Mapa ...</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Izberite mapo.</p>
+    </item>
+    <item>
+      <p>Poimenujte galerijo in ji dodajte opis.</p>
+    </item>
+    <item>
+      <p>Izberite način izvoza.  <gui>Ustvari samostojno spletno galerijo</gui> bo ustvaril mapo z vsebino, pripravljeno za pošiljanje na spletni strežnik za predstavitev slik v galeriji. <gui>Shrani le datoteke</gui> fotografije le premakne v izbrano mapo. <gui>Ustvari galerijo z "Izvirno"</gui> bo ustvarilo mapo z vsebino, primerno za uporabo z Izvirno galerijo fotografij.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Izvoz</gui>.</p>
+    </item>
+  </steps>
+</page>

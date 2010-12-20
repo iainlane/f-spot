@@ -29,9 +29,11 @@
 using System;
 using Gtk;
 
+using Hyena.Gui.Canvas;
+
 namespace Hyena.Data.Gui
 {
-    public class ListViewBase : Widget
+    public abstract class ListViewBase : Widget, ICanvasHost
     {
         protected ListViewBase (IntPtr ptr) : base (ptr)
         {
@@ -47,7 +49,7 @@ namespace Hyena.Data.Gui
             QueueDrawArea (region.X, region.Y, region.Width, region.Height);
         }
 
-        public void QueueDirtyRegion (Hyena.Gui.Canvas.Rect region)
+        public void QueueDirtyRegion (Rect region)
         {
             QueueDirtyRegion ((Gdk.Rectangle)region);
         }
@@ -61,5 +63,12 @@ namespace Hyena.Data.Gui
                 Height = (int)Math.Ceiling (region.Height)
             });
         }
+
+        public void QueueRender (Hyena.Gui.Canvas.CanvasItem item, Rect rect)
+        {
+            QueueDirtyRegion (rect);
+        }
+
+        public abstract Pango.Layout PangoLayout { get; }
     }
 }

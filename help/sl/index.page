@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="guide" id="index">
+
+  <info>
+    <title type="link">F-spot upravljalnik fotografij</title>
+    <title type="text">F-spot upravljalnik fotografij</title>
+  </info>
+
+  <title>F-spot upravljalnik fotografij</title>
+
+  <section id="basic-functions" style="2column" groups="import tag rate management">
+    <title>Osnovne zmožnosti</title>
+  </section>
+
+  <section id="searching" style="2column">
+    <title>Iskanje</title>
+  </section>
+
+  <section id="editing" style="2column" groups="general colors enhancements">
+    <title>Urejanje fotografij</title>
+  </section>
+
+  <section id="sharing" style="2column">
+    <title>Souporaba</title>
+  </section>
+
+  <section id="advanced" style="2column">
+    <title>Napredne možnosti</title>
+  </section>
+</page>

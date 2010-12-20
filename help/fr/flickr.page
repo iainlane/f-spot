@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" xmlns:e="http://projectmallard.org/experimental/" type="topic" id="flickr">
+
+  <info>
+    <link type="guide" xref="upload-to-web"/>
+    <desc>Envoyer des photos vers Flickr</desc>
+  </info>
+
+  <title>Flickr</title>
+
+  <p>Pour envoyer des photos vers Flickr, vous avez besoin d'un compte Flickr, ainsi que d'un accès à internet. L'<link xref="extensions">extension</link> Flickr doit aussi être installée et activée.</p>
+</page>

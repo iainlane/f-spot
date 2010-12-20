@@ -250,7 +250,10 @@ namespace TagLib.Xmp
 		///    A <see cref="System.String"/> containing an XMP packet. This should be a valid
 		///    XMP block.
 		/// </param>
-		public XmpTag (string data)
+		/// <param name="file">
+		///    The file that's currently being parsed, used for reporting corruptions.
+		/// </param>
+		public XmpTag (string data, TagLib.File file)
 		{
 			XmlDocument doc = new XmlDocument (NameTable);
 			doc.LoadXml (data);
@@ -265,7 +268,7 @@ namespace TagLib.Xmp
 			if (node == null)
 				throw new CorruptFileException ();
 
-			NodeTree = ParseRDF (node);
+			NodeTree = ParseRDF (node, file);
 			AcceptVisitors ();
 		}
 
@@ -277,7 +280,7 @@ namespace TagLib.Xmp
 		//		start-element ( URI == rdf:RDF, attributes == set() )
 		//		nodeElementList
 		//		end-element()
-		private XmpNode ParseRDF (XmlNode rdf_node)
+		private XmpNode ParseRDF (XmlNode rdf_node, TagLib.File file)
 		{
 			XmpNode top = new XmpNode (String.Empty, String.Empty);
 			foreach (XmlNode node in rdf_node.ChildNodes) {
@@ -294,7 +297,8 @@ namespace TagLib.Xmp
 					continue;
 				}
 
-				throw new CorruptFileException ("Cannot have anything other than rdf:Description at the top level");
+				file.MarkAsCorrupt ("Cannot have anything other than rdf:Description at the top level");
+				return top;
 			}
 			ParseNodeElementList (top, rdf_node);
 			return top;
@@ -500,7 +504,6 @@ namespace TagLib.Xmp
 			var simple_prop_val = rdf_value ?? rdf_resource ?? null;
 			if (simple_prop_val != null) {
 				string value = simple_prop_val.InnerText;
-				node.Attributes.Remove (simple_prop_val); // This one isn't a qualifier.
 				parent.AddChild (CreateTextPropertyWithQualifiers (node, value));
 				return;
 			}
@@ -527,6 +530,8 @@ namespace TagLib.Xmp
 			foreach (XmlAttribute attr in node.Attributes) {
 				if (attr.In (XMLNS_NS))
 					continue;
+				if (attr.Is (RDF_NS, VALUE_URI) || attr.Is (RDF_NS, RESOURCE_URI))
+					continue; // These aren't qualifiers
 				t.AddQualifier (new XmpNode (attr.NamespaceURI, attr.LocalName, attr.InnerText));
 			}
 			return t;

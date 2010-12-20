@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-creation">
+  <info>
+    <link type="guide" xref="tags#tag-functions" group="create"/>
+    <desc>Ustvarjanje oznak za pripenjanje k fotografijam</desc>
+  </info>
+
+  <title>Ustvarjanje</title>
+  <p>Za uporabo oznak jih morate najprej ustvariti. Za ustvarjanje oznak so na voljo trije glavni načini.</p>
+  <p>Prvi način:</p>
+  <steps>
+    <item>
+      <p>Izberite <guiseq><gui>Oznake</gui><gui>Ustari novo oznako ...</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Izberite nadrejeno oznako pod katero naj se pojavi nova oznaka kot so na primer ljudje ali dogodki. V primeru, da želite ustvariti oznako brez nadrejenega predmeta, izberite <gui>(Brez)</gui>.</p>
+    </item>
+    <item>
+      <p>Poimenujte oznako.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Ustvari</gui></p>
+    </item>
+  </steps>
+  <p>Drugi način:</p>
+  <steps>
+    <item>
+      <p> Desno kliknite v pladnju oznak in izberite <gui>Ustvari novo oznako ...</gui></p>
+    </item>
+    <item>
+      <p>Izberite nadrejeno oznako pod katero naj se pojavi nova oznaka kot so na primer ljudje ali dogodki. V primeru, da želite ustvariti oznako brez nadrejenega predmeta, izberite <gui>(Brez)</gui>.</p>
+    </item>
+    <item>
+      <p>Poimenujte oznako.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Ustvari</gui></p>
+    </item>
+  </steps>
+  <p>Tretji način omogoča tudi <link xref="tag-attach"> pripenjanje</link> nove oznake izbranim fotografijam.  To storite tako:</p>
+  <steps>
+    <item>
+      <p>Izberite fotografije katerim želite dodati novo oznako.</p>
+    </item>
+    <item>
+      <p>Desno kliknite na fotografije in izberite <guiseq><gui>Pripni oznako</gui><gui>Ustvari novo oznako ...</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Izberite nadrejeno oznako pod katero naj se pojavi nova oznaka kot so na primer ljudje ali dogodki. V primeru, da želite ustvariti oznako brez nadrejenega predmeta, izberite <gui>(Brez)</gui>.</p>
+    </item>
+    <item>
+      <p>Poimenujte oznako.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Ustvari</gui></p>
+    </item>
+  </steps>
+</page>

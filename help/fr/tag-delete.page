@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="tag-delete">
+  <info>
+    <link type="guide" xref="tags#tag-functions" group="delete"/>
+    <desc>Suppression d'étiquettes du système</desc>
+  </info>
+
+  <title>Suppression</title>
+  <p>Supprimer des étiquettes les supprime totalement du système, mais les photos auxquelles elles sont attribuées restent présentes.</p>
+  <p>Pour supprimer une étiquette :</p>
+  <steps>
+    <item>
+      <p>Sélectionnez l'étiquette que vous souhaitez supprimer dans le volet Étiquettes.</p>
+    </item>
+    <item>
+      <p>Cliquez sur <guiseq><gui>Étiquettes</gui><gui>Supprimer l'étiquette sélectionnée</gui></guiseq>, ou d'un clic droit sur l'étiquette dans le volet, sélectionnez <gui>Supprimer l'étiquette</gui>.</p>
+    </item>
+  </steps>
+</page>

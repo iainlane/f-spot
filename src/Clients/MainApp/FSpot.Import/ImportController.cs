@@ -343,6 +343,10 @@ namespace FSpot.Import
 
         void ImportPhoto (IPhoto item, Roll roll)
         {
+            if (item is IInvalidPhotoCheck && (item as IInvalidPhotoCheck).IsInvalid) {
+                throw new Exception ("Failed to parse metadata, probably not a photo");
+            }
+
             var destination = FindImportDestination (item);
 
             // Do duplicate detection

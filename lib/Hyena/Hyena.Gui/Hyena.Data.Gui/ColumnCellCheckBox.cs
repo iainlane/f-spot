@@ -29,6 +29,8 @@
 using System;
 using Gtk;
 
+using Hyena.Gui.Canvas;
+
 namespace Hyena.Data.Gui
 {
     public class ColumnCellCheckBox : ColumnCell, IInteractiveCell, ISizeRequestCell
@@ -39,18 +41,25 @@ namespace Hyena.Data.Gui
         {
         }
 
-        public override void Render (CellContext context, StateType state, double cellWidth, double cellHeight)
+        public override Size Measure (Size available)
         {
-            int cell_width = context.Area.Width - 2 * Xpad;
-            int cell_height = context.Area.Height - 2 * Ypad;
+            Width = Size + 2 * Xpad;
+            Height = Size + 2 * Ypad;
+            return DesiredSize = new Size (Width + Margin.X, Height + Margin.Y);
+        }
+
+        public override void Render (CellContext context, double cellWidth, double cellHeight)
+        {
+            int cell_width = (int)cellWidth - 2 * Xpad;
+            int cell_height = (int)cellHeight - 2 * Ypad;
             int x = context.Area.X + xpad + ((cell_width - Size) / 2);
             int y = context.Area.Y + ypad + ((cell_height - Size) / 2);
 
-            if (state == StateType.Normal && last_hover_bound == BoundObjectParent) {
-                state = StateType.Prelight;
+            if (context.State == StateType.Normal && last_hover_bound == BoundObjectParent) {
+                context.State = StateType.Prelight;
             }
 
-            Style.PaintCheck (context.Widget.Style, context.Drawable, state,
+            Style.PaintCheck (context.Widget.Style, context.Drawable, context.State,
                 Value ? ShadowType.In : ShadowType.Out,
                 context.Clip, context.Widget, "cellcheck", x, y, Size, Size);
         }
@@ -58,7 +67,7 @@ namespace Hyena.Data.Gui
         private object last_pressed_bound;
         private object last_hover_bound;
 
-        public bool ButtonEvent (int x, int y, bool pressed, Gdk.EventButton evnt)
+        public override bool ButtonEvent (Point press, bool pressed, uint button)
         {
             if (pressed) {
                 last_pressed_bound = BoundObjectParent;
@@ -73,24 +82,29 @@ namespace Hyena.Data.Gui
                 if (handler != null) {
                     handler (BoundObjectParent, EventArgs.Empty);
                 }
+
+                InvalidateRender ();
             }
 
             return true;
         }
 
-        public bool MotionEvent (int x, int y, Gdk.EventMotion evnt)
+        public override bool CursorMotionEvent (Point motion)
         {
             if (last_hover_bound == BoundObjectParent) {
                 return false;
             }
 
             last_hover_bound = BoundObjectParent;
+            InvalidateRender ();
             return true;
         }
 
-        public bool PointerLeaveEvent ()
+        public override bool CursorLeaveEvent ()
         {
+            base.CursorLeaveEvent ();
             last_hover_bound = null;
+            InvalidateRender ();
             return true;
         }
 

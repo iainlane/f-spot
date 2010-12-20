@@ -2,7 +2,7 @@ dnl Granularly define the version components
 dnl Remember to also update the Display Version
 m4_define([fspot_version_major], [0])
 m4_define([fspot_version_minor], [8])
-m4_define([fspot_version_micro], [0])
+m4_define([fspot_version_micro], [2])
 
 dnl set to 0 when doing an official release
 m4_define([fspot_version_pre_release], [0])
@@ -23,7 +23,7 @@ m4_define([fspot_version],
 
 dnl this can sometimes differ manually
 m4_define([fspot_display_version],
-	["0.8.0"])
+	["0.8.2"])
 
 m4_define([fspot_api_version],
 	[fspot_version_major.fspot_version_minor])
@@ -326,7 +326,6 @@ lib/Hyena/Hyena.Data.Sqlite/Makefile
 lib/Hyena/Hyena.Gui/Makefile
 lib/Hyena/Hyena/Makefile
 lib/Hyena/Makefile
-lib/Hyena/Mono.Data.Sqlite/Makefile
 lib/libfspot/Makefile
 lib/Makefile
 lib/Mono.Google/Makefile

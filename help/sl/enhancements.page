@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="topic" id="enhancements">
+  <info>
+    <link type="guide" xref="index#editing" group="enhancements"/>
+    <desc>Enostavne izboljšave za vaše fotograije</desc>
+  </info>
+
+  <title>Izboljšave</title>
+
+  <p>Trenutno <app>F-Spot</app> podpira dve glavni izboljšavi: odstranitev rdečih oči in samodejno izboljševanje barve.</p>
+  <p>Za odstranitev rdečih oči:</p>
+  <steps>
+    <item>
+      <p>Z dvoklikom izberite fotografijo,  na kateri želite uporabiti orodje odstranjevanja rdečih oči</p>
+    </item>
+    <item>
+      <p>V pladnju Uredi kliknite <gui>Odstranitev rdečih oči</gui>.</p>
+    </item>
+    <item>
+      <p>Izberite področje iz katerega želite odstraniti rdeče oko. V primeru da ima slika več rdečih oči, priporočamo izbiro posameznih rdečih oči.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Popravi!</gui>.</p>
+    </item>
+  </steps>
+  <p>Za samodejno izboljšanje barv fotografije:</p>
+  <steps>
+    <item>
+      <p>Z dvoklikom izberite fotografijo, ki jo želite izboljšati.</p>
+    </item>
+    <item>
+      <p>Kliknite <gui>Samodejna barva</gui>.</p>
+    </item>
+  </steps>
+</page>

@@ -18,7 +18,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Data;
 using System;
 
 using FSpot;
@@ -39,7 +38,7 @@ public class PhotoStore : DbStore<Photo> {
 			IDataReader reader = Database.Query("SELECT COUNT(*) AS photo_count FROM photos");
 			reader.Read ();
 			int total = Convert.ToInt32 (reader ["photo_count"]);
-			reader.Close ();
+			reader.Dispose ();
 			return total;
 		}
 	}
@@ -110,7 +109,7 @@ public class PhotoStore : DbStore<Photo> {
 		var reader = Database.Query (new HyenaSqliteCommand (query, uri.GetBaseUri ().ToString (), uri.GetFilename ()));
 		reader.Read ();
 		int count = Convert.ToInt32 (reader ["count"]);
-		reader.Close();
+		reader.Dispose();
 		if (count > 0)
 			return true;
 
@@ -148,7 +147,7 @@ public class PhotoStore : DbStore<Photo> {
 					return true;
 				}
 			}
-			reader.Close ();
+			reader.Dispose ();
 		}
 
 		// No matches
@@ -220,7 +219,7 @@ public class PhotoStore : DbStore<Photo> {
 
 			photo.AddVersionUnsafely (version_id, base_uri, filename, import_md5, name, is_protected);
 		}
-		reader.Close();
+		reader.Dispose();
 	}
 
 	private void GetTags (Photo photo)
@@ -232,7 +231,7 @@ public class PhotoStore : DbStore<Photo> {
 			Tag tag = App.Instance.Database.Tags.Get (tag_id) as Tag;
 			photo.AddTagUnsafely (tag);
 		}
-		reader.Close();
+		reader.Dispose();
 	}
 
 	private void GetAllVersions  (string ids) {
@@ -270,7 +269,7 @@ public class PhotoStore : DbStore<Photo> {
 			System.Console.WriteLine ("directory_path = {0}", directory_path);
 			*/
 		}
-		reader.Close();
+		reader.Dispose();
 	}
 
 	private void GetAllTags (string ids) {
@@ -296,7 +295,7 @@ public class PhotoStore : DbStore<Photo> {
 				photo.AddTagUnsafely (tag);
 			}
 		}
-		reader.Close();
+		reader.Dispose();
 	}
 
 	public override Photo Get (uint id)
@@ -320,7 +319,7 @@ public class PhotoStore : DbStore<Photo> {
 			photo.Rating = Convert.ToUInt32 (reader ["rating"]);
 			AddToCache (photo);
 		}
-		reader.Close();
+		reader.Dispose();
 
 		if (photo == null)
 			return null;
@@ -357,7 +356,7 @@ public class PhotoStore : DbStore<Photo> {
 			photo.Rating = Convert.ToUInt32 (reader ["rating"]);
 		}
 
-		reader.Close();
+		reader.Dispose();
 
 		if (photo == null)
 			return null;
@@ -551,7 +550,7 @@ public class PhotoStore : DbStore<Photo> {
 		IDataReader reader = Database.Query (query_builder.ToString());
 		reader.Read ();
 		int count = Convert.ToInt32 (reader ["count"]);
-		reader.Close();
+		reader.Dispose();
 		return count;
 	}
 
@@ -590,7 +589,7 @@ public class PhotoStore : DbStore<Photo> {
 		int index = - 1;
 		if (reader.Read ())
 			index = Convert.ToInt32 (reader ["row_id"]);
-		reader.Close();
+		reader.Dispose();
 		Log.DebugTimerPrint (timer, "IndexOf took {0} : " + query);
 		return index - 1; //ROWID starts counting at 1
 	}
@@ -602,7 +601,7 @@ public class PhotoStore : DbStore<Photo> {
 		IDataReader reader = Database.Query (query);
 		while (reader.Read ())
 			list.Add (Convert.ToInt32 (reader ["row_id"]) - 1);
-		reader.Close ();
+		reader.Dispose ();
 		Log.DebugTimerPrint (timer, "IndicesOf took {0} : " + query);
 		return list.ToArray ();
 	}
@@ -642,7 +641,7 @@ public class PhotoStore : DbStore<Photo> {
 				val.Add (year, new int[12]);
 			val[year][month-1] = count;
 		}
-		reader.Close ();
+		reader.Dispose ();
 
 		//Fill the blank
 		for (int i = minyear; i <= maxyear; i++)
@@ -775,7 +774,7 @@ public class PhotoStore : DbStore<Photo> {
 
 			query_result.Add (photo);
 		}
-		reader.Close();
+		reader.Dispose();
 
 		bool need_load = false;
 		string photo_ids = "(";

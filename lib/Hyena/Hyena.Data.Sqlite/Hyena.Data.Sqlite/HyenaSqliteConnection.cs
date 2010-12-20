@@ -28,10 +28,8 @@
 //
 
 using System;
-using System.Data;
 using System.Threading;
 using System.Collections.Generic;
-using Mono.Data.Sqlite;
 
 namespace Hyena.Data.Sqlite
 {
@@ -70,15 +68,6 @@ namespace Hyena.Data.Sqlite
         }
     }
 
-    public class ExecutingEventArgs : EventArgs
-    {
-        public readonly SqliteCommand Command;
-        public ExecutingEventArgs (SqliteCommand command)
-        {
-            Command = command;
-        }
-    }
-
     public enum HyenaCommandType {
         Reader,
         Scalar,
@@ -87,8 +76,10 @@ namespace Hyena.Data.Sqlite
 
     public class HyenaSqliteConnection : IDisposable
     {
-        private SqliteConnection connection;
+        private Hyena.Data.Sqlite.Connection connection;
         private string dbpath;
+
+        protected string DbPath { get { return dbpath; } }
 
         // These are 'parallel' queues; that is, when a value is pushed or popped to
         // one, a value is pushed or popped to all three.
@@ -114,9 +105,7 @@ namespace Hyena.Data.Sqlite
             set { warn_if_called_from_thread = value; }
         }
 
-        public string ServerVersion { get { return connection.ServerVersion; } }
-
-        public event EventHandler<ExecutingEventArgs> Executing;
+        public string ServerVersion { get { return Query<string> ("SELECT sqlite_version ()"); } }
 
         public HyenaSqliteConnection(string dbpath)
         {
@@ -127,6 +116,17 @@ namespace Hyena.Data.Sqlite
             queue_thread.Start();
         }
 
+        public void AddFunction<T> () where T : SqliteFunction
+        {
+            connection.AddFunction<T> ();
+        }
+
+        public void RemoveFunction<T> () where T : SqliteFunction
+        {
+            connection.RemoveFunction<T> ();
+        }
+
+
 #region Public Query Methods
 
         // TODO special case for single object param to avoid object []
@@ -136,24 +136,24 @@ namespace Hyena.Data.Sqlite
         {
             command.CommandType = HyenaCommandType.Reader;
             QueueCommand (command);
-            return command.WaitForResult (this) as IDataReader;
+            return (IDataReader) command.WaitForResult (this);
         }
 
         public IDataReader Query (HyenaSqliteCommand command, params object [] param_values)
         {
             command.CommandType = HyenaCommandType.Reader;
             QueueCommand (command, param_values);
-            return command.WaitForResult (this) as IDataReader;
+            return (IDataReader) command.WaitForResult (this);
         }
 
         public IDataReader Query (string command_str, params object [] param_values)
         {
-            return Query (new HyenaSqliteCommand (command_str, param_values));
+            return Query (new HyenaSqliteCommand (command_str, param_values) { ReaderDisposes = true });
         }
 
         public IDataReader Query (object command)
         {
-            return Query (new HyenaSqliteCommand (command.ToString ()));
+            return Query (new HyenaSqliteCommand (command.ToString ()) { ReaderDisposes = true });
         }
 
         // SELECT single column, multiple rows queries
@@ -179,12 +179,12 @@ namespace Hyena.Data.Sqlite
 
         public IEnumerable<T> QueryEnumerable<T> (string command_str, params object [] param_values)
         {
-            return QueryEnumerable<T> (new HyenaSqliteCommand (command_str, param_values));
+            return QueryEnumerable<T> (new HyenaSqliteCommand (command_str, param_values) { ReaderDisposes = true });
         }
 
         public IEnumerable<T> QueryEnumerable<T> (object command)
         {
-            return QueryEnumerable<T> (new HyenaSqliteCommand (command.ToString ()));
+            return QueryEnumerable<T> (new HyenaSqliteCommand (command.ToString ()) { ReaderDisposes = true });
         }
 
         // SELECT single column, single row queries
@@ -206,12 +206,12 @@ namespace Hyena.Data.Sqlite
 
         public T Query<T> (string command_str, params object [] param_values)
         {
-            return Query<T> (new HyenaSqliteCommand (command_str, param_values));
+            return Query<T> (new HyenaSqliteCommand (command_str, param_values) { ReaderDisposes = true });
         }
 
         public T Query<T> (object command)
         {
-            return Query<T> (new HyenaSqliteCommand (command.ToString ()));
+            return Query<T> (new HyenaSqliteCommand (command.ToString ()) { ReaderDisposes = true });
         }
 
         // INSERT, UPDATE, DELETE queries
@@ -231,12 +231,12 @@ namespace Hyena.Data.Sqlite
 
         public int Execute (string command_str, params object [] param_values)
         {
-            return Execute (new HyenaSqliteCommand (command_str, param_values));
+            return Execute (new HyenaSqliteCommand (command_str, param_values) { ReaderDisposes = true });
         }
 
         public int Execute (object command)
         {
-            return Execute (new HyenaSqliteCommand (command.ToString ()));
+            return Execute (new HyenaSqliteCommand (command.ToString ()) { ReaderDisposes = true });
         }
 
 #endregion
@@ -333,7 +333,7 @@ namespace Hyena.Data.Sqlite
             foreach (string column_def in sql.Split (',')) {
                 string column_def_t = column_def.Trim ();
                 int ws_index = column_def_t.IndexOfAny (ws_chars);
-                code (column_def_t.Substring (0, ws_index));
+                code (ws_index == -1 ? column_def_t : column_def_t.Substring (0, ws_index));
             }
         }
 
@@ -417,8 +417,7 @@ namespace Hyena.Data.Sqlite
         private void ProcessQueue()
         {
             if (connection == null) {
-                connection = new SqliteConnection (String.Format ("Version=3,URI=file:{0}", dbpath));
-                connection.Open ();
+                connection = new Hyena.Data.Sqlite.Connection (dbpath);
             }
 
             // Keep handling queries
@@ -456,15 +455,7 @@ namespace Hyena.Data.Sqlite
             }
 
             // Finish
-            connection.Close ();
-        }
-
-        internal void OnExecuting (SqliteCommand command)
-        {
-            EventHandler<ExecutingEventArgs> handler = Executing;
-            if (handler != null) {
-                handler (this, new ExecutingEventArgs (command));
-            }
+            connection.Dispose ();
         }
 
 #endregion

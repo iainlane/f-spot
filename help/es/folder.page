@@ -3,36 +3,28 @@
 
   <info>
     <link type="guide" xref="index#sharing"/>
-    <desc>Send photos to a folder</desc>
+    <desc>Enviar las fotos a una carpeta</desc>
   </info>
 
   <title>Exportar carpeta</title>
 
-  <p><app>F-Spot</app> allows you to export to a folder.  In order to do so,
-     however, you will need to have the folder export
-     <link xref="extensions">extension</link> installed and enabled.</p>
-  <p>To export selected photos to a folder:</p>
+  <p><app>F-Spot</app> le permite exportar a una carpeta. Para ello, no obstante, necesitará tener la <link xref="extensions">extensión</link> para exportar carpetas instalada y activada.</p>
+  <p>Exportar a una carpeta las fotos seleccionadas:</p>
   <steps>
     <item>
-      <p>Select <guiseq><gui>Photo</gui><gui>Export To</gui><gui>Folder...</gui>
-      </guiseq>.</p>
+      <p>Seleccione <guiseq><gui>Foto</gui><gui>Exportar a</gui><gui>Carpeta...</gui></guiseq>.</p>
     </item>
     <item>
-      <p>Select a folder.</p>
+      <p>Seleccione una carpeta.</p>
     </item>
     <item>
-      <p>Name the gallery and give it a description.</p>
+      <p>Proporcione un nombre y una descripción para la galería.</p>
     </item>
     <item>
-      <p>Select an export method.  <gui>Create Standalone Web Gallery</gui>
-         will create a folder with contents fit to be uploaded to a web
-         server to present pictures in a gallery.  <gui>Save the files
-         only</gui>  will only move photos to the selected folder.
-         <gui>Create gallery using "Original"</gui> will create a folder
-         with contents suitable for using with Original Photo Gallery.</p>
+      <p>Seleccione un método de exportación. <gui>Crear una galería web autónoma</gui> creará una carpeta con el contenido ajustado para que se suba a un servidor web para presentar las imágenes en una galería. <gui>Sólo guardar los archivos</gui> sólo moverá las fotos a la carpeta. <gui>Crear una galería usando «Original»</gui> creará una carpeta con contenidos apropiados para usarlos con la Galería fotográfica Original.</p>
     </item>
     <item>
-      <p>Click <gui>Export</gui>.</p>
+      <p>Pulse <gui>Exportar</gui>.</p>
     </item>
   </steps>
 </page>

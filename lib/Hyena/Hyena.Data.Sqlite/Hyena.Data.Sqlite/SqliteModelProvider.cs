@@ -28,7 +28,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Reflection;
 using System.Text;
 
@@ -143,7 +142,7 @@ namespace Hyena.Data.Sqlite
             if (connection.TableExists (HyenaTableName)) {
                 using (IDataReader reader = connection.Query (SelectVersionSql (TableName))) {
                     if (reader.Read ()) {
-                        int table_version = reader.GetInt32 (0);
+                        int table_version = reader.Get<int> (0);
                         if (table_version < ModelVersion) {
                             MigrateTable (table_version);
                             UpdateVersion (TableName, ModelVersion);
@@ -361,14 +360,14 @@ namespace Hyena.Data.Sqlite
 
             AbstractDatabaseColumn bad_column = null;
             try {
-                foreach (DatabaseColumn column in select_columns) {
+                foreach (var column in select_columns) {
                     bad_column = column;
-                    column.SetValue (target, reader, i++);
+                    column.SetValue (target, reader.Get (i++, column.ValueType));
                 }
 
-                foreach (VirtualDatabaseColumn column in virtual_columns) {
+                foreach (var column in virtual_columns) {
                     bad_column = column;
-                    column.SetValue (target, reader, i++);
+                    column.SetValue (target, reader.Get (i++, column.ValueType));
                 }
             } catch (Exception e) {
                 Log.Debug (
